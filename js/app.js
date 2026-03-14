@@ -3811,7 +3811,7 @@ function getChartConfig(overrides) {
 
     /* ── X axis ─────────────────────────────────────────────────────── */
     var xConfig = {
-        type: (o.xMin != null || o.xMax != null) ? 'linear' : undefined,
+        type: (o.xMin != null || o.xMax != null) ? 'linear' : 'category',
         grid:   gridOpts,
         border: borderOpts,
         title: o.xTitle ? {
@@ -3865,8 +3865,8 @@ function getChartConfig(overrides) {
             globalStyle.plugins || {},
             {
                 zoom: {
-                    zoom: { pinch: { enabled: true }, mode: 'xy' },
-                    pan:  { enabled: true, mode: 'xy' }
+                    zoom: { pinch: { enabled: true }, mode: 'y' },
+                    pan:  { enabled: true, mode: 'y' }
                 }
             }
         );
@@ -4004,18 +4004,20 @@ function renderCharts() {
     });
     const energy = dates.map(d => (entries[d] && entries[d].energy != null) ? entries[d].energy : null);
     
+    var _CM = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
     const shortDates = dates.map(d => {
         const parts = d.split('-');
-        return parseInt(parts[1], 10) + '/' + parseInt(parts[2], 10);
+        return _CM[parseInt(parts[1], 10) - 1] + ' ' + parseInt(parts[2], 10);
     });
-    
-    createChart('moodChart',     'Mood',   mood,  shortDates, colors.chart1, { yMin: 1, yMax: 10, yStep: 1, yTitle: 'Mood (1–10)',    integerTicks: true  });
-    createChart('sleepChart',    'Sleep',  sleep, shortDates, colors.chart2, { yMin: 0, yMax: 12, yStep: 1, yTitle: 'Sleep (hrs)',     integerTicks: false });
-    createChart('energyChart',   'Energy', energy,shortDates, colors.chart3, { yMin: 1, yMax: 10, yStep: 1, yTitle: 'Energy (1–10)',   integerTicks: true  });
 
-    createChart('moodChartFull', 'Mood',   mood,  shortDates, colors.chart1, { yMin: 1, yMax: 10, yStep: 1, yTitle: 'Mood (1–10)',    integerTicks: true  });
-    createChart('sleepChartFull','Sleep',  sleep, shortDates, colors.chart2, { yMin: 0, yMax: 12, yStep: 1, yTitle: 'Sleep (hrs)',     integerTicks: false });
-    createChart('energyChartFull','Energy',energy,shortDates, colors.chart3, { yMin: 1, yMax: 10, yStep: 1, yTitle: 'Energy (1–10)',   integerTicks: true  });
+    var _xLabel = 'Last ' + chartDays + ' days';
+    createChart('moodChart',     'Mood',   mood,  shortDates, colors.chart1, { yMin: 1, yMax: 10, yStep: 1, yTitle: 'Mood (1–10)',    xTitle: _xLabel, integerTicks: true  });
+    createChart('sleepChart',    'Sleep',  sleep, shortDates, colors.chart2, { yMin: 0, yMax: 12, yStep: 1, yTitle: 'Sleep (hrs)',     xTitle: _xLabel, integerTicks: false });
+    createChart('energyChart',   'Energy', energy,shortDates, colors.chart3, { yMin: 1, yMax: 10, yStep: 1, yTitle: 'Energy (1–10)',   xTitle: _xLabel, integerTicks: true  });
+
+    createChart('moodChartFull', 'Mood',   mood,  shortDates, colors.chart1, { yMin: 1, yMax: 10, yStep: 1, yTitle: 'Mood (1–10)',    xTitle: _xLabel, integerTicks: true  });
+    createChart('sleepChartFull','Sleep',  sleep, shortDates, colors.chart2, { yMin: 0, yMax: 12, yStep: 1, yTitle: 'Sleep (hrs)',     xTitle: _xLabel, integerTicks: false });
+    createChart('energyChartFull','Energy',energy,shortDates, colors.chart3, { yMin: 1, yMax: 10, yStep: 1, yTitle: 'Energy (1–10)',   xTitle: _xLabel, integerTicks: true  });
     
     renderMoodVelocity();
     
