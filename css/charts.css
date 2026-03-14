@@ -36,15 +36,37 @@
     background: color-mix(in srgb, var(--surface) 95%, var(--bg));
     border-color: color-mix(in srgb, var(--border) 110%, transparent);
 }
-/* Chart Styling — scope the cap so analytics full-height canvases are never clipped */
-.dashboard-grid canvas,
+/* Chart Styling — fixed-height containers so Chart.js renders without distortion */
+.dashboard-chart-wrap {
+    position: relative;
+    height: 280px;
+    width: 100%;
+}
+.dashboard-chart-wrap canvas {
+    display: block;
+    width: 100% !important;
+    height: 100% !important;
+    max-width: 100%;
+    max-height: 100%;
+}
 .chart-card canvas {
     max-height: 300px;
     max-width: 100%;
 }
-.analytics-chart-card canvas,
+/* Full-page analytics charts: fixed height so aspect ratio is correct */
+.mood-trends-chart-wrap.comparison-chart-wrap,
+.analytics-chart-wrap.comparison-chart-wrap {
+    height: 320px;
+    min-height: 320px;
+}
 .mood-trends-chart-wrap canvas,
-.analytics-chart-wrap canvas,
+.analytics-chart-wrap canvas {
+    display: block;
+    width: 100% !important;
+    height: 100% !important;
+    max-width: 100%;
+    max-height: 100%;
+}
 .mood-velocity-chart-wrap canvas,
 .circadian-velocity-card canvas {
     max-height: none !important;
@@ -83,15 +105,13 @@
         padding: 20px 16px;
         min-height: 180px;
     }
-    .dashboard-grid .card canvas {
-        height: 220px !important;
-        max-height: 220px !important;
+    .dashboard-chart-wrap {
+        height: 220px;
     }
-    .analytics-chart-card canvas,
-    .mood-trends-chart-wrap canvas,
-    .analytics-chart-wrap canvas,
-    .mood-velocity-chart-wrap canvas {
-        max-height: none !important;
+    .mood-trends-chart-wrap.comparison-chart-wrap,
+    .analytics-chart-wrap.comparison-chart-wrap {
+        height: 260px;
+        min-height: 260px;
     }
     .chart-container {
         height: 220px;
