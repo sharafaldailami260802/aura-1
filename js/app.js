@@ -1168,6 +1168,9 @@ function navigate(page, button) {
     else if (page === 'settings') {
         loadPreferencesIntoUI();
         renderCustomMetricsList();
+        bindSettingsDataManager();
+        renderSettingsDataManagerRecent();
+        renderDataManagerPreview(getDataManagerSelectedDate());
         var sel = document.getElementById('themeSelect');
         if (sel) sel.value = document.documentElement.getAttribute('data-theme') || 'aura';
         syncDarkToggleButtons();
@@ -1349,7 +1352,7 @@ function setupEntryListTouch() {
         }, { passive: true });
         li.addEventListener('click', function(e) {
             if (contextMenuJustShown) return;
-            if (!e.target.closest('.entry-delete, .context-menu')) showEntryModalFromJournal(date);
+            if (!e.target.closest('.entry-delete, .entry-record-delete, .entry-record-action, .context-menu')) showEntryModalFromJournal(date);
         });
     });
 }
@@ -3413,6 +3416,156 @@ function closeEntryModal() {
 function closeModal() {
     closeEntryModal();
 }
+
+var settingsDataManagerSelectedDate = '';
+function getDataManagerSelectedDate() {
+    var input = document.getElementById('settingsDataManagerDate');
+    if (!input) return '';
+    var value = typeof getDateInputValue === 'function'
+        ? getDateInputValue(input)
+        : (input.value || '').trim();
+    if (value && typeof setDateInputDisplay === 'function') {
+        setDateInputDisplay(input, value);
+    }
+    settingsDataManagerSelectedDate = value || '';
+    return settingsDataManagerSelectedDate;
+}
+function getDayRecordMeta(entry) {
+    entry = entry || {};
+    var journalText = typeof notesValueToPlainText === 'function' ? notesValueToPlainText(entry).trim() : ((entry.journal || entry.notes || '') + '').trim();
+    return {
+        hasMood: typeof entry.mood === 'number' && !isNaN(entry.mood),
+        hasEnergy: typeof entry.energy === 'number' && !isNaN(entry.energy),
+        hasSleep: (typeof entry.sleep === 'number' && !isNaN(entry.sleep)) || (typeof entry.sleepTotal === 'number' && !isNaN(entry.sleepTotal)),
+        hasJournal: journalText.length > 0,
+        photoCount: Array.isArray(entry.photos) ? entry.photos.length : 0,
+        tagCount: Array.isArray(entry.tags) ? entry.tags.length : ((entry.tags || '').trim() ? (entry.tags + '').split(/\s+/).length : 0),
+        activityCount: Array.isArray(entry.activities) ? entry.activities.length : ((entry.activities || '').trim() ? (entry.activities + '').split(/\s*,\s*/).filter(Boolean).length : 0)
+    };
+}
+function buildDataManagerMetaPill(label, state, valueText) {
+    var stateClass = state ? 'is-present' : 'is-missing';
+    var value = valueText ? ' <span>' + escapeHtml(valueText) + '</span>' : '';
+    return '<span class="data-pill ' + stateClass + '">' + escapeHtml(label) + value + '</span>';
+}
+function renderDataManagerPreview(dateStr) {
+    var preview = document.getElementById('settingsDataManagerPreview');
+    var status = document.getElementById('settingsDataManagerStatus');
+    var checkInBtn = document.getElementById('settingsEditCheckInBtn');
+    var journalBtn = document.getElementById('settingsEditJournalBtn');
+    if (!preview) return;
+    if (status) status.textContent = '';
+    if (checkInBtn) checkInBtn.disabled = true;
+    if (journalBtn) journalBtn.disabled = true;
+    if (!dateStr) {
+        preview.className = 'data-manager-preview is-empty';
+        preview.innerHTML = ''
+            + '<div class="data-manager-preview-empty">'
+            + '  <p class="data-manager-preview-title">Choose a saved day</p>'
+            + '  <p class="data-manager-preview-copy">Select a date to see what data exists and open the correct editor.</p>'
+            + '</div>';
+        return;
+    }
+    var entry = entries[dateStr];
+    if (!entry) {
+        preview.className = 'data-manager-preview is-empty';
+        preview.innerHTML = ''
+            + '<div class="data-manager-preview-empty">'
+            + '  <p class="data-manager-preview-title">No saved data for this day</p>'
+            + '  <p class="data-manager-preview-copy">Try another date. Only saved days can be edited from here.</p>'
+            + '</div>';
+        if (status) status.textContent = 'No saved data for ' + dateStr + '.';
+        return;
+    }
+    var meta = getDayRecordMeta(entry);
+    var dateFmt = window.auraDateFormat || 'MD';
+    var displayDate = typeof formatDisplayDate === 'function' ? formatDisplayDate(dateStr, dateFmt) : dateStr;
+    preview.className = 'data-manager-preview';
+    preview.innerHTML = ''
+        + '<div class="data-manager-preview-top">'
+        + '  <div>'
+        + '    <p class="data-manager-preview-eyebrow">Saved record</p>'
+        + '    <h4 class="data-manager-preview-date">' + escapeHtml(displayDate) + '</h4>'
+        + '  </div>'
+        + '  <div class="data-manager-preview-score">'
+        + (meta.hasMood ? '<span class="data-manager-score-value">' + escapeHtml(String(entry.mood)) + '</span><span class="data-manager-score-label">Mood</span>' : '<span class="data-manager-score-empty">No mood</span>')
+        + '  </div>'
+        + '</div>'
+        + '<div class="data-manager-preview-pills">'
+        + buildDataManagerMetaPill('Energy', meta.hasEnergy, meta.hasEnergy ? String(entry.energy) : 'Missing')
+        + buildDataManagerMetaPill('Sleep', meta.hasSleep, meta.hasSleep ? 'Saved' : 'Missing')
+        + buildDataManagerMetaPill('Journal', meta.hasJournal, meta.hasJournal ? 'Saved' : 'Missing')
+        + buildDataManagerMetaPill('Photos', meta.photoCount > 0, meta.photoCount > 0 ? String(meta.photoCount) : '0')
+        + buildDataManagerMetaPill('Tags', meta.tagCount > 0, meta.tagCount > 0 ? String(meta.tagCount) : '0')
+        + buildDataManagerMetaPill('Activities', meta.activityCount > 0, meta.activityCount > 0 ? String(meta.activityCount) : '0')
+        + '</div>';
+    if (checkInBtn) checkInBtn.disabled = false;
+    if (journalBtn) journalBtn.disabled = false;
+}
+function renderSettingsDataManagerRecent() {
+    var wrap = document.getElementById('settingsDataManagerRecentList');
+    if (!wrap) return;
+    var dates = Object.keys(entries).sort().reverse().slice(0, 12);
+    if (!dates.length) {
+        wrap.innerHTML = '<div class="data-manager-row data-manager-row-empty">No saved days yet.</div>';
+        return;
+    }
+    var dateFmt = window.auraDateFormat || 'MD';
+    wrap.innerHTML = dates.map(function(date) {
+        var entry = entries[date] || {};
+        var meta = getDayRecordMeta(entry);
+        var displayDate = typeof formatDisplayDate === 'function' ? formatDisplayDate(date, dateFmt) : date;
+        var safeDate = date.replace(/'/g, "\\'");
+        var journalText = typeof notesValueToPlainText === 'function' ? notesValueToPlainText(entry).trim() : '';
+        var summary = journalText ? 'Journal saved' : (meta.hasMood ? 'Mood ' + entry.mood : 'No journal');
+        return ''
+            + '<button type="button" class="data-manager-row" onclick="selectSettingsDataManagerDate(\'' + safeDate + '\')">'
+            + '  <span class="data-manager-row-main">'
+            + '    <span class="data-manager-row-date">' + escapeHtml(displayDate) + '</span>'
+            + '    <span class="data-manager-row-summary">' + escapeHtml(summary) + '</span>'
+            + '  </span>'
+            + '  <span class="data-manager-row-meta">'
+            + (meta.hasJournal ? '<span class="data-manager-row-dot is-journal"></span>' : '')
+            + (meta.photoCount > 0 ? '<span class="data-manager-row-badge">' + meta.photoCount + ' photo' + (meta.photoCount === 1 ? '' : 's') + '</span>' : '')
+            + '  </span>'
+            + '</button>';
+    }).join('');
+}
+function selectSettingsDataManagerDate(dateStr) {
+    var input = document.getElementById('settingsDataManagerDate');
+    settingsDataManagerSelectedDate = dateStr || '';
+    if (input && typeof setDateInputDisplay === 'function') {
+        setDateInputDisplay(input, settingsDataManagerSelectedDate);
+    } else if (input) {
+        input.value = settingsDataManagerSelectedDate;
+    }
+    renderDataManagerPreview(settingsDataManagerSelectedDate);
+}
+function openSelectedDayCheckIn() {
+    var dateStr = getDataManagerSelectedDate();
+    if (!dateStr || !entries[dateStr]) return;
+    closeSidebar();
+    navigateTo('entry', dateStr);
+}
+function openSelectedDayJournal() {
+    var dateStr = getDataManagerSelectedDate();
+    if (!dateStr || !entries[dateStr]) return;
+    closeSidebar();
+    navigateTo('journal', dateStr);
+}
+function bindSettingsDataManager() {
+    var input = document.getElementById('settingsDataManagerDate');
+    if (!input || input.dataset.bound === 'true') return;
+    input.dataset.bound = 'true';
+    input.addEventListener('change', function() {
+        var dateStr = getDataManagerSelectedDate();
+        renderDataManagerPreview(dateStr);
+    });
+    input.addEventListener('blur', function() {
+        var dateStr = getDataManagerSelectedDate();
+        renderDataManagerPreview(dateStr);
+    });
+}
 var _premiumConfirmCallback = null;
 function showPremiumConfirm(title, desc, btnLabel, onConfirm) {
     var modal = document.getElementById('premiumConfirmModal');
@@ -3632,13 +3785,21 @@ function renderCalendarList() {
     var dateFmt = window.auraDateFormat || 'MD';
     ul.innerHTML = dates.map(function(dateStr) {
         var e = entries[dateStr];
-        var moodStr = e && e.mood != null ? e.mood.toFixed(1) : '–';
-        var energyStr = e && e.energy != null ? e.energy.toFixed(1) : '–';
-        var metricsText = 'Mood ' + moodStr + ' · Energy ' + energyStr;
-        var displayDate = formatDisplayDate(dateStr, dateFmt);
+        var moodStr = e && e.mood != null ? e.mood.toFixed(1) : '\u2013';
+        var energyStr = e && e.energy != null ? e.energy.toFixed(1) : '\u2013';
+        var sleepStr = e && (e.sleepTotal != null || e.sleep != null) ? (e.sleepTotal != null ? e.sleepTotal : e.sleep).toFixed(1) : '';
+        var summaryParts = ['Mood ' + moodStr, 'Energy ' + energyStr];
+        if (sleepStr) summaryParts.push('Sleep ' + sleepStr + 'h');
+        var summaryText = summaryParts.join(' \u00B7 ');
+        var displayDate = formatDisplayDate(dateStr, dateFmt) + (dateStr === todayStr ? ' (today)' : '');
         var safeDate = dateStr.replace(/'/g, "\\'");
-        return '<li onclick="showEntryModal(\'' + safeDate + '\')"><div class="entry-row-content"><span class="entry-date">' + escapeHtml(displayDate) + (dateStr === todayStr ? ' (today)' : '') + '</span><span class="entry-list-metrics">' + escapeHtml(metricsText) + '</span></div></li>';
-    }).join('') || '<li style="color: var(--text-muted); cursor: default; padding: var(--space-md);">No entries yet.</li>';
+        var meta = typeof getDayRecordMeta === 'function' ? getDayRecordMeta(e) : { hasJournal: false, photoCount: 0, tagCount: 0 };
+        var pills = '';
+        if (meta.hasJournal) pills += '<span class="calendar-record-pill">Journal</span>';
+        if (meta.photoCount > 0) pills += '<span class="calendar-record-pill">' + meta.photoCount + ' photo' + (meta.photoCount === 1 ? '' : 's') + '</span>';
+        if (meta.tagCount > 0) pills += '<span class="calendar-record-pill">' + meta.tagCount + ' tag' + (meta.tagCount === 1 ? '' : 's') + '</span>';
+        return '<li class="calendar-record-card" onclick="showEntryModal(\'' + safeDate + '\')"><div class="calendar-record-main"><span class="calendar-record-date">' + escapeHtml(displayDate) + '</span><span class="calendar-record-summary">' + escapeHtml(summaryText) + '</span></div><div class="calendar-record-pills">' + pills + '</div><div class="calendar-record-actions"><button type="button" class="calendar-record-action" onclick="event.stopPropagation(); navigateTo(\'entry\', \'' + safeDate + '\');">Edit Check-In</button><button type="button" class="calendar-record-action btn-secondary" onclick="event.stopPropagation(); navigateTo(\'journal\', \'' + safeDate + '\');">Edit Journal</button></div></li>';
+    }).join('') || '<li class="calendar-record-card" style="color: var(--text-muted); cursor: default; padding: var(--space-md);">No entries yet.</li>';
 }
 
 function exportHeatmapPNG() {
@@ -3812,8 +3973,13 @@ function renderHeatmap() {
     })();
 }
 
-var entryListShown = 200;
-var ENTRY_LIST_CHUNK = 200;
+function getJournalSnippet(entry) {
+    if (!entry) return '';
+    var text = typeof notesValueToPlainText === 'function' ? notesValueToPlainText(entry).trim() : ((entry.journal || entry.notes || '') + '').trim();
+    if (!text) return '';
+    return text.length > 80 ? text.slice(0, 80) + '\u2026' : text;
+}
+var RECENT_ENTRIES_LIMIT = 15;
 function renderEntryList() {
     var ul = document.getElementById('entryList');
     if (!ul) return;
@@ -3832,28 +3998,23 @@ function renderEntryList() {
         }
         return;
     }
-    var show = total <= ENTRY_LIST_CHUNK ? total : Math.min(entryListShown, total);
-    var slice = dates.slice(0, show);
+    var slice = dates.slice(0, RECENT_ENTRIES_LIMIT);
     var dateFmt = window.auraDateFormat || 'MD';
     ul.innerHTML = slice.map(function(date) {
         var e = entries[date];
         var displayDate = formatDisplayDate(date, dateFmt);
-        var moodStr = e && e.mood != null ? e.mood.toFixed(1) : '–';
-        var energyStr = e && e.energy != null ? e.energy.toFixed(1) : '–';
-        var metricsText = 'Mood ' + moodStr + ' · Energy ' + energyStr;
+        var moodStr = e && e.mood != null ? e.mood.toFixed(1) : '\u2013';
+        var energyStr = e && e.energy != null ? e.energy.toFixed(1) : '\u2013';
+        var previewText = getJournalSnippet(e) || 'No journal text saved';
         var safeDate = date.replace(/'/g, "\\'");
         var activeClass = date === currentJournalEntryDate ? ' active' : '';
-        return '<li class="entry-list-item' + activeClass + '" data-date="' + date + '"><div class="entry-row-swipe"><div class="entry-row-content"><span class="entry-date">' + escapeHtml(displayDate) + '</span><div class="entry-list-right"><span class="entry-list-metrics">' + escapeHtml(metricsText) + '</span><button type="button" class="entry-delete" title="Delete journal" aria-label="Delete journal for ' + date + '" onclick="event.stopPropagation(); openDeleteEntryModal(\'' + safeDate + '\', this)">🗑️</button></div></div></div></li>';
+        var meta = typeof getDayRecordMeta === 'function' ? getDayRecordMeta(e) : { hasJournal: false, photoCount: 0 };
+        var extraPill = '';
+        if (meta.hasJournal) extraPill += '<span class="entry-record-pill">Journal</span>';
+        if (meta.photoCount > 0) extraPill += '<span class="entry-record-pill">' + meta.photoCount + ' photo' + (meta.photoCount === 1 ? '' : 's') + '</span>';
+        return '<li class="entry-list-item' + activeClass + '" data-date="' + date + '"><div class="entry-row-swipe"><div class="entry-row-content entry-record-card"><div class="entry-record-main"><div class="entry-record-date-block"><span class="entry-date">' + escapeHtml(displayDate) + '</span><span class="entry-record-subtitle">' + escapeHtml(previewText) + '</span></div><div class="entry-record-meta"><span class="entry-record-pill">Mood ' + escapeHtml(moodStr) + '</span><span class="entry-record-pill">Energy ' + escapeHtml(energyStr) + '</span>' + extraPill + '</div></div><div class="entry-record-actions"><button type="button" class="entry-record-action" onclick="event.stopPropagation(); openJournalEntry(\'' + safeDate + '\');">Edit</button><button type="button" class="entry-record-delete" title="Delete journal" aria-label="Delete journal for ' + date + '" onclick="event.stopPropagation(); openDeleteEntryModal(\'' + safeDate + '\', this)">Delete</button></div></div></div></li>';
     }).join('');
-    if (total > ENTRY_LIST_CHUNK && show < total) {
-        var remaining = total - show;
-        ul.innerHTML += '<li class="entry-list-load-more"><button type="button" class="btn-secondary" onclick="entryListLoadMore()">Load more (' + remaining + ' remaining)</button></li>';
-    }
     if (typeof setupEntryListTouch === 'function') setupEntryListTouch();
-}
-function entryListLoadMore() {
-    entryListShown += ENTRY_LIST_CHUNK;
-    renderEntryList();
 }
 
 async function deleteJournalEntry(entryId) {
@@ -8197,7 +8358,6 @@ if (typeof dismissNoDataBanner === 'function') window.dismissNoDataBanner = dism
 if (typeof dismissPwaInstallBanner === 'function') window.dismissPwaInstallBanner = dismissPwaInstallBanner;
 if (typeof downloadBackupNow === 'function') window.downloadBackupNow = downloadBackupNow;
 if (typeof entryJournalStartEdit === 'function') window.entryJournalStartEdit = entryJournalStartEdit;
-if (typeof entryListLoadMore === 'function') window.entryListLoadMore = entryListLoadMore;
 if (typeof entryRedo === 'function') window.entryRedo = entryRedo;
 if (typeof entryUndo === 'function') window.entryUndo = entryUndo;
 if (typeof exportCSV === 'function') window.exportCSV = exportCSV;
@@ -8219,6 +8379,9 @@ if (typeof navigateToEntry === 'function') window.navigateToEntry = navigateToEn
 if (typeof openDeleteAllModal === 'function') window.openDeleteAllModal = openDeleteAllModal;
 if (typeof openDeleteEntryModal === 'function') window.openDeleteEntryModal = openDeleteEntryModal;
 if (typeof openEntryForDate === 'function') window.openEntryForDate = openEntryForDate;
+if (typeof openSelectedDayCheckIn === 'function') window.openSelectedDayCheckIn = openSelectedDayCheckIn;
+if (typeof openSelectedDayJournal === 'function') window.openSelectedDayJournal = openSelectedDayJournal;
+if (typeof selectSettingsDataManagerDate === 'function') window.selectSettingsDataManagerDate = selectSettingsDataManagerDate;
 if (typeof openFullEntryDeleteConfirm === 'function') window.openFullEntryDeleteConfirm = openFullEntryDeleteConfirm;
 if (typeof openJournalEntry === 'function') window.openJournalEntry = openJournalEntry;
 if (typeof openSidebar === 'function') window.openSidebar = openSidebar;

@@ -1108,6 +1108,38 @@
                         <ul id="customMetricsList" class="custom-metrics-list"></ul>
                     </div>
                 </div>
+                <div class="card data-manager-card" id="settingsDataManagerCard">
+                    <div class="data-manager-header">
+                        <div>
+                            <h3>Data Manager</h3>
+                            <p class="card-desc">Review any saved day and jump straight into the right editor.</p>
+                        </div>
+                    </div>
+                    <div class="data-manager-controls">
+                        <div class="form-group">
+                            <label for="settingsDataManagerDate">Saved day</label>
+                            <input type="text" id="settingsDataManagerDate" class="aura-date-input form-input" placeholder="YYYY-MM-DD" aria-label="Saved day to manage">
+                        </div>
+                        <div id="settingsDataManagerStatus" class="data-manager-status" aria-live="polite"></div>
+                    </div>
+                    <div id="settingsDataManagerPreview" class="data-manager-preview is-empty">
+                        <div class="data-manager-preview-empty">
+                            <p class="data-manager-preview-title">Choose a saved day</p>
+                            <p class="data-manager-preview-copy">Select a date to see what data exists and open the correct editor.</p>
+                        </div>
+                    </div>
+                    <div class="data-manager-actions">
+                        <button type="button" class="btn" id="settingsEditCheckInBtn" onclick="openSelectedDayCheckIn()" disabled>Edit Check-In</button>
+                        <button type="button" class="btn btn-secondary" id="settingsEditJournalBtn" onclick="openSelectedDayJournal()" disabled>Edit Journal</button>
+                    </div>
+                    <div class="data-manager-recent">
+                        <div class="data-manager-recent-header">
+                            <h4>Recent saved days</h4>
+                            <p>Browse recent records quickly. The date field still works for any saved day.</p>
+                        </div>
+                        <div id="settingsDataManagerRecentList" class="data-manager-recent-list"></div>
+                    </div>
+                </div>
                 <div class="card">
                     <h3>Privacy &amp; data</h3>
                     <p class="card-desc">Optional passcode lock, private mode, data retention, and complete deletion.</p>
