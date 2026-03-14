@@ -3828,12 +3828,30 @@ function createChart(id, label, data, dates, color, scaleOpts, datasetOpts) {
     if (!id || !label) return;
     const ctx = document.getElementById(id);
     if (!ctx) return;
-    if (!Array.isArray(data)) data = [];
-    if (!Array.isArray(dates)) dates = [];
+
+    // Destroy any previous instance
     try {
         const existing = Chart.getChart(ctx);
         if (existing) existing.destroy();
     } catch (e) {}
+
+    // Remove any stale empty-state overlay
+    const wrap = ctx.closest('.comparison-chart-wrap, .analytics-chart-wrap, .mood-trends-chart-wrap, .mood-velocity-chart-wrap, .chart-container') || ctx.parentElement;
+    if (wrap) {
+        const old = wrap.querySelector('.chart-empty-overlay');
+        if (old) old.remove();
+    }
+
+    if (!Array.isArray(data)) data = [];
+    if (!Array.isArray(dates)) dates = [];
+
+    // Show premium empty state instead of a broken/flat chart
+    const hasData = data.some(function(v) { return v != null && !isNaN(Number(v)); });
+    if (!hasData) {
+        renderChartEmptyState(ctx, label);
+        return;
+    }
+
     var opts = getChartConfig(scaleOpts || {});
     var baseDataset = {
         label: label,
@@ -3876,6 +3894,36 @@ function createChart(id, label, data, dates, color, scaleOpts, datasetOpts) {
     } catch (chartErr) {
         console.warn('[Aura] createChart failed for ' + id, chartErr);
     }
+}
+
+function renderChartEmptyState(canvas, chartLabel) {
+    var wrap = canvas.closest('.comparison-chart-wrap, .analytics-chart-wrap, .mood-trends-chart-wrap, .mood-velocity-chart-wrap, .chart-container') || canvas.parentElement;
+    if (!wrap) return;
+
+    // Avoid duplicates
+    if (wrap.querySelector('.chart-empty-overlay')) return;
+
+    // Ensure the wrapper is a positioning context
+    var pos = getComputedStyle(wrap).position;
+    if (pos === 'static') wrap.style.position = 'relative';
+
+    // Map chart label to a friendly message
+    var messages = {
+        'Mood': 'Log your first check-in to see your mood trend',
+        'Sleep': 'Add sleep data in Daily Check-In to see sleep patterns',
+        'Energy': 'Track energy in Daily Check-In to see patterns',
+        'Mood Change': 'Track at least 2 days of mood to see velocity'
+    };
+    var msg = messages[chartLabel] || 'Add entries to see this chart';
+
+    var overlay = document.createElement('div');
+    overlay.className = 'chart-empty-overlay';
+    overlay.setAttribute('aria-hidden', 'true');
+    overlay.innerHTML =
+        '<span class="chart-empty-icon" aria-hidden="true">📊</span>' +
+        '<p class="chart-empty-text">' + escapeHtml(msg) + '</p>';
+
+    wrap.appendChild(overlay);
 }
 
 function renderCharts() {

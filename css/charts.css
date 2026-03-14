@@ -36,6 +36,21 @@
     background: color-mix(in srgb, var(--surface) 95%, var(--bg));
     border-color: color-mix(in srgb, var(--border) 110%, transparent);
 }
+/* Chart Styling — scope the cap so analytics full-height canvases are never clipped */
+.dashboard-grid canvas,
+.chart-card canvas {
+    max-height: 300px;
+    max-width: 100%;
+}
+.analytics-chart-card canvas,
+.mood-trends-chart-wrap canvas,
+.analytics-chart-wrap canvas,
+.mood-velocity-chart-wrap canvas,
+.circadian-velocity-card canvas {
+    max-height: none !important;
+    max-width: 100%;
+}
+
 .chart-container {
     position: relative;
     height: 280px;
@@ -67,6 +82,16 @@
     .comparison-chart-wrap {
         padding: 20px 16px;
         min-height: 180px;
+    }
+    .dashboard-grid .card canvas {
+        height: 220px !important;
+        max-height: 220px !important;
+    }
+    .analytics-chart-card canvas,
+    .mood-trends-chart-wrap canvas,
+    .analytics-chart-wrap canvas,
+    .mood-velocity-chart-wrap canvas {
+        max-height: none !important;
     }
     .chart-container {
         height: 220px;
@@ -1381,3 +1406,29 @@ input.aura-date-input { cursor: pointer; }
     color: var(--surface);
 }
 input.aura-time-input { cursor: pointer; }
+
+/* Chart empty state — premium placeholder when no data exists for a canvas */
+.chart-empty-overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-sm);
+    pointer-events: none;
+    z-index: 1;
+}
+.chart-empty-icon {
+    font-size: 2rem;
+    opacity: 0.25;
+    line-height: 1;
+}
+.chart-empty-text {
+    font-size: 0.875rem;
+    color: var(--text-muted);
+    margin: 0;
+    opacity: 0.7;
+    text-align: center;
+    font-family: var(--font-body);
+}
