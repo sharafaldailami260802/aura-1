@@ -4005,8 +4005,8 @@ function renderCharts() {
     const energy = dates.map(d => (entries[d] && entries[d].energy != null) ? entries[d].energy : null);
     
     const shortDates = dates.map(d => {
-        const date = new Date(d);
-        return (date.getMonth() + 1) + '/' + date.getDate();
+        const parts = d.split('-');
+        return parseInt(parts[1], 10) + '/' + parseInt(parts[2], 10);
     });
     
     createChart('moodChart',     'Mood',   mood,  shortDates, colors.chart1, { yMin: 1, yMax: 10, yStep: 1, yTitle: 'Mood (1–10)',    integerTicks: true  });
