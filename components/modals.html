@@ -1,0 +1,141 @@
+<!-- Modals: inject into #modals-mount when using dynamic load -->
+<!-- Entry detail modal -->
+<div id="entryModal" class="entry-modal-overlay" role="dialog" aria-modal="true" aria-labelledby="entryModalTitle" aria-hidden="true" onclick="if (event.target === this) closeEntryModal()">
+    <div class="entry-modal entry-modal-premium">
+        <div class="entry-modal-header">
+            <div>
+                <h3 id="entryModalTitle" class="entry-modal-title-text">Entry</h3>
+                <p id="entryModalSubtitle" class="entry-modal-subtitle"></p>
+            </div>
+            <button type="button" class="entry-modal-close" onclick="closeModal()" aria-label="Close">✕</button>
+        </div>
+        <div id="entryModalBody" class="entry-modal-body"></div>
+        <div class="entry-modal-footer">
+            <button type="button" class="btn btn-secondary entry-modal-footer-btn" id="entryModalEditBtn" onclick="navigateTo('entry', entryModalDate)">✏️ Full Edit</button>
+            <button type="button" class="btn btn-secondary entry-modal-footer-btn" id="entryModalJournalBtn" onclick="navigateTo('journal', entryModalDate)" style="display:none;">📓 Journal</button>
+            <button type="button" class="btn btn-neutral entry-modal-footer-btn" onclick="closeModal()">Close</button>
+        </div>
+    </div>
+</div>
+<div id="fullEntryDeleteModal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="fullEntryDeleteModalTitle" aria-describedby="fullEntryDeleteModalDesc" aria-hidden="true" onclick="if (event.target === this) closeFullEntryDeleteModal()">
+    <div class="modal full-entry-delete-modal">
+        <h3 id="fullEntryDeleteModalTitle">Delete this entire day?</h3>
+        <p id="fullEntryDeleteModalDesc" class="modal-desc">Mood, energy, sleep, activities and journal will be permanently removed.<br>This action cannot be undone.</p>
+        <div class="modal-actions modal-actions-full-entry-delete">
+            <button type="button" class="btn btn-secondary" onclick="closeFullEntryDeleteModal()">Cancel</button>
+            <button type="button" class="btn btn-danger-full-entry" id="fullEntryDeleteConfirmBtn" onclick="confirmFullEntryDeleteFromModal()">Delete Entry</button>
+        </div>
+    </div>
+</div>
+<div id="premiumConfirmModal" class="modal-overlay" role="dialog" aria-modal="true" aria-hidden="true" onclick="if(event.target===this)closePremiumConfirm()">
+    <div class="modal premium-confirm-modal">
+        <div class="premium-confirm-icon">⚠️</div>
+        <h3 id="premiumConfirmTitle" class="premium-confirm-title">Are you sure?</h3>
+        <p id="premiumConfirmDesc" class="modal-desc"></p>
+        <div class="modal-actions">
+            <button type="button" class="btn btn-secondary" onclick="closePremiumConfirm()">Cancel</button>
+            <button type="button" class="btn btn-danger" id="premiumConfirmOkBtn">Delete</button>
+        </div>
+    </div>
+</div>
+<div id="dayPreviewTooltip" class="day-preview-tooltip" aria-hidden="true"></div>
+
+<!-- Search modal -->
+<div id="searchModal" class="search-modal-overlay" role="dialog" aria-modal="true" aria-labelledby="searchModalTitle" aria-hidden="true" onclick="if (event.target === this) this.classList.remove('show')">
+    <div class="search-modal">
+        <h3 id="searchModalTitle">Search entries</h3>
+        <input type="text" id="searchQuery" placeholder="Search in journal, activities, tags..." class="form-input">
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-sm); margin-top: var(--space-sm);">
+            <div><label style="font-size: 0.85rem; color: var(--text-muted);">Date from</label><input type="text" id="searchDateFrom" class="aura-date-input" placeholder="YYYY-MM-DD" aria-label="Date from"></div>
+            <div><label style="font-size: 0.85rem; color: var(--text-muted);">Date to</label><input type="text" id="searchDateTo" class="aura-date-input" placeholder="YYYY-MM-DD" aria-label="Date to"></div>
+        </div>
+        <div style="margin-top: var(--space-sm);">
+            <label style="font-size: 0.85rem; color: var(--text-muted);">Mood range</label>
+            <div style="display: flex; gap: 8px; align-items: center;"><input type="number" id="searchMoodMin" min="1" max="10" placeholder="Min" style="width: 60px;"> – <input type="number" id="searchMoodMax" min="1" max="10" placeholder="Max" style="width: 60px;"></div>
+        </div>
+        <div style="margin-top: var(--space-sm);">
+            <label style="font-size: 0.85rem; color: var(--text-muted);">Tags (comma-separated)</label>
+            <input type="text" id="searchTags" placeholder="e.g. work, exercise" class="form-input">
+        </div>
+        <button type="button" class="btn" style="margin-top: var(--space-md);" onclick="runSearch()">Search</button>
+        <div id="searchResults" class="search-results"></div>
+    </div>
+</div>
+
+<!-- Delete All Data Modal -->
+<div id="deleteAllModal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="deleteAllModalTitle" aria-describedby="deleteAllModalDesc">
+    <div class="modal">
+        <h3 id="deleteAllModalTitle">Delete all my data</h3>
+        <p id="deleteAllModalDesc">This permanently deletes all entries, journal, backups, and settings. This cannot be undone.</p>
+        <p id="deleteAllModalError" class="modal-error"></p>
+        <div id="deleteAllPasscodeWrap">
+            <label style="display:block; margin-bottom: 4px; font-size: 0.9rem; color: var(--text-muted);">Enter passcode to confirm</label>
+            <input type="password" id="deleteAllPassword" class="modal-input" placeholder="Passcode" autocomplete="off">
+        </div>
+        <div id="deleteAllTypeWrap" style="display: none;">
+            <label style="display:block; margin-bottom: 4px; font-size: 0.9rem; color: var(--text-muted);">Type DELETE to confirm</label>
+            <input type="text" id="deleteAllTypeConfirm" class="modal-input" placeholder="Type DELETE" autocomplete="off">
+        </div>
+        <div class="modal-actions">
+            <button type="button" class="btn-secondary" onclick="closeDeleteAllModal()">Cancel</button>
+            <button type="button" class="btn-danger" onclick="confirmDeleteAll()">Confirm</button>
+        </div>
+    </div>
+</div>
+
+<!-- Delete journal entry modal -->
+<div id="deleteEntryModal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="deleteEntryModalTitle" aria-describedby="deleteEntryModalPreview deleteEntryModalDesc" aria-hidden="true" onclick="if (event.target === this) closeDeleteEntryModal()">
+    <div class="modal">
+        <h3 id="deleteEntryModalTitle">Delete Entry?</h3>
+        <div id="deleteEntryModalPreview" class="modal-preview" hidden></div>
+        <p id="deleteEntryModalDesc">This action cannot be undone.</p>
+        <div class="modal-actions">
+            <button type="button" class="btn btn-secondary" id="deleteEntryCancelBtn" onclick="closeDeleteEntryModal()">Cancel</button>
+            <button type="button" class="btn btn-danger" id="deleteEntryConfirmBtn" onclick="confirmDeleteEntryFromModal()">Delete</button>
+        </div>
+    </div>
+</div>
+
+<!-- Import Preview Modal -->
+<div id="importPreviewModal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="importPreviewTitle">
+    <div class="modal">
+        <h3 id="importPreviewTitle">Preview import</h3>
+        <p id="importPreviewSummary" style="color: var(--text-muted); margin-bottom: var(--space-sm);"></p>
+        <div id="importPreviewSample" style="max-height: 200px; overflow-y: auto; font-size: 0.9rem; margin-bottom: var(--space-md); padding: var(--space-sm); background: var(--bg); border-radius: 12px;"></div>
+        <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: var(--space-sm);">For matching dates:</p>
+        <label style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px;"><input type="radio" name="importConflict" value="keep"> Keep existing</label>
+        <label style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px;"><input type="radio" name="importConflict" value="overwrite" checked> Use imported</label>
+        <label style="display: flex; align-items: center; gap: 8px; margin-bottom: var(--space-md);"><input type="radio" name="importConflict" value="newer"> Keep newer</label>
+        <div class="modal-actions">
+            <button type="button" class="btn-secondary" onclick="closeImportPreviewModal()">Cancel</button>
+            <button type="button" class="btn" onclick="confirmImportMerge()">Import (merge)</button>
+            <button type="button" class="btn-secondary" onclick="confirmImportReplace()">Import (replace)</button>
+        </div>
+    </div>
+</div>
+
+<!-- Passcode lock screen -->
+<div id="passcodeLockScreen" class="passcode-lock-overlay" aria-hidden="true" style="display: none;">
+    <div class="passcode-lock-card">
+        <h3>Enter passcode</h3>
+        <input type="password" id="passcodeUnlockInput" class="modal-input" placeholder="Passcode" autocomplete="off" aria-label="Passcode">
+        <button type="button" class="btn" onclick="unlockWithPasscode()">Unlock</button>
+    </div>
+</div>
+
+<!-- Set passcode modal -->
+<div id="setPasscodeModal" class="modal-overlay" role="dialog" aria-modal="true">
+    <div class="modal">
+        <h3>Set passcode</h3>
+        <p style="color: var(--text-muted); margin-bottom: var(--space-md);">Enter a 4–8 digit passcode to lock the app.</p>
+        <label style="display:block; margin-bottom: 4px; font-size: 0.9rem;">New passcode</label>
+        <input type="password" id="setPasscodeNew" class="modal-input" placeholder="Passcode" autocomplete="off" maxlength="8" inputmode="numeric" pattern="[0-9]*">
+        <label style="display:block; margin-bottom: 4px; font-size: 0.9rem; margin-top: var(--space-sm);">Confirm passcode</label>
+        <input type="password" id="setPasscodeConfirm" class="modal-input" placeholder="Confirm" autocomplete="off" maxlength="8" inputmode="numeric" pattern="[0-9]*">
+        <p id="setPasscodeError" class="modal-error" style="margin-top: var(--space-sm);"></p>
+        <div class="modal-actions" style="margin-top: var(--space-md);">
+            <button type="button" class="btn-secondary" onclick="closeSetPasscodeModal()">Cancel</button>
+            <button type="button" class="btn" onclick="savePasscode()">Set passcode</button>
+        </div>
+    </div>
+</div>

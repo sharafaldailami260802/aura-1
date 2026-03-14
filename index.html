@@ -1,0 +1,1254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#ea580c">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="Aura Mood">
+    <!-- Manifest may throw a CORS error when opened via file://; it works when served from a local server or over http/https. -->
+    <link rel="manifest" href="../manifest.json">
+    <link rel="apple-touch-icon" href="../icon-192.svg">
+    <link rel="apple-touch-icon" sizes="192x192" href="../icon-192.svg">
+    <link rel="apple-touch-icon" sizes="512x512" href="../icon-512.svg">
+    <!-- Themed splash (SVG fallback; PNG recommended for best iOS support) -->
+    <link rel="apple-touch-startup-image" href="../screenshot-narrow.svg" media="(max-device-width: 768px) and (orientation: portrait)">
+    <title>Aura Mood</title>
+    
+    <!-- Apply theme from cache immediately to avoid flash. Default: sunset, dark on. -->
+    <script>
+        (function() {
+            var t = localStorage.getItem('auraTheme');
+            if (t === null || t === '') t = 'sunset';
+            var d = localStorage.getItem('auraDark');
+            if (d === null || d === '') d = 'true';
+            else d = d === 'true';
+            document.documentElement.setAttribute('data-theme', t);
+            document.documentElement.setAttribute('data-dark', d ? 'true' : 'false');
+        })();
+    </script>
+    
+    <!-- Distinctive Typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@300;400;600&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+    
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-zoom@2.0.1/dist/chartjs-plugin-zoom.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/dexie@3.2.4/dist/dexie.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/d3@7.8.5/dist/d3.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.snow.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.min.js"></script>
+    
+    <link rel="stylesheet" href="css/design-system.css">
+    <link rel="stylesheet" href="css/layout.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/charts.css">
+</head>
+<body>
+    <div id="auraDatePicker" class="aura-date-picker" aria-hidden="true" role="dialog" aria-label="Choose date"></div>
+    <div id="auraTimePicker" class="aura-time-picker" aria-hidden="true" role="dialog" aria-label="Choose time"></div>
+    <div class="app">
+        <!-- Sidebar -->
+        <aside class="sidebar" role="navigation" aria-label="Main navigation">
+            <div class="logo-wrap">
+                <div class="logo-mark" aria-hidden="true">
+                    <svg viewBox="0 0 192 192" xmlns="http://www.w3.org/2000/svg"><path d="M36 96 Q 60 72, 96 96 T 156 96" fill="none" stroke="currentColor" stroke-width="12" stroke-linecap="round"/><path d="M44 112 Q 68 88, 96 112 T 148 112" fill="none" stroke="currentColor" stroke-width="10" stroke-linecap="round" opacity="0.85"/><path d="M52 128 Q 76 104, 96 128 T 140 128" fill="none" stroke="currentColor" stroke-width="8" stroke-linecap="round" opacity="0.7"/></svg>
+                </div>
+                <h2 class="logo">Aura <span class="logo-accent">Mood</span></h2>
+            </div>
+            
+            <button type="button" class="sidebar-close-mobile" onclick="closeSidebar()" aria-label="Close menu">×</button>
+            
+            <div class="theme-toggle-wrap" title="Toggle dark mode">
+                <button type="button" id="darkModeToggle" class="theme-toggle" aria-label="Toggle dark mode">
+                    <span class="theme-toggle-icon sun">☀️</span>
+                    <span class="theme-toggle-icon moon">🌙</span>
+                </button>
+            </div>
+            
+            <div class="section-label">Tracking</div>
+            <button onclick="navigate('dashboard', this)" class="nav active" aria-label="Go to Overview" aria-current="page">
+                <span class="nav-icon">📊</span>
+                <span>Overview</span>
+            </button>
+            <button onclick="navigate('entry', this)" class="nav" aria-label="Go to Daily Check-In">
+                <span class="nav-icon">✨</span>
+                <span>Daily Check-In</span>
+            </button>
+            <button onclick="navigate('calendar', this)" class="nav" aria-label="Go to Calendar">
+                <span class="nav-icon">📅</span>
+                <span>Calendar</span>
+            </button>
+            <button onclick="navigate('journal', this)" class="nav" aria-label="Go to Journal">
+                <span class="nav-icon">📔</span>
+                <span>Journal</span>
+            </button>
+            
+            <div class="section-label">Analytics</div>
+            <button onclick="navigate('mood', this)" class="nav">
+                <span class="nav-icon">📈</span>
+                <span>Mood Trends</span>
+            </button>
+            <button onclick="navigate('sleep', this)" class="nav">
+                <span class="nav-icon">🌙</span>
+                <span>Sleep Analysis</span>
+            </button>
+            <button onclick="navigate('energy', this)" class="nav">
+                <span class="nav-icon">⚡</span>
+                <span>Energy Patterns</span>
+            </button>
+            <button onclick="navigate('circadian', this)" class="nav">
+                <span class="nav-icon">⏰</span>
+                <span>Circadian Rhythm</span>
+            </button>
+            <button onclick="navigate('correlations', this)" class="nav">
+                <span class="nav-icon">🔗</span>
+                <span>Correlations</span>
+            </button>
+            <button onclick="navigate('predictions', this)" class="nav">
+                <span class="nav-icon">🔮</span>
+                <span>Predictions</span>
+            </button>
+            <button onclick="navigate('patterns', this)" class="nav">
+                <span class="nav-icon">📊</span>
+                <span>Weekly & Time</span>
+            </button>
+            <button onclick="navigate('seasonal', this)" class="nav">
+                <span class="nav-icon">🍂</span>
+                <span>Seasonal Patterns</span>
+            </button>
+            <button onclick="navigate('reports', this)" class="nav">
+                <span class="nav-icon">📋</span>
+                <span>Reports</span>
+            </button>
+            <button onclick="navigate('insights', this)" class="nav">
+                <span class="nav-icon">💡</span>
+                <span>Insights</span>
+            </button>
+            
+            <div class="section-label">Settings</div>
+            <button onclick="navigate('settings', this)" class="nav">
+                <span class="nav-icon">⚙️</span>
+                <span>Settings</span>
+            </button>
+            
+            <div class="section-label">Data</div>
+            <button onclick="navigate('data', this)" class="nav">
+                <span class="nav-icon">💾</span>
+                <span>Export & Backup</span>
+            </button>
+        </aside>
+        <div id="sidebarOverlay" class="sidebar-overlay" aria-hidden="true" onclick="closeSidebar()"></div>
+        
+        <!-- Main Content -->
+        <main id="main-content" role="main" aria-label="Page content">
+            <!-- Dashboard Overview -->
+            <div id="dashboard" class="page active">
+                <h1>Welcome Back</h1>
+                <div class="metrics">
+                    <div class="metric">
+                        <h3>Mood Today</h3>
+                        <span class="metric-value skeleton" id="todayMood">--</span>
+                    </div>
+                    <div class="metric">
+                        <h3>Sleep Duration</h3>
+                        <span class="metric-value skeleton" id="todaySleep">--</span>
+                        <span class="metric-unit">hrs</span>
+                    </div>
+                    <div class="metric">
+                        <h3>Energy Level</h3>
+                        <span class="metric-value skeleton" id="todayEnergy">--</span>
+                    </div>
+                    <div class="metric metric-streak" id="streakCard">
+                        <div style="display:flex;align-items:flex-start;justify-content:space-between;width:100%;">
+                            <div style="flex:1;">
+                                <div class="streak-icon-wrap" aria-hidden="true">🔥</div>
+                                <h3 style="font-size:0.72rem;text-transform:uppercase;letter-spacing:0.09em;color:var(--text-muted);font-weight:600;margin-bottom:4px;">Streak</h3>
+                                <div class="streak-value-row">
+                                    <span class="metric-value skeleton" id="streak">--</span>
+                                    <span class="metric-unit">days</span>
+                                </div>
+                            </div>
+                            <div style="text-align:right;flex-shrink:0;padding-top:4px;">
+                                <span id="streakMilestoneLabel" class="streak-milestone-label"></span>
+                            </div>
+                        </div>
+                        <div style="margin-top:10px;width:100%;">
+                            <div class="streak-progress-track">
+                                <div class="streak-progress-fill" id="streakProgress" style="width:0%;"></div>
+                            </div>
+                            <div id="streakProgressLabels" class="streak-progress-labels"></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="dashboard-grid">
+                    <div class="card" data-widget="mood">
+                        <h3>Mood Timeline</h3>
+                        <canvas id="moodChart"></canvas>
+                    </div>
+                    <div class="card" data-widget="sleep">
+                        <h3>Sleep Patterns</h3>
+                        <canvas id="sleepChart"></canvas>
+                    </div>
+                    <div class="card" data-widget="energy">
+                        <h3>Energy Flow</h3>
+                        <canvas id="energyChart"></canvas>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Daily Check-In -->
+            <div id="entry" class="page">
+                <h1>Daily Check-In</h1>
+                
+                <div class="form checkin-form-wrap">
+                    <div class="checkin-desktop-layout">
+                        <div class="checkin-form">
+                    <div class="entry-section entry-section-date">
+                        <div class="entry-section-header">
+                            <span class="entry-section-heading">Date</span>
+                        </div>
+                        <div class="entry-section-content" style="max-height: none;">
+                            <div class="form-group" style="margin-bottom: 0;">
+                                <label>Date</label>
+                                <input type="text" id="date" class="aura-date-input" placeholder="YYYY-MM-DD" aria-label="Date">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="entry-section entry-section-1 collapsible-mobile" id="entrySectionMoodEnergy" data-section="mood-energy">
+                        <button type="button" class="entry-section-header" onclick="toggleEntrySection('entrySectionMoodEnergy')" aria-expanded="false" aria-controls="entrySectionMoodEnergyContent">
+                            <span class="entry-section-heading">Mood &amp; Energy</span>
+                            <span class="entry-section-chevron">▼</span>
+                        </button>
+                        <div class="entry-section-content" id="entrySectionMoodEnergyContent">
+                            <div class="form-group" id="fg-mood">
+                                <label>
+                                    Mood
+                                    <span class="form-value" id="moodValue">5</span>
+                                </label>
+                                <input type="range" min="1" max="10" step="0.5" value="5" id="entryMood"
+                                       oninput="var v=roundMoodEnergySleepQuality(parseFloat(this.value)); this.value=v; moodValue.innerText=v; clearFieldError('mood');">
+                                <p id="error-mood" class="form-error" aria-live="polite"></p>
+                            </div>
+                            <div class="form-group">
+                                <label>
+                                    Energy Level
+                                    <span class="form-value" id="energyValue">5</span>
+                                </label>
+                                <input type="range" min="1" max="10" step="0.5" value="5" id="entryEnergy"
+                                       oninput="var v=roundMoodEnergySleepQuality(parseFloat(this.value)); this.value=v; energyValue.innerText=v;">
+                            </div>
+                            <div id="customMetricsFormWrap"></div>
+                        </div>
+                    </div>
+
+                    <div class="entry-section entry-section-2 collapsible-mobile" id="entrySectionSleep" data-section="sleep">
+                        <button type="button" class="entry-section-header" onclick="toggleEntrySection('entrySectionSleep')" aria-expanded="false" aria-controls="entrySectionSleepContent">
+                            <span class="entry-section-heading">Sleep</span>
+                            <span class="entry-section-chevron">▼</span>
+                        </button>
+                        <div class="entry-section-content" id="entrySectionSleepContent">
+                            <div class="form-group" id="fg-sleep">
+                                <label>
+                                    Sleep Duration
+                                    <span class="form-value"><span id="sleepValue">7</span> hrs</span>
+                                </label>
+                                <input type="range" min="0" max="12" step="0.5" value="7" id="entrySleep"
+                                       oninput="sleepValue.innerText=this.value; clearFieldError('sleep');">
+                                <p id="error-sleep" class="form-error" aria-live="polite"></p>
+                            </div>
+                            <div class="form-group">
+                                <label>
+                                    Sleep Quality
+                                    <span class="form-value" id="sleepQualityValue">5</span>
+                                </label>
+                                <input type="range" min="1" max="10" step="0.5" value="5" id="sleepQuality"
+                                       oninput="var v=roundMoodEnergySleepQuality(parseFloat(this.value)); this.value=v; document.getElementById('sleepQualityValue').innerText=v;">
+                            </div>
+                            <div class="form-group">
+                                <label>Primary Sleep Time</label>
+                                <input type="text" id="sleepTime" class="aura-time-input form-input" value="23:00" placeholder="HH:mm" aria-label="Sleep time" data-aura-time="23:00">
+                            </div>
+                            <div class="form-group">
+                                <label>Primary Wake Time</label>
+                                <input type="text" id="wakeTime" class="aura-time-input form-input" value="07:00" placeholder="HH:mm" aria-label="Wake time" data-aura-time="07:00">
+                            </div>
+                            <div class="form-group">
+                                <label>
+                                    Sleep Segments
+                                    <span class="form-hint-inline">(up to 3 per night)</span>
+                                </label>
+                                <p class="sleep-segments-intro">Capture split or interrupted sleep in separate segments.</p>
+                                <div class="sleep-segments-module">
+                                    <div id="sleepSegmentsList" class="sleep-segments-list"></div>
+                                    <button type="button" id="addSleepSegmentBtn" class="btn btn-secondary add-sleep-segment" onclick="addSleepSegment()">+ Add Sleep Segment</button>
+                                    <p id="sleepSegmentSummary" class="sleep-segment-summary" aria-live="polite"></p>
+                                    <p id="sleepSegmentsError" class="form-error" aria-live="polite" style="display:none;"></p>
+                                </div>
+                                <p class="form-hint">Use segments to track fragmented or polyphasic sleep.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="entry-section entry-section-3 collapsible-mobile" id="entrySectionActivitiesTags" data-section="activities-tags">
+                        <button type="button" class="entry-section-header" onclick="toggleEntrySection('entrySectionActivitiesTags')" aria-expanded="false" aria-controls="entrySectionActivitiesTagsContent">
+                            <span class="entry-section-heading">Activities &amp; Tags</span>
+                            <span class="entry-section-chevron">▼</span>
+                        </button>
+                        <div class="entry-section-content" id="entrySectionActivitiesTagsContent">
+                            <div class="form-group">
+                                <label>Activities</label>
+                                <input type="text" id="activities" class="form-input" placeholder="e.g. exercise, reading, work (comma-separated)">
+                            </div>
+                            <div class="form-group">
+                                <label>Tags</label>
+                                <input type="text" id="tags" class="form-input" placeholder="e.g. #weekend #family (comma or space separated)" autocomplete="off">
+                                <p class="tag-suggestions-label" id="tagSuggestionsLabel">Suggested tags <span class="tag-suggestions-hint">Tap to add</span></p>
+                                <div id="tagSuggestions" class="tag-suggestions"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="entry-section entry-section-4 collapsible-mobile entry-section-journal-after-summary" id="entrySectionJournal" data-section="journal">
+                        <button type="button" class="entry-section-header" onclick="toggleEntrySection('entrySectionJournal')" aria-expanded="false" aria-controls="entrySectionJournalContent">
+                            <span class="entry-section-heading" data-i18n="journal">Journal</span>
+                            <span class="entry-section-chevron">▼</span>
+                        </button>
+                        <div class="entry-section-content" id="entrySectionJournalContent">
+                            <p class="journal-helper" id="journalOnePerDayHint" data-i18n="one_journal_per_day">Only one journal entry can be created per day.</p>
+                            <div class="card journal-entry-card">
+                                <header class="journal-card-header">
+                                    <h3 class="journal-card-title">Daily Reflection</h3>
+                                    <p class="journal-card-subtitle">Capture how the day felt, what mattered, and what you noticed.</p>
+                                </header>
+                                <div class="form-group" id="journalFormGroup">
+                                    <div id="journalPreviewWrap" class="journal-preview-wrap" style="display: none;" aria-hidden="true">
+                                        <p class="journal-preview-placeholder" id="journalPreviewPlaceholder" data-i18n="journal_saved_placeholder">Your journal entry for today has already been saved.</p>
+                                        <button type="button" class="journal-edit-link" id="journalEditLink" onclick="entryJournalStartEdit()" data-i18n="edit_journal_entry">Edit journal entry</button>
+                                    </div>
+                                    <div class="journal-editor-wrap">
+                                        <textarea id="notes" class="form-input journal-textarea" placeholder="What stood out today? What affected your mood? What are you grateful for?"></textarea>
+                                    </div>
+                                </div>
+                                <div class="journal-save-row">
+                                    <span class="journal-save-helper">Your journal is saved when you click <strong>Save Entry</strong> at the bottom of the page (or press ⌘S).</span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>Photos</label>
+                                <div class="photo-upload-wrap">
+                                    <input type="file" id="photoInput" accept="image/*" multiple>
+                                    <span class="btn btn-secondary photo-upload-btn" id="photoUploadLabel" data-i18n="add_photo">📷 Add Photo</span>
+                                </div>
+                                <div id="photoPreviews" class="photo-preview-grid"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="entryDailySummaryCard" class="daily-summary-card" hidden>
+                        <h3 class="daily-summary-title" data-i18n="daily_summary">Daily Summary</h3>
+                        <p id="entryDailySummaryText" class="daily-summary-text">Not enough data to generate a summary yet.</p>
+                    </div>
+
+                    <p id="draftIndicator" class="draft-indicator" aria-live="polite"></p>
+                    <div class="entry-actions">
+                        <div class="entry-history-controls" aria-label="Editor history controls">
+                            <button type="button" class="btn btn-secondary entry-history-btn" id="undoBtn" onclick="entryUndo()" title="Undo (Cmd+Z)">
+                                <span>Undo</span>
+                                <span class="entry-history-icon" aria-hidden="true">↺</span>
+                            </button>
+                            <button type="button" class="btn btn-secondary entry-history-btn" id="redoBtn" onclick="entryRedo()" title="Redo (Cmd+Shift+Z)">
+                                <span>Redo</span>
+                                <span class="entry-history-icon" aria-hidden="true">↻</span>
+                            </button>
+                        </div>
+                        <button class="btn" id="saveEntryBtn" onclick="saveEntry()" data-i18n="save_entry">Save Entry</button>
+                        <span class="shortcut-hint">⌘S to save</span>
+                    </div>
+                        </div>
+                        <aside class="checkin-support-rail" aria-label="Check-in context">
+                            <div class="support-card support-card-status">
+                                <h3 class="support-card-heading">Entry status</h3>
+                                <p class="support-card-eyebrow">Today</p>
+                                <p class="support-card-line" id="supportRailDate">—</p>
+                                <p class="support-card-line" id="supportRailDraft">—</p>
+                                <p class="support-card-reminder">Save Entry stores your full check-in.</p>
+                            </div>
+                            <div class="support-card support-card-snapshot">
+                                <h3 class="support-card-heading">Live snapshot</h3>
+                                <ul class="support-snapshot-rows" aria-label="Current check-in summary">
+                                    <li class="support-snapshot-row"><span class="support-snapshot-label">Mood</span><span class="support-snapshot-value" id="supportRailMood">—</span></li>
+                                    <li class="support-snapshot-row"><span class="support-snapshot-label">Energy</span><span class="support-snapshot-value" id="supportRailEnergy">—</span></li>
+                                    <li class="support-snapshot-row"><span class="support-snapshot-label">Sleep</span><span class="support-snapshot-value" id="supportRailSleep">—</span></li>
+                                    <li class="support-snapshot-row"><span class="support-snapshot-label">Tags</span><span class="support-snapshot-value support-snapshot-tags" id="supportRailTags">—</span></li>
+                                    <li class="support-snapshot-row"><span class="support-snapshot-label">Reflection</span><span class="support-snapshot-value" id="supportRailReflection">—</span></li>
+                                </ul>
+                            </div>
+                            <div class="support-card support-card-cue">
+                                <h3 class="support-card-heading">Reflection</h3>
+                                <div class="support-cue-block">
+                                    <p class="support-cue-prompt">What felt most notable today?</p>
+                                    <p class="support-cue-helper">A few lines for you — no need to write more.</p>
+                                </div>
+                            </div>
+                        </aside>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Calendar -->
+            <div id="calendar" class="page">
+                <header class="calendar-page-header">
+                    <h1 data-i18n="calendar_title">Calendar</h1>
+                    <p class="calendar-page-subtitle" data-i18n="calendar_subtitle">Explore your mood history across days, weeks and months.</p>
+                </header>
+                
+                <div class="calendar-view-tabs">
+                    <button type="button" class="active" data-view="year" onclick="setCalendarView('year', this)">Year heatmap</button>
+                    <button type="button" data-view="month" onclick="setCalendarView('month', this)">Month grid</button>
+                    <button type="button" data-view="week" onclick="setCalendarView('week', this)">Week timeline</button>
+                    <button type="button" data-view="list" onclick="setCalendarView('list', this)">List</button>
+                </div>
+                
+                <div id="calendarYearPanel" class="calendar-view-panel active">
+                    <div class="calendar-container">
+                        <div class="heatmap-card-header">
+                            <div class="heatmap-header-left">
+                                <h2 class="heatmap-section-title">Year in Mood</h2>
+                                <p class="heatmap-section-subtitle">Track your mood consistency across the past year.</p>
+                                <div class="heatmap-streak-stat">
+                                    <span class="heatmap-streak-label">Current streak</span>
+                                    <span id="heatmapStreakHint" class="heatmap-streak-value"></span>
+                                </div>
+                            </div>
+                            <div class="heatmap-header-right">
+                                <button type="button" class="btn-secondary heatmap-export-btn" onclick="exportHeatmapPNG()" aria-label="Export heatmap as image">
+                                    <span class="heatmap-export-icon" aria-hidden="true">⬇</span>
+                                    <span data-i18n="export_heatmap">Export Heatmap</span>
+                                </button>
+                            </div>
+                        </div>
+                        <p id="heatmapScrollHint" class="heatmap-scroll-hint" aria-hidden="true">Scroll horizontally →</p>
+                        <div class="year-heatmap-scroll-wrap">
+                            <div id="yearHeatmapMonths" class="year-heatmap-months"></div>
+                            <div id="yearHeatmap" class="year-heatmap"></div>
+                        </div>
+                        <div class="calendar-legend">
+                            <span class="calendar-legend-label">Mood</span>
+                            <div class="legend-item"><span class="legend-dot legend-dot-low"></span><span data-i18n="low_mood">Low mood</span></div>
+                            <div class="legend-item"><span class="legend-dot legend-dot-mid"></span><span data-i18n="neutral">Neutral</span></div>
+                            <div class="legend-item"><span class="legend-dot legend-dot-good"></span><span data-i18n="good_mood">Good mood</span></div>
+                            <div class="legend-item legend-item-today"><span class="legend-dot legend-dot-today" aria-hidden="true"></span><span data-i18n="today">Today</span></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="calendarMonthPanel" class="calendar-view-panel">
+                    <div class="calendar-container">
+                        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: var(--space-lg); flex-wrap: wrap; gap: var(--space-sm);">
+                            <button type="button" class="cal-nav-btn" onclick="calendarMonthPrev()" aria-label="Previous month">‹ Prev</button>
+                            <h2 id="calendarMonthTitle" style="margin: 0; font-size: 1.25rem; font-family: var(--font-display); font-weight: 400;">Month</h2>
+                            <button type="button" class="cal-nav-btn" onclick="calendarMonthNext()" aria-label="Next month">Next ›</button>
+                        </div>
+                        <div id="monthGrid" class="month-grid"></div>
+                    </div>
+                </div>
+                
+                <div id="calendarWeekPanel" class="calendar-view-panel">
+                    <div class="calendar-container">
+                        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: var(--space-lg); flex-wrap: wrap; gap: var(--space-sm);">
+                            <button type="button" class="cal-nav-btn" onclick="calendarWeekPrev()" aria-label="Previous week">‹ Prev</button>
+                            <h2 id="calendarWeekTitle" style="margin: 0; font-size: 1.25rem; font-family: var(--font-display); font-weight: 400;">Week of …</h2>
+                            <button type="button" class="cal-nav-btn" onclick="calendarWeekNext()" aria-label="Next week">Next ›</button>
+                        </div>
+                        <div id="weekTimeline" class="week-timeline"></div>
+                    </div>
+                </div>
+                
+                <div id="calendarListPanel" class="calendar-view-panel">
+                    <div class="calendar-container">
+                        <p style="color: var(--text-muted); margin-bottom: var(--space-md);">Click an entry to view or edit.</p>
+                        <ul id="calendarEntryList" class="calendar-list-view"></ul>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Entry detail modal (calendar + recent entries) — Premium -->
+            <div id="entryModal" class="entry-modal-overlay" role="dialog" aria-modal="true" aria-labelledby="entryModalTitle" aria-hidden="true" onclick="if (event.target === this) closeEntryModal()">
+                <div class="entry-modal entry-modal-premium">
+                    <div class="entry-modal-header">
+                        <div>
+                            <h3 id="entryModalTitle" class="entry-modal-title-text">Entry</h3>
+                            <p id="entryModalSubtitle" class="entry-modal-subtitle"></p>
+                        </div>
+                        <button type="button" class="entry-modal-close" onclick="closeModal()" aria-label="Close">✕</button>
+                    </div>
+                    <div id="entryModalBody" class="entry-modal-body"></div>
+                    <div class="entry-modal-footer">
+                        <button type="button" class="btn btn-secondary entry-modal-footer-btn" id="entryModalEditBtn" onclick="navigateTo('entry', entryModalDate)">✏️ Full Edit</button>
+                        <button type="button" class="btn btn-secondary entry-modal-footer-btn" id="entryModalJournalBtn" onclick="navigateTo('journal', entryModalDate)" style="display:none;">📓 Journal</button>
+                        <button type="button" class="btn btn-neutral entry-modal-footer-btn" onclick="closeModal()">Close</button>
+                    </div>
+                </div>
+            </div>
+            <div id="fullEntryDeleteModal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="fullEntryDeleteModalTitle" aria-describedby="fullEntryDeleteModalDesc" aria-hidden="true" onclick="if (event.target === this) closeFullEntryDeleteModal()">
+                <div class="modal full-entry-delete-modal">
+                    <h3 id="fullEntryDeleteModalTitle">Delete this entire day?</h3>
+                    <p id="fullEntryDeleteModalDesc" class="modal-desc">Mood, energy, sleep, activities and journal will be permanently removed.<br>This action cannot be undone.</p>
+                    <div class="modal-actions modal-actions-full-entry-delete">
+                        <button type="button" class="btn btn-secondary" onclick="closeFullEntryDeleteModal()">Cancel</button>
+                        <button type="button" class="btn btn-danger-full-entry" id="fullEntryDeleteConfirmBtn" onclick="confirmFullEntryDeleteFromModal()">Delete Entry</button>
+                    </div>
+                </div>
+            </div>
+            <!-- Premium confirm modal (field-level deletes) -->
+            <div id="premiumConfirmModal" class="modal-overlay" role="dialog" aria-modal="true" aria-hidden="true" onclick="if(event.target===this)closePremiumConfirm()">
+                <div class="modal premium-confirm-modal">
+                    <div class="premium-confirm-icon">⚠️</div>
+                    <h3 id="premiumConfirmTitle" class="premium-confirm-title">Are you sure?</h3>
+                    <p id="premiumConfirmDesc" class="modal-desc"></p>
+                    <div class="modal-actions">
+                        <button type="button" class="btn btn-secondary" onclick="closePremiumConfirm()">Cancel</button>
+                        <button type="button" class="btn btn-danger" id="premiumConfirmOkBtn">Delete</button>
+                    </div>
+                </div>
+            </div>
+            <div id="dayPreviewTooltip" class="day-preview-tooltip" aria-hidden="true"></div>
+            
+            <!-- Journal -->
+            <div id="journal" class="page">
+                <h1 id="journalPageTitle">Journal</h1>
+                
+                <div class="card">
+                    <p id="journalEntryMeta" class="journal-entry-meta"></p>
+                    <div id="journalEditor"></div>
+                    <p id="journalWordCount" class="journal-word-count">0 words</p>
+                    <p id="journalUnsavedIndicator" class="journal-unsaved-indicator" hidden>Unsaved changes</p>
+                    <div class="journal-actions">
+                        <button type="button" class="btn" id="saveJournalBtn" onclick="saveJournal()">Save Journal</button>
+                    </div>
+                    <div class="journal-photos-wrap">
+                        <label class="journal-section-label">Photos</label>
+                        <input type="file" id="journalPhotoInput" accept="image/*" multiple style="display: none;">
+                        <div>
+                            <button type="button" class="btn btn-secondary" id="journalPhotoAddBtn" onclick="document.getElementById('journalPhotoInput').click();">📷 Add Journal Photo</button>
+                        </div>
+                        <div id="journalPhotoThumbs" class="journal-photo-grid"></div>
+                    </div>
+                </div>
+                <div class="card tag-cloud-section" style="margin-top: var(--space-lg);">
+                    <h3>Tag Cloud</h3>
+                    <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 4px;">Tag size reflects how often you've used it. Click to filter entries.</p>
+                    <div id="tagCloud" class="tag-cloud"></div>
+                </div>
+                <div class="card" style="margin-top: var(--space-lg);">
+                    <h3>Recent entries</h3>
+                    <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: var(--space-sm);">Click an entry to view mood & energy. The trash icon removes only the journal text.</p>
+                    <ul id="entryList" class="entry-list" tabindex="-1"></ul>
+                </div>
+            </div>
+            
+            <!-- Search modal (Cmd+K) -->
+            <div id="searchModal" class="search-modal-overlay" role="dialog" aria-modal="true" aria-labelledby="searchModalTitle" aria-hidden="true" onclick="if (event.target === this) this.classList.remove('show')">
+                <div class="search-modal">
+                    <h3 id="searchModalTitle">Search entries</h3>
+                    <input type="text" id="searchQuery" placeholder="Search in journal, activities, tags..." class="form-input">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-sm); margin-top: var(--space-sm);">
+                        <div><label style="font-size: 0.85rem; color: var(--text-muted);">Date from</label><input type="text" id="searchDateFrom" class="aura-date-input" placeholder="YYYY-MM-DD" aria-label="Date from"></div>
+                        <div><label style="font-size: 0.85rem; color: var(--text-muted);">Date to</label><input type="text" id="searchDateTo" class="aura-date-input" placeholder="YYYY-MM-DD" aria-label="Date to"></div>
+                    </div>
+                    <div style="margin-top: var(--space-sm);">
+                        <label style="font-size: 0.85rem; color: var(--text-muted);">Mood range</label>
+                        <div style="display: flex; gap: 8px; align-items: center;"><input type="number" id="searchMoodMin" min="1" max="10" placeholder="Min" style="width: 60px;"> – <input type="number" id="searchMoodMax" min="1" max="10" placeholder="Max" style="width: 60px;"></div>
+                    </div>
+                    <div style="margin-top: var(--space-sm);">
+                        <label style="font-size: 0.85rem; color: var(--text-muted);">Tags (comma-separated)</label>
+                        <input type="text" id="searchTags" placeholder="e.g. work, exercise" class="form-input">
+                    </div>
+                    <button type="button" class="btn" style="margin-top: var(--space-md);" onclick="runSearch()">Search</button>
+                    <div id="searchResults" class="search-results"></div>
+                </div>
+            </div>
+            
+            <!-- Analytics Pages -->
+            <div id="mood" class="page">
+                <h1>Mood Trends</h1>
+                <p class="page-subtitle">Track your mood trajectory over time.</p>
+                <div class="card analytics-chart-card">
+                    <header class="analytics-chart-card-header">
+                        <p class="analytics-chart-eyebrow">Trend &amp; trajectory</p>
+                        <p class="analytics-chart-desc">Your mood over time.</p>
+                    </header>
+                    <div class="comparison-chart-wrap mood-trends-chart-wrap">
+                        <canvas id="moodChartFull"></canvas>
+                    </div>
+                </div>
+                <div class="card analytics-insights-card" style="margin-top: var(--space-lg);">
+                    <h3>Insights</h3>
+                    <div id="analyticsInsightsContent">
+                        <p class="insight-empty">Insights will appear once enough data has been collected.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="sleep" class="page">
+                <h1>Sleep Analysis</h1>
+                <p class="page-subtitle">Recovery and consistency over time.</p>
+                <div class="card analytics-chart-card">
+                    <header class="analytics-chart-card-header">
+                        <p class="analytics-chart-eyebrow">Recovery &amp; consistency</p>
+                        <p class="analytics-chart-desc">Sleep duration and consistency.</p>
+                    </header>
+                    <div class="comparison-chart-wrap analytics-chart-wrap">
+                        <canvas id="sleepChartFull"></canvas>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="energy" class="page">
+                <h1>Energy Patterns</h1>
+                <p class="page-subtitle">Rhythm and stamina across days.</p>
+                <div class="card analytics-chart-card">
+                    <header class="analytics-chart-card-header">
+                        <p class="analytics-chart-eyebrow">Rhythm &amp; stamina</p>
+                        <p class="analytics-chart-desc">Daily energy levels.</p>
+                    </header>
+                    <div class="comparison-chart-wrap analytics-chart-wrap">
+                        <canvas id="energyChartFull"></canvas>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="circadian" class="page">
+                <h1>Mood Velocity &amp; Stability</h1>
+                <p class="circadian-page-subtitle">See how your mood shifts day to day and how stable you feel over two weeks.</p>
+                <div class="card analytics-chart-card circadian-velocity-card">
+                    <header class="circadian-card-header">
+                        <p class="circadian-card-eyebrow">Mood trajectory</p>
+                        <h2 class="circadian-card-title">Day-to-day change</h2>
+                        <p class="circadian-card-desc">Bars above zero mean mood is improving; bars below mean it’s dipping.</p>
+                    </header>
+                    <div class="comparison-chart-wrap analytics-chart-wrap mood-velocity-chart-wrap">
+                        <canvas id="circadianChart"></canvas>
+                    </div>
+                    <div id="stabilityScorePanel" class="stability-score-panel"></div>
+                </div>
+            </div>
+            
+            <div id="correlations" class="page">
+                <h1>Data Correlations</h1>
+                <p class="page-subtitle">See how sleep, mood, activity, and energy relate over time.</p>
+                <div class="dashboard-grid">
+                    <div class="card analytics-card">
+                        <header class="correlation-card-header">
+                            <p class="correlation-card-eyebrow">Sleep &amp; mood</p>
+                            <h3 class="correlation-card-title">Sleep vs Mood</h3>
+                            <p class="correlation-card-desc">How sleep duration relates to mood.</p>
+                        </header>
+                        <div class="chart-container">
+                            <canvas id="correlationsChart"></canvas>
+                        </div>
+                        <div class="chart-meta">
+                            <p id="r2SleepMood" class="chart-r2"></p>
+                            <button type="button" class="btn chart-export-btn" onclick="exportChartPNG('correlationsChart')">Export PNG</button>
+                        </div>
+                    </div>
+                    <div class="card analytics-card">
+                        <header class="correlation-card-header">
+                            <p class="correlation-card-eyebrow">Activity &amp; energy</p>
+                            <h3 class="correlation-card-title">Activity vs Energy</h3>
+                            <p class="correlation-card-desc">How activity level relates to energy.</p>
+                        </header>
+                        <div class="chart-container">
+                            <canvas id="activityEnergyChart"></canvas>
+                        </div>
+                        <div class="chart-meta">
+                            <p id="r2ActivityEnergy" class="chart-r2"></p>
+                            <button type="button" class="btn chart-export-btn" onclick="exportChartPNG('activityEnergyChart')">Export PNG</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="card correlation-matrix-card" style="margin-top: var(--space-lg);">
+                    <header class="correlation-matrix-header">
+                        <p class="correlation-matrix-eyebrow">Insight panel</p>
+                        <h3 class="correlation-matrix-title">Correlation Matrix (R²)</h3>
+                        <p class="correlation-matrix-desc">Strength of relationships between metrics. Higher values indicate stronger correlation.</p>
+                    </header>
+                    <div id="correlationMatrix" class="correlation-matrix"></div>
+                </div>
+            </div>
+            
+            <div id="predictions" class="page">
+                <h1>Mood Predictions</h1>
+                <div class="card" style="margin-bottom: var(--space-lg);">
+                    <h3>Next 7 days</h3>
+                    <p style="color: var(--text-muted); margin-bottom: var(--space-md);">The line is your forecast; the shaded band is the range we’d expect based on your recent pattern. Not a guarantee—just a helpful view of where things might go.</p>
+                    <div style="position: relative; height: 280px;">
+                        <canvas id="predictionChart"></canvas>
+                    </div>
+                    <p id="predictionNote" style="color: var(--text-muted); font-size: 0.9rem; margin-top: var(--space-sm);"></p>
+                    <button type="button" class="btn chart-export-btn" onclick="exportChartPNG('predictionChart')">Export PNG</button>
+                </div>
+                <div class="card">
+                    <h3>Patterns & triggers</h3>
+                    <p id="predictionPatterns" style="color: var(--text); line-height: 1.7;"></p>
+                </div>
+            </div>
+            
+            <div id="patterns" class="page">
+                <h1>Patterns &amp; Rhythms</h1>
+                <p class="page-subtitle">How mood, sleep, and time of day connect across your data.</p>
+                <div class="dashboard-grid">
+                    <div class="card">
+                        <h3 id="radarTitle">Mood Patterns — Last 7 Days</h3>
+                        <p class="patterns-card-desc">Balance of your mood across days of the week.</p>
+                        <div class="radar-controls" id="radarControls">
+                            <button type="button" class="radar-mode active" data-mode="weekly" id="radarModeWeekly">Last 7 Days</button>
+                            <button type="button" class="radar-mode" data-mode="monthly" id="radarModeMonthly">Monthly</button>
+                            <div class="radar-month-picker" id="radarMonthSelectWrap" style="display: none;">
+                                <button type="button" class="month-trigger" id="radarMonthTrigger" aria-label="Select month" aria-haspopup="true" aria-expanded="false">
+                                    <span class="selected-month" id="radarSelectedMonthLabel">Select month</span>
+                                    <span class="month-chevron" aria-hidden="true">▾</span>
+                                </button>
+                                <div class="month-popover hidden" id="radarMonthPopover" role="listbox">
+                                    <div class="month-list"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <p id="radarChartContextLabel" class="radar-context-label">Weekly Balance (Last 7 Days)</p>
+                        <p id="radarChartEmpty" class="radar-empty-message" style="display: none;">No entries in this time period.</p>
+                        <div id="radarChartWrap">
+                            <canvas id="radarChart"></canvas>
+                        </div>
+                        <button type="button" class="btn chart-export-btn" onclick="exportChartPNG('radarChart')">Export PNG</button>
+                    </div>
+                    <div class="card">
+                        <h3>Mood Distribution</h3>
+                        <p class="patterns-card-desc">Where your ratings cluster over time.</p>
+                        <canvas id="distributionChart"></canvas>
+                        <p id="distributionChartSummary" class="distribution-chart-summary" style="margin: var(--space-md) 0 0 0; font-size: 0.9rem; color: var(--text-muted);"></p>
+                        <button type="button" class="btn chart-export-btn" onclick="exportChartPNG('distributionChart')">Export PNG</button>
+                    </div>
+                </div>
+                <div class="card" style="margin-top: var(--space-lg);">
+                    <h3>Sleep Timeline</h3>
+                    <p class="patterns-card-desc">When you slept across each night—surfaces consistency and fragmentation.</p>
+                    <div class="sleep-timeline-controls" id="sleepTimelineControls">
+                        <button type="button" class="btn" data-range="30" onclick="setSleepTimelineRange(30, this)">Last 30 days</button>
+                        <button type="button" class="btn-secondary" data-range="7" onclick="setSleepTimelineRange(7, this)">Last 7 days</button>
+                        <button type="button" class="btn-secondary" data-range="90" onclick="setSleepTimelineRange(90, this)">Last 90 days</button>
+                    </div>
+                    <div class="sleep-timeline-shell">
+                        <div id="sleepTimelineChart" class="sleep-timeline-chart"></div>
+                    </div>
+                </div>
+                <div class="card" style="margin-top: var(--space-lg);">
+                    <h3>Mood by Time of Day</h3>
+                    <p class="patterns-card-desc">How your mood relates to when you sleep and wake.</p>
+                    <div id="timeHeatmap" class="time-heatmap"></div>
+                </div>
+                <div class="card" style="margin-top: var(--space-lg);">
+                    <h3>Weekly Rhythm</h3>
+                    <p class="patterns-card-desc">Which days tend to feel better or harder.</p>
+                    <canvas id="dowChart"></canvas>
+                    <p id="dowChartInsight" style="margin-top: var(--space-md); font-size: 0.9rem; color: var(--text-muted);"></p>
+                </div>
+            </div>
+            <div id="sleepTimelineTooltip" class="sleep-timeline-tooltip" role="tooltip" aria-hidden="true"></div>
+            
+            <div id="seasonal" class="page">
+                <h1>Seasonal &amp; Custom Range</h1>
+                <div class="card" style="margin-bottom: var(--space-lg);">
+                    <h3>Monthly comparison (average mood by month)</h3>
+                    <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: var(--space-sm);">All your data combined by month.</p>
+                    <canvas id="seasonalChart"></canvas>
+                </div>
+                <div class="card" style="margin-bottom: var(--space-lg);">
+                    <h3>Year-over-year</h3>
+                    <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: var(--space-lg); line-height: 1.6;">Compare average mood by month across two years. Choose two years to see how your patterns shifted.</p>
+                    <div class="comparison-controls yoy-controls">
+                        <div class="form-group">
+                            <label for="yoyYear1">First year</label>
+                            <select id="yoyYear1" class="theme-select yoy-select" aria-label="Select first year"></select>
+                        </div>
+                        <div class="form-group">
+                            <label for="yoyYear2">Second year</label>
+                            <select id="yoyYear2" class="theme-select yoy-select" aria-label="Select second year"></select>
+                        </div>
+                        <button type="button" class="btn btn-compare-years" onclick="renderYearOverYear()">Compare years</button>
+                    </div>
+                    <div class="comparison-chart-wrap">
+                        <canvas id="yoyChart"></canvas>
+                    </div>
+                </div>
+                <div class="card">
+                    <h3>Custom date range</h3>
+                    <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: var(--space-lg); line-height: 1.6;">View mood, sleep, and energy for any date range.</p>
+                    <div class="comparison-controls">
+                        <div class="form-group">
+                            <label for="customRangeFrom">From</label>
+                            <input type="text" id="customRangeFrom" class="aura-date-input" placeholder="YYYY-MM-DD" aria-label="Start date">
+                        </div>
+                        <div class="form-group">
+                            <label for="customRangeTo">To</label>
+                            <input type="text" id="customRangeTo" class="aura-date-input" placeholder="YYYY-MM-DD" aria-label="End date">
+                        </div>
+                        <button type="button" class="btn" onclick="renderCustomRangeChart()">Apply range</button>
+                    </div>
+                    <div class="comparison-chart-wrap">
+                        <canvas id="customRangeChart"></canvas>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="reports" class="page">
+                <h1>Reports</h1>
+                <div class="report-tabs" style="display: flex; gap: var(--space-xs); margin-bottom: var(--space-lg); flex-wrap: wrap;">
+                    <button type="button" class="btn active" data-report="weekly" onclick="setReportTab('weekly', this)">Weekly summary</button>
+                    <button type="button" class="btn-secondary" data-report="monthly" onclick="setReportTab('monthly', this)">Monthly recap</button>
+                    <button type="button" class="btn-secondary" data-report="year" onclick="setReportTab('year', this)">Year in review</button>
+                </div>
+                <div id="reportWeekly" class="report-panel card">
+                    <h3>Last 7 days</h3>
+                    <div id="reportWeeklyContent"></div>
+                    <button type="button" class="btn chart-export-btn" onclick="exportReportPNG('reportWeekly')">Export as image</button>
+                </div>
+                <div id="reportMonthly" class="report-panel card" style="display: none;">
+                    <h3>This month</h3>
+                    <div id="reportMonthlyContent"></div>
+                    <button type="button" class="btn chart-export-btn" onclick="exportReportPNG('reportMonthly')">Export as image</button>
+                </div>
+                <div id="reportYear" class="report-panel card" style="display: none;">
+                    <h3>Year in review</h3>
+                    <div id="reportYearContent"></div>
+                    <button type="button" class="btn chart-export-btn" onclick="exportReportPNG('reportYear')">Export as image</button>
+                </div>
+                <div style="margin-top: var(--space-lg);">
+                    <button type="button" class="btn" onclick="exportReportPDF()">Export report as PDF</button>
+                </div>
+            </div>
+            
+            <div id="insights" class="page">
+                <h1>Personal Insights</h1>
+                <div class="insights-page-layout">
+                    <div class="insight-overview-card">
+                        <p class="insight-overview-eyebrow">Personal Analytics</p>
+                        <h3>Insights Overview</h3>
+                        <p id="insightsOverviewText">More insights will appear as you record additional entries. Track mood, sleep, and activities to uncover patterns.</p>
+                    </div>
+                    <div id="insightsDashboardContent" class="insights-dashboard-stack">
+                        <p class="insight-empty">More insights will appear as you record additional entries. Track mood, sleep, and activities to uncover patterns.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Settings -->
+            <div id="settings" class="page">
+                <h1>Settings</h1>
+                <div class="card">
+                    <h3>Appearance</h3>
+                    <p class="card-desc">Theme and display preferences.</p>
+                    <div class="data-options-block">
+                        <div class="form-group">
+                            <label for="themeSelect">Theme</label>
+                            <select id="themeSelect" class="theme-select" onchange="setTheme(this.value)">
+                                <option value="aura">Aura (sage / terracotta)</option>
+                                <option value="midnight">Midnight (deep blues)</option>
+                                <option value="forest">Forest (rich greens)</option>
+                                <option value="sunset">Sunset (warm oranges / pinks)</option>
+                                <option value="ocean">Ocean (cool blues / teals)</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Dark mode</label>
+                            <button type="button" id="darkModeTogglePage" class="theme-toggle" aria-label="Toggle dark mode" onclick="toggleDarkFromPage()">
+                                <span class="theme-toggle-icon sun">☀️</span>
+                                <span class="theme-toggle-icon moon">🌙</span>
+                            </button>
+                        </div>
+                        <div class="form-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="soundEnabledToggle" onchange="setSoundEnabled(this.checked)">
+                                Success sound
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="particlesEnabledToggle" onchange="setParticlesEnabled(this.checked)">
+                                Ambient particles
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="parallaxEnabledToggle" onchange="setParallaxEnabled(this.checked)">
+                                Parallax scrolling
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <h3>Preferences</h3>
+                    <p class="card-desc">Defaults and display options.</p>
+                    <div class="data-options-block">
+                        <div class="form-group">
+                            <label for="localeDropdownTrigger">Language</label>
+                            <div id="localeDropdown" class="locale-dropdown" role="combobox" aria-expanded="false" aria-haspopup="listbox" aria-controls="localeDropdownList">
+                                <button type="button" id="localeDropdownTrigger" class="locale-dropdown-trigger" aria-expanded="false" aria-controls="localeDropdownList" aria-label="Select language">
+                                    <span class="locale-dropdown-label">English</span>
+                                    <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+                                </button>
+                                <div id="localeDropdownList" class="locale-dropdown-menu" role="listbox" aria-label="Language options" tabindex="-1">
+                                    <div class="locale-dropdown-option" role="option" tabindex="-1" data-value="en" aria-selected="true"><span>English</span><span class="check" aria-hidden="true">✓</span></div>
+                                    <div class="locale-dropdown-option" role="option" tabindex="-1" data-value="de"><span>Deutsch</span><span class="check" aria-hidden="true">✓</span></div>
+                                    <div class="locale-dropdown-option" role="option" tabindex="-1" data-value="fr"><span>Français</span><span class="check" aria-hidden="true">✓</span></div>
+                                    <div class="locale-dropdown-option" role="option" tabindex="-1" data-value="es"><span>Español</span><span class="check" aria-hidden="true">✓</span></div>
+                                    <div class="locale-dropdown-option" role="option" tabindex="-1" data-value="it"><span>Italiano</span><span class="check" aria-hidden="true">✓</span></div>
+                                    <div class="locale-dropdown-option" role="option" tabindex="-1" data-value="pt"><span>Português</span><span class="check" aria-hidden="true">✓</span></div>
+                                    <div class="locale-dropdown-option" role="option" tabindex="-1" data-value="pt-BR"><span>Português (Brasil)</span><span class="check" aria-hidden="true">✓</span></div>
+                                    <div class="locale-dropdown-option" role="option" tabindex="-1" data-value="nl"><span>Nederlands</span><span class="check" aria-hidden="true">✓</span></div>
+                                    <div class="locale-dropdown-option" role="option" tabindex="-1" data-value="pl"><span>Polski</span><span class="check" aria-hidden="true">✓</span></div>
+                                    <div class="locale-dropdown-option" role="option" tabindex="-1" data-value="ru"><span>Русский</span><span class="check" aria-hidden="true">✓</span></div>
+                                    <div class="locale-dropdown-option" role="option" tabindex="-1" data-value="ja"><span>日本語</span><span class="check" aria-hidden="true">✓</span></div>
+                                    <div class="locale-dropdown-option" role="option" tabindex="-1" data-value="zh"><span>中文</span><span class="check" aria-hidden="true">✓</span></div>
+                                    <div class="locale-dropdown-option" role="option" tabindex="-1" data-value="zh-CN"><span>中文 (简体)</span><span class="check" aria-hidden="true">✓</span></div>
+                                    <div class="locale-dropdown-option" role="option" tabindex="-1" data-value="ar"><span>العربية</span><span class="check" aria-hidden="true">✓</span></div>
+                                    <div class="locale-dropdown-option" role="option" tabindex="-1" data-value="tr"><span>Türkçe</span><span class="check" aria-hidden="true">✓</span></div>
+                                    <div class="locale-dropdown-option" role="option" tabindex="-1" data-value="hi"><span>हिन्दी</span><span class="check" aria-hidden="true">✓</span></div>
+                                    <div class="locale-dropdown-option" role="option" tabindex="-1" data-value="_custom"><span>Custom (BCP 47)...</span><span class="check" aria-hidden="true">✓</span></div>
+                                </div>
+                            </div>
+                            <input type="text" id="prefLocaleCustom" class="form-input" placeholder="e.g. ko, sv, fi" style="display: none; margin-top: var(--space-xs);" aria-label="Custom locale code" onchange="if (window.auraLocale === '_custom') savePreference('locale', this.value.trim() || 'en')">
+                        </div>
+                        <div class="form-group">
+                            <label for="prefDateFormat">Date format</label>
+                            <select id="prefDateFormat" class="theme-select" onchange="savePreference('dateFormat', this.value)">
+                                <option value="DM">Day / Month / Year (DD.MM.YYYY) — Germany, UK, Europe</option>
+                                <option value="MD">Month / Day / Year (MM/DD/YYYY) — USA</option>
+                                <option value="YMD">Year-Month-Day (YYYY-MM-DD) — ISO</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="prefTimeFormat">Time format</label>
+                            <select id="prefTimeFormat" class="theme-select" onchange="savePreference('timeFormat', this.value)">
+                                <option value="12">12-hour</option>
+                                <option value="24">24-hour</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="prefDefaultSleep">Default sleep time</label>
+                            <input type="text" id="prefDefaultSleep" class="aura-time-input form-input" placeholder="HH:mm" aria-label="Default sleep time">
+                        </div>
+                        <div class="form-group">
+                            <label for="prefDefaultWake">Default wake time</label>
+                            <input type="text" id="prefDefaultWake" class="aura-time-input form-input" placeholder="HH:mm" aria-label="Default wake time">
+                        </div>
+                        <div class="form-group">
+                            <label for="prefFavoriteTags">Favorite tags (comma-separated)</label>
+                            <input type="text" id="prefFavoriteTags" class="form-input" placeholder="e.g. work, exercise" onchange="savePreference('favoriteTags', this.value)">
+                        </div>
+                        <div class="form-group">
+                            <label for="prefChartDays">Chart default days</label>
+                            <select id="prefChartDays" class="theme-select" onchange="savePreference('chartDays', this.value)">
+                                <option value="7">7 days</option>
+                                <option value="14">14 days</option>
+                                <option value="30">30 days</option>
+                                <option value="90">90 days</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="prefReduceMotion" onchange="savePreference('reduceMotion', this.checked)">
+                                Reduce motion
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="prefNotifications" onchange="savePreference('notifications', this.checked)">
+                                Enable notifications (browser)
+                            </label>
+                        </div>
+                        <h4 class="backup-list-title" style="margin-top: var(--space-md);">Dashboard widgets</h4>
+                        <div class="form-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="prefWidgetMood" onchange="saveDashboardVisible('mood', this.checked)">
+                                Show Mood chart
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="prefWidgetSleep" onchange="saveDashboardVisible('sleep', this.checked)">
+                                Show Sleep chart
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="prefWidgetEnergy" onchange="saveDashboardVisible('energy', this.checked)">
+                                Show Energy chart
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <h3>Custom metrics</h3>
+                    <p class="card-desc">Add your own trackable metrics (e.g. anxiety, pain, productivity). They appear in check-in, charts, and correlations.</p>
+                    <div class="data-options-block">
+                        <div class="form-group">
+                            <label for="newMetricName">Add metric</label>
+                            <div style="display: flex; flex-wrap: wrap; gap: var(--space-sm); align-items: flex-end;">
+                                <input type="text" id="newMetricName" class="form-input" placeholder="e.g. Anxiety" style="max-width: 180px;">
+                                <select id="newMetricType" class="theme-select" style="min-width: 120px;">
+                                    <option value="scale">1–10 scale</option>
+                                    <option value="yesno">Yes / No</option>
+                                </select>
+                                <button type="button" class="btn" onclick="addCustomMetric()">Add</button>
+                            </div>
+                        </div>
+                        <ul id="customMetricsList" class="custom-metrics-list"></ul>
+                    </div>
+                </div>
+                <div class="card">
+                    <h3>Privacy &amp; data</h3>
+                    <p class="card-desc">Optional passcode lock, private mode, data retention, and complete deletion.</p>
+                    <div class="privacy-options-block">
+                        <div class="form-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="passcodeLockEnabled" onchange="togglePasscodeLock(this.checked)">
+                                Passcode lock
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="encryptEntriesToggle" onchange="setEncryptEntries(this.checked)">
+                                Encrypt entries (optional)
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="privateModeToggle" onchange="setPrivateMode(this.checked)">
+                                Private mode (hide journal previews in lists)
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <label for="dataRetention">Data retention</label>
+                            <select id="dataRetention" class="theme-select" onchange="setDataRetention(this.value)">
+                                <option value="forever">Keep forever</option>
+                                <option value="365">1 year</option>
+                                <option value="180">6 months</option>
+                                <option value="90">90 days</option>
+                                <option value="30">30 days</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="privacy-delete-wrap" style="margin-bottom: var(--space-md);">
+                        <button type="button" class="btn btn-secondary" onclick="addSampleData()">Load 90 days of sample data</button>
+                        <p class="card-desc" style="margin-top: var(--space-sm); color: var(--text-muted); font-size: 0.9rem;">This adds demo data. Use &lsquo;Delete all my data&rsquo; to remove it when done.</p>
+                    </div>
+                    <div class="privacy-delete-wrap">
+                        <button type="button" class="btn btn-danger" onclick="openDeleteAllModal()">Delete all my data</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Export & Backup -->
+            <div id="data" class="page">
+                <h1>Export & Backup</h1>
+                <div class="card">
+                    <h3>Export data</h3>
+                    <p class="card-desc">Download entries as JSON or CSV. Optionally filter by date range or tags.</p>
+                    <div class="comparison-controls">
+                        <div class="form-group">
+                            <label for="exportDateFrom">From</label>
+                            <input type="text" id="exportDateFrom" class="aura-date-input" placeholder="YYYY-MM-DD" aria-label="Export from date">
+                        </div>
+                        <div class="form-group">
+                            <label for="exportDateTo">To</label>
+                            <input type="text" id="exportDateTo" class="aura-date-input" placeholder="YYYY-MM-DD" aria-label="Export to date">
+                        </div>
+                        <div class="form-group">
+                            <label for="exportTags">Tags (optional)</label>
+                            <input type="text" id="exportTags" class="form-input" placeholder="e.g. work, exercise">
+                        </div>
+                        <button type="button" class="btn" onclick="exportJSON()">Export as JSON</button>
+                        <button type="button" class="btn-secondary" onclick="exportCSV()">Export as CSV</button>
+                    </div>
+                </div>
+                <div class="card">
+                    <h3>Backups</h3>
+                    <p class="card-desc">Automatic JSON backup every 24 hours. Last 7 backups are kept in the browser. Last backup: <strong id="lastBackupDate">Never</strong></p>
+                    <p id="backupReminder" class="backup-reminder">⏱ Backup reminder: consider downloading a backup.</p>
+                    <div class="backup-actions">
+                        <button type="button" class="btn" onclick="downloadBackupNow()">Download backup now</button>
+                    </div>
+                    <h4 class="backup-list-title">Restore from backup</h4>
+                    <ul id="backupList" class="backup-list"></ul>
+                </div>
+                <div class="card">
+                    <h3>Import data</h3>
+                    <p class="card-desc">Import from Aura Mood JSON/CSV, or from Daylio / Bearable exports. Preview before importing.</p>
+                    <div class="comparison-controls">
+                        <div class="form-group">
+                            <label for="importFile">File</label>
+                            <div class="import-file-wrap">
+                                <input type="file" id="importFile" accept=".json,.csv,application/json,text/csv" aria-label="Choose file to import">
+                                <span class="btn btn-secondary">Choose file</span>
+                            </div>
+                        </div>
+                        <button type="button" class="btn" onclick="previewImport()">Preview import</button>
+                    </div>
+                    <p id="importResult" class="import-result"></p>
+                </div>
+            </div>
+        </main>
+        
+        <nav class="mobile-nav" role="navigation" aria-label="Mobile navigation">
+            <button type="button" class="mobile-nav-item active" data-page="dashboard" aria-label="Dashboard"><span class="mobile-icon">📊</span><span class="mobile-label">Dashboard</span></button>
+            <button type="button" class="mobile-nav-item" data-page="entry" aria-label="Entry"><span class="mobile-icon">➕</span><span class="mobile-label">Entry</span></button>
+            <button type="button" class="mobile-nav-item" data-page="calendar" aria-label="Calendar"><span class="mobile-icon">📅</span><span class="mobile-label">Calendar</span></button>
+            <button type="button" class="mobile-nav-item" data-page="mood" aria-label="Analytics"><span class="mobile-icon">📈</span><span class="mobile-label">Analytics</span></button>
+            <button type="button" class="mobile-nav-item" data-page="settings" aria-label="Settings"><span class="mobile-icon">⚙️</span><span class="mobile-label">Settings</span></button>
+        </nav>
+        
+        <div id="splash" class="splash" aria-hidden="true">
+            <div class="splash-brand">
+                <div class="splash-icon" aria-hidden="true">
+                    <svg viewBox="0 0 192 192" xmlns="http://www.w3.org/2000/svg"><path d="M36 96 Q 60 72, 96 96 T 156 96" fill="none" stroke="currentColor" stroke-width="12" stroke-linecap="round"/><path d="M44 112 Q 68 88, 96 112 T 148 112" fill="none" stroke="currentColor" stroke-width="10" stroke-linecap="round" opacity="0.85"/><path d="M52 128 Q 76 104, 96 128 T 140 128" fill="none" stroke="currentColor" stroke-width="8" stroke-linecap="round" opacity="0.7"/></svg>
+                </div>
+                <h1 class="splash-title"><span class="splash-title-main">Aura</span> <span class="splash-title-accent">Mood</span></h1>
+                <p class="splash-subtitle">Mood and rhythm tracking</p>
+                <p class="splash-status" aria-live="polite">Opening…</p>
+            </div>
+        </div>
+        <button type="button" class="fab" id="fabEntry" onclick="navigateFromBottom('entry', document.querySelector('[data-page=entry]'))" aria-label="Quick check-in">✨</button>
+        <div id="addToHomeBanner" class="add-to-home-banner" role="dialog" aria-label="Add to Home Screen">
+            <p style="margin: 0; font-size: 0.9rem;">Add to Home Screen for an app-like experience.</p>
+            <button type="button" id="addToHomeInstallBtn" class="btn" style="margin-top: 8px; display: none;" onclick="triggerPwaInstall()">Install app</button>
+            <button type="button" class="banner-dismiss" onclick="dismissAddToHomeBanner()" aria-label="Dismiss">×</button>
+        </div>
+        <nav class="bottom-nav" role="navigation" aria-label="Mobile navigation">
+            <button type="button" data-page="dashboard" class="active" onclick="navigateFromBottom('dashboard', this)" aria-label="Overview"><span class="bn-icon">📊</span><span>Overview</span></button>
+            <button type="button" data-page="entry" onclick="navigateFromBottom('entry', this)" aria-label="Daily Check-In"><span class="bn-icon">✨</span><span>Check-In</span></button>
+            <button type="button" data-page="calendar" onclick="navigateFromBottom('calendar', this)" aria-label="Calendar"><span class="bn-icon">📅</span><span>Calendar</span></button>
+            <button type="button" data-page="journal" onclick="navigateFromBottom('journal', this)" aria-label="Journal"><span class="bn-icon">📔</span><span>Journal</span></button>
+            <button type="button" onclick="openSidebar()" aria-label="Open menu"><span class="bn-icon">☰</span><span>Menu</span></button>
+        </nav>
+    </div>
+    
+    <!-- Delete All Data Modal (Privacy: complete data deletion) -->
+    <div id="deleteAllModal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="deleteAllModalTitle" aria-describedby="deleteAllModalDesc">
+        <div class="modal">
+            <h3 id="deleteAllModalTitle">Delete all my data</h3>
+            <p id="deleteAllModalDesc">This permanently deletes all entries, journal, backups, and settings. This cannot be undone.</p>
+            <p id="deleteAllModalError" class="modal-error"></p>
+            <div id="deleteAllPasscodeWrap">
+                <label style="display:block; margin-bottom: 4px; font-size: 0.9rem; color: var(--text-muted);">Enter passcode to confirm</label>
+                <input type="password" id="deleteAllPassword" class="modal-input" placeholder="Passcode" autocomplete="off">
+            </div>
+            <div id="deleteAllTypeWrap" style="display: none;">
+                <label style="display:block; margin-bottom: 4px; font-size: 0.9rem; color: var(--text-muted);">Type DELETE to confirm</label>
+                <input type="text" id="deleteAllTypeConfirm" class="modal-input" placeholder="Type DELETE" autocomplete="off">
+            </div>
+            <div class="modal-actions">
+                <button type="button" class="btn-secondary" onclick="closeDeleteAllModal()">Cancel</button>
+                <button type="button" class="btn-danger" onclick="confirmDeleteAll()">Confirm</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Delete journal entry confirmation modal -->
+    <div id="deleteEntryModal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="deleteEntryModalTitle" aria-describedby="deleteEntryModalPreview deleteEntryModalDesc" aria-hidden="true" onclick="if (event.target === this) closeDeleteEntryModal()">
+        <div class="modal">
+            <h3 id="deleteEntryModalTitle">Delete Entry?</h3>
+            <div id="deleteEntryModalPreview" class="modal-preview" hidden></div>
+            <p id="deleteEntryModalDesc">This action cannot be undone.</p>
+            <div class="modal-actions">
+                <button type="button" class="btn btn-secondary" id="deleteEntryCancelBtn" onclick="closeDeleteEntryModal()">Cancel</button>
+                <button type="button" class="btn btn-danger" id="deleteEntryConfirmBtn" onclick="confirmDeleteEntryFromModal()">Delete</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Import Preview Modal -->
+    <div id="importPreviewModal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="importPreviewTitle">
+        <div class="modal">
+            <h3 id="importPreviewTitle">Preview import</h3>
+            <p id="importPreviewSummary" style="color: var(--text-muted); margin-bottom: var(--space-sm);"></p>
+            <div id="importPreviewSample" style="max-height: 200px; overflow-y: auto; font-size: 0.9rem; margin-bottom: var(--space-md); padding: var(--space-sm); background: var(--bg); border-radius: 12px;"></div>
+            <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: var(--space-sm);">For matching dates:</p>
+            <label style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px;"><input type="radio" name="importConflict" value="keep"> Keep existing</label>
+            <label style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px;"><input type="radio" name="importConflict" value="overwrite" checked> Use imported</label>
+            <label style="display: flex; align-items: center; gap: 8px; margin-bottom: var(--space-md);"><input type="radio" name="importConflict" value="newer"> Keep newer</label>
+            <div class="modal-actions">
+                <button type="button" class="btn-secondary" onclick="closeImportPreviewModal()">Cancel</button>
+                <button type="button" class="btn" onclick="confirmImportMerge()">Import (merge)</button>
+                <button type="button" class="btn-secondary" onclick="confirmImportReplace()">Import (replace)</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Passcode lock screen -->
+    <div id="passcodeLockScreen" class="passcode-lock-overlay" aria-hidden="true" style="display: none;">
+        <div class="passcode-lock-card">
+            <h3>Enter passcode</h3>
+            <input type="password" id="passcodeUnlockInput" class="modal-input" placeholder="Passcode" autocomplete="off" aria-label="Passcode">
+            <button type="button" class="btn" onclick="unlockWithPasscode()">Unlock</button>
+        </div>
+    </div>
+    
+    <!-- Set passcode modal (when enabling passcode lock) -->
+    <div id="setPasscodeModal" class="modal-overlay" role="dialog" aria-modal="true">
+        <div class="modal">
+            <h3>Set passcode</h3>
+            <p style="color: var(--text-muted); margin-bottom: var(--space-md);">Enter a 4–8 digit passcode to lock the app.</p>
+            <label style="display:block; margin-bottom: 4px; font-size: 0.9rem;">New passcode</label>
+            <input type="password" id="setPasscodeNew" class="modal-input" placeholder="Passcode" autocomplete="off" maxlength="8" inputmode="numeric" pattern="[0-9]*">
+            <label style="display:block; margin-bottom: 4px; font-size: 0.9rem; margin-top: var(--space-sm);">Confirm passcode</label>
+            <input type="password" id="setPasscodeConfirm" class="modal-input" placeholder="Confirm" autocomplete="off" maxlength="8" inputmode="numeric" pattern="[0-9]*">
+            <p id="setPasscodeError" class="modal-error" style="margin-top: var(--space-sm);"></p>
+            <div class="modal-actions" style="margin-top: var(--space-md);">
+                <button type="button" class="btn-secondary" onclick="closeSetPasscodeModal()">Cancel</button>
+                <button type="button" class="btn" onclick="savePasscode()">Set passcode</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Success Message -->
+    <div class="success-message" id="successMessage">
+        Entry saved successfully ✓
+    </div>
+    <div class="undo-toast" id="undoToast" role="status" aria-live="polite" aria-hidden="true">
+        <span class="undo-toast-text" id="undoToastText">Entry deleted</span>
+        <button type="button" class="btn btn-secondary undo-toast-btn" id="undoToastBtn" onclick="undoLastDeletedEntry()">Undo</button>
+    </div>
+    
+    <!-- PWA: Install app banner -->
+    <div class="pwa-banner" id="pwaInstallBanner" role="dialog" aria-label="Install Aura app">
+        <span class="pwa-banner-text">Install Aura for quick access and offline use.</span>
+        <div class="pwa-banner-actions">
+            <button type="button" class="btn-secondary" onclick="dismissPwaInstallBanner()">Not now</button>
+            <button type="button" class="btn" id="pwaInstallBtn" onclick="installPwa()">Install</button>
+        </div>
+    </div>
+    <!-- PWA: Update available banner -->
+    <div class="pwa-banner" id="pwaUpdateBanner" role="dialog" aria-label="Update available">
+        <span class="pwa-banner-text">A new version is available.</span>
+        <div class="pwa-banner-actions">
+            <button type="button" class="btn" onclick="reloadForPwaUpdate()">Reload</button>
+        </div>
+    </div>
+    <!-- No data yet: floating suggestion banner -->
+    <div class="no-data-banner" id="noDataFloatingBanner" role="dialog" aria-label="Getting started">
+        <span class="no-data-banner-text">No entries yet — when you're ready, you can add sample data in <button type="button" class="no-data-settings-btn" onclick="var b = document.querySelector('.sidebar .nav[onclick*=\'settings\']'); if(b) navigate('settings', b);">Settings</button> → Data &amp; Privacy to explore the app.</span>
+        <button type="button" class="no-data-banner-close" onclick="dismissNoDataBanner()" aria-label="Dismiss">×</button>
+    </div>
+    
+    <canvas id="confetti-canvas" aria-hidden="true"></canvas>
+    <div class="ambient-particles" id="ambientParticles" aria-hidden="true"><canvas id="particlesCanvas"></canvas></div>
+    
+
+    <script src="js/charts.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>

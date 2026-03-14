@@ -1,0 +1,91 @@
+<!-- Sidebar: inject into #sidebar-mount when using dynamic load -->
+<aside class="sidebar" role="navigation" aria-label="Main navigation">
+    <div class="logo-wrap">
+        <div class="logo-mark" aria-hidden="true">
+            <svg viewBox="0 0 192 192" xmlns="http://www.w3.org/2000/svg"><path d="M36 96 Q 60 72, 96 96 T 156 96" fill="none" stroke="currentColor" stroke-width="12" stroke-linecap="round"/><path d="M44 112 Q 68 88, 96 112 T 148 112" fill="none" stroke="currentColor" stroke-width="10" stroke-linecap="round" opacity="0.85"/><path d="M52 128 Q 76 104, 96 128 T 140 128" fill="none" stroke="currentColor" stroke-width="8" stroke-linecap="round" opacity="0.7"/></svg>
+        </div>
+        <h2 class="logo">Aura <span class="logo-accent">Mood</span></h2>
+    </div>
+
+    <button type="button" class="sidebar-close-mobile" onclick="closeSidebar()" aria-label="Close menu">×</button>
+
+    <div class="theme-toggle-wrap" title="Toggle dark mode">
+        <button type="button" id="darkModeToggle" class="theme-toggle" aria-label="Toggle dark mode">
+            <span class="theme-toggle-icon sun">☀️</span>
+            <span class="theme-toggle-icon moon">🌙</span>
+        </button>
+    </div>
+
+    <div class="section-label">Tracking</div>
+    <button onclick="navigate('dashboard', this)" class="nav active" aria-label="Go to Overview" aria-current="page">
+        <span class="nav-icon">📊</span>
+        <span>Overview</span>
+    </button>
+    <button onclick="navigate('entry', this)" class="nav" aria-label="Go to Daily Check-In">
+        <span class="nav-icon">✨</span>
+        <span>Daily Check-In</span>
+    </button>
+    <button onclick="navigate('calendar', this)" class="nav" aria-label="Go to Calendar">
+        <span class="nav-icon">📅</span>
+        <span>Calendar</span>
+    </button>
+    <button onclick="navigate('journal', this)" class="nav" aria-label="Go to Journal">
+        <span class="nav-icon">📔</span>
+        <span>Journal</span>
+    </button>
+
+    <div class="section-label">Analytics</div>
+    <button onclick="navigate('mood', this)" class="nav">
+        <span class="nav-icon">📈</span>
+        <span>Mood Trends</span>
+    </button>
+    <button onclick="navigate('sleep', this)" class="nav">
+        <span class="nav-icon">🌙</span>
+        <span>Sleep Analysis</span>
+    </button>
+    <button onclick="navigate('energy', this)" class="nav">
+        <span class="nav-icon">⚡</span>
+        <span>Energy Patterns</span>
+    </button>
+    <button onclick="navigate('circadian', this)" class="nav">
+        <span class="nav-icon">⏰</span>
+        <span>Circadian Rhythm</span>
+    </button>
+    <button onclick="navigate('correlations', this)" class="nav">
+        <span class="nav-icon">🔗</span>
+        <span>Correlations</span>
+    </button>
+    <button onclick="navigate('predictions', this)" class="nav">
+        <span class="nav-icon">🔮</span>
+        <span>Predictions</span>
+    </button>
+    <button onclick="navigate('patterns', this)" class="nav">
+        <span class="nav-icon">📊</span>
+        <span>Weekly & Time</span>
+    </button>
+    <button onclick="navigate('seasonal', this)" class="nav">
+        <span class="nav-icon">🍂</span>
+        <span>Seasonal Patterns</span>
+    </button>
+    <button onclick="navigate('reports', this)" class="nav">
+        <span class="nav-icon">📋</span>
+        <span>Reports</span>
+    </button>
+    <button onclick="navigate('insights', this)" class="nav">
+        <span class="nav-icon">💡</span>
+        <span>Insights</span>
+    </button>
+
+    <div class="section-label">Settings</div>
+    <button onclick="navigate('settings', this)" class="nav">
+        <span class="nav-icon">⚙️</span>
+        <span>Settings</span>
+    </button>
+
+    <div class="section-label">Data</div>
+    <button onclick="navigate('data', this)" class="nav">
+        <span class="nav-icon">💾</span>
+        <span>Export & Backup</span>
+    </button>
+</aside>
+<div id="sidebarOverlay" class="sidebar-overlay" aria-hidden="true" onclick="closeSidebar()"></div>
