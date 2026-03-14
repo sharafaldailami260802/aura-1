@@ -339,13 +339,13 @@ window.buildChartAnnotations = function buildChartAnnotations(data, metricLabel)
  */
 window.renderChartAnnotationBar = function renderChartAnnotationBar(canvas, chips) {
     if (!canvas || !chips || !chips.length) return;
-    var wrap = canvas.parentElement;
-    if (!wrap) return;
-
-    // Remove any existing annotation bar
-    var existing = wrap.querySelector('.chart-annotation-bar');
+    var chartWrap = canvas.closest(
+        '.comparison-chart-wrap, .analytics-chart-wrap, .mood-trends-chart-wrap, .mood-velocity-chart-wrap, .chart-container'
+    ) || canvas.parentElement;
+    var container = chartWrap.parentElement || chartWrap;
+    var existing = container.querySelector(':scope > .chart-annotation-bar');
     if (existing) existing.remove();
-
+    if (!chips.length) return;
     var bar = document.createElement('div');
     bar.className = 'chart-annotation-bar';
     chips.forEach(function(chip) {
@@ -354,5 +354,5 @@ window.renderChartAnnotationBar = function renderChartAnnotationBar(canvas, chip
         el.innerHTML = '<span class="chart-annotation-dot"></span>' + chip.text;
         bar.appendChild(el);
     });
-    wrap.appendChild(bar);
+    chartWrap.parentNode.insertBefore(bar, chartWrap.nextSibling);
 };

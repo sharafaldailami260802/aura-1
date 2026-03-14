@@ -100,6 +100,13 @@
 .chart-export-btn {
     display: block;
 }
+@media (min-width: 769px) {
+    .mood-trends-chart-wrap.comparison-chart-wrap,
+    .analytics-chart-wrap.comparison-chart-wrap {
+        height: 440px;
+        min-height: 440px;
+    }
+}
 @media (max-width: 768px) {
     .comparison-chart-wrap {
         padding: 20px 16px;
