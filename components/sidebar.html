@@ -35,6 +35,8 @@
     </button>
 
     <div class="section-label">Analytics</div>
+
+    <div class="section-sublabel">Overview</div>
     <button onclick="navigate('mood', this)" class="nav">
         <span class="nav-icon">📈</span>
         <span>Mood Trends</span>
@@ -47,33 +49,36 @@
         <span class="nav-icon">⚡</span>
         <span>Energy Patterns</span>
     </button>
-    <button onclick="navigate('circadian', this)" class="nav">
-        <span class="nav-icon">⏰</span>
-        <span>Circadian Rhythm</span>
-    </button>
-    <button onclick="navigate('correlations', this)" class="nav">
-        <span class="nav-icon">🔗</span>
-        <span>Correlations</span>
-    </button>
-    <button onclick="navigate('predictions', this)" class="nav">
-        <span class="nav-icon">🔮</span>
-        <span>Predictions</span>
-    </button>
-    <button onclick="navigate('patterns', this)" class="nav">
-        <span class="nav-icon">📊</span>
-        <span>Weekly & Time</span>
-    </button>
-    <button onclick="navigate('seasonal', this)" class="nav">
-        <span class="nav-icon">🍂</span>
-        <span>Seasonal Patterns</span>
-    </button>
-    <button onclick="navigate('reports', this)" class="nav">
-        <span class="nav-icon">📋</span>
-        <span>Reports</span>
-    </button>
     <button onclick="navigate('insights', this)" class="nav">
         <span class="nav-icon">💡</span>
         <span>Insights</span>
+    </button>
+
+    <div class="sidebar-analytics-divider"></div>
+    <div class="section-sublabel">Deep dive</div>
+    <button onclick="navigate('correlations', this)" class="nav nav-secondary">
+        <span class="nav-icon">🔗</span>
+        <span>Correlations</span>
+    </button>
+    <button onclick="navigate('circadian', this)" class="nav nav-secondary">
+        <span class="nav-icon">⏰</span>
+        <span>Mood Velocity</span>
+    </button>
+    <button onclick="navigate('predictions', this)" class="nav nav-secondary">
+        <span class="nav-icon">🔮</span>
+        <span>Forecast</span>
+    </button>
+    <button onclick="navigate('patterns', this)" class="nav nav-secondary">
+        <span class="nav-icon">📊</span>
+        <span>Patterns</span>
+    </button>
+    <button onclick="navigate('seasonal', this)" class="nav nav-secondary">
+        <span class="nav-icon">🍂</span>
+        <span>Seasonal</span>
+    </button>
+    <button onclick="navigate('reports', this)" class="nav nav-secondary">
+        <span class="nav-icon">📋</span>
+        <span>Reports</span>
     </button>
 
     <div class="section-label">Settings</div>

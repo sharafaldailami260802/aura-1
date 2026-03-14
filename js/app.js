@@ -1804,6 +1804,7 @@ function loadEntryIntoCheckInForm(dateStr, options) {
     renderEntryPhotoPreviews(entries[nextDate] && Array.isArray(entries[nextDate].photos) ? entries[nextDate].photos : []);
     resetEntryProgressTracking(null);
     setEntryDirty(false);
+    updateEntryProgressUI();
     syncEntryJournalPreview(nextDate);
     renderEntryDailySummary(nextDate);
 }
@@ -1897,7 +1898,37 @@ function getEntryCompletionState() {
     };
 }
 function updateEntryProgressUI() {
-    return;
+    try {
+        var state = getEntryCompletionState();
+        if (!state) return;
+
+        // Progress bar (mobile)
+        var fill = document.getElementById('entryProgressBarFill');
+        var label = document.getElementById('entryProgressLabel');
+        if (fill) fill.style.width = state.percent + '%';
+        if (label) {
+            var filledSections = Object.keys(state.sections).filter(function(k) { return state.sections[k]; }).length;
+            label.textContent = filledSections + ' of 4 sections filled';
+        }
+
+        // Section check dots
+        var sectionMap = {
+            'entrySectionMoodEnergy':    { key: 'moodEnergy',    checkId: 'checkMoodEnergy'    },
+            'entrySectionSleep':         { key: 'sleep',         checkId: 'checkSleep'         },
+            'entrySectionActivitiesTags':{ key: 'activitiesTags',checkId: 'checkActivitiesTags'},
+            'entrySectionJournal':       { key: 'journal',       checkId: 'checkJournal'       }
+        };
+        Object.keys(sectionMap).forEach(function(sectionId) {
+            var map = sectionMap[sectionId];
+            var wrap = document.getElementById(sectionId);
+            var check = document.getElementById(map.checkId);
+            var complete = !!state.sections[map.key];
+            if (wrap) wrap.classList.toggle('section-complete', complete);
+            if (check) check.style.borderColor = complete ? 'var(--accent)' : 'var(--border)';
+        });
+    } catch(e) {
+        // Never throw from UI update
+    }
 }
 
 // Sleep Segments: form-state UI only. Segment cards can look "complete" once both times are valid;
@@ -2772,9 +2803,87 @@ function updateParallax() {
 }
 
 var lastStreakMilestone = 0;
+
+function buildDashboardGreeting() {
+    var hour = new Date().getHours();
+    var greeting = hour < 12 ? 'Good morning' : hour < 17 ? 'Good afternoon' : 'Good evening';
+    return greeting;
+}
+
+function buildDashboardNarrative() {
+    var allDates = Object.keys(entries).sort();
+    if (!allDates.length) return 'Start logging your first check-in to see patterns emerge here.';
+
+    var today = new Date().toISOString().split('T')[0];
+    var todayEntry = entries[today];
+
+    // Recent 7-day mood trend
+    var last7 = allDates.filter(function(d) { return d <= today; }).slice(-7);
+    var last7Moods = last7.map(function(d) { return entries[d] && entries[d].mood; }).filter(function(m) { return typeof m === 'number' && !isNaN(m); });
+
+    var trendText = '';
+    if (last7Moods.length >= 4) {
+        var firstHalf = last7Moods.slice(0, Math.floor(last7Moods.length / 2));
+        var secondHalf = last7Moods.slice(Math.floor(last7Moods.length / 2));
+        var firstAvg = firstHalf.reduce(function(a, b) { return a + b; }, 0) / firstHalf.length;
+        var secondAvg = secondHalf.reduce(function(a, b) { return a + b; }, 0) / secondHalf.length;
+        var diff = secondAvg - firstAvg;
+        if (diff > 0.5) trendText = 'Your mood has been climbing this week.';
+        else if (diff < -0.5) trendText = 'Your mood has dipped a little this week.';
+        else trendText = 'Your mood has been steady this week.';
+    }
+
+    // Streak
+    var streak = 0;
+    var checkDate = new Date();
+    if (!entries[checkDate.toISOString().split('T')[0]]) checkDate.setDate(checkDate.getDate() - 1);
+    while (entries[checkDate.toISOString().split('T')[0]]) {
+        streak++;
+        checkDate.setDate(checkDate.getDate() - 1);
+    }
+
+    // Today's status
+    var todayText = '';
+    if (todayEntry && todayEntry.mood != null) {
+        var moodLabel = todayEntry.mood >= 7.5 ? 'a strong' : todayEntry.mood >= 5 ? 'a moderate' : 'a low';
+        todayText = 'Today you logged ' + moodLabel + ' mood of ' + todayEntry.mood.toFixed(1) + '.';
+    } else {
+        todayText = 'No check-in yet today.';
+    }
+
+    // Best tag recently
+    var tagCounts = {};
+    last7.forEach(function(d) {
+        (entries[d] && entries[d].tags || []).forEach(function(t) { tagCounts[t] = (tagCounts[t] || 0) + 1; });
+    });
+    var topTag = Object.keys(tagCounts).sort(function(a, b) { return tagCounts[b] - tagCounts[a]; })[0];
+    var tagText = topTag ? 'You\'ve been tagging \u201c' + topTag + '\u201d a lot lately.' : '';
+
+    var streakText = streak >= 3 ? streak + '-day streak\u2014keep it up.' : streak > 0 ? 'Day ' + streak + ' of your streak.' : '';
+
+    var parts = [todayText, trendText, tagText, streakText].filter(Boolean);
+    return parts.slice(0, 3).join(' ');
+}
+
 function updateDashboard() {
     var noDataFloating = document.getElementById('noDataFloatingBanner');
     if (noDataFloating && Object.keys(entries).length > 0) noDataFloating.classList.remove('show');
+
+    // Smart greeting + narrative
+    var greetingEl = document.getElementById('dashboardGreeting');
+    var narrativeEl = document.getElementById('dashboardNarrative');
+    if (greetingEl) greetingEl.textContent = buildDashboardGreeting();
+    if (narrativeEl) {
+        narrativeEl.classList.add('loading');
+        var narrative = buildDashboardNarrative();
+        narrativeEl.textContent = narrative;
+        requestAnimationFrame(function() {
+            requestAnimationFrame(function() {
+                narrativeEl.classList.remove('loading');
+            });
+        });
+    }
+
     const today = new Date().toISOString().split('T')[0];
     const todayData = entries[today];
     var moodEl = document.getElementById('todayMood');
@@ -2783,7 +2892,17 @@ function updateDashboard() {
     var streakEl = document.getElementById('streak');
     var progressEl = document.getElementById('streakProgress');
     
-    [moodEl, sleepEl, energyEl, streakEl].forEach(function(el) { if (el) el.classList.remove('skeleton'); });
+    [moodEl, sleepEl, energyEl, streakEl].forEach(function(el) {
+        if (!el) return;
+        el.style.transition = 'opacity 0.3s ease';
+        el.style.opacity = '0';
+        requestAnimationFrame(function() {
+            el.classList.remove('skeleton');
+            requestAnimationFrame(function() {
+                el.style.opacity = '1';
+            });
+        });
+    });
     if (todayData) {
         var curM = parseFloat(moodEl.innerText);
         var curS = parseFloat(sleepEl.innerText);
@@ -2795,6 +2914,22 @@ function updateDashboard() {
         moodEl.innerText = '--';
         sleepEl.innerText = '--';
         energyEl.innerText = '--';
+        // Show gentle prompt on metric cards if no entries at all
+        var hasAnyEntry = Object.keys(entries).length > 0;
+        var grid = document.querySelector('#dashboard .metrics');
+        if (grid) grid.classList.toggle('metrics-no-data', !hasAnyEntry);
+    }
+
+    // Tint the mood metric card based on today's mood value
+    var moodCard = moodEl && moodEl.closest('.metric');
+    if (moodCard) {
+        var moodNum = todayData && todayData.mood != null ? Number(todayData.mood) : null;
+        moodCard.removeAttribute('style');
+        if (moodNum != null && !isNaN(moodNum)) {
+            var hue = moodNum >= 7 ? 'var(--heat-good)' : moodNum >= 4 ? 'var(--heat-mid)' : 'var(--heat-bad)';
+            moodCard.style.borderColor = 'color-mix(in srgb, ' + hue + ' 30%, var(--border))';
+            moodCard.style.background = 'color-mix(in srgb, ' + hue + ' 6%, var(--surface))';
+        }
     }
     
     var streak = 0;
@@ -3634,7 +3769,15 @@ function renderEntryList() {
     if (filterByTag) dates = dates.filter(function(d) { return (entries[d].tags || []).indexOf(filterByTag) >= 0; });
     var total = dates.length;
     if (total === 0) {
-        ul.innerHTML = '<li style="color: var(--text-muted);">' + (filterByTag ? 'No entries with this tag.' : 'No entries yet.') + '</li>';
+        if (filterByTag) {
+            ul.innerHTML = '<li style="color: var(--text-muted); padding: var(--space-md) 0; font-size: 0.9rem;">No entries tagged \u201c' + escapeHtml(filterByTag) + '\u201d yet.</li>';
+        } else {
+            ul.innerHTML = '<li class="entry-list-empty-state" style="padding: var(--space-lg) 0; text-align: center;">' +
+                '<div style="font-size: 2rem; margin-bottom: var(--space-sm); opacity: 0.3;" aria-hidden="true">📔</div>' +
+                '<p style="margin: 0 0 var(--space-sm); color: var(--text-muted); font-size: 0.9rem;">No journal entries yet.</p>' +
+                '<button type="button" class="btn btn-secondary" onclick="navigate(\'entry\')" style="font-size: 0.85rem; height: 36px; padding: 0 14px;">Start your first check-in \u2192</button>' +
+                '</li>';
+        }
         return;
     }
     var show = total <= ENTRY_LIST_CHUNK ? total : Math.min(entryListShown, total);
@@ -3908,6 +4051,7 @@ function createChart(id, label, data, dates, color, scaleOpts, datasetOpts) {
     }
 
     var opts = getChartConfig(scaleOpts || {});
+    if (id && id.indexOf('Full') >= 0) opts._auraShowAvgLine = true;
     var baseDataset = {
         label: label,
         data: data,
@@ -3954,30 +4098,35 @@ function createChart(id, label, data, dates, color, scaleOpts, datasetOpts) {
 function renderChartEmptyState(canvas, chartLabel) {
     var wrap = canvas.closest('.comparison-chart-wrap, .analytics-chart-wrap, .mood-trends-chart-wrap, .mood-velocity-chart-wrap, .chart-container') || canvas.parentElement;
     if (!wrap) return;
-
-    // Avoid duplicates
     if (wrap.querySelector('.chart-empty-overlay')) return;
-
-    // Ensure the wrapper is a positioning context
     var pos = getComputedStyle(wrap).position;
     if (pos === 'static') wrap.style.position = 'relative';
 
-    // Map chart label to a friendly message
-    var messages = {
-        'Mood': 'Log your first check-in to see your mood trend',
-        'Sleep': 'Add sleep data in Daily Check-In to see sleep patterns',
-        'Energy': 'Track energy in Daily Check-In to see patterns',
-        'Mood Change': 'Track at least 2 days of mood to see velocity'
+    var ctaMap = {
+        'Mood':   { text: 'Log your first mood', page: 'entry' },
+        'Sleep':  { text: 'Add sleep data',       page: 'entry' },
+        'Energy': { text: 'Track your energy',    page: 'entry' },
+        'Mood Change': { text: 'Track 2+ days of mood', page: 'entry' }
     };
-    var msg = messages[chartLabel] || 'Add entries to see this chart';
+    var iconMap = { 'Mood': '🌿', 'Sleep': '🌙', 'Energy': '⚡', 'Mood Change': '📈' };
+    var msgMap = {
+        'Mood':        'Your mood trend will appear here once you\u2019ve logged a few days.',
+        'Sleep':       'Sleep patterns emerge once you start tracking daily.',
+        'Energy':      'Energy data gives this chart life \u2014 log your first check-in.',
+        'Mood Change': 'Track at least two consecutive days to see day-over-day change.'
+    };
+
+    var icon = iconMap[chartLabel] || '📊';
+    var msg  = msgMap[chartLabel]  || 'Add entries to see this chart.';
+    var cta  = ctaMap[chartLabel];
 
     var overlay = document.createElement('div');
     overlay.className = 'chart-empty-overlay';
     overlay.setAttribute('aria-hidden', 'true');
     overlay.innerHTML =
-        '<span class="chart-empty-icon" aria-hidden="true">📊</span>' +
-        '<p class="chart-empty-text">' + escapeHtml(msg) + '</p>';
-
+        '<span class="chart-empty-icon" aria-hidden="true">' + icon + '</span>' +
+        '<p class="chart-empty-text">' + escapeHtml(msg) + '</p>' +
+        (cta ? '<button type="button" class="chart-empty-cta" onclick="navigate(\'' + cta.page + '\')">' + escapeHtml(cta.text) + ' \u2192</button>' : '');
     wrap.appendChild(overlay);
 }
 
@@ -4018,6 +4167,23 @@ function renderCharts() {
     createChart('moodChartFull', 'Mood',   mood,  shortDates, colors.chart1, { yMin: 1, yMax: 10, yStep: 1, yTitle: 'Mood (1–10)',    xTitle: _xLabel, integerTicks: true  });
     createChart('sleepChartFull','Sleep',  sleep, shortDates, colors.chart2, { yMin: 0, yMax: 12, yStep: 1, yTitle: 'Sleep (hrs)',     xTitle: _xLabel, integerTicks: false });
     createChart('energyChartFull','Energy',energy,shortDates, colors.chart3, { yMin: 1, yMax: 10, yStep: 1, yTitle: 'Energy (1–10)',   xTitle: _xLabel, integerTicks: true  });
+
+    // Render annotation bars on the full analytics charts
+    if (typeof buildChartAnnotations === 'function' && typeof renderChartAnnotationBar === 'function') {
+        requestAnimationFrame(function() {
+            var charts = [
+                { id: 'moodChartFull',   data: mood,   label: 'Mood'   },
+                { id: 'sleepChartFull',  data: sleep,  label: 'Sleep'  },
+                { id: 'energyChartFull', data: energy, label: 'Energy' }
+            ];
+            charts.forEach(function(c) {
+                var canvas = document.getElementById(c.id);
+                if (!canvas) return;
+                var chips = buildChartAnnotations(c.data, c.label);
+                renderChartAnnotationBar(canvas, chips);
+            });
+        });
+    }
     
     renderMoodVelocity();
     
@@ -4886,22 +5052,33 @@ function getInsightStrength(score) {
     return { label: 'Weak pattern', width: 38 };
 }
 function buildInsightCardHtml(insight) {
-    var strength = getInsightStrength(insight.score || 0);
+    var strengthMap = {
+        strong:   { label: 'Strong pattern',   width: 100, class: 'insight-strength-strong'   },
+        moderate: { label: 'Moderate pattern', width: 62,  class: 'insight-strength-moderate' },
+        emerging: { label: 'Emerging signal',  width: 32,  class: 'insight-strength-emerging' }
+    };
+    var s = strengthMap[insight.strength || 'emerging'];
+
+    var nudgeHtml = insight.nudge
+        ? '<p class="insight-nudge">' + escapeHtml(insight.nudge) + '</p>'
+        : '';
+
     return '<div class="card insight-detail-card">' +
         '<div class="insight-detail-header">' +
             '<div class="insight-detail-title-wrap">' +
-                '<span class="insight-icon-badge" aria-hidden="true">' + escapeHtml(insight.icon || '•') + '</span>' +
+                '<span class="insight-icon-badge" data-section="' + escapeHtml(insight.section) + '" aria-hidden="true">' + escapeHtml(insight.icon || '\u2022') + '</span>' +
                 '<div>' +
-                    '<h4 class="insight-detail-title">' + escapeHtml(insight.title) + '</h4>' +
                     '<span class="insight-detail-kicker">' + escapeHtml(insight.kicker || 'Insight') + '</span>' +
+                    '<h4 class="insight-detail-title">' + escapeHtml(insight.title) + '</h4>' +
                 '</div>' +
             '</div>' +
             '<div class="insight-strength">' +
-                '<span class="insight-strength-label">' + escapeHtml(strength.label) + '</span>' +
-                '<div class="insight-strength-bar"><div class="insight-strength-fill" style="width:' + strength.width + '%;"></div></div>' +
+                '<span class="insight-strength-label ' + s.class + '">' + s.label + '</span>' +
+                '<div class="insight-strength-bar"><div class="insight-strength-fill" style="width:' + s.width + '%;"></div></div>' +
             '</div>' +
         '</div>' +
         '<p class="insight-detail-text">' + escapeHtml(insight.description) + '</p>' +
+        nudgeHtml +
         '<p class="insight-detail-context">' + escapeHtml(insight.context) + '</p>' +
     '</div>';
 }
@@ -4939,6 +5116,7 @@ function renderInsightsResult(result) {
 }
 function createInsightCandidate(section, title, description, supportCount, score, options) {
     options = options || {};
+    var entryWord = supportCount === 1 ? 'entry' : 'entries';
     return {
         section: section,
         title: title,
@@ -4947,7 +5125,9 @@ function createInsightCandidate(section, title, description, supportCount, score
         score: score,
         kicker: options.kicker || 'Insight',
         icon: options.icon || ((INSIGHT_SECTION_META[section] && INSIGHT_SECTION_META[section].icon) || '•'),
-        context: options.context || ('Based on ' + supportCount + ' entr' + (supportCount === 1 ? 'y' : 'ies') + '.')
+        context: options.context || ('Observed across ' + supportCount + ' ' + entryWord + '.'),
+        nudge: options.nudge || '',
+        strength: score >= 5 ? 'strong' : score >= 3 ? 'moderate' : 'emerging'
     };
 }
 var correlationInsightsEngine = {
@@ -4990,16 +5170,18 @@ var correlationInsightsEngine = {
             if (bestBucketDiff >= 0.15) {
                 candidates.push(createInsightCandidate(
                     'sleep',
-                    'Optimal Sleep Duration',
-                    'Your mood tends to be highest after ' + bestBucket.label + ' of sleep.',
+                    'Your sweet spot for sleep',
+                    'When you sleep ' + bestBucket.label + ', your mood tends to be noticeably higher than your average.',
                     records.filter(function(record) {
                         var sleepValue = typeof record.sleepTotal === 'number' && !isNaN(record.sleepTotal) ? record.sleepTotal : record.sleep;
                         return typeof sleepValue === 'number' && !isNaN(sleepValue);
                     }).length,
                     bestBucketDiff * Math.sqrt(bestBucket.records.length),
                     {
-                        kicker: 'Sleep Insight',
-                        context: 'Based on ' + bestBucket.records.length + ' entries in the strongest sleep-duration range, compared with your overall mood trend.'
+                        kicker: 'Sleep',
+                        icon: '\u263d',
+                        nudge: 'Try to aim for ' + bestBucket.label + ' when you can.',
+                        context: 'Based on ' + bestBucket.records.length + ' nights in that range.'
                     }
                 ));
             }
@@ -5017,15 +5199,17 @@ var correlationInsightsEngine = {
             if (Math.abs(fragmentedDiff) >= 0.15) {
                 candidates.push(createInsightCandidate(
                     'sleep',
-                    'Fragmented Sleep Effect',
+                    fragmentedDiff < 0 ? 'Interrupted sleep affects your day' : 'You handle split sleep well',
                     fragmentedDiff < 0
-                        ? 'Your mood tends to be lower after fragmented sleep.'
-                        : 'Your mood appears slightly higher on nights with fragmented sleep.',
+                        ? 'On nights when your sleep was fragmented, your mood the next day was lower on average.'
+                        : 'Interestingly, split sleep nights don\'t seem to drag your mood down much.',
                     fragmented.length + consolidated.length,
                     Math.abs(fragmentedDiff) * Math.sqrt(fragmented.length + consolidated.length),
                     {
-                        kicker: 'Sleep Insight',
-                        context: 'Observed across ' + fragmented.length + ' fragmented nights and ' + consolidated.length + ' more consolidated nights.'
+                        kicker: 'Sleep',
+                        icon: '\u263d',
+                        nudge: fragmentedDiff < 0 ? 'Protecting sleep continuity may help stabilise your mood.' : '',
+                        context: 'Compared ' + fragmented.length + ' fragmented and ' + consolidated.length + ' consolidated nights.'
                     }
                 ));
             }
@@ -5077,13 +5261,17 @@ var correlationInsightsEngine = {
             if (Math.abs(diff) < 0.20) return;
             candidates.push(createInsightCandidate(
                 'tags',
-                'Tag Correlation',
-                'Days tagged "' + stat.label + '" ' + (diff > 0 ? 'tend to be associated with higher mood.' : 'often correlate with lower mood.'),
+                diff > 0 ? '\u201c' + stat.label + '\u201d days tend to lift you' : '\u201c' + stat.label + '\u201d days weigh on you',
+                diff > 0
+                    ? 'Days you tag \u201c' + stat.label + '\u201d tend to show higher mood than your average.'
+                    : 'Days tagged \u201c' + stat.label + '\u201d often coincide with a dip in mood.',
                 stat.records.length,
                 Math.abs(diff) * Math.sqrt(stat.records.length),
                 {
-                    kicker: 'Tag Insight',
-                    context: 'Detected in ' + stat.records.length + ' tagged entr' + (stat.records.length === 1 ? 'y.' : 'ies.')
+                    kicker: 'Tags',
+                    icon: '#',
+                    nudge: diff < 0 ? 'Worth noticing what \u201c' + stat.label + '\u201d days have in common.' : '',
+                    context: 'Seen across ' + stat.records.length + ' tagged ' + (stat.records.length === 1 ? 'entry' : 'entries') + '.'
                 }
             ));
         });
@@ -5106,13 +5294,17 @@ var correlationInsightsEngine = {
             if (Math.abs(diff) < 0.20) return;
             candidates.push(createInsightCandidate(
                 'activity',
-                'Activity Effect',
-                'Days with ' + stat.label + ' ' + (diff > 0 ? 'tend to be associated with better mood.' : 'often correlate with lower mood.'),
+                diff > 0 ? stat.label + ' days are better days' : stat.label + ' correlates with lower mood',
+                diff > 0
+                    ? 'Days that include ' + stat.label + ' tend to be associated with a better mood overall.'
+                    : 'Days with ' + stat.label + ' in your log often show a slightly lower mood.',
                 stat.records.length,
                 Math.abs(diff) * Math.sqrt(stat.records.length),
                 {
-                    kicker: 'Activity Insight',
-                    context: 'Observed in ' + stat.records.length + ' entr' + (stat.records.length === 1 ? 'y' : 'ies') + ' that included this activity.'
+                    kicker: 'Activity',
+                    icon: '\u25cb',
+                    nudge: diff > 0 ? 'Keep prioritising it.' : '',
+                    context: 'Logged ' + stat.label + ' on ' + stat.records.length + ' ' + (stat.records.length === 1 ? 'day' : 'days') + '.'
                 }
             ));
         });
@@ -5145,25 +5337,29 @@ var correlationInsightsEngine = {
                 if (recentStdDev >= 1.8) {
                     candidates.push(createInsightCandidate(
                         'stability',
-                        'Recent Volatility',
-                        'Your mood has been more volatile this week.',
+                        'Your mood has been more variable lately',
+                        'The last week shows more day-to-day swings than usual. That\'s worth paying attention to.',
                         recentRecords.length,
                         recentStdDev * Math.sqrt(recentRecords.length),
                         {
-                            kicker: 'Mood Stability',
-                            context: 'Observed over the last ' + recentRecords.length + ' mood-tracked entries.'
+                            kicker: 'Stability',
+                            icon: '\u25d4',
+                            nudge: 'Sleep and activity levels often drive short-term volatility.',
+                            context: 'Based on the last ' + recentRecords.length + ' days.'
                         }
                     ));
                 } else if (recentStdDev <= 1.1) {
                     candidates.push(createInsightCandidate(
                         'stability',
-                        'Recent Stability',
-                        'Your mood has been relatively stable recently.',
+                        'You\'ve been emotionally consistent',
+                        'Your mood has stayed relatively stable recently \u2014 a sign of good equilibrium.',
                         recentRecords.length,
                         (1.4 - recentStdDev) * Math.sqrt(recentRecords.length),
                         {
-                            kicker: 'Mood Stability',
-                            context: 'Observed over the last ' + recentRecords.length + ' mood-tracked entries.'
+                            kicker: 'Stability',
+                            icon: '\u25d4',
+                            nudge: 'Whatever you\'re doing, it\'s working.',
+                            context: 'Based on the last ' + recentRecords.length + ' days.'
                         }
                     ));
                 }
@@ -5316,11 +5512,53 @@ function renderPredictions() {
         });
     }
     if (noteEl) noteEl.textContent = '';
+
+    // Summary stat chips
+    var summaryRow = document.getElementById('predictionSummaryRow');
+    if (summaryRow && n >= 7) {
+        var avgMood = mood.reduce(function(a,b){return a+b;},0) / n;
+        var nextAvg = next7.reduce(function(a,b){return a+b;},0) / 7;
+        var chips = [
+            { label: 'Days of data', value: String(n) },
+            { label: 'Recent avg', value: avgMood.toFixed(1) },
+            { label: '7-day forecast', value: nextAvg.toFixed(1) },
+            { label: 'Variability', value: '\xb1' + std.toFixed(1) }
+        ];
+        summaryRow.innerHTML = chips.map(function(c) {
+            return '<div class="prediction-stat-chip"><span class="prediction-stat-label">' + escapeHtml(c.label) + '</span><span class="prediction-stat-value">' + escapeHtml(c.value) + '</span></div>';
+        }).join('');
+    }
+
+    // Interpretation block
+    var interpEl = document.getElementById('predictionInterpretation');
+    var interpTextEl = document.getElementById('predictionInterpretationText');
+    if (interpEl && interpTextEl && n >= 7) {
+        var trendDesc = '';
+        if (slope > 0.04) trendDesc = 'Your mood has been on a steady upward trajectory.';
+        else if (slope > 0.01) trendDesc = 'There\u2019s a gentle upward drift in your recent mood.';
+        else if (slope < -0.04) trendDesc = 'Your mood has been gradually trending downward lately.';
+        else if (slope < -0.01) trendDesc = 'There\u2019s a slight downward drift over recent weeks.';
+        else trendDesc = 'Your mood has been holding fairly steady.';
+
+        var stabilityDesc = std < 1 ? 'Your day-to-day variability is low, so the forecast band is narrow.' :
+                             std < 2 ? 'Some day-to-day variability means the actual range could vary.' :
+                                       'Your mood has been quite variable, so treat this forecast as a rough guide.';
+
+        interpTextEl.textContent = trendDesc + ' ' + stabilityDesc;
+        interpEl.style.display = '';
+    }
+
+    // Pattern text (richer)
     var patternText = [];
-    if (slope > 0.02) patternText.push('Your trend over the last few weeks is gently up.');
-    else if (slope < -0.02) patternText.push('Your trend has been dipping lately—worth paying attention to.');
-    else patternText.push('Your mood has been relatively steady over the period we looked at.');
-    patternText.push('This forecast is based on the last ' + n + ' days of entries. Use it as a guide, not a guarantee.');
+    if (slope > 0.02) patternText.push('Your mood has been climbing gradually \u2014 a positive sign.');
+    else if (slope < -0.02) patternText.push('There\u2019s a gentle downward drift lately. Worth checking in on sleep and activity patterns.');
+    else patternText.push('Your mood has been stable \u2014 consistent tracking is helping you see this clearly.');
+
+    if (std < 1) patternText.push('Low day-to-day variability suggests good equilibrium.');
+    else if (std > 2) patternText.push('Higher variability in your recent data means the forecast range is wider than usual.');
+
+    patternText.push('This forecast is based on your last ' + n + ' logged days. The more you track, the sharper it gets.');
+
     if (patternsEl) patternsEl.innerHTML = patternText.join(' ');
     } catch (e) {
         console.error('[Aura] renderPredictions error:', e);

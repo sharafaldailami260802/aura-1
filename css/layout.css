@@ -60,6 +60,42 @@
     font-weight: 600;
     transition: color 0.4s ease;
 }
+.section-sublabel {
+    font-size: 0.58rem;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    color: var(--text-muted);
+    margin: var(--space-sm) 0 6px var(--space-md);
+    font-weight: 600;
+    opacity: 0.65;
+    font-family: var(--font-body);
+}
+.nav-secondary {
+    font-size: 0.88rem;
+    opacity: 0.85;
+    padding-left: calc(var(--space-lg) + 8px);
+}
+.nav-secondary .nav-icon {
+    font-size: 1rem;
+    opacity: 0.7;
+}
+.nav-secondary.active {
+    padding-left: calc(var(--space-lg) + 5px);
+}
+.sidebar-analytics-divider {
+    height: 1px;
+    background: var(--border);
+    margin: var(--space-xs) var(--space-sm);
+    opacity: 0.5;
+}
+@media (max-width: 768px) {
+    .nav-secondary {
+        padding-left: var(--space-md);
+    }
+    .section-sublabel {
+        margin-left: var(--space-sm);
+    }
+}
 
 .nav {
     display: flex;
@@ -263,6 +299,17 @@ h1 {
 .metric:hover {
     transform: translateY(-2px);
     box-shadow: var(--shadow-md);
+}
+.metrics-no-data .metric:first-child::after {
+    content: 'Log today \u2192';
+    display: block;
+    font-size: 0.72rem;
+    color: var(--accent-dark);
+    margin-top: 4px;
+    font-family: var(--font-body);
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    cursor: pointer;
 }
 
 .metric h3 {
@@ -504,6 +551,26 @@ h1 {
 }
 
 /* Dashboard Grid */
+.dashboard-header {
+    margin-bottom: var(--space-lg);
+}
+.dashboard-narrative {
+    font-family: var(--font-body);
+    font-size: 1rem;
+    color: var(--text-muted);
+    margin: 4px 0 0 0;
+    line-height: 1.65;
+    max-width: 600px;
+    transition: opacity 0.4s ease;
+}
+.dashboard-narrative.loading {
+    opacity: 0;
+}
+@media (max-width: 768px) {
+    .dashboard-narrative {
+        font-size: 0.9rem;
+    }
+}
 .dashboard-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));

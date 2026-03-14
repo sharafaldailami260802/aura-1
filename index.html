@@ -86,6 +86,8 @@
             </button>
             
             <div class="section-label">Analytics</div>
+
+            <div class="section-sublabel">Overview</div>
             <button onclick="navigate('mood', this)" class="nav">
                 <span class="nav-icon">📈</span>
                 <span>Mood Trends</span>
@@ -98,35 +100,38 @@
                 <span class="nav-icon">⚡</span>
                 <span>Energy Patterns</span>
             </button>
-            <button onclick="navigate('circadian', this)" class="nav">
-                <span class="nav-icon">⏰</span>
-                <span>Circadian Rhythm</span>
-            </button>
-            <button onclick="navigate('correlations', this)" class="nav">
-                <span class="nav-icon">🔗</span>
-                <span>Correlations</span>
-            </button>
-            <button onclick="navigate('predictions', this)" class="nav">
-                <span class="nav-icon">🔮</span>
-                <span>Predictions</span>
-            </button>
-            <button onclick="navigate('patterns', this)" class="nav">
-                <span class="nav-icon">📊</span>
-                <span>Weekly & Time</span>
-            </button>
-            <button onclick="navigate('seasonal', this)" class="nav">
-                <span class="nav-icon">🍂</span>
-                <span>Seasonal Patterns</span>
-            </button>
-            <button onclick="navigate('reports', this)" class="nav">
-                <span class="nav-icon">📋</span>
-                <span>Reports</span>
-            </button>
             <button onclick="navigate('insights', this)" class="nav">
                 <span class="nav-icon">💡</span>
                 <span>Insights</span>
             </button>
-            
+
+            <div class="sidebar-analytics-divider"></div>
+            <div class="section-sublabel">Deep dive</div>
+            <button onclick="navigate('correlations', this)" class="nav nav-secondary">
+                <span class="nav-icon">🔗</span>
+                <span>Correlations</span>
+            </button>
+            <button onclick="navigate('circadian', this)" class="nav nav-secondary">
+                <span class="nav-icon">⏰</span>
+                <span>Mood Velocity</span>
+            </button>
+            <button onclick="navigate('predictions', this)" class="nav nav-secondary">
+                <span class="nav-icon">🔮</span>
+                <span>Forecast</span>
+            </button>
+            <button onclick="navigate('patterns', this)" class="nav nav-secondary">
+                <span class="nav-icon">📊</span>
+                <span>Patterns</span>
+            </button>
+            <button onclick="navigate('seasonal', this)" class="nav nav-secondary">
+                <span class="nav-icon">🍂</span>
+                <span>Seasonal</span>
+            </button>
+            <button onclick="navigate('reports', this)" class="nav nav-secondary">
+                <span class="nav-icon">📋</span>
+                <span>Reports</span>
+            </button>
+
             <div class="section-label">Settings</div>
             <button onclick="navigate('settings', this)" class="nav">
                 <span class="nav-icon">⚙️</span>
@@ -145,7 +150,10 @@
         <main id="main-content" role="main" aria-label="Page content">
             <!-- Dashboard Overview -->
             <div id="dashboard" class="page active">
-                <h1>Welcome Back</h1>
+                <div class="dashboard-header">
+                    <h1 id="dashboardGreeting">Welcome Back</h1>
+                    <p id="dashboardNarrative" class="dashboard-narrative"></p>
+                </div>
                 <div class="metrics">
                     <div class="metric">
                         <h3>Mood Today</h3>
@@ -206,6 +214,12 @@
                 <div class="form checkin-form-wrap">
                     <div class="checkin-desktop-layout">
                         <div class="checkin-form">
+                    <div class="entry-progress-bar-wrap" id="entryProgressBarWrap">
+                        <div class="entry-progress-bar-track">
+                            <div class="entry-progress-bar-fill" id="entryProgressBarFill" style="width: 0%;"></div>
+                        </div>
+                        <p class="entry-progress-label" id="entryProgressLabel">0 of 4 sections filled</p>
+                    </div>
                     <div class="entry-section entry-section-date">
                         <div class="entry-section-header">
                             <span class="entry-section-heading">Date</span>
@@ -220,7 +234,7 @@
 
                     <div class="entry-section entry-section-1 collapsible-mobile" id="entrySectionMoodEnergy" data-section="mood-energy">
                         <button type="button" class="entry-section-header" onclick="toggleEntrySection('entrySectionMoodEnergy')" aria-expanded="false" aria-controls="entrySectionMoodEnergyContent">
-                            <span class="entry-section-heading">Mood &amp; Energy</span>
+                            <span class="entry-section-heading">Mood &amp; Energy <span class="entry-section-check" id="checkMoodEnergy">✓</span></span>
                             <span class="entry-section-chevron">▼</span>
                         </button>
                         <div class="entry-section-content" id="entrySectionMoodEnergyContent">
@@ -247,7 +261,7 @@
 
                     <div class="entry-section entry-section-2 collapsible-mobile" id="entrySectionSleep" data-section="sleep">
                         <button type="button" class="entry-section-header" onclick="toggleEntrySection('entrySectionSleep')" aria-expanded="false" aria-controls="entrySectionSleepContent">
-                            <span class="entry-section-heading">Sleep</span>
+                            <span class="entry-section-heading">Sleep <span class="entry-section-check" id="checkSleep">✓</span></span>
                             <span class="entry-section-chevron">▼</span>
                         </button>
                         <div class="entry-section-content" id="entrySectionSleepContent">
@@ -295,7 +309,7 @@
 
                     <div class="entry-section entry-section-3 collapsible-mobile" id="entrySectionActivitiesTags" data-section="activities-tags">
                         <button type="button" class="entry-section-header" onclick="toggleEntrySection('entrySectionActivitiesTags')" aria-expanded="false" aria-controls="entrySectionActivitiesTagsContent">
-                            <span class="entry-section-heading">Activities &amp; Tags</span>
+                            <span class="entry-section-heading">Activities &amp; Tags <span class="entry-section-check" id="checkActivitiesTags">✓</span></span>
                             <span class="entry-section-chevron">▼</span>
                         </button>
                         <div class="entry-section-content" id="entrySectionActivitiesTagsContent">
@@ -314,7 +328,7 @@
 
                     <div class="entry-section entry-section-4 collapsible-mobile entry-section-journal-after-summary" id="entrySectionJournal" data-section="journal">
                         <button type="button" class="entry-section-header" onclick="toggleEntrySection('entrySectionJournal')" aria-expanded="false" aria-controls="entrySectionJournalContent">
-                            <span class="entry-section-heading" data-i18n="journal">Journal</span>
+                            <span class="entry-section-heading" data-i18n="journal">Journal <span class="entry-section-check" id="checkJournal">✓</span></span>
                             <span class="entry-section-chevron">▼</span>
                         </button>
                         <div class="entry-section-content" id="entrySectionJournalContent">
@@ -682,19 +696,30 @@
             </div>
             
             <div id="predictions" class="page">
-                <h1>Mood Predictions</h1>
+                <h1>Mood Forecast</h1>
+                <p class="page-subtitle">A projection based on your recent pattern — a guide, not a guarantee.</p>
+
+                <div id="predictionSummaryRow" class="prediction-summary-row"></div>
+                <div id="predictionInterpretation" class="prediction-interpretation" style="display:none;">
+                    <p id="predictionInterpretationText"></p>
+                </div>
+
                 <div class="card" style="margin-bottom: var(--space-lg);">
                     <h3>Next 7 days</h3>
                     <p style="color: var(--text-muted); margin-bottom: var(--space-md);">The line is your forecast; the shaded band is the range we’d expect based on your recent pattern. Not a guarantee—just a helpful view of where things might go.</p>
                     <div style="position: relative; height: 280px;">
                         <canvas id="predictionChart"></canvas>
                     </div>
+                    <div class="prediction-band-legend">
+                        <span class="prediction-band-swatch"></span>
+                        <span>Shaded band shows expected range based on your recent variability</span>
+                    </div>
                     <p id="predictionNote" style="color: var(--text-muted); font-size: 0.9rem; margin-top: var(--space-sm);"></p>
                     <button type="button" class="btn chart-export-btn" onclick="exportChartPNG('predictionChart')">Export PNG</button>
                 </div>
                 <div class="card">
-                    <h3>Patterns & triggers</h3>
-                    <p id="predictionPatterns" style="color: var(--text); line-height: 1.7;"></p>
+                    <h3>What your data says</h3>
+                    <p id="predictionPatterns" style="color: var(--text); line-height: 1.75;"></p>
                 </div>
             </div>
             
@@ -837,7 +862,7 @@
                     <div class="insight-overview-card">
                         <p class="insight-overview-eyebrow">Personal Analytics</p>
                         <h3>Insights Overview</h3>
-                        <p id="insightsOverviewText">More insights will appear as you record additional entries. Track mood, sleep, and activities to uncover patterns.</p>
+                        <p id="insightsOverviewText">Here are the clearest patterns in your recent data. These get sharper the more you track.</p>
                     </div>
                     <div id="insightsDashboardContent" class="insights-dashboard-stack">
                         <p class="insight-empty">More insights will appear as you record additional entries. Track mood, sleep, and activities to uncover patterns.</p>

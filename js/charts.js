@@ -176,12 +176,28 @@
                         },
                         label: function(ctx) {
                             var label = ctx.dataset.label || '';
-                            var value = ctx.parsed && ctx.parsed.y != null
-                                ? ctx.parsed.y
-                                : ctx.raw;
+                            var value = ctx.parsed && ctx.parsed.y != null ? ctx.parsed.y : ctx.raw;
                             var formatted = formatChartValue(value, label);
-                            /* Use a middle dot separator — cleaner than ":" */
-                            return label ? '  ' + label + '  ·  ' + formatted : '  ' + formatted;
+                            if (!label) return '  ' + formatted;
+
+                            // Add contextual suffix based on value
+                            var suffix = '';
+                            if (label === 'Mood' || label === 'Energy') {
+                                var n = Number(value);
+                                if (!isNaN(n)) {
+                                    if (n >= 8) suffix = ' \u2014 great';
+                                    else if (n >= 6) suffix = ' \u2014 good';
+                                    else if (n <= 3) suffix = ' \u2014 tough day';
+                                }
+                            }
+                            if (label === 'Sleep') {
+                                var h = Number(value);
+                                if (!isNaN(h)) {
+                                    if (h >= 8) suffix = ' \u2014 well rested';
+                                    else if (h < 6) suffix = ' \u2014 short night';
+                                }
+                            }
+                            return '  ' + label + '  \xb7  ' + formatted + suffix;
                         }
                     }
                 },
@@ -197,6 +213,34 @@
     window.auraChartFormatValue   = formatChartValue;
     window.auraChartUnits         = CHART_UNITS;
 
+    /* ─── Average reference line plugin ───────────────────────────────────── */
+    if (typeof Chart !== 'undefined' && Chart.register) {
+        Chart.register({
+            id: 'auraAverageLine',
+            afterDraw: function(chart) {
+                if (!chart.config.options || !chart.config.options._auraShowAvgLine) return;
+                var ctx = chart.ctx;
+                var datasets = chart.data.datasets;
+                if (!datasets || !datasets.length) return;
+                var d = datasets[0].data.filter(function(v) { return v != null && !isNaN(Number(v)); }).map(Number);
+                if (d.length < 3) return;
+                var avg = d.reduce(function(a, b) { return a + b; }, 0) / d.length;
+                var yScale = chart.scales.y;
+                var ca = chart.chartArea;
+                if (!yScale || !ca) return;
+                var y = yScale.getPixelForValue(avg);
+                ctx.save();
+                ctx.setLineDash([4, 4]);
+                ctx.strokeStyle = 'rgba(139,157,131,0.45)';
+                ctx.lineWidth = 1;
+                ctx.beginPath();
+                ctx.moveTo(ca.left, y);
+                ctx.lineTo(ca.right, y);
+                ctx.stroke();
+                ctx.restore();
+            }
+        });
+    }
 })();
 
 /**
@@ -238,4 +282,77 @@ window.renderCircadianChart = function() {
 };
 window.renderMoodVelocityChart = function() {
     if (typeof window.renderMoodVelocity === 'function') window.renderMoodVelocity();
+};
+
+/**
+ * Analyse a data array and return annotation chips for display below a chart.
+ * @param {Array<number|null>} data - the chart data values
+ * @param {string} metricLabel - 'Mood', 'Sleep', 'Energy', etc.
+ * @returns {Array<{text: string, sentiment: 'positive'|'negative'|'neutral'}>}
+ */
+window.buildChartAnnotations = function buildChartAnnotations(data, metricLabel) {
+    if (!Array.isArray(data) || !data.length) return [];
+    var valid = data.filter(function(v) { return v != null && !isNaN(Number(v)); }).map(Number);
+    if (valid.length < 3) return [];
+
+    var chips = [];
+    var avg = valid.reduce(function(a, b) { return a + b; }, 0) / valid.length;
+    var last = valid[valid.length - 1];
+    var firstHalf = valid.slice(0, Math.floor(valid.length / 2));
+    var secondHalf = valid.slice(Math.floor(valid.length / 2));
+    var firstAvg = firstHalf.reduce(function(a, b) { return a + b; }, 0) / firstHalf.length;
+    var secondAvg = secondHalf.reduce(function(a, b) { return a + b; }, 0) / secondHalf.length;
+    var trend = secondAvg - firstAvg;
+
+    // Average chip
+    chips.push({ text: 'Avg ' + avg.toFixed(1), sentiment: 'neutral' });
+
+    // Trend chip
+    if (Math.abs(trend) >= 0.3) {
+        var direction = trend > 0 ? '\u2197 Up' : '\u2198 Down';
+        var sign = trend > 0 ? '+' : '';
+        chips.push({
+            text: direction + ' ' + sign + trend.toFixed(1) + ' vs earlier',
+            sentiment: trend > 0 ? 'positive' : 'negative'
+        });
+    }
+
+    // Latest vs average
+    var latestDiff = last - avg;
+    if (Math.abs(latestDiff) >= 0.4) {
+        var vsAvgText = (latestDiff > 0 ? '+' : '') + latestDiff.toFixed(1) + ' vs avg';
+        chips.push({ text: 'Latest: ' + vsAvgText, sentiment: latestDiff > 0 ? 'positive' : 'negative' });
+    }
+
+    // Range chip
+    var min = Math.min.apply(null, valid);
+    var max = Math.max.apply(null, valid);
+    chips.push({ text: 'Range ' + min.toFixed(1) + '\u2013' + max.toFixed(1), sentiment: 'neutral' });
+
+    return chips.slice(0, 4);
+};
+
+/**
+ * Render annotation chips below a chart canvas.
+ * @param {HTMLElement} canvas - the chart canvas element
+ * @param {Array} chips - from buildChartAnnotations()
+ */
+window.renderChartAnnotationBar = function renderChartAnnotationBar(canvas, chips) {
+    if (!canvas || !chips || !chips.length) return;
+    var wrap = canvas.parentElement;
+    if (!wrap) return;
+
+    // Remove any existing annotation bar
+    var existing = wrap.querySelector('.chart-annotation-bar');
+    if (existing) existing.remove();
+
+    var bar = document.createElement('div');
+    bar.className = 'chart-annotation-bar';
+    chips.forEach(function(chip) {
+        var el = document.createElement('span');
+        el.className = 'chart-annotation-chip ' + (chip.sentiment || 'neutral');
+        el.innerHTML = '<span class="chart-annotation-dot"></span>' + chip.text;
+        bar.appendChild(el);
+    });
+    wrap.appendChild(bar);
 };
