@@ -1118,11 +1118,15 @@ function navigate(page, button) {
     } else if (page === 'predictions') {
         loadTensorFlow().then(function() { renderPredictions(); }).catch(function() { renderPredictions(); });
     } else if (page === 'patterns') {
-        renderRadarChart();
-        renderDistributionChart();
-        renderSleepTimeline();
-        renderTimeHeatmap();
-        renderDayOfWeekChart();
+        requestAnimationFrame(function() {
+            requestAnimationFrame(function() {
+                renderRadarChart();
+                renderDistributionChart();
+                renderSleepTimeline();
+                renderTimeHeatmap();
+                renderDayOfWeekChart();
+            });
+        });
     } else if (page === 'entry') {
         (renderCustomMetricsInEntryForm() || Promise.resolve()).then(function() {
             var activeDate = getWorkingEntryDate();
@@ -1172,19 +1176,23 @@ function navigate(page, button) {
         updateLastBackupDisplay();
         renderBackupList();
     } else if (page === 'seasonal') {
-        renderSeasonal();
-        renderYearOverYear();
-        var from = document.getElementById('customRangeFrom');
-        var to = document.getElementById('customRangeTo');
-        if (from && to) {
-            if (!from.value) {
-                var t = new Date();
-                to.value = t.toISOString().split('T')[0];
-                t.setDate(t.getDate() - 30);
-                from.value = t.toISOString().split('T')[0];
-            }
-            renderCustomRangeChart();
-        }
+        requestAnimationFrame(function() {
+            requestAnimationFrame(function() {
+                renderSeasonal();
+                renderYearOverYear();
+                var from = document.getElementById('customRangeFrom');
+                var to = document.getElementById('customRangeTo');
+                if (from && to) {
+                    if (!from.value) {
+                        var t = new Date();
+                        to.value = t.toISOString().split('T')[0];
+                        t.setDate(t.getDate() - 30);
+                        from.value = t.toISOString().split('T')[0];
+                    }
+                    renderCustomRangeChart();
+                }
+            });
+        });
     } else if (page === 'reports') {
         setReportTab(reportTabState || 'weekly');
         renderReportsContent();
@@ -3039,7 +3047,6 @@ function updateDashboard() {
         else milestoneEl.textContent = 'Start tracking to build a streak';
     }
     if (typeof renderMoodVelocity === 'function') renderMoodVelocity();
-    if (typeof renderDayOfWeekChart === 'function') renderDayOfWeekChart();
 }
 
 var calendarViewState = 'year';
@@ -4232,10 +4239,7 @@ function renderCharts() {
     
     renderMoodVelocity();
     
-    // Day-of-Week chart
-    renderDayOfWeekChart();
-    
-    // Seasonal Chart
+    // Seasonal Chart (Seasonal page only; Patterns charts rendered when navigating to Patterns)
     renderSeasonal();
     } catch (chartErr) {
         console.warn('[Aura] renderCharts failed', chartErr);
@@ -4788,21 +4792,24 @@ function renderSeasonal() {
     const colors = getThemeColors();
     const existingSea = Chart.getChart(seasonalCtx);
     if (existingSea) existingSea.destroy();
-    
+
     const monthlyData = {};
-    Object.keys(entries).forEach(date => {
-        const month = new Date(date).getMonth();
+    Object.keys(entries).forEach(function(date) {
+        var e = entries[date];
+        var mood = e && e.mood;
+        if (typeof mood !== 'number' || isNaN(mood)) return;
+        var month = new Date(date + 'T12:00:00').getMonth();
         if (!monthlyData[month]) monthlyData[month] = [];
-        monthlyData[month].push(entries[date].mood);
+        monthlyData[month].push(mood);
     });
-    
-    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-    const avgByMonth = months.map((m, i) => {
-        const data = monthlyData[i];
-        return data ? data.reduce((a, b) => a + b, 0) / data.length : 0;
+
+    var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    var avgByMonth = months.map(function(m, i) {
+        var data = monthlyData[i];
+        return data && data.length ? data.reduce(function(a, b) { return a + b; }, 0) / data.length : 0;
     });
-    
-    new Chart(seasonalCtx, {
+
+    var chart = new Chart(seasonalCtx, {
         type: 'bar',
         data: {
             labels: months,
@@ -4816,6 +4823,7 @@ function renderSeasonal() {
         },
         options: getChartConfig({ yMin: 1, yMax: 10, yStep: 1, yTitle: 'Mood (1–10)' })
     });
+    requestAnimationFrame(function() { if (chart && chart.resize) chart.resize(); });
 }
 
 function getEntryYears() {
@@ -5873,7 +5881,7 @@ function renderRadarChart() {
     if (existing) existing.destroy();
     var colors = getThemeColors();
     var gridColor = colors.grid || 'rgba(0,0,0,0.06)';
-    new Chart(ctx, {
+    var chart = new Chart(ctx, {
         type: 'radar',
         data: {
             labels: days,
@@ -5941,6 +5949,7 @@ function renderRadarChart() {
             return { ...globalStyle, ...existingOptions };
         })()
     });
+    requestAnimationFrame(function() { if (chart && chart.resize) chart.resize(); });
 }
 
 function renderDistributionChart() {
@@ -5980,7 +5989,7 @@ function renderDistributionChart() {
     var existing = Chart.getChart(ctx);
     if (existing) existing.destroy();
     var hoverAlpha = (barColor && barColor.indexOf('#') === 0 && barColor.length === 7) ? barColor + 'dd' : barColor;
-    new Chart(ctx, {
+    var chart = new Chart(ctx, {
         type: 'bar',
         data: {
             labels: chartLabels,
@@ -6032,6 +6041,7 @@ function renderDistributionChart() {
             return { ...globalStyle, ...existingOptions };
         })()
     });
+    requestAnimationFrame(function() { if (chart && chart.resize) chart.resize(); });
     var maxCount = Math.max.apply(null, moodBuckets);
     var modeMood = 1;
     for (var j = 9; j >= 0; j--) {
@@ -6313,7 +6323,7 @@ function renderDayOfWeekChart() {
     baseOpts.scales.x.ticks = Object.assign({}, baseOpts.scales.x.ticks, { autoSkip: false, maxTicksLimit: 7 });
     baseOpts.scales.x.barPercentage = 0.78;
     baseOpts.scales.x.categoryPercentage = 0.88;
-    new Chart(canvas, {
+    var chart = new Chart(canvas, {
         type: 'bar',
         data: {
             labels: dayNames,
@@ -6332,6 +6342,7 @@ function renderDayOfWeekChart() {
         },
         options: baseOpts
     });
+    requestAnimationFrame(function() { if (chart && chart.resize) chart.resize(); });
     var best = -1, worst = 11, bestIdx = -1, worstIdx = -1;
     avgs.forEach(function(v, i) {
         if (v === null) return;

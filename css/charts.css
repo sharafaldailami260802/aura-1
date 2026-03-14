@@ -130,6 +130,94 @@
     }
 }
 
+/* Patterns & Seasonal: fixed-height wrappers to prevent Chart.js distortion */
+.seasonal-chart-wrap,
+.pattern-chart-wrap,
+#radarChartWrap {
+    position: relative;
+    width: 100%;
+    height: 320px;
+    min-height: 320px;
+}
+.seasonal-chart-wrap canvas,
+.pattern-chart-wrap canvas,
+#radarChartWrap canvas,
+#seasonalChart,
+#dowChart,
+#distributionChart,
+#radarChart {
+    display: block;
+    width: 100% !important;
+    height: 100% !important;
+    max-width: 100%;
+    max-height: 100%;
+}
+@media (min-width: 769px) {
+    .seasonal-chart-wrap,
+    .pattern-chart-wrap,
+    #radarChartWrap {
+        height: 420px;
+        min-height: 420px;
+    }
+}
+@media (max-width: 768px) {
+    .seasonal-chart-wrap,
+    .pattern-chart-wrap,
+    #radarChartWrap {
+        height: 260px;
+        min-height: 260px;
+    }
+}
+
+/* Forecast: chart as centerpiece — fixed height for Chart.js */
+.forecast-chart-canvas-wrap {
+    position: relative;
+    width: 100%;
+    height: 320px;
+    min-height: 320px;
+    margin-bottom: var(--space-sm);
+}
+.forecast-chart-canvas-wrap canvas {
+    display: block;
+    width: 100% !important;
+    height: 100% !important;
+    max-width: 100%;
+    max-height: 100%;
+}
+@media (min-width: 769px) {
+    .forecast-chart-canvas-wrap {
+        height: 380px;
+        min-height: 380px;
+    }
+}
+@media (max-width: 768px) {
+    .forecast-chart-canvas-wrap {
+        height: 260px;
+        min-height: 260px;
+    }
+}
+
+/* Patterns: toolbar strip + hero chart title */
+.patterns-toolbar {
+    display: flex;
+    gap: var(--space-sm);
+    align-items: center;
+    flex-wrap: wrap;
+    margin-bottom: var(--space-md);
+    padding-bottom: var(--space-sm);
+    border-bottom: 1px solid var(--border);
+}
+.patterns-hero-chart-title {
+    font-family: var(--font-display);
+    font-size: 1.35rem;
+    font-weight: 400;
+    margin: 0 0 var(--space-xs) 0;
+    color: var(--text);
+}
+.patterns-radar-card .radar-context-label {
+    margin-top: 0;
+}
+
 /* Skeleton loading */
 .skeleton {
     background: linear-gradient(90deg, var(--border) 25%, color-mix(in srgb, var(--border) 50%, transparent) 50%, var(--border) 75%);

@@ -375,6 +375,61 @@ h1 {
     line-height: 1.5;
     font-family: var(--font-body);
 }
+
+/* Page hero — intro block for Forecast, Patterns, Daily Check-In */
+.page-hero {
+    margin-bottom: var(--space-lg);
+}
+.page-hero h1 {
+    margin-bottom: var(--space-xs);
+}
+.page-hero-subtitle {
+    font-size: 0.95rem;
+    font-weight: 400;
+    color: var(--text-muted);
+    margin: 0;
+    max-width: 520px;
+    line-height: 1.55;
+    font-family: var(--font-body);
+}
+.forecast-hero { margin-bottom: var(--space-md); }
+.forecast-chart-section { margin-bottom: var(--space-lg); }
+.forecast-support-cards {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+}
+.patterns-hero { margin-bottom: var(--space-md); }
+.patterns-hero-chart { margin-bottom: var(--space-lg); }
+.patterns-explainer {
+    margin-bottom: var(--space-lg);
+    padding: var(--space-md) 0;
+    border-bottom: 1px solid var(--border);
+}
+.patterns-explainer-text {
+    margin: 0;
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    line-height: 1.55;
+    max-width: 560px;
+}
+.patterns-secondary { margin-top: var(--space-md); }
+.entry-page-header { margin-bottom: var(--space-md); }
+.entry-progress-block {
+    margin-bottom: var(--space-lg);
+}
+.support-rail-group {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+}
+.support-rail-group + .support-rail-group {
+    margin-top: var(--space-md);
+}
+@media (max-width: 768px) {
+    .page-hero-subtitle { max-width: 100%; }
+    .patterns-explainer { padding: var(--space-sm) 0; }
+}
 .analytics-chart-card-header {
     margin-bottom: var(--space-md);
 }

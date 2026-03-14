@@ -29,6 +29,33 @@
     color: var(--text);
 }
 
+/* Card hierarchy: chart (primary), support (secondary), secondary (demoted) */
+.card--chart {
+    margin-bottom: var(--space-lg);
+}
+.card--support {
+    padding: var(--space-md) var(--space-lg);
+    background: color-mix(in srgb, var(--bg) 40%, var(--surface));
+    border-color: color-mix(in srgb, var(--border) 80%, transparent);
+}
+.card--support-heading {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: var(--space-sm);
+    color: var(--text-muted);
+    font-family: var(--font-body);
+    letter-spacing: 0.02em;
+}
+.card--secondary {
+    opacity: 0.97;
+}
+.card--secondary h3 {
+    font-size: 1.25rem;
+}
+.card--secondary .patterns-card-desc {
+    font-size: 0.85rem;
+}
+
 /* Form Styles */
 .form {
     max-width: 600px;
@@ -2723,7 +2750,6 @@ body::before { animation: gradientShift 8s ease-in-out infinite; }
     border-radius: var(--radius-lg);
     border: 1px solid color-mix(in srgb, var(--accent) 20%, var(--border));
     border-left: 3px solid var(--accent);
-    margin-bottom: var(--space-lg);
 }
 .prediction-interpretation p {
     margin: 0;

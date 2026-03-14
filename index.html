@@ -105,7 +105,7 @@
 
             <button type="button" class="nav nav-group-toggle" id="deepDiveToggle" onclick="toggleDeepDive()" aria-expanded="false" aria-controls="deepDiveGroup">
                 <span class="nav-icon">🔬</span>
-                <span>Deep dive</span>
+                <span>Deep Dive</span>
                 <span class="nav-group-chevron" aria-hidden="true">▾</span>
             </button>
             <div class="nav-group-items" id="deepDiveGroup" aria-hidden="true">
@@ -121,13 +121,13 @@
                     <span class="nav-icon">🔮</span>
                     <span>Forecast</span>
                 </button>
-                <button onclick="navigate('patterns', this)" class="nav nav-secondary" aria-label="Go to Patterns">
+                <button onclick="navigate('patterns', this)" class="nav nav-secondary" aria-label="Go to My Patterns">
                     <span class="nav-icon">📊</span>
-                    <span>Patterns</span>
+                    <span>My Patterns</span>
                 </button>
-                <button onclick="navigate('seasonal', this)" class="nav nav-secondary" aria-label="Go to Seasonal">
+                <button onclick="navigate('seasonal', this)" class="nav nav-secondary" aria-label="Go to Seasonal Rhythm">
                     <span class="nav-icon">🍂</span>
-                    <span>Seasonal</span>
+                    <span>Seasonal Rhythm</span>
                 </button>
                 <button onclick="navigate('reports', this)" class="nav nav-secondary" aria-label="Go to Reports">
                     <span class="nav-icon">📋</span>
@@ -247,16 +247,21 @@
             
             <!-- Daily Check-In -->
             <div id="entry" class="page">
-                <h1>Daily Check-In</h1>
-                
+                <header class="page-hero entry-page-header">
+                    <h1>Daily Check-In</h1>
+                    <p class="page-hero-subtitle">Log your mood, sleep, and energy. One entry per day — quick or detailed, your choice.</p>
+                </header>
+
                 <div class="form checkin-form-wrap">
                     <div class="checkin-desktop-layout">
                         <div class="checkin-form">
+                    <div class="entry-progress-block">
                     <div class="entry-progress-bar-wrap" id="entryProgressBarWrap">
                         <div class="entry-progress-bar-track">
                             <div class="entry-progress-bar-fill" id="entryProgressBarFill" style="width: 0%;"></div>
                         </div>
                         <p class="entry-progress-label" id="entryProgressLabel">0 of 4 sections filled</p>
+                    </div>
                     </div>
                     <div class="entry-section entry-section-date">
                         <div class="entry-section-header">
@@ -422,6 +427,7 @@
                     </div>
                         </div>
                         <aside class="checkin-support-rail" aria-label="Check-in context">
+                            <div class="support-rail-group">
                             <div class="support-card support-card-status">
                                 <h3 class="support-card-heading">Entry status</h3>
                                 <p class="support-card-eyebrow">Today</p>
@@ -429,6 +435,8 @@
                                 <p class="support-card-line" id="supportRailDraft">—</p>
                                 <p class="support-card-reminder">Save Entry stores your full check-in.</p>
                             </div>
+                            </div>
+                            <div class="support-rail-group">
                             <div class="support-card support-card-snapshot">
                                 <h3 class="support-card-heading">Live snapshot</h3>
                                 <ul class="support-snapshot-rows" aria-label="Current check-in summary">
@@ -439,12 +447,15 @@
                                     <li class="support-snapshot-row"><span class="support-snapshot-label">Reflection</span><span class="support-snapshot-value" id="supportRailReflection">—</span></li>
                                 </ul>
                             </div>
+                            </div>
+                            <div class="support-rail-group">
                             <div class="support-card support-card-cue">
                                 <h3 class="support-card-heading">Reflection</h3>
                                 <div class="support-cue-block">
                                     <p class="support-cue-prompt">What felt most notable today?</p>
                                     <p class="support-cue-helper">A few lines for you — no need to write more.</p>
                                 </div>
+                            </div>
                             </div>
                         </aside>
                     </div>
@@ -734,41 +745,50 @@
             </div>
             
             <div id="predictions" class="page">
-                <h1>Mood Forecast</h1>
-                <p class="page-subtitle">A projection based on your recent pattern — a guide, not a guarantee.</p>
+                <header class="page-hero forecast-hero">
+                    <h1>Mood Forecast</h1>
+                    <p class="page-hero-subtitle">A projection based on your recent pattern — a guide, not a guarantee.</p>
+                </header>
 
-                <div id="predictionSummaryRow" class="prediction-summary-row"></div>
-                <div id="predictionInterpretation" class="prediction-interpretation" style="display:none;">
-                    <p id="predictionInterpretationText"></p>
-                </div>
+                <section class="forecast-chart-section" aria-label="Forecast chart">
+                    <div id="predictionSummaryRow" class="prediction-summary-row"></div>
+                    <div class="card card--chart forecast-chart-card">
+                        <div class="forecast-chart-inner">
+                            <p class="forecast-chart-helper" style="color: var(--text-muted); margin-bottom: var(--space-md); font-size: 0.9rem;">The line is your forecast; the shaded band is the range we’d expect based on your recent pattern. Not a guarantee—just a helpful view of where things might go.</p>
+                            <div class="forecast-chart-canvas-wrap">
+                                <canvas id="predictionChart"></canvas>
+                            </div>
+                            <div class="prediction-band-legend">
+                                <span class="prediction-band-swatch"></span>
+                                <span>Shaded band shows expected range based on your recent variability</span>
+                            </div>
+                            <p id="predictionNote" style="color: var(--text-muted); font-size: 0.9rem; margin-top: var(--space-sm);"></p>
+                            <button type="button" class="btn chart-export-btn" onclick="exportChartPNG('predictionChart')">Export PNG</button>
+                        </div>
+                    </div>
+                </section>
 
-                <div class="card" style="margin-bottom: var(--space-lg);">
-                    <h3>Next 7 days</h3>
-                    <p style="color: var(--text-muted); margin-bottom: var(--space-md);">The line is your forecast; the shaded band is the range we’d expect based on your recent pattern. Not a guarantee—just a helpful view of where things might go.</p>
-                    <div style="position: relative; height: 280px;">
-                        <canvas id="predictionChart"></canvas>
+                <div class="forecast-support-cards">
+                    <div id="predictionInterpretation" class="card card--support prediction-interpretation" style="display:none;">
+                        <h3 class="card--support-heading">Interpretation</h3>
+                        <p id="predictionInterpretationText"></p>
                     </div>
-                    <div class="prediction-band-legend">
-                        <span class="prediction-band-swatch"></span>
-                        <span>Shaded band shows expected range based on your recent variability</span>
+                    <div class="card card--support">
+                        <h3 class="card--support-heading">What your data says</h3>
+                        <p id="predictionPatterns" style="color: var(--text); line-height: 1.75;"></p>
                     </div>
-                    <p id="predictionNote" style="color: var(--text-muted); font-size: 0.9rem; margin-top: var(--space-sm);"></p>
-                    <button type="button" class="btn chart-export-btn" onclick="exportChartPNG('predictionChart')">Export PNG</button>
-                </div>
-                <div class="card">
-                    <h3>What your data says</h3>
-                    <p id="predictionPatterns" style="color: var(--text); line-height: 1.75;"></p>
                 </div>
             </div>
             
             <div id="patterns" class="page">
-                <h1>Patterns &amp; Rhythms</h1>
-                <p class="page-subtitle">How mood, sleep, and time of day connect across your data.</p>
-                <div class="dashboard-grid">
-                    <div class="card">
-                        <h3 id="radarTitle">Mood Patterns — Last 7 Days</h3>
-                        <p class="patterns-card-desc">Balance of your mood across days of the week.</p>
-                        <div class="radar-controls" id="radarControls">
+                <header class="page-hero patterns-hero">
+                    <h1>Pattern Analysis</h1>
+                    <p class="page-hero-subtitle">How mood, sleep, and time of day connect across your data.</p>
+                </header>
+
+                <section class="patterns-hero-chart" aria-label="Mood balance chart">
+                    <div class="card card--chart patterns-radar-card">
+                        <div class="patterns-toolbar radar-controls" id="radarControls">
                             <button type="button" class="radar-mode active" data-mode="weekly" id="radarModeWeekly">Last 7 Days</button>
                             <button type="button" class="radar-mode" data-mode="monthly" id="radarModeMonthly">Monthly</button>
                             <div class="radar-month-picker" id="radarMonthSelectWrap" style="display: none;">
@@ -781,22 +801,33 @@
                                 </div>
                             </div>
                         </div>
+                        <h3 id="radarTitle" class="patterns-hero-chart-title">Mood Patterns — Last 7 Days</h3>
                         <p id="radarChartContextLabel" class="radar-context-label">Weekly Balance (Last 7 Days)</p>
                         <p id="radarChartEmpty" class="radar-empty-message" style="display: none;">No entries in this time period.</p>
-                        <div id="radarChartWrap">
+                        <div id="radarChartWrap" class="chart-container pattern-chart-wrap">
                             <canvas id="radarChart"></canvas>
                         </div>
                         <button type="button" class="btn chart-export-btn" onclick="exportChartPNG('radarChart')">Export PNG</button>
                     </div>
-                    <div class="card">
+                </section>
+
+                <div class="patterns-explainer">
+                    <p class="patterns-explainer-text">Balance of your mood across days of the week. Switch to monthly to see a single month’s overview.</p>
+                </div>
+
+                <section class="patterns-secondary" aria-label="Additional patterns">
+                    <div class="dashboard-grid">
+                    <div class="card card--secondary">
                         <h3>Mood Distribution</h3>
                         <p class="patterns-card-desc">Where your ratings cluster over time.</p>
-                        <canvas id="distributionChart"></canvas>
+                        <div class="chart-container pattern-chart-wrap">
+                            <canvas id="distributionChart"></canvas>
+                        </div>
                         <p id="distributionChartSummary" class="distribution-chart-summary" style="margin: var(--space-md) 0 0 0; font-size: 0.9rem; color: var(--text-muted);"></p>
                         <button type="button" class="btn chart-export-btn" onclick="exportChartPNG('distributionChart')">Export PNG</button>
                     </div>
-                </div>
-                <div class="card" style="margin-top: var(--space-lg);">
+                    </div>
+                <div class="card card--secondary" style="margin-top: var(--space-lg);">
                     <h3>Sleep Timeline</h3>
                     <p class="patterns-card-desc">When you slept across each night—surfaces consistency and fragmentation.</p>
                     <div class="sleep-timeline-controls" id="sleepTimelineControls">
@@ -808,26 +839,31 @@
                         <div id="sleepTimelineChart" class="sleep-timeline-chart"></div>
                     </div>
                 </div>
-                <div class="card" style="margin-top: var(--space-lg);">
+                <div class="card card--secondary" style="margin-top: var(--space-lg);">
                     <h3>Mood by Time of Day</h3>
                     <p class="patterns-card-desc">How your mood relates to when you sleep and wake.</p>
                     <div id="timeHeatmap" class="time-heatmap"></div>
                 </div>
-                <div class="card" style="margin-top: var(--space-lg);">
+                <div class="card card--secondary" style="margin-top: var(--space-lg);">
                     <h3>Weekly Rhythm</h3>
                     <p class="patterns-card-desc">Which days tend to feel better or harder.</p>
-                    <canvas id="dowChart"></canvas>
+                    <div class="chart-container pattern-chart-wrap">
+                        <canvas id="dowChart"></canvas>
+                    </div>
                     <p id="dowChartInsight" style="margin-top: var(--space-md); font-size: 0.9rem; color: var(--text-muted);"></p>
                 </div>
+                </section>
             </div>
             <div id="sleepTimelineTooltip" class="sleep-timeline-tooltip" role="tooltip" aria-hidden="true"></div>
             
             <div id="seasonal" class="page">
-                <h1>Seasonal &amp; Custom Range</h1>
+                <h1>Seasonal &amp; Custom Rhythm Analysis</h1>
                 <div class="card" style="margin-bottom: var(--space-lg);">
                     <h3>Monthly comparison (average mood by month)</h3>
                     <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: var(--space-sm);">All your data combined by month.</p>
-                    <canvas id="seasonalChart"></canvas>
+                    <div class="comparison-chart-wrap seasonal-chart-wrap">
+                        <canvas id="seasonalChart"></canvas>
+                    </div>
                 </div>
                 <div class="card" style="margin-bottom: var(--space-lg);">
                     <h3>Year-over-year</h3>
