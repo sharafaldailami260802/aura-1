@@ -3770,56 +3770,111 @@ var clearCornerArtifactPlugin = {
 if (typeof Chart !== 'undefined' && Chart.register) Chart.register(clearCornerArtifactPlugin);
 function getChartConfig(overrides) {
     var o = overrides || {};
-    const c = getThemeColors();
-    var tickFont = { size: 14, family: 'DM Sans, sans-serif' };
-    var axisTitleFont = { size: 12, weight: '600', family: 'DM Sans, sans-serif' };
-    var integerTicks = o.integerTicks !== false;
-    var yMin = o.yMin != null ? o.yMin : 0;
-    var yMax = o.yMax != null ? o.yMax : null;
-    var yStep = o.yStep != null ? o.yStep : 1;
-    var gridOpts = { color: "rgba(0,0,0,0.05)", drawBorder: false, lineWidth: 1 };
+    var c = getThemeColors();
+
+    var tickFont      = { size: 11, family: "'DM Sans', sans-serif", weight: '500' };
+    var axisTitleFont = { size: 11, weight: '600', family: "'DM Sans', sans-serif" };
+    var integerTicks  = o.integerTicks !== false;
+    var yMin   = o.yMin  != null ? o.yMin  : 0;
+    var yMax   = o.yMax  != null ? o.yMax  : null;
+    var yStep  = o.yStep != null ? o.yStep : 1;
+    var isDark = document.documentElement.getAttribute('data-dark') === 'true';
+
+    var gridOpts   = { color: c.grid || (isDark ? 'rgba(255,255,255,0.07)' : 'rgba(0,0,0,0.06)'), drawBorder: false, lineWidth: 1 };
     var borderOpts = { display: false };
+
+    /* ── Y axis ─────────────────────────────────────────────────────── */
     var yConfig = {
         type: (o.yMin != null || o.yMax != null) ? 'linear' : undefined,
         min: yMin,
-        max: yMax,
         beginAtZero: yMin === 0,
-        grid: gridOpts,
+        grid:   gridOpts,
         border: borderOpts,
-        title: o.yTitle ? { display: true, text: o.yTitle, font: axisTitleFont, color: c.textPrimary } : { display: false },
+        title: o.yTitle ? {
+            display: true,
+            text:    o.yTitle,
+            font:    axisTitleFont,
+            color:   c.text || (isDark ? '#94a3b8' : '#4A4A4A'),
+            padding: { bottom: 6 }
+        } : { display: false },
         ticks: {
-            font: tickFont,
-            color: c.text,
+            font:    tickFont,
+            color:   c.text || (isDark ? '#94a3b8' : '#4A4A4A'),
             padding: 8,
-            callback: integerTicks ? function(val) { return Number.isInteger(val) ? val : ''; } : undefined,
+            callback: integerTicks
+                ? function(val) { return Number.isInteger(val) ? val : ''; }
+                : undefined,
             stepSize: integerTicks ? yStep : undefined
         }
     };
     if (yMax != null) yConfig.max = yMax;
+
+    /* ── X axis ─────────────────────────────────────────────────────── */
     var xConfig = {
         type: (o.xMin != null || o.xMax != null) ? 'linear' : undefined,
-        grid: gridOpts,
+        grid:   gridOpts,
         border: borderOpts,
-        title: o.xTitle ? { display: true, text: o.xTitle, font: axisTitleFont, color: c.textPrimary } : { display: false },
-        ticks: { font: tickFont, color: c.text, padding: 8, autoSkip: true, maxTicksLimit: 6 }
+        title: o.xTitle ? {
+            display: true,
+            text:    o.xTitle,
+            font:    axisTitleFont,
+            color:   c.text || (isDark ? '#94a3b8' : '#4A4A4A'),
+            padding: { top: 6 }
+        } : { display: false },
+        ticks: {
+            font:  tickFont,
+            color: c.text || (isDark ? '#94a3b8' : '#4A4A4A'),
+            padding: 8,
+            autoSkip: true,
+            maxTicksLimit: 8
+        }
     };
     if (o.xMin != null) xConfig.min = o.xMin;
     if (o.xMax != null) xConfig.max = o.xMax;
-    var globalStyle = typeof getAuraChartOptions === 'function' ? getAuraChartOptions() : {};
-    var existingOptions = {
+
+    /* ── Merge with global defaults from charts.js ───────────────────── */
+    var globalStyle = typeof getAuraChartOptions === 'function'
+        ? getAuraChartOptions()
+        : {};
+
+    var merged = Object.assign({}, globalStyle, {
         layout: { padding: { top: 10, bottom: 10, left: 10, right: 10 } },
         scales: {
             y: yConfig,
             x: xConfig,
-            r: { min: o.rMin != null ? o.rMin : 0, max: o.rMax != null ? o.rMax : 10, grid: gridOpts, border: borderOpts, ticks: { font: tickFont, color: c.text, padding: 8, stepSize: o.rStep != null ? o.rStep : 1, callback: function(val) { return Number.isInteger(val) ? val : ''; } } }
+            r: {
+                min:    o.rMin != null ? o.rMin : 0,
+                max:    o.rMax != null ? o.rMax : 10,
+                grid:   gridOpts,
+                border: borderOpts,
+                ticks: {
+                    font:     tickFont,
+                    color:    c.text || (isDark ? '#94a3b8' : '#4A4A4A'),
+                    padding:  8,
+                    stepSize: o.rStep != null ? o.rStep : 1,
+                    callback: function(val) { return Number.isInteger(val) ? val : ''; }
+                }
+            }
         }
-    };
+    });
+
+    /* Preserve tooltip from globalStyle; allow zoom plugin */
     try {
-        existingOptions.plugins = { ...(globalStyle.plugins || {}), zoom: { zoom: { pinch: { enabled: true }, mode: 'xy' }, pan: { enabled: true, mode: 'xy' } } };
+        merged.plugins = Object.assign(
+            {},
+            globalStyle.plugins || {},
+            {
+                zoom: {
+                    zoom: { pinch: { enabled: true }, mode: 'xy' },
+                    pan:  { enabled: true, mode: 'xy' }
+                }
+            }
+        );
     } catch (e) {
-        existingOptions.plugins = globalStyle.plugins || {};
+        merged.plugins = globalStyle.plugins || {};
     }
-    return { ...globalStyle, ...existingOptions };
+
+    return merged;
 }
 let chartConfig = getChartConfig();
 
@@ -3954,13 +4009,13 @@ function renderCharts() {
         return (date.getMonth() + 1) + '/' + date.getDate();
     });
     
-    createChart('moodChart', 'Mood', mood, shortDates, colors.chart1, { yMin: 1, yMax: 10, yStep: 1, yTitle: 'Mood (1–10)' });
-    createChart('sleepChart', 'Sleep', sleep, shortDates, colors.chart2, { yMin: 0, yMax: 12, yStep: 1, yTitle: 'Sleep Hours' });
-    createChart('energyChart', 'Energy', energy, shortDates, colors.chart3, { yMin: 1, yMax: 10, yStep: 1, yTitle: 'Energy (1–10)' });
-    
-    createChart('moodChartFull', 'Mood', mood, shortDates, colors.chart1, { yMin: 1, yMax: 10, yStep: 1, yTitle: 'Mood (1–10)' });
-    createChart('sleepChartFull', 'Sleep', sleep, shortDates, colors.chart2, { yMin: 0, yMax: 12, yStep: 1, yTitle: 'Sleep Hours' });
-    createChart('energyChartFull', 'Energy', energy, shortDates, colors.chart3, { yMin: 1, yMax: 10, yStep: 1, yTitle: 'Energy (1–10)' });
+    createChart('moodChart',     'Mood',   mood,  shortDates, colors.chart1, { yMin: 1, yMax: 10, yStep: 1, yTitle: 'Mood (1–10)',    integerTicks: true  });
+    createChart('sleepChart',    'Sleep',  sleep, shortDates, colors.chart2, { yMin: 0, yMax: 12, yStep: 1, yTitle: 'Sleep (hrs)',     integerTicks: false });
+    createChart('energyChart',   'Energy', energy,shortDates, colors.chart3, { yMin: 1, yMax: 10, yStep: 1, yTitle: 'Energy (1–10)',   integerTicks: true  });
+
+    createChart('moodChartFull', 'Mood',   mood,  shortDates, colors.chart1, { yMin: 1, yMax: 10, yStep: 1, yTitle: 'Mood (1–10)',    integerTicks: true  });
+    createChart('sleepChartFull','Sleep',  sleep, shortDates, colors.chart2, { yMin: 0, yMax: 12, yStep: 1, yTitle: 'Sleep (hrs)',     integerTicks: false });
+    createChart('energyChartFull','Energy',energy,shortDates, colors.chart3, { yMin: 1, yMax: 10, yStep: 1, yTitle: 'Energy (1–10)',   integerTicks: true  });
     
     renderMoodVelocity();
     
