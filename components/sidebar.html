@@ -35,51 +35,54 @@
     </button>
 
     <div class="section-label">Analytics</div>
-
-    <div class="section-sublabel">Overview</div>
-    <button onclick="navigate('mood', this)" class="nav">
+    <button onclick="navigate('mood', this)" class="nav" aria-label="Go to Mood Trends">
         <span class="nav-icon">📈</span>
         <span>Mood Trends</span>
     </button>
-    <button onclick="navigate('sleep', this)" class="nav">
+    <button onclick="navigate('sleep', this)" class="nav" aria-label="Go to Sleep Analysis">
         <span class="nav-icon">🌙</span>
         <span>Sleep Analysis</span>
     </button>
-    <button onclick="navigate('energy', this)" class="nav">
+    <button onclick="navigate('energy', this)" class="nav" aria-label="Go to Energy Patterns">
         <span class="nav-icon">⚡</span>
         <span>Energy Patterns</span>
     </button>
-    <button onclick="navigate('insights', this)" class="nav">
+    <button onclick="navigate('insights', this)" class="nav" aria-label="Go to Insights">
         <span class="nav-icon">💡</span>
         <span>Insights</span>
     </button>
 
-    <div class="sidebar-analytics-divider"></div>
-    <div class="section-sublabel">Deep dive</div>
-    <button onclick="navigate('correlations', this)" class="nav nav-secondary">
-        <span class="nav-icon">🔗</span>
-        <span>Correlations</span>
+    <button type="button" class="nav nav-group-toggle" id="deepDiveToggle" onclick="toggleDeepDive()" aria-expanded="false" aria-controls="deepDiveGroup">
+        <span class="nav-icon">🔬</span>
+        <span>Deep dive</span>
+        <span class="nav-group-chevron" aria-hidden="true">▾</span>
     </button>
-    <button onclick="navigate('circadian', this)" class="nav nav-secondary">
-        <span class="nav-icon">⏰</span>
-        <span>Mood Velocity</span>
-    </button>
-    <button onclick="navigate('predictions', this)" class="nav nav-secondary">
-        <span class="nav-icon">🔮</span>
-        <span>Forecast</span>
-    </button>
-    <button onclick="navigate('patterns', this)" class="nav nav-secondary">
-        <span class="nav-icon">📊</span>
-        <span>Patterns</span>
-    </button>
-    <button onclick="navigate('seasonal', this)" class="nav nav-secondary">
-        <span class="nav-icon">🍂</span>
-        <span>Seasonal</span>
-    </button>
-    <button onclick="navigate('reports', this)" class="nav nav-secondary">
-        <span class="nav-icon">📋</span>
-        <span>Reports</span>
-    </button>
+    <div class="nav-group-items" id="deepDiveGroup" aria-hidden="true">
+        <button onclick="navigate('correlations', this)" class="nav nav-secondary" aria-label="Go to Correlations">
+            <span class="nav-icon">🔗</span>
+            <span>Correlations</span>
+        </button>
+        <button onclick="navigate('circadian', this)" class="nav nav-secondary" aria-label="Go to Mood Velocity">
+            <span class="nav-icon">⏰</span>
+            <span>Mood Velocity</span>
+        </button>
+        <button onclick="navigate('predictions', this)" class="nav nav-secondary" aria-label="Go to Forecast">
+            <span class="nav-icon">🔮</span>
+            <span>Forecast</span>
+        </button>
+        <button onclick="navigate('patterns', this)" class="nav nav-secondary" aria-label="Go to Patterns">
+            <span class="nav-icon">📊</span>
+            <span>Patterns</span>
+        </button>
+        <button onclick="navigate('seasonal', this)" class="nav nav-secondary" aria-label="Go to Seasonal">
+            <span class="nav-icon">🍂</span>
+            <span>Seasonal</span>
+        </button>
+        <button onclick="navigate('reports', this)" class="nav nav-secondary" aria-label="Go to Reports">
+            <span class="nav-icon">📋</span>
+            <span>Reports</span>
+        </button>
+    </div>
 
     <div class="section-label">Settings</div>
     <button onclick="navigate('settings', this)" class="nav">

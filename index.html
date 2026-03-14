@@ -86,51 +86,54 @@
             </button>
             
             <div class="section-label">Analytics</div>
-
-            <div class="section-sublabel">Overview</div>
-            <button onclick="navigate('mood', this)" class="nav">
+            <button onclick="navigate('mood', this)" class="nav" aria-label="Go to Mood Trends">
                 <span class="nav-icon">📈</span>
                 <span>Mood Trends</span>
             </button>
-            <button onclick="navigate('sleep', this)" class="nav">
+            <button onclick="navigate('sleep', this)" class="nav" aria-label="Go to Sleep Analysis">
                 <span class="nav-icon">🌙</span>
                 <span>Sleep Analysis</span>
             </button>
-            <button onclick="navigate('energy', this)" class="nav">
+            <button onclick="navigate('energy', this)" class="nav" aria-label="Go to Energy Patterns">
                 <span class="nav-icon">⚡</span>
                 <span>Energy Patterns</span>
             </button>
-            <button onclick="navigate('insights', this)" class="nav">
+            <button onclick="navigate('insights', this)" class="nav" aria-label="Go to Insights">
                 <span class="nav-icon">💡</span>
                 <span>Insights</span>
             </button>
 
-            <div class="sidebar-analytics-divider"></div>
-            <div class="section-sublabel">Deep dive</div>
-            <button onclick="navigate('correlations', this)" class="nav nav-secondary">
-                <span class="nav-icon">🔗</span>
-                <span>Correlations</span>
+            <button type="button" class="nav nav-group-toggle" id="deepDiveToggle" onclick="toggleDeepDive()" aria-expanded="false" aria-controls="deepDiveGroup">
+                <span class="nav-icon">🔬</span>
+                <span>Deep dive</span>
+                <span class="nav-group-chevron" aria-hidden="true">▾</span>
             </button>
-            <button onclick="navigate('circadian', this)" class="nav nav-secondary">
-                <span class="nav-icon">⏰</span>
-                <span>Mood Velocity</span>
-            </button>
-            <button onclick="navigate('predictions', this)" class="nav nav-secondary">
-                <span class="nav-icon">🔮</span>
-                <span>Forecast</span>
-            </button>
-            <button onclick="navigate('patterns', this)" class="nav nav-secondary">
-                <span class="nav-icon">📊</span>
-                <span>Patterns</span>
-            </button>
-            <button onclick="navigate('seasonal', this)" class="nav nav-secondary">
-                <span class="nav-icon">🍂</span>
-                <span>Seasonal</span>
-            </button>
-            <button onclick="navigate('reports', this)" class="nav nav-secondary">
-                <span class="nav-icon">📋</span>
-                <span>Reports</span>
-            </button>
+            <div class="nav-group-items" id="deepDiveGroup" aria-hidden="true">
+                <button onclick="navigate('correlations', this)" class="nav nav-secondary" aria-label="Go to Correlations">
+                    <span class="nav-icon">🔗</span>
+                    <span>Correlations</span>
+                </button>
+                <button onclick="navigate('circadian', this)" class="nav nav-secondary" aria-label="Go to Mood Velocity">
+                    <span class="nav-icon">⏰</span>
+                    <span>Mood Velocity</span>
+                </button>
+                <button onclick="navigate('predictions', this)" class="nav nav-secondary" aria-label="Go to Forecast">
+                    <span class="nav-icon">🔮</span>
+                    <span>Forecast</span>
+                </button>
+                <button onclick="navigate('patterns', this)" class="nav nav-secondary" aria-label="Go to Patterns">
+                    <span class="nav-icon">📊</span>
+                    <span>Patterns</span>
+                </button>
+                <button onclick="navigate('seasonal', this)" class="nav nav-secondary" aria-label="Go to Seasonal">
+                    <span class="nav-icon">🍂</span>
+                    <span>Seasonal</span>
+                </button>
+                <button onclick="navigate('reports', this)" class="nav nav-secondary" aria-label="Go to Reports">
+                    <span class="nav-icon">📋</span>
+                    <span>Reports</span>
+                </button>
+            </div>
 
             <div class="section-label">Settings</div>
             <button onclick="navigate('settings', this)" class="nav">
@@ -150,6 +153,41 @@
         <main id="main-content" role="main" aria-label="Page content">
             <!-- Dashboard Overview -->
             <div id="dashboard" class="page active">
+                <div id="dashboardEmptyState" class="dashboard-empty-state" aria-live="polite" hidden>
+                    <div class="des-inner">
+                        <div class="des-icon" aria-hidden="true">
+                            <svg viewBox="0 0 192 192" xmlns="http://www.w3.org/2000/svg" width="48" height="48">
+                                <path d="M36 96 Q 60 72, 96 96 T 156 96" fill="none" stroke="currentColor" stroke-width="12" stroke-linecap="round"/>
+                                <path d="M44 112 Q 68 88, 96 112 T 148 112" fill="none" stroke="currentColor" stroke-width="10" stroke-linecap="round" opacity="0.85"/>
+                                <path d="M52 128 Q 76 104, 96 128 T 140 128" fill="none" stroke="currentColor" stroke-width="8" stroke-linecap="round" opacity="0.7"/>
+                            </svg>
+                        </div>
+                        <h2 class="des-title">Welcome to Aura Mood</h2>
+                        <p class="des-subtitle">Track your mood, sleep, and energy every day. Patterns emerge after a week. Insights sharpen over a month.</p>
+                        <div class="des-actions">
+                            <button type="button" class="btn des-cta-primary" onclick="navigate('entry', document.querySelector('.nav[aria-label=\'Go to Daily Check-In\']') || document.querySelector('.bottom-nav [data-page=entry]'))">
+                                Start today's check-in →
+                            </button>
+                            <button type="button" class="btn btn-secondary des-cta-secondary" onclick="addSampleData().then(function(){ if (typeof hideDashboardEmptyState === 'function') hideDashboardEmptyState(); })">
+                                Explore with sample data
+                            </button>
+                        </div>
+                        <div class="des-features">
+                            <div class="des-feature">
+                                <span class="des-feature-icon" aria-hidden="true">📈</span>
+                                <span class="des-feature-text">Mood trends &amp; forecasting</span>
+                            </div>
+                            <div class="des-feature">
+                                <span class="des-feature-icon" aria-hidden="true">🌙</span>
+                                <span class="des-feature-text">Sleep pattern analysis</span>
+                            </div>
+                            <div class="des-feature">
+                                <span class="des-feature-icon" aria-hidden="true">💡</span>
+                                <span class="des-feature-text">Personalised insights</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <div class="dashboard-header">
                     <h1 id="dashboardGreeting">Welcome Back</h1>
                     <p id="dashboardNarrative" class="dashboard-narrative"></p>
@@ -862,7 +900,7 @@
                     <div class="insight-overview-card">
                         <p class="insight-overview-eyebrow">Personal Analytics</p>
                         <h3>Insights Overview</h3>
-                        <p id="insightsOverviewText">Here are the clearest patterns in your recent data. These get sharper the more you track.</p>
+                        <p id="insightsOverviewText">Here's what your data says so far. The more consistently you log, the sharper and more personal these patterns become.</p>
                     </div>
                     <div id="insightsDashboardContent" class="insights-dashboard-stack">
                         <p class="insight-empty">More insights will appear as you record additional entries. Track mood, sleep, and activities to uncover patterns.</p>
@@ -1128,14 +1166,6 @@
             </div>
         </main>
         
-        <nav class="mobile-nav" role="navigation" aria-label="Mobile navigation">
-            <button type="button" class="mobile-nav-item active" data-page="dashboard" aria-label="Dashboard"><span class="mobile-icon">📊</span><span class="mobile-label">Dashboard</span></button>
-            <button type="button" class="mobile-nav-item" data-page="entry" aria-label="Entry"><span class="mobile-icon">➕</span><span class="mobile-label">Entry</span></button>
-            <button type="button" class="mobile-nav-item" data-page="calendar" aria-label="Calendar"><span class="mobile-icon">📅</span><span class="mobile-label">Calendar</span></button>
-            <button type="button" class="mobile-nav-item" data-page="mood" aria-label="Analytics"><span class="mobile-icon">📈</span><span class="mobile-label">Analytics</span></button>
-            <button type="button" class="mobile-nav-item" data-page="settings" aria-label="Settings"><span class="mobile-icon">⚙️</span><span class="mobile-label">Settings</span></button>
-        </nav>
-        
         <div id="splash" class="splash" aria-hidden="true">
             <div class="splash-brand">
                 <div class="splash-icon" aria-hidden="true">
@@ -1146,7 +1176,7 @@
                 <p class="splash-status" aria-live="polite">Opening…</p>
             </div>
         </div>
-        <button type="button" class="fab" id="fabEntry" onclick="navigateFromBottom('entry', document.querySelector('[data-page=entry]'))" aria-label="Quick check-in">✨</button>
+        <button type="button" class="fab" id="fabEntry" onclick="navigateFromBottom('entry', document.querySelector('.bottom-nav [data-page=entry]'))" aria-label="Quick check-in" aria-hidden="false">✨</button>
         <div id="addToHomeBanner" class="add-to-home-banner" role="dialog" aria-label="Add to Home Screen">
             <p style="margin: 0; font-size: 0.9rem;">Add to Home Screen for an app-like experience.</p>
             <button type="button" id="addToHomeInstallBtn" class="btn" style="margin-top: 8px; display: none;" onclick="triggerPwaInstall()">Install app</button>

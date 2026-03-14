@@ -10,8 +10,8 @@
 }
 [data-dark="true"] .comparison-chart-wrap {
     background: color-mix(in srgb, var(--surface) 98%, var(--bg));
-    border-color: color-mix(in srgb, var(--border) 120%, transparent);
-    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.2), 0 1px 0 0 color-mix(in srgb, white 6%, transparent);
+    border-color: color-mix(in srgb, var(--border) 140%, transparent);
+    box-shadow: 0 2px 16px rgba(0, 0, 0, 0.35), 0 1px 0 0 rgba(255, 255, 255, 0.05);
 }
 
 /* Shared chart-shell classes: consistent wrapper treatment and stable space */
@@ -1022,42 +1022,6 @@ input.input-error, textarea.input-error { border-color: #dc2626 !important; box-
 }
 .bottom-nav button:hover, .bottom-nav button.active { color: var(--accent-dark); background: color-mix(in srgb, var(--accent) 12%, transparent); }
 .bottom-nav .bn-icon { font-size: 1.4rem; }
-
-.mobile-nav {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 64px;
-    display: none;
-    justify-content: space-around;
-    align-items: center;
-    background: var(--surface);
-    border-top: 1px solid var(--border);
-    padding-bottom: env(safe-area-inset-bottom);
-    z-index: 1000;
-}
-.mobile-nav-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    min-width: 44px;
-    min-height: 44px;
-    border: none;
-    background: transparent;
-    color: var(--text-muted);
-    font-family: var(--font-body);
-    font-size: 0.75rem;
-    cursor: pointer;
-    transition: transform 120ms ease;
-}
-.mobile-nav-item:active { transform: scale(0.95); }
-.mobile-icon { font-size: 1.2rem; margin-bottom: 2px; }
-.mobile-nav-item.active { color: var(--accent); }
-@media (max-width: 768px) {
-    .mobile-nav { display: flex; }
-}
 
 .fab {
     display: none;

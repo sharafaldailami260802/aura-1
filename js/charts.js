@@ -136,10 +136,19 @@
                 }
             },
 
+            elements: {
+                point: {
+                    hoverRadius: 6,
+                    hoverBorderWidth: 2,
+                    hoverBorderColor: 'var(--surface)'
+                }
+            },
+
             plugins: {
                 tooltip: {
                     enabled: true,
                     backgroundColor: tooltipBg,
+                    animation: { duration: 120 },
 
                     /* ── Typography ──────────────────────────────────────────── */
                     titleFont:  { family: "'DM Sans', sans-serif", size: 13, weight: '600' },
@@ -236,6 +245,27 @@
                 ctx.beginPath();
                 ctx.moveTo(ca.left, y);
                 ctx.lineTo(ca.right, y);
+                ctx.stroke();
+                ctx.restore();
+            }
+        });
+        Chart.register({
+            id: 'auraCrosshair',
+            afterDraw: function(chart) {
+                if (!chart.tooltip || !chart.tooltip._active || !chart.tooltip._active.length) return;
+                var ctx = chart.ctx;
+                var ca = chart.chartArea;
+                var activePoint = chart.tooltip._active[0];
+                if (!activePoint) return;
+                var x = activePoint.element.x;
+                ctx.save();
+                ctx.beginPath();
+                ctx.moveTo(x, ca.top);
+                ctx.lineTo(x, ca.bottom);
+                ctx.lineWidth = 1;
+                ctx.setLineDash([3, 3]);
+                var isDark = document.documentElement.getAttribute('data-dark') === 'true';
+                ctx.strokeStyle = isDark ? 'rgba(255,255,255,0.2)' : 'rgba(0,0,0,0.15)';
                 ctx.stroke();
                 ctx.restore();
             }
