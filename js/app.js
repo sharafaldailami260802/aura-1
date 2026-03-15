@@ -659,6 +659,45 @@ function normalizeDateKey(dateStr) {
     }
     return String(dateStr);
 }
+function formatLocalDateYMD(dateObj) {
+    if (!(dateObj instanceof Date) || isNaN(dateObj.getTime())) return '';
+    return dateObj.getFullYear()
+        + '-' + String(dateObj.getMonth() + 1).padStart(2, '0')
+        + '-' + String(dateObj.getDate()).padStart(2, '0');
+}
+function parseLocalYMD(dateStr) {
+    var normalized = normalizeDateKey(dateStr);
+    var m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(normalized);
+    if (!m) return null;
+    var year = parseInt(m[1], 10);
+    var month = parseInt(m[2], 10);
+    var day = parseInt(m[3], 10);
+    var dt = new Date(year, month - 1, day);
+    if (isNaN(dt.getTime())) return null;
+    dt.setHours(0, 0, 0, 0);
+    return dt;
+}
+function shiftLocalDateYMD(dateStr, deltaDays) {
+    var dt = dateStr ? parseLocalYMD(dateStr) : new Date();
+    if (!dt) dt = new Date();
+    dt.setHours(0, 0, 0, 0);
+    dt.setDate(dt.getDate() + (deltaDays || 0));
+    return formatLocalDateYMD(dt);
+}
+function shouldApplyDefaultTimeToActiveField(fieldKey) {
+    var entryPage = document.getElementById('entry');
+    if (!entryPage || !entryPage.classList.contains('active')) return false;
+    if (entryDirty) return false;
+    var workingDate = typeof getWorkingEntryDate === 'function' ? getWorkingEntryDate() : '';
+    var existingEntry = workingDate && entries[workingDate] ? entries[workingDate] : null;
+    var input = document.getElementById(fieldKey === 'defaultSleepTime' ? 'sleepTime' : 'wakeTime');
+    if (!input) return false;
+    var currentValue = typeof getTimeInputValue === 'function' ? getTimeInputValue(input) : (input.value || '').trim();
+    if (currentValue) return false;
+    if (fieldKey === 'defaultSleepTime' && existingEntry && existingEntry.sleepTime) return false;
+    if (fieldKey === 'defaultWakeTime' && existingEntry && existingEntry.wakeTime) return false;
+    return true;
+}
 function updateBrowserThemeColor() {
     var meta = document.querySelector('meta[name="theme-color"]');
     if (!meta) return;
@@ -1230,9 +1269,9 @@ function navigate(page, button) {
                     var fromStr = typeof getDateInputValue === 'function' ? getDateInputValue(from) : from.value;
                     if (!fromStr) {
                         var t = new Date();
-                        var toYmd = t.toISOString().split('T')[0];
+                        var toYmd = formatLocalDateYMD(t);
                         t.setDate(t.getDate() - 30);
-                        var fromYmd = t.toISOString().split('T')[0];
+                        var fromYmd = formatLocalDateYMD(t);
                         if (typeof setDateInputDisplay === 'function') {
                             setDateInputDisplay(to, toYmd);
                             setDateInputDisplay(from, fromYmd);
@@ -2928,7 +2967,7 @@ function buildDashboardNarrative() {
     var allDates = Object.keys(entries).sort();
     if (!allDates.length) return 'Start logging your first check-in to see patterns emerge here.';
 
-    var today = new Date().toISOString().split('T')[0];
+    var today = getLocalTodayYMD();
     var todayEntry = entries[today];
 
     // Recent 7-day mood trend
@@ -2950,8 +2989,9 @@ function buildDashboardNarrative() {
     // Streak
     var streak = 0;
     var checkDate = new Date();
-    if (!entries[checkDate.toISOString().split('T')[0]]) checkDate.setDate(checkDate.getDate() - 1);
-    while (entries[checkDate.toISOString().split('T')[0]]) {
+    checkDate.setHours(0, 0, 0, 0);
+    if (!entries[formatLocalDateYMD(checkDate)]) checkDate.setDate(checkDate.getDate() - 1);
+    while (entries[formatLocalDateYMD(checkDate)]) {
         streak++;
         checkDate.setDate(checkDate.getDate() - 1);
     }
@@ -3005,7 +3045,7 @@ function updateDashboard() {
         });
     }
 
-    const today = new Date().toISOString().split('T')[0];
+    const today = getLocalTodayYMD();
     const todayData = entries[today];
     var moodEl = document.getElementById('todayMood');
     var sleepEl = document.getElementById('todaySleep');
@@ -3818,8 +3858,8 @@ function renderWeekTimeline() {
     end.setDate(end.getDate() + 6);
     var loc = typeof getLocale === 'function' ? getLocale() : 'en';
     var weekOfStr = typeof getLocaleStrings === 'function' ? getLocaleStrings(loc).weekOf : 'Week of ';
-    var startStr = start.toISOString().split('T')[0];
-    var endStr = end.toISOString().split('T')[0];
+    var startStr = formatLocalDateYMD(start);
+    var endStr = formatLocalDateYMD(end);
     var startDisplay = typeof getUserDateDisplay === 'function'
         ? getUserDateDisplay(startStr)
         : (typeof formatDisplayDate === 'function'
@@ -3835,7 +3875,7 @@ function renderWeekTimeline() {
     for (var i = 0; i < 7; i++) {
         var d = new Date(start);
         d.setDate(d.getDate() + i);
-        var dateStr = d.toISOString().split('T')[0];
+        var dateStr = formatLocalDateYMD(d);
         var entry = entries[dateStr];
         var mood = entry && entry.mood != null ? entry.mood : 0;
         var sleep = entry && entry.sleep != null ? entry.sleep : 0;
@@ -3863,7 +3903,7 @@ function renderCalendarList() {
     var ul = document.getElementById('calendarEntryList');
     if (!ul) return;
     var dates = Object.keys(entries).sort().reverse();
-    var todayStr = new Date().toISOString().split('T')[0];
+    var todayStr = getLocalTodayYMD();
     var dateFmt = window.auraDateFormat || 'MD';
     ul.innerHTML = dates.map(function(dateStr) {
         var e = entries[dateStr];
@@ -3898,7 +3938,7 @@ function exportHeatmapPNG() {
     canvas.width = w;
     canvas.height = h;
     var ctx = canvas.getContext('2d');
-    var todayStr = new Date().toISOString().split('T')[0];
+    var todayStr = getLocalTodayYMD();
     var bw = getBestWorstDates();
     for (var i = 0; i < container.children.length; i++) {
         var wrap = container.children[i];
@@ -3919,7 +3959,7 @@ function exportHeatmapPNG() {
         }
     }
     var a = document.createElement('a');
-    a.download = 'aura-heatmap-' + new Date().toISOString().split('T')[0] + '.png';
+    a.download = 'aura-heatmap-' + getLocalTodayYMD() + '.png';
     a.href = canvas.toDataURL('image/png');
     a.click();
 }
@@ -3932,7 +3972,7 @@ function renderHeatmap() {
     
     const today = new Date();
     today.setHours(0,0,0,0);
-    const todayStr = today.toISOString().split('T')[0];
+    const todayStr = formatLocalDateYMD(today);
     
     // Start grid with January: Sunday of the week that contains Jan 1 of current year
     var year = today.getFullYear();
@@ -3992,7 +4032,7 @@ function renderHeatmap() {
     var streakToday = 0;
     var checkDate = new Date(today);
     while (true) {
-        var ds = checkDate.toISOString().split('T')[0];
+        var ds = formatLocalDateYMD(checkDate);
         if (entries[ds]) { streakToday++; checkDate.setDate(checkDate.getDate() - 1); }
         else break;
     }
@@ -4004,7 +4044,7 @@ function renderHeatmap() {
     for (var day = 0; day < totalDays; day++) {
         var cellDate = new Date(gridStartDate);
         cellDate.setDate(cellDate.getDate() + day);
-        var dateStr = cellDate.toISOString().split('T')[0];
+        var dateStr = formatLocalDateYMD(cellDate);
         var isFuture = cellDate > today;
         
         const wrap = document.createElement('div');
@@ -4976,10 +5016,8 @@ function renderMoodVelocity() {
     } catch (chartErr) {
         console.error('[debug] renderMoodVelocity: Chart.js error', chartErr);
     }
-    var today = new Date().toISOString().split('T')[0];
-    var fourteenDaysAgo = new Date();
-    fourteenDaysAgo.setDate(fourteenDaysAgo.getDate() - 14);
-    var fromStr = fourteenDaysAgo.toISOString().split('T')[0];
+    var today = getLocalTodayYMD();
+    var fromStr = shiftLocalDateYMD(today, -14);
     var last14 = Object.keys(entries).filter(function(d) { return d >= fromStr && d <= today; }).sort();
     var mood14 = last14.map(function(d) { return entries[d].mood; }).filter(function(m) { return typeof m === 'number' && !isNaN(m); });
     if (mood14.length < 5) {
@@ -5222,7 +5260,7 @@ function renderReportYear() {
     var best = getBestWorstDates();
     var streak = 0;
     var check = new Date();
-    while (entries[check.toISOString().split('T')[0]]) { streak++; check.setDate(check.getDate() - 1); }
+    while (entries[formatLocalDateYMD(check)]) { streak++; check.setDate(check.getDate() - 1); }
     el.innerHTML = '<p style="font-size: 1.2rem; margin-bottom: var(--space-md);"><strong>Your ' + year + ' in numbers</strong></p>' +
         '<p><strong>Total days tracked:</strong> ' + dates.length + '</p>' +
         '<p><strong>Average mood:</strong> ' + avgMood + '</p>' +
@@ -5244,7 +5282,7 @@ function exportReportPNG(panelId) {
     }
     html2canvas(panel).then(function(canvas) {
         var a = document.createElement('a');
-        a.download = 'aura-report-' + panelId + '-' + new Date().toISOString().split('T')[0] + '.png';
+        a.download = 'aura-report-' + panelId + '-' + getLocalTodayYMD() + '.png';
         a.href = canvas.toDataURL('image/png');
         a.click();
     });
@@ -6351,11 +6389,8 @@ function splitSleepTimelineSegment(segment) {
     };
 }
 function getSleepTimelineRecords(rangeDays) {
-    var today = new Date();
-    today.setHours(0, 0, 0, 0);
-    var start = new Date(today);
-    start.setDate(start.getDate() - ((rangeDays || 30) - 1));
-    var fromStr = start.toISOString().split('T')[0];
+    var today = getLocalTodayYMD();
+    var fromStr = shiftLocalDateYMD(today, -((rangeDays || 30) - 1));
     return Object.keys(entries).filter(function(date) {
         return date >= fromStr;
     }).sort().reverse().map(function(date) {
@@ -8136,8 +8171,16 @@ async function savePreference(key, value) {
         try { await db.appState.put({ key: key, value: v }); } catch (e) { console.warn('savePreference failed', key, e); }
         var sleepEl = document.getElementById('sleepTime');
         var wakeEl = document.getElementById('wakeTime');
-        if (key === 'defaultSleepTime' && sleepEl) { setTimeInputDisplay(sleepEl, v); }
-        if (key === 'defaultWakeTime' && wakeEl) { setTimeInputDisplay(wakeEl, v); }
+        if (key === 'defaultSleepTime' && sleepEl && shouldApplyDefaultTimeToActiveField('defaultSleepTime')) {
+            setTimeInputDisplay(sleepEl, v);
+            if (typeof updateSupportRail === 'function') updateSupportRail();
+            if (typeof updateEntryProgressUI === 'function') updateEntryProgressUI();
+        }
+        if (key === 'defaultWakeTime' && wakeEl && shouldApplyDefaultTimeToActiveField('defaultWakeTime')) {
+            setTimeInputDisplay(wakeEl, v);
+            if (typeof updateSupportRail === 'function') updateSupportRail();
+            if (typeof updateEntryProgressUI === 'function') updateEntryProgressUI();
+        }
     } else {
         try { await db.appState.put({ key: 'pref_' + key, value: v }); } catch (e) { console.warn('savePreference failed', key, e); }
     }
@@ -8301,7 +8344,7 @@ if ('serviceWorker' in navigator) {
     if (!title && !text && !url) return;
     var content = [title, text, url].filter(Boolean).join('\n');
     if (!content) return;
-    var targetDate = (typeof getWorkingEntryDate === 'function' && getWorkingEntryDate()) || new Date().toISOString().split('T')[0];
+    var targetDate = (typeof getWorkingEntryDate === 'function' && getWorkingEntryDate()) || getLocalTodayYMD();
     Promise.resolve().then(function() {
         var existing = entries[targetDate] ? getRecordJournalHtml(entries[targetDate]) : '';
         var appended = existing ? (existing + '\n\n--- Shared ---\n' + content) : content;
