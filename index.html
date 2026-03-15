@@ -383,10 +383,18 @@
                                 </header>
                                 <div class="form-group" id="journalFormGroup">
                                     <div id="journalPreviewWrap" class="journal-preview-wrap" style="display: none;" aria-hidden="true">
-                                        <p class="journal-preview-placeholder" id="journalPreviewPlaceholder" data-i18n="journal_saved_placeholder">Your journal entry for today has already been saved.</p>
-                                        <button type="button" class="journal-edit-link" id="journalEditLink" onclick="entryJournalStartEdit()" data-i18n="edit_journal_entry">Edit journal entry</button>
+                                        <div class="journal-preview-top">
+                                            <div class="journal-preview-copy">
+                                                <p class="journal-preview-eyebrow">Saved reflection</p>
+                                                <p class="journal-preview-placeholder" id="journalPreviewPlaceholder" data-i18n="journal_saved_placeholder">Your journal entry for today has already been saved.</p>
+                                            </div>
+                                            <div class="journal-preview-actions">
+                                                <button type="button" class="journal-edit-link" id="journalEditLink" onclick="entryJournalStartEdit()" data-i18n="edit_journal_entry">Edit journal entry</button>
+                                                <button type="button" class="journal-secondary-link" onclick="navigateTo('journal', getWorkingEntryDate())">Open full journal</button>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div class="journal-editor-wrap">
+                                    <div class="journal-editor-wrap" id="journalEditorWrap">
                                         <textarea id="notes" class="form-input journal-textarea" placeholder="What stood out today? What affected your mood? What are you grateful for?"></textarea>
                                     </div>
                                 </div>
@@ -551,9 +559,9 @@
                     </div>
                     <div id="entryModalBody" class="entry-modal-body"></div>
                     <div class="entry-modal-footer">
-                        <button type="button" class="btn btn-secondary entry-modal-footer-btn" id="entryModalEditBtn" onclick="navigateTo('entry', entryModalDate)">✏️ Full Edit</button>
-                        <button type="button" class="btn btn-secondary entry-modal-footer-btn" id="entryModalJournalBtn" onclick="navigateTo('journal', entryModalDate)" style="display:none;">📓 Journal</button>
-                        <button type="button" class="btn btn-neutral entry-modal-footer-btn" onclick="closeModal()">Close</button>
+                        <button type="button" class="btn btn-secondary entry-modal-footer-btn" id="entryModalEditBtn" onclick="openEntryForDate(entryModalDate)">✏️ Full Edit</button>
+                        <button type="button" class="btn btn-secondary entry-modal-footer-btn" id="entryModalJournalBtn" onclick="openJournalEntryFromModal(entryModalDate)" style="display:none;">📓 Journal</button>
+                        <button type="button" class="btn btn-neutral entry-modal-footer-btn" onclick="closeEntryModal()">Close</button>
                     </div>
                 </div>
             </div>

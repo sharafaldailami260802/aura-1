@@ -163,7 +163,7 @@ function mergeLegacyStandaloneJournal(records, journalHtml, photosList) {
     if (!text && !photos.length) return records || [];
     var list = Array.isArray(records) ? records.slice() : [];
     var dated = list.map(function(item) { return item && (item.date || item.id); }).filter(Boolean).sort();
-    var targetDate = dated.length ? dated[dated.length - 1] : new Date().toISOString().split('T')[0];
+    var targetDate = dated.length ? dated[dated.length - 1] : getLocalTodayYMD();
     var index = list.findIndex(function(item) { return item && (item.date || item.id) === targetDate; });
     var base = index >= 0 ? normalizeDailyRecord(list[index], targetDate) : createDailyRecord(targetDate);
     var next = applyDailyRecordPatch(base, {
@@ -437,7 +437,7 @@ async function migrateLegacyJournalAppState() {
     var journalHtml = journalRow && journalRow.value ? journalRow.value : '';
     var legacyPhotos = photosRow && Array.isArray(photosRow.value) ? photosRow.value : [];
     if (!journalHtml && !legacyPhotos.length) return;
-    var targetDate = getDefaultJournalEntryDate() || new Date().toISOString().split('T')[0];
+    var targetDate = getDefaultJournalEntryDate() || getLocalTodayYMD();
     var record = entries[targetDate] ? normalizeDailyRecord(entries[targetDate], targetDate) : createDailyRecord(targetDate);
     if (!getRecordJournalHtml(record) && !(record.photos || []).length) {
         await upsertDailyRecord(targetDate, {
@@ -645,29 +645,75 @@ async function clearAllData() {
     location.reload();
 }
 
-function applyTheme(themeName, dark) {
-    document.documentElement.setAttribute('data-theme', themeName || 'aura');
-    document.documentElement.setAttribute('data-dark', dark ? 'true' : 'false');
-    localStorage.setItem('auraTheme', themeName || 'aura');
-    localStorage.setItem('auraDark', dark ? 'true' : 'false');
+function getLocalTodayYMD() {
+    var now = new Date();
+    return now.getFullYear()
+        + '-' + String(now.getMonth() + 1).padStart(2, '0')
+        + '-' + String(now.getDate()).padStart(2, '0');
+}
+function normalizeDateKey(dateStr) {
+    if (!dateStr) return getLocalTodayYMD();
+    if (typeof parseDateToYYYYMMDD === 'function') {
+        var parsed = parseDateToYYYYMMDD(String(dateStr), 'YMD');
+        if (parsed) return parsed;
+    }
+    return String(dateStr);
+}
+function updateBrowserThemeColor() {
+    var meta = document.querySelector('meta[name="theme-color"]');
+    if (!meta) return;
+    var accent = '';
+    try {
+        accent = getComputedStyle(document.documentElement).getPropertyValue('--accent').trim();
+    } catch (e) {}
+    meta.setAttribute('content', accent || '#ea580c');
+}
+function refreshAppearanceDrivenUi() {
     if (typeof renderCharts === 'function') renderCharts();
+    if (typeof updateDashboard === 'function') updateDashboard();
+    if (typeof renderEntryList === 'function') renderEntryList();
+    if (typeof renderCalendarCurrentView === 'function') renderCalendarCurrentView();
+    if (typeof renderSettingsDataManagerRecent === 'function') renderSettingsDataManagerRecent();
+    if (typeof renderDataManagerPreview === 'function') {
+        var selected = typeof getDataManagerSelectedDate === 'function' ? getDataManagerSelectedDate() : '';
+        renderDataManagerPreview(selected);
+    }
+    if (typeof entryModalDate !== 'undefined' && entryModalDate) {
+        var entryModal = document.getElementById('entryModal');
+        if (entryModal && entryModal.classList.contains('show') && typeof showEntryModal === 'function') {
+            showEntryModal(entryModalDate);
+        }
+    }
+}
+function applyTheme(themeName, dark, options) {
+    options = options || {};
+    var nextTheme = themeName || 'sunset';
+    var isDark = !!dark;
+    document.documentElement.setAttribute('data-theme', nextTheme);
+    document.documentElement.setAttribute('data-dark', isDark ? 'true' : 'false');
+    localStorage.setItem('auraTheme', nextTheme);
+    localStorage.setItem('auraDark', isDark ? 'true' : 'false');
+    updateBrowserThemeColor();
+    syncDarkToggleButtons();
+    var sel = document.getElementById('themeSelect');
+    if (sel) sel.value = nextTheme;
+    if (options.refreshUi !== false) refreshAppearanceDrivenUi();
 }
 async function saveThemeToDb(themeName, dark) {
-    await db.appState.put({ key: 'theme', value: themeName || 'aura' });
+    await db.appState.put({ key: 'theme', value: themeName || 'sunset' });
     await db.appState.put({ key: 'darkMode', value: !!dark });
 }
 function setTheme(name) {
+    var nextTheme = name || 'sunset';
     var dark = document.documentElement.getAttribute('data-dark') === 'true';
-    applyTheme(name, dark);
-    saveThemeToDb(name, dark);
-    var sel = document.getElementById('themeSelect');
-    if (sel) sel.value = name;
+    applyTheme(nextTheme, dark);
+    saveThemeToDb(nextTheme, dark);
 }
 function toggleDark() {
+    var themeName = document.documentElement.getAttribute('data-theme') || 'sunset';
     var dark = document.documentElement.getAttribute('data-dark') !== 'true';
-    applyTheme(document.documentElement.getAttribute('data-theme') || 'aura', dark);
-    saveThemeToDb(document.documentElement.getAttribute('data-theme'), dark);
-    syncDarkToggleButtons();
+    applyTheme(themeName, dark);
+    saveThemeToDb(themeName, dark);
 }
 function toggleDarkFromPage() {
     toggleDark();
@@ -676,7 +722,7 @@ function syncDarkToggleButtons() {
     var dark = document.documentElement.getAttribute('data-dark') === 'true';
     [ 'darkModeToggle', 'darkModeTogglePage' ].forEach(function(id) {
         var el = document.getElementById(id);
-        if (el) el.setAttribute('aria-pressed', dark);
+        if (el) el.setAttribute('aria-pressed', dark ? 'true' : 'false');
     });
 }
 
@@ -879,14 +925,9 @@ async function initStorage() {
     var darkRow = await db.appState.get('darkMode');
     var themeName = (themeRow && themeRow.value) ? themeRow.value : 'sunset';
     var dark = (darkRow && darkRow.value !== undefined) ? !!darkRow.value : true;
-    applyTheme(themeName, dark);
-    var sel = document.getElementById('themeSelect');
-    if (sel) sel.value = themeName;
-    document.documentElement.setAttribute('data-dark', dark ? 'true' : 'false');
-    localStorage.setItem('auraDark', dark ? 'true' : 'false');
+    applyTheme(themeName, dark, { refreshUi: false });
     if (!themeRow || !themeRow.value) await db.appState.put({ key: 'theme', value: 'sunset' });
     if (darkRow === undefined || darkRow.value === undefined) await db.appState.put({ key: 'darkMode', value: true });
-    syncDarkToggleButtons();
     var soundRow = await db.appState.get('soundEnabled');
     window.auraSoundEnabled = !!(soundRow && soundRow.value);
     var soundToggle = document.getElementById('soundEnabledToggle');
@@ -1774,10 +1815,10 @@ function setEntryDirty(dirty) {
 function getWorkingEntryDate() {
     var dateInput = document.getElementById('date');
     var inputDate = dateInput ? getDateInputValue(dateInput) : '';
-    return inputDate || currentCheckInEntryDate || currentJournalEntryDate || new Date().toISOString().split('T')[0];
+    return normalizeDateKey(inputDate || currentCheckInEntryDate || currentJournalEntryDate || getLocalTodayYMD());
 }
 function setWorkingEntryDate(dateStr) {
-    var nextDate = dateStr || new Date().toISOString().split('T')[0];
+    var nextDate = normalizeDateKey(dateStr || getLocalTodayYMD());
     var dateInput = document.getElementById('date');
     currentCheckInEntryDate = nextDate;
     if (dateInput && getDateInputValue(dateInput) !== nextDate) {
@@ -1866,19 +1907,29 @@ function updateJournalEmptyState() {
 function syncEntryJournalPreview(dateStr) {
     var previewWrap = document.getElementById('journalPreviewWrap');
     var notesEl = document.getElementById('notes');
-    if (!previewWrap || !notesEl) return;
+    var editorWrap = document.getElementById('journalEditorWrap');
+    if (!previewWrap || !notesEl || !editorWrap) return;
     var entry = dateStr && entries[dateStr];
-    var hasSavedJournal = entry && notesValueToPlainText(entry).trim().length > 0;
+    var savedText = entry ? notesValueToPlainText(entry) : '';
+    var hasSavedJournal = !!savedText.trim();
     entryJournalPreviewMode = !!hasSavedJournal;
     if (entryJournalPreviewMode) {
         previewWrap.style.display = 'block';
         previewWrap.setAttribute('aria-hidden', 'false');
-        notesEl.style.display = 'none';
-        notesEl.value = '';
+        editorWrap.classList.add('journal-editor-wrap--readonly');
+        notesEl.style.display = 'block';
+        notesEl.value = savedText;
+        notesEl.readOnly = true;
+        notesEl.setAttribute('aria-readonly', 'true');
+        notesEl.tabIndex = -1;
     } else {
         previewWrap.style.display = 'none';
         previewWrap.setAttribute('aria-hidden', 'true');
+        editorWrap.classList.remove('journal-editor-wrap--readonly');
         notesEl.style.display = 'block';
+        notesEl.readOnly = false;
+        notesEl.removeAttribute('aria-readonly');
+        notesEl.removeAttribute('tabindex');
     }
     updateJournalEmptyState();
 }
@@ -1888,12 +1939,18 @@ function entryJournalStartEdit() {
     var entry = entries[dateStr];
     var notesEl = document.getElementById('notes');
     var previewWrap = document.getElementById('journalPreviewWrap');
-    if (!notesEl || !previewWrap) return;
+    var editorWrap = document.getElementById('journalEditorWrap');
+    if (!notesEl || !previewWrap || !editorWrap) return;
     entryJournalPreviewMode = false;
     previewWrap.style.display = 'none';
     previewWrap.setAttribute('aria-hidden', 'true');
+    editorWrap.classList.remove('journal-editor-wrap--readonly');
     notesEl.style.display = 'block';
+    notesEl.readOnly = false;
+    notesEl.removeAttribute('aria-readonly');
+    notesEl.removeAttribute('tabindex');
     notesEl.value = entry ? notesValueToPlainText(entry) : '';
+    notesEl.focus();
     updateJournalEmptyState();
 }
 function confirmDiscardEntryChanges() {
@@ -3400,10 +3457,18 @@ function emDeleteAll(dateStr) {
     closeEntryModal();
     openFullEntryDeleteConfirm(dateStr);
 }
+function getNavButtonForPage(page) {
+    return document.querySelector('.sidebar .nav[onclick*="navigate(\'' + page + '\'"]')
+        || document.querySelector('.bottom-nav button[data-page="' + page + '"]')
+        || null;
+}
 function openJournalEntryFromModal(dateStr) {
+    var targetDate = normalizeDateKey(dateStr || entryModalDate || getWorkingEntryDate());
     closeEntryModal();
     entryModalJournalMode = false;
-    openJournalEntry(dateStr || entryModalDate);
+    setWorkingEntryDate(targetDate);
+    currentJournalEntryDate = targetDate;
+    navigate('journal', getNavButtonForPage('journal'));
 }
 function openDeleteEntryModalFromEntryModal(dateStr) {
     closeEntryModal();
@@ -3589,24 +3654,21 @@ function closePremiumConfirm() {
     if (modal) { modal.classList.remove('show'); modal.setAttribute('aria-hidden', 'true'); }
 }
 function openEntryForDate(dateStr) {
+    var targetDate = normalizeDateKey(dateStr || entryModalDate || getWorkingEntryDate());
     closeEntryModal();
-    var dateInput = document.getElementById('date');
-    var targetDate = dateStr || entryModalDate || getWorkingEntryDate();
-    if (dateInput) setDateInputDisplay(dateInput, targetDate);
     setWorkingEntryDate(targetDate);
-    navigate('entry');
+    currentCheckInEntryDate = targetDate;
+    navigate('entry', getNavButtonForPage('entry'));
 }
 function editEntry(dateStr) {
     openEntryForDate(dateStr);
 }
 function navigateTo(page, entryDate) {
-    var dateStr = entryDate || entryModalDate;
+    var dateStr = normalizeDateKey(entryDate || entryModalDate || getWorkingEntryDate());
     if (page === 'entry') {
         openEntryForDate(dateStr);
     } else if (page === 'journal') {
-        closeEntryModal();
-        entryModalJournalMode = false;
-        openJournalEntry(dateStr || entryModalDate);
+        openJournalEntryFromModal(dateStr);
     }
 }
 
@@ -3756,7 +3818,19 @@ function renderWeekTimeline() {
     end.setDate(end.getDate() + 6);
     var loc = typeof getLocale === 'function' ? getLocale() : 'en';
     var weekOfStr = typeof getLocaleStrings === 'function' ? getLocaleStrings(loc).weekOf : 'Week of ';
-    document.getElementById('calendarWeekTitle').textContent = weekOfStr + start.toLocaleDateString(loc, { month: 'short', day: 'numeric', year: 'numeric' });
+    var startStr = start.toISOString().split('T')[0];
+    var endStr = end.toISOString().split('T')[0];
+    var startDisplay = typeof getUserDateDisplay === 'function'
+        ? getUserDateDisplay(startStr)
+        : (typeof formatDisplayDate === 'function'
+            ? formatDisplayDate(startStr, window.auraDateFormat || 'MD')
+            : startStr);
+    var endDisplay = typeof getUserDateDisplay === 'function'
+        ? getUserDateDisplay(endStr)
+        : (typeof formatDisplayDate === 'function'
+            ? formatDisplayDate(endStr, window.auraDateFormat || 'MD')
+            : endStr);
+    document.getElementById('calendarWeekTitle').textContent = weekOfStr + startDisplay + ' - ' + endDisplay;
     var html = '';
     for (var i = 0; i < 7; i++) {
         var d = new Date(start);
@@ -3770,7 +3844,12 @@ function renderWeekTimeline() {
         var sleepH = Math.max(6, (sleep / 12) * 34);
         var energyH = Math.max(6, (energy / 10) * 34);
         html += '<div class="week-row" onclick="showEntryModal(\'' + dateStr + '\')" onmouseenter="showDayPreview(event,\'' + dateStr + '\')" onmouseleave="hideDayPreview()">';
-        html += '<span class="week-date">' + d.toLocaleDateString(typeof getLocale === 'function' ? getLocale() : 'en', { weekday: 'short', month: 'short', day: 'numeric' }) + '</span>';
+        var dateDisplay = typeof getUserDateDisplay === 'function'
+            ? getUserDateDisplay(dateStr)
+            : (typeof formatDisplayDate === 'function'
+                ? formatDisplayDate(dateStr, window.auraDateFormat || 'MD')
+                : dateStr);
+        html += '<span class="week-date">' + escapeHtml(dateDisplay) + '</span>';
         html += '<div class="week-bars">';
         html += '<div class="week-bar" style="height:' + moodH + 'px;background:var(--heat-good);" title="Mood ' + mood + '"></div>';
         html += '<div class="week-bar" style="height:' + sleepH + 'px;background:var(--chart-2);" title="Sleep ' + sleep + 'h"></div>';
@@ -6804,8 +6883,7 @@ function compressImage(base64, maxW, quality) {
 
 function handleJournalPhotoUpload(e) {
     if (!currentJournalEntryDate) {
-        // Set to today's date if not set
-        currentJournalEntryDate = new Date().toISOString().split('T')[0];
+        currentJournalEntryDate = getLocalTodayYMD();
         setWorkingEntryDate(currentJournalEntryDate);
     }
     var files = e.target.files;
@@ -7006,10 +7084,12 @@ function runSearch() {
 }
 
 function navigateToEntry(dateStr) {
-    document.getElementById('searchModal').classList.remove('show');
-    setWorkingEntryDate(dateStr);
-    navigate('entry');
-    setDateInputDisplay(document.getElementById('date'), dateStr);
+    var searchModal = document.getElementById('searchModal');
+    if (searchModal) {
+        searchModal.classList.remove('show');
+        searchModal.setAttribute('aria-hidden', 'true');
+    }
+    openEntryForDate(dateStr);
 }
 
 document.addEventListener('keydown', function(e) {
@@ -7861,6 +7941,7 @@ function refreshAllDateInputsDisplay() {
 function refreshPreferenceDrivenUi() {
     if (typeof refreshDateInputPlaceholders === 'function') refreshDateInputPlaceholders();
     if (typeof refreshAllDateInputsDisplay === 'function') refreshAllDateInputsDisplay();
+    if (typeof updateLastBackupDisplay === 'function') updateLastBackupDisplay();
     var activePage = document.querySelector('.page.active');
     var activeId = activePage ? activePage.id : '';
     if (activeId === 'settings') {
@@ -7875,6 +7956,10 @@ function refreshPreferenceDrivenUi() {
     }
     if (activeId === 'calendar') {
         if (typeof renderCalendarCurrentView === 'function') renderCalendarCurrentView();
+    }
+    if (activeId === 'dashboard' || activeId === 'mood' || activeId === 'insights') {
+        if (typeof updateDashboard === 'function') updateDashboard();
+        if (typeof renderCharts === 'function') renderCharts();
     }
     if (typeof entryModalDate !== 'undefined' && entryModalDate) {
         var entryModal = document.getElementById('entryModal');

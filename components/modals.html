@@ -11,9 +11,9 @@
         </div>
         <div id="entryModalBody" class="entry-modal-body"></div>
         <div class="entry-modal-footer">
-            <button type="button" class="btn btn-secondary entry-modal-footer-btn" id="entryModalEditBtn" onclick="navigateTo('entry', entryModalDate)">✏️ Full Edit</button>
-            <button type="button" class="btn btn-secondary entry-modal-footer-btn" id="entryModalJournalBtn" onclick="navigateTo('journal', entryModalDate)" style="display:none;">📓 Journal</button>
-            <button type="button" class="btn btn-neutral entry-modal-footer-btn" onclick="closeModal()">Close</button>
+            <button type="button" class="btn btn-secondary entry-modal-footer-btn" id="entryModalEditBtn" onclick="openEntryForDate(entryModalDate)">✏️ Full Edit</button>
+            <button type="button" class="btn btn-secondary entry-modal-footer-btn" id="entryModalJournalBtn" onclick="openJournalEntryFromModal(entryModalDate)" style="display:none;">📓 Journal</button>
+            <button type="button" class="btn btn-neutral entry-modal-footer-btn" onclick="closeEntryModal()">Close</button>
         </div>
     </div>
 </div>

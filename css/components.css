@@ -1510,13 +1510,44 @@ input[type="range"]::-moz-range-thumb:hover {
 }
 .journal-preview-wrap {
     padding: var(--space-md);
-    border-radius: var(--radius-md);
-    border: 2px solid var(--border-input);
-    background: color-mix(in srgb, var(--accent) 5%, var(--surface));
+    border-radius: var(--radius-lg);
+    border: 1px solid color-mix(in srgb, var(--accent) 18%, var(--border));
+    background: color-mix(in srgb, var(--accent) 6%, var(--surface));
     margin-bottom: var(--space-sm);
 }
-.journal-preview-placeholder { margin: 0 0 var(--space-sm) 0; color: var(--text-muted); font-size: 0.95rem; }
-.journal-edit-link {
+.journal-preview-top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: var(--space-md);
+    flex-wrap: wrap;
+}
+.journal-preview-copy {
+    flex: 1 1 240px;
+    min-width: 0;
+}
+.journal-preview-eyebrow {
+    margin: 0 0 6px 0;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent-dark);
+}
+.journal-preview-placeholder {
+    margin: 0;
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    line-height: 1.55;
+}
+.journal-preview-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+.journal-edit-link,
+.journal-secondary-link {
     background: none;
     border: none;
     color: var(--accent);
@@ -1527,10 +1558,22 @@ input[type="range"]::-moz-range-thumb:hover {
     padding: 0;
     text-decoration: underline;
 }
-.journal-edit-link:hover { color: var(--accent-dark); }
+.journal-edit-link:hover,
+.journal-secondary-link:hover { color: var(--accent-dark); }
 .journal-editor-wrap {
     position: relative;
     margin-bottom: 0;
+}
+.journal-editor-wrap--readonly .journal-textarea {
+    background: color-mix(in srgb, var(--bg) 65%, var(--surface));
+    border-color: color-mix(in srgb, var(--border) 120%, transparent);
+    color: var(--text-muted);
+    box-shadow: none;
+    cursor: default;
+}
+.journal-editor-wrap--readonly .journal-textarea:focus {
+    border-color: color-mix(in srgb, var(--border) 120%, transparent);
+    box-shadow: none;
 }
 .journal-textarea {
     min-height: 140px;
