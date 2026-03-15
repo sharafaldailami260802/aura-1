@@ -1,0 +1,843 @@
+/* =====================================================================
+   Aura Mood — Improvements CSS
+   Surgical enhancements: transitions, sidebar, reports, journal,
+   entry modal, tags, daily check-in, forecast, mood velocity
+   ===================================================================== */
+
+/* ── Page transitions: smoother, more premium ─────────────────────── */
+.page {
+    display: none;
+    opacity: 0;
+    transform: translateY(8px);
+    transition: opacity 0.28s cubic-bezier(0.22, 1, 0.36, 1),
+                transform 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+    will-change: opacity, transform;
+}
+.page.active {
+    display: block !important;
+    opacity: 1;
+    transform: translateY(0);
+    animation: pageSlideIn 0.3s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+@keyframes pageSlideIn {
+    from { opacity: 0; transform: translateY(10px) scale(0.995); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* ── Card hover: more alive ───────────────────────────────────────── */
+.card {
+    transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1),
+                box-shadow 0.22s cubic-bezier(0.16, 1, 0.3, 1),
+                border-color 0.22s ease;
+}
+.card:hover {
+    transform: translateY(-3px) scale(1.002);
+    box-shadow: var(--shadow-md), 0 0 0 1px color-mix(in srgb, var(--accent) 12%, transparent);
+}
+
+/* ── Metric cards: subtle lift with color accent on hover ─────────── */
+.metric {
+    transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1),
+                box-shadow 0.22s ease,
+                border-color 0.22s ease;
+}
+.metric:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-md);
+}
+
+/* ── Nav items: smoother hover with left-border slide ─────────────── */
+.nav {
+    transition: background 0.18s ease,
+                color 0.18s ease,
+                transform 0.15s ease,
+                border-left-color 0.18s ease,
+                padding-left 0.18s ease;
+}
+.nav:hover {
+    transform: translateX(3px);
+}
+
+/* ── Sidebar: section labels refinement ──────────────────────────── */
+.section-label {
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    opacity: 0.65;
+    font-weight: 700;
+    margin: var(--space-lg) 0 8px;
+    padding: 0 var(--space-md);
+}
+
+/* ── Reports tabs: premium pill styling ──────────────────────────── */
+.report-tabs {
+    display: flex;
+    gap: 6px;
+    margin-bottom: var(--space-lg);
+    flex-wrap: wrap;
+    padding: 4px;
+    background: color-mix(in srgb, var(--accent) 6%, var(--surface));
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    width: fit-content;
+}
+.report-tabs button {
+    display: inline-flex;
+    align-items: center;
+    height: 36px;
+    padding: 0 20px;
+    border-radius: 999px;
+    border: none;
+    font-family: var(--font-body);
+    font-size: 0.88rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    background: transparent;
+    color: var(--text-muted);
+    white-space: nowrap;
+}
+.report-tabs button:hover {
+    color: var(--text);
+    background: color-mix(in srgb, var(--accent) 10%, transparent);
+}
+.report-tabs button.active,
+.report-tabs button.btn {
+    background: var(--accent) !important;
+    color: var(--surface) !important;
+    font-weight: 600;
+    box-shadow: 0 2px 8px color-mix(in srgb, var(--accent) 35%, transparent),
+                inset 0 1px 0 rgba(255,255,255,0.15);
+}
+.report-tabs button.btn-secondary {
+    background: transparent !important;
+    color: var(--text-muted) !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+.report-tabs button.btn-secondary:hover {
+    background: color-mix(in srgb, var(--accent) 10%, transparent) !important;
+    color: var(--text) !important;
+}
+
+/* ── Calendar view tabs: same pill treatment ──────────────────────── */
+.calendar-view-tabs {
+    display: flex;
+    gap: 6px;
+    margin-bottom: var(--space-lg);
+    flex-wrap: wrap;
+    padding: 4px;
+    background: color-mix(in srgb, var(--accent) 6%, var(--surface));
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    width: fit-content;
+}
+.calendar-view-tabs button {
+    display: inline-flex;
+    align-items: center;
+    height: 36px;
+    padding: 0 18px;
+    border-radius: 999px;
+    border: none;
+    font-family: var(--font-body);
+    font-size: 0.85rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    background: transparent;
+    color: var(--text-muted);
+    white-space: nowrap;
+    min-height: 36px;
+}
+.calendar-view-tabs button:hover {
+    color: var(--text);
+    background: color-mix(in srgb, var(--accent) 10%, transparent);
+}
+.calendar-view-tabs button.active {
+    background: var(--accent);
+    color: var(--surface);
+    font-weight: 600;
+    box-shadow: 0 2px 8px color-mix(in srgb, var(--accent) 35%, transparent);
+}
+
+/* ── Journal page: premium redesign ──────────────────────────────── */
+#journal .card {
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+}
+#journal .card:first-child {
+    background: linear-gradient(
+        160deg,
+        color-mix(in srgb, var(--accent) 4%, var(--surface)),
+        var(--surface) 60%
+    );
+    border-color: color-mix(in srgb, var(--accent) 18%, var(--border));
+}
+#journalEditor {
+    min-height: 420px;
+    border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+}
+.ql-toolbar.ql-snow {
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0 !important;
+    padding: 10px 16px !important;
+    background: color-mix(in srgb, var(--accent) 4%, var(--bg)) !important;
+}
+.ql-container.ql-snow {
+    border-radius: 0 0 var(--radius-lg) var(--radius-lg) !important;
+}
+.ql-editor {
+    min-height: 400px !important;
+    padding: 20px 24px !important;
+    font-size: 1.05rem !important;
+    line-height: 1.8 !important;
+}
+
+/* Journal page header area */
+#journal h1 {
+    font-size: 2.5rem;
+    margin-bottom: var(--space-xs);
+}
+#journalEntryMeta {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    margin-bottom: var(--space-md);
+    padding: 8px 14px;
+    background: color-mix(in srgb, var(--accent) 8%, transparent);
+    border-radius: var(--radius-md);
+    border: 1px solid color-mix(in srgb, var(--accent) 20%, transparent);
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+#journalEntryMeta::before {
+    content: '📅';
+    font-size: 0.9rem;
+}
+
+/* Journal actions: cleaner */
+.journal-actions {
+    margin-top: var(--space-md);
+    padding-top: var(--space-md);
+    border-top: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    flex-wrap: wrap;
+}
+#journalWordCount {
+    font-size: 0.82rem;
+    color: var(--text-muted);
+    margin-top: var(--space-xs);
+    letter-spacing: 0.03em;
+}
+
+/* Tag cloud card: editorial */
+.tag-cloud-section {
+    background: linear-gradient(
+        135deg,
+        color-mix(in srgb, var(--accent) 5%, var(--surface)),
+        var(--surface)
+    ) !important;
+    border-color: color-mix(in srgb, var(--accent) 15%, var(--border)) !important;
+}
+.tag-cloud {
+    gap: 10px 12px;
+    padding: var(--space-sm) 0;
+    min-height: 60px;
+}
+
+/* Recent entries in journal: card-style rows */
+#entryList .entry-row-content.entry-record-card {
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border);
+    background: var(--bg);
+    margin: 0;
+    padding: var(--space-md);
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+#entryList .entry-list-item {
+    margin-bottom: 8px;
+}
+#entryList .entry-row-content.entry-record-card:hover {
+    background: color-mix(in srgb, var(--accent) 6%, var(--surface));
+    border-color: color-mix(in srgb, var(--accent) 25%, var(--border));
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-sm);
+}
+
+/* ── Daily Check-In: tag input area ──────────────────────────────── */
+#tags {
+    font-family: var(--font-body);
+}
+/* Compact journal helper text */
+.journal-helper {
+    font-size: 0.82rem;
+    color: var(--text-muted);
+    margin: 0 0 var(--space-sm);
+    padding: 8px 14px;
+    background: color-mix(in srgb, var(--accent) 5%, transparent);
+    border-left: 2px solid color-mix(in srgb, var(--accent) 35%, transparent);
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+}
+
+/* Progress bar: taller, more impactful */
+.entry-progress-bar-track {
+    height: 3px;
+    border-radius: 999px;
+    background: var(--border);
+    overflow: hidden;
+    position: relative;
+}
+.entry-progress-bar-fill {
+    height: 100%;
+    border-radius: 999px;
+    background: linear-gradient(90deg, var(--accent-light), var(--accent), var(--accent-dark));
+    transition: width 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+    position: relative;
+}
+.entry-progress-bar-fill::after {
+    content: '';
+    position: absolute;
+    top: 0; right: 0; bottom: 0;
+    width: 40px;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3));
+    border-radius: 999px;
+}
+.entry-progress-label {
+    font-size: 0.72rem;
+    color: var(--text-muted);
+    margin-top: 5px;
+    text-align: right;
+    letter-spacing: 0.03em;
+    font-weight: 500;
+}
+
+/* ── Entry modal: premium redesign ───────────────────────────────── */
+.entry-modal {
+    border-radius: var(--radius-xl);
+    box-shadow: 0 24px 80px rgba(0,0,0,0.22),
+                0 8px 32px rgba(0,0,0,0.1),
+                0 0 0 1px color-mix(in srgb, white 10%, transparent);
+    animation: modalPop 0.28s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+@keyframes modalPop {
+    from { opacity: 0; transform: scale(0.96) translateY(8px); }
+    to   { opacity: 1; transform: scale(1) translateY(0); }
+}
+.entry-modal-header {
+    background: linear-gradient(
+        to bottom,
+        color-mix(in srgb, var(--accent) 5%, var(--surface)),
+        var(--surface)
+    );
+    padding: 24px 24px 16px;
+}
+.entry-modal-title-text {
+    font-size: 1.4rem;
+    letter-spacing: -0.02em;
+}
+.entry-modal-subtitle {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    margin-top: 2px;
+}
+.entry-modal-body {
+    padding: 8px 0;
+}
+.em-field-row {
+    padding: 12px 24px;
+    transition: background 0.15s ease;
+    border-bottom: 1px solid color-mix(in srgb, var(--border) 70%, transparent);
+}
+.em-field-row:last-child { border-bottom: none; }
+.em-field-row:hover {
+    background: color-mix(in srgb, var(--accent) 4%, transparent);
+}
+.em-field-label {
+    font-size: 0.68rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--text-muted);
+    font-weight: 700;
+    min-width: 72px;
+}
+.em-field-value.em-score {
+    font-size: 1.15rem;
+    font-family: var(--font-display);
+}
+/* Delete button: refined */
+.entry-modal-delete-btn,
+.em-delete-all {
+    margin: 8px 24px 16px;
+    width: calc(100% - 48px);
+    border-radius: var(--radius-lg);
+    padding: 12px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    border: 1px solid color-mix(in srgb, #e05050 25%, var(--border));
+    background: color-mix(in srgb, #e05050 5%, transparent);
+    color: #c0392b;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+.entry-modal-delete-btn:hover,
+.em-delete-all:hover {
+    background: color-mix(in srgb, #e05050 12%, transparent);
+    border-color: color-mix(in srgb, #e05050 50%, var(--border));
+    transform: none;
+    box-shadow: none;
+}
+.entry-modal-footer {
+    padding: 12px 20px;
+    gap: 8px;
+    background: color-mix(in srgb, var(--bg) 50%, transparent);
+}
+.entry-modal-footer-btn {
+    font-size: 0.82rem;
+    padding: 0 16px;
+    height: 38px;
+    border-radius: var(--radius-md);
+}
+
+/* Full entry delete modal: premium */
+.full-entry-delete-modal {
+    text-align: center;
+    padding: var(--space-xl);
+}
+.full-entry-delete-modal h3 {
+    font-size: 1.3rem;
+    margin-bottom: var(--space-sm);
+}
+
+/* ── Mood Velocity: use accent colors not heat colors ─────────────── */
+/* This is handled via JS override — see velocity patch below */
+
+/* ── Forecast page: cleanup ───────────────────────────────────────── */
+.forecast-support-cards .card--support:last-child {
+    display: none !important;
+}
+
+/* ── Sleep Analysis & Energy: insight strips ──────────────────────── */
+.page-analytics-insights {
+    margin-top: var(--space-lg);
+    padding: var(--space-md) var(--space-lg);
+    border-radius: var(--radius-lg);
+    background: linear-gradient(
+        135deg,
+        color-mix(in srgb, var(--accent) 6%, var(--surface)),
+        var(--surface)
+    );
+    border: 1px solid color-mix(in srgb, var(--accent) 18%, var(--border));
+    border-left: 3px solid var(--accent);
+}
+.page-analytics-insights h4 {
+    font-family: var(--font-body);
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.09em;
+    color: var(--text-muted);
+    font-weight: 700;
+    margin: 0 0 var(--space-sm) 0;
+}
+.page-analytics-insight-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 10px 0;
+    border-bottom: 1px solid color-mix(in srgb, var(--border) 60%, transparent);
+}
+.page-analytics-insight-row:last-child { border-bottom: none; }
+.page-analytics-insight-icon {
+    font-size: 1.1rem;
+    flex-shrink: 0;
+    margin-top: 1px;
+}
+.page-analytics-insight-text {
+    font-size: 0.9rem;
+    color: var(--text);
+    line-height: 1.55;
+    margin: 0;
+}
+.page-analytics-insight-sub {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    margin: 3px 0 0 0;
+}
+
+/* ── Heatmap: aesthetic alignment ─────────────────────────────────── */
+.calendar-container {
+    border-radius: var(--radius-xl);
+    background: linear-gradient(
+        155deg,
+        color-mix(in srgb, var(--accent) 4%, var(--surface)),
+        var(--surface) 70%
+    );
+}
+.year-heatmap-scroll-wrap {
+    border-radius: var(--radius-lg);
+    background: color-mix(in srgb, var(--bg) 60%, var(--surface));
+    padding: var(--space-md);
+    border: 1px solid color-mix(in srgb, var(--border) 80%, transparent);
+}
+.day {
+    border-radius: 4px;
+    transition: transform 0.15s ease, box-shadow 0.15s ease, outline 0.1s ease;
+}
+.day:hover {
+    transform: scale(1.15);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}
+
+/* ── Month grid: better cell styling ─────────────────────────────── */
+.month-grid .day-cell {
+    border-radius: var(--radius-md);
+    font-size: 0.88rem;
+    font-weight: 500;
+    transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+    border: 1px solid transparent;
+    position: relative;
+}
+.month-grid .day-cell:not(.empty):hover {
+    border-color: color-mix(in srgb, var(--accent) 35%, transparent);
+    transform: translateY(-2px) scale(1.04);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+/* ── Week timeline rows: premium ─────────────────────────────────── */
+.week-timeline .week-row {
+    border-radius: var(--radius-lg);
+    padding: var(--space-md);
+    margin-bottom: 4px;
+    border: 1px solid transparent;
+    transition: all 0.18s ease;
+}
+.week-timeline .week-row:hover {
+    background: color-mix(in srgb, var(--accent) 7%, var(--surface));
+    border-color: color-mix(in srgb, var(--accent) 20%, var(--border));
+    box-shadow: var(--shadow-sm);
+}
+.week-bar {
+    border-radius: 6px 6px 2px 2px;
+    transition: height 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* ── Settings page: premium data manager ─────────────────────────── */
+.data-manager-card {
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+}
+.data-manager-row {
+    border-radius: var(--radius-md);
+    transition: all 0.18s ease;
+}
+
+/* ── Export/Backup page: button consistency ───────────────────────── */
+#data .btn,
+#data .btn-secondary {
+    min-height: var(--btn-height);
+    border-radius: var(--radius-md);
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+#data .backup-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-sm);
+}
+#data .backup-list li {
+    border-radius: var(--radius-md);
+    padding: var(--space-md);
+    background: color-mix(in srgb, var(--bg) 60%, var(--surface));
+    border: 1px solid var(--border);
+    margin-bottom: 6px;
+}
+#data .backup-list li:last-child { margin-bottom: 0; }
+
+/* ── Correlation page: tab switcher for metric pairs ─────────────── */
+.correlation-pair-tabs {
+    display: flex;
+    gap: 6px;
+    margin-bottom: var(--space-md);
+    padding: 4px;
+    background: color-mix(in srgb, var(--accent) 6%, var(--surface));
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    width: fit-content;
+    flex-wrap: wrap;
+}
+.correlation-pair-tab {
+    display: inline-flex;
+    align-items: center;
+    height: 34px;
+    padding: 0 16px;
+    border-radius: 999px;
+    border: none;
+    font-family: var(--font-body);
+    font-size: 0.82rem;
+    font-weight: 500;
+    cursor: pointer;
+    background: transparent;
+    color: var(--text-muted);
+    transition: all 0.2s ease;
+}
+.correlation-pair-tab:hover {
+    color: var(--text);
+    background: color-mix(in srgb, var(--accent) 10%, transparent);
+}
+.correlation-pair-tab.active {
+    background: var(--accent);
+    color: var(--surface);
+    font-weight: 600;
+    box-shadow: 0 2px 8px color-mix(in srgb, var(--accent) 30%, transparent);
+}
+
+/* ── Buttons: system-wide micro polish ───────────────────────────── */
+.btn {
+    transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+    letter-spacing: 0.01em;
+}
+.btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px color-mix(in srgb, var(--accent) 25%, rgba(0,0,0,0.08));
+}
+.btn:active {
+    transform: scale(0.97) translateY(0);
+}
+.btn-secondary {
+    transition: all 0.18s ease;
+}
+.btn-secondary:hover {
+    transform: translateY(-1px);
+}
+
+/* ── Dashboard grid: staggered card entry ────────────────────────── */
+.dashboard-grid .card:nth-child(1) { animation-delay: 0.08s; }
+.dashboard-grid .card:nth-child(2) { animation-delay: 0.14s; }
+.dashboard-grid .card:nth-child(3) { animation-delay: 0.20s; }
+
+/* ── Insight overview card: richer gradient ──────────────────────── */
+.insight-overview-card {
+    background: linear-gradient(135deg, var(--insight-from) 0%, var(--insight-to) 100%);
+    position: relative;
+    overflow: hidden;
+}
+.insight-overview-card::before {
+    content: '';
+    position: absolute;
+    top: -40%;
+    right: -10%;
+    width: 60%;
+    height: 160%;
+    background: radial-gradient(ellipse, rgba(255,255,255,0.12) 0%, transparent 70%);
+    pointer-events: none;
+}
+
+/* ── Tooltip refinements ─────────────────────────────────────────── */
+.day-preview-tooltip {
+    border-radius: var(--radius-lg);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.14), 0 0 0 1px color-mix(in srgb, var(--border) 80%, transparent);
+    padding: 12px 16px;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+}
+.day-preview-tooltip strong {
+    font-family: var(--font-display);
+    font-size: 1rem;
+    font-weight: 400;
+    letter-spacing: -0.01em;
+    margin-bottom: 8px;
+    display: block;
+}
+
+/* ── Success toast: elevated ─────────────────────────────────────── */
+.success-message {
+    border-radius: var(--radius-lg);
+    border: 1px solid color-mix(in srgb, var(--accent) 25%, var(--border));
+    background: color-mix(in srgb, var(--accent) 8%, var(--surface));
+    color: var(--text);
+    font-weight: 500;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.12), 0 2px 8px rgba(0,0,0,0.06);
+}
+
+/* ── Sleep timeline: segments more visible ───────────────────────── */
+.sleep-timeline-segment {
+    border-radius: 999px;
+    opacity: 0.9;
+    transition: opacity 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease;
+}
+.sleep-timeline-segment:hover {
+    opacity: 1;
+    transform: translateY(-2px) scaleY(1.1);
+    box-shadow: 0 4px 12px color-mix(in srgb, var(--accent) 30%, transparent);
+}
+
+/* ── Form inputs: more refined focus ─────────────────────────────── */
+.form input[type="text"]:focus,
+.form textarea:focus,
+input.aura-date-input:focus,
+input.aura-time-input:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 18%, transparent),
+                0 1px 4px rgba(0,0,0,0.06);
+}
+
+/* ── Range sliders: more tactile ─────────────────────────────────── */
+input[type="range"]::-webkit-slider-thumb:hover {
+    transform: scale(1.25);
+    box-shadow: 0 0 0 6px color-mix(in srgb, var(--accent) 18%, transparent);
+}
+input[type="range"]:active::-webkit-slider-thumb {
+    transform: scale(1.1);
+}
+
+/* ── Forecast: hide repetitive patterns card ──────────────────────── */
+#predictions .forecast-support-cards > .card--support:nth-child(2) {
+    display: none;
+}
+
+/* ── Insights page: less crowded layout ──────────────────────────── */
+.insights-section {
+    padding: var(--space-lg);
+    background: linear-gradient(
+        to bottom right,
+        color-mix(in srgb, var(--accent) 3%, var(--surface)),
+        var(--surface)
+    );
+    border: 1px solid color-mix(in srgb, var(--border) 90%, transparent);
+    border-radius: var(--radius-xl);
+}
+.insights-section + .insights-section {
+    margin-top: var(--space-md);
+}
+.insight-cards-grid {
+    gap: var(--space-md);
+}
+.insight-detail-card {
+    padding: var(--space-md);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    background: var(--surface);
+    transition: all 0.2s ease;
+}
+.insight-detail-card:hover {
+    border-color: color-mix(in srgb, var(--accent) 25%, var(--border));
+    box-shadow: var(--shadow-sm);
+    transform: translateY(-2px);
+}
+
+/* ── Mobile: bottom nav refinements ──────────────────────────────── */
+.bottom-nav {
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    background: color-mix(in srgb, var(--surface) 92%, transparent);
+}
+.bottom-nav button {
+    border-radius: var(--radius-md);
+    transition: all 0.18s ease;
+}
+.bottom-nav button:hover,
+.bottom-nav button.active {
+    transform: translateY(-2px);
+}
+
+/* ── Fab button: more premium ────────────────────────────────────── */
+.fab {
+    box-shadow: 0 4px 20px color-mix(in srgb, var(--accent) 35%, rgba(0,0,0,0.15)),
+                0 0 0 1px color-mix(in srgb, white 15%, transparent);
+    transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.fab:hover {
+    transform: scale(1.08) translateY(-2px);
+    box-shadow: 0 8px 28px color-mix(in srgb, var(--accent) 40%, rgba(0,0,0,0.2));
+}
+
+/* ── Calendar list view: card-like rows ──────────────────────────── */
+.calendar-record-card {
+    transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+    margin-bottom: 6px;
+}
+.calendar-record-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+    border-color: color-mix(in srgb, var(--accent) 25%, var(--border));
+}
+.calendar-record-action {
+    border-radius: var(--radius-md);
+    transition: all 0.15s ease;
+    font-size: 0.8rem;
+    font-weight: 500;
+    letter-spacing: 0.01em;
+}
+.calendar-record-action:hover {
+    opacity: 0.88;
+    transform: translateY(-1px);
+}
+
+/* ── Seasonal / patterns charts ──────────────────────────────────── */
+#seasonal .card,
+#patterns .card {
+    transition: transform 0.22s ease, box-shadow 0.22s ease;
+}
+
+/* ── Deep Dive nav items (now direct under section label) ────────── */
+.nav.nav-deep-dive-item {
+    font-size: 0.9rem;
+    opacity: 0.9;
+    padding-left: var(--space-md);
+}
+.nav.nav-deep-dive-item .nav-icon {
+    font-size: 1rem;
+    opacity: 0.75;
+}
+
+/* ── Reduce motion support ───────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+    .card, .metric, .nav, .btn, .fab, .page, .entry-modal {
+        animation: none !important;
+        transition: none !important;
+    }
+}
+.reduce-motion .card,
+.reduce-motion .metric,
+.reduce-motion .page,
+.reduce-motion .btn {
+    animation: none !important;
+    transition: none !important;
+}
+
+/* ── Dark mode: deeper polish ────────────────────────────────────── */
+[data-dark="true"] .year-heatmap-scroll-wrap {
+    background: color-mix(in srgb, var(--bg) 80%, var(--surface));
+}
+[data-dark="true"] .entry-modal {
+    box-shadow: 0 24px 80px rgba(0,0,0,0.5),
+                0 8px 32px rgba(0,0,0,0.3),
+                0 0 0 1px rgba(255,255,255,0.05);
+}
+[data-dark="true"] .calendar-container {
+    background: color-mix(in srgb, var(--accent) 6%, var(--surface));
+}
+
+@media (max-width: 768px) {
+    .report-tabs,
+    .calendar-view-tabs,
+    .correlation-pair-tabs {
+        width: 100%;
+        border-radius: var(--radius-lg);
+    }
+    .report-tabs button,
+    .calendar-view-tabs button {
+        flex: 1;
+        justify-content: center;
+        padding: 0 10px;
+        font-size: 0.8rem;
+    }
+}

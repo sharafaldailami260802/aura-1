@@ -44,6 +44,7 @@
     <link rel="stylesheet" href="css/layout.css">
     <link rel="stylesheet" href="css/components.css">
     <link rel="stylesheet" href="css/charts.css">
+    <link rel="stylesheet" href="css/improvements.css">
 </head>
 <body>
     <div id="auraDatePicker" class="aura-date-picker" aria-hidden="true" role="dialog" aria-label="Choose date"></div>
@@ -57,16 +58,16 @@
                 </div>
                 <h2 class="logo">Aura <span class="logo-accent">Mood</span></h2>
             </div>
-            
+
             <button type="button" class="sidebar-close-mobile" onclick="closeSidebar()" aria-label="Close menu">×</button>
-            
+
             <div class="theme-toggle-wrap" title="Toggle dark mode">
                 <button type="button" id="darkModeToggle" class="theme-toggle" aria-label="Toggle dark mode">
                     <span class="theme-toggle-icon sun">☀️</span>
                     <span class="theme-toggle-icon moon">🌙</span>
                 </button>
             </div>
-            
+
             <div class="section-label">Tracking</div>
             <button onclick="navigate('dashboard', this)" class="nav active" aria-label="Go to Overview" aria-current="page">
                 <span class="nav-icon">📊</span>
@@ -84,7 +85,7 @@
                 <span class="nav-icon">📔</span>
                 <span>Journal</span>
             </button>
-            
+
             <div class="section-label">Analytics</div>
             <button onclick="navigate('mood', this)" class="nav" aria-label="Go to Mood Trends">
                 <span class="nav-icon">📈</span>
@@ -103,45 +104,37 @@
                 <span>Insights</span>
             </button>
 
-            <button type="button" class="nav nav-group-toggle" id="deepDiveToggle" onclick="toggleDeepDive()" aria-expanded="false" aria-controls="deepDiveGroup">
-                <span class="nav-icon">🔬</span>
-                <span>Deep Dive</span>
-                <span class="nav-group-chevron" aria-hidden="true">▾</span>
+            <div class="section-label">Deep Dive</div>
+            <button onclick="navigate('correlations', this)" class="nav nav-deep-dive-item" aria-label="Go to Correlations">
+                <span class="nav-icon">🔗</span>
+                <span>Correlations</span>
             </button>
-            <div class="nav-group-items" id="deepDiveGroup" aria-hidden="true">
-                <button onclick="navigate('correlations', this)" class="nav nav-secondary" aria-label="Go to Correlations">
-                    <span class="nav-icon">🔗</span>
-                    <span>Correlations</span>
-                </button>
-                <button onclick="navigate('circadian', this)" class="nav nav-secondary" aria-label="Go to Mood Velocity">
-                    <span class="nav-icon">⏰</span>
-                    <span>Mood Velocity</span>
-                </button>
-                <button onclick="navigate('predictions', this)" class="nav nav-secondary" aria-label="Go to Forecast">
-                    <span class="nav-icon">🔮</span>
-                    <span>Forecast</span>
-                </button>
-                <button onclick="navigate('patterns', this)" class="nav nav-secondary" aria-label="Go to My Patterns">
-                    <span class="nav-icon">📊</span>
-                    <span>My Patterns</span>
-                </button>
-                <button onclick="navigate('seasonal', this)" class="nav nav-secondary" aria-label="Go to Seasonal Rhythm">
-                    <span class="nav-icon">🍂</span>
-                    <span>Seasonal Rhythm</span>
-                </button>
-                <button onclick="navigate('reports', this)" class="nav nav-secondary" aria-label="Go to Reports">
-                    <span class="nav-icon">📋</span>
-                    <span>Reports</span>
-                </button>
-            </div>
+            <button onclick="navigate('circadian', this)" class="nav nav-deep-dive-item" aria-label="Go to Mood Velocity">
+                <span class="nav-icon">⏰</span>
+                <span>Mood Velocity</span>
+            </button>
+            <button onclick="navigate('predictions', this)" class="nav nav-deep-dive-item" aria-label="Go to Forecast">
+                <span class="nav-icon">🔮</span>
+                <span>Forecast</span>
+            </button>
+            <button onclick="navigate('patterns', this)" class="nav nav-deep-dive-item" aria-label="Go to My Patterns">
+                <span class="nav-icon">🎯</span>
+                <span>My Patterns</span>
+            </button>
+            <button onclick="navigate('seasonal', this)" class="nav nav-deep-dive-item" aria-label="Go to Seasonal Rhythm">
+                <span class="nav-icon">🍂</span>
+                <span>Seasonal Rhythm</span>
+            </button>
+            <button onclick="navigate('reports', this)" class="nav nav-deep-dive-item" aria-label="Go to Reports">
+                <span class="nav-icon">📋</span>
+                <span>Reports</span>
+            </button>
 
-            <div class="section-label">Settings</div>
+            <div class="section-label">Data</div>
             <button onclick="navigate('settings', this)" class="nav">
                 <span class="nav-icon">⚙️</span>
                 <span>Settings</span>
             </button>
-            
-            <div class="section-label">Data</div>
             <button onclick="navigate('data', this)" class="nav">
                 <span class="nav-icon">💾</span>
                 <span>Export & Backup</span>
@@ -781,10 +774,6 @@
                         <h3 class="card--support-heading">Interpretation</h3>
                         <p id="predictionInterpretationText"></p>
                     </div>
-                    <div class="card card--support">
-                        <h3 class="card--support-heading">What your data says</h3>
-                        <p id="predictionPatterns" style="color: var(--text); line-height: 1.75;"></p>
-                    </div>
                 </div>
             </div>
             
@@ -1383,5 +1372,6 @@
 
     <script src="js/charts.js"></script>
     <script src="js/app.js"></script>
+    <script src="js/improvements.js"></script>
 </body>
 </html>

@@ -1125,15 +1125,6 @@ function renderAnalyticsCharts(page) {
 
 function navigate(page, button) {
     closeSidebar();
-    var deepDivePages = ['correlations', 'circadian', 'predictions', 'patterns', 'seasonal', 'reports'];
-    if (deepDivePages.indexOf(page) >= 0) {
-        var toggle = document.getElementById('deepDiveToggle');
-        var group = document.getElementById('deepDiveGroup');
-        if (toggle && group && toggle.getAttribute('aria-expanded') !== 'true') {
-            toggle.setAttribute('aria-expanded', 'true');
-            group.setAttribute('aria-hidden', 'false');
-        }
-    }
     var pageEl = document.getElementById(page);
     if (!pageEl) return;
     var activePage = document.querySelector('.page.active');
