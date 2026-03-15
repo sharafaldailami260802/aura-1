@@ -110,13 +110,18 @@
     box-shadow: 0 2px 8px color-mix(in srgb, var(--accent) 35%, transparent),
                 inset 0 1px 0 rgba(255,255,255,0.15);
 }
-.report-tabs button.btn-secondary {
+.report-tabs button:not(.active):not([class*="btn"]),
+.report-tabs button.btn-secondary,
+#reports .report-tabs button.btn-secondary,
+#reports .report-tabs button:not(.active):not(.btn):not(.btn-primary) {
     background: transparent !important;
     color: var(--text-muted) !important;
     border: none !important;
     box-shadow: none !important;
+    font-weight: 500 !important;
 }
-.report-tabs button.btn-secondary:hover {
+.report-tabs button.btn-secondary:hover,
+#reports .report-tabs button.btn-secondary:hover {
     background: color-mix(in srgb, var(--accent) 10%, transparent) !important;
     color: var(--text) !important;
 }
