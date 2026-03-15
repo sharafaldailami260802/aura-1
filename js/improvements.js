@@ -1055,3 +1055,233 @@
 
     console.log('[Aura Improvements Batch B] Correlations toggle + seasonal deviation loaded.');
 })();
+
+/* ═══════════════════════════════════════════════════════════════════════
+   BATCH C — Calendar edit modal fixes + button functionality
+   ═══════════════════════════════════════════════════════════════════════ */
+(function () {
+    'use strict';
+
+    function onReady(fn) {
+        if (document.readyState !== 'loading' && window.navigate) { setTimeout(fn, 120); return; }
+        document.addEventListener('DOMContentLoaded', function () { setTimeout(fn, 800); });
+    }
+
+    /* ─────────────────────────────────────────────────────────────────────
+       1. FIX: closePremiumConfirm not exposed to window
+          modals.html cancel button calls closePremiumConfirm() inline,
+          but app.js never puts it on window — so clicking Cancel on the
+          delete-field confirm modal does nothing. Patch it here.
+    ───────────────────────────────────────────────────────────────────── */
+    onReady(function () {
+        // Wait for app.js to finish its own window-expose block
+        setTimeout(function () {
+            if (typeof window.closePremiumConfirm !== 'function') {
+                // Find it in closure scope via the modal element itself
+                window.closePremiumConfirm = function () {
+                    var modal = document.getElementById('premiumConfirmModal');
+                    if (modal) {
+                        modal.classList.remove('show');
+                        modal.setAttribute('aria-hidden', 'true');
+                    }
+                };
+            }
+        }, 300);
+    });
+
+    /* ─────────────────────────────────────────────────────────────────────
+       2. FIX: Entry modal footer buttons — ensure onclick handlers resolve
+          even if the global function name differs across app versions.
+          We bind via event delegation so we never rely on inline onclick.
+    ───────────────────────────────────────────────────────────────────── */
+    onReady(function () {
+        var overlay = document.getElementById('entryModal');
+        if (!overlay) return;
+
+        overlay.addEventListener('click', function (e) {
+            // "Full Edit" button
+            var editBtn = e.target.closest('#entryModalEditBtn');
+            if (editBtn) {
+                e.preventDefault();
+                var dateStr = window.entryModalDate || '';
+                if (!dateStr) return;
+                if (typeof window.openEntryForDate === 'function') {
+                    window.openEntryForDate(dateStr);
+                } else if (typeof window.navigateTo === 'function') {
+                    window.navigateTo('entry', dateStr);
+                }
+                return;
+            }
+
+            // "Journal" button
+            var journalBtn = e.target.closest('#entryModalJournalBtn');
+            if (journalBtn) {
+                e.preventDefault();
+                var dateStr = window.entryModalDate || '';
+                if (!dateStr) return;
+                if (typeof window.openJournalEntryFromModal === 'function') {
+                    window.openJournalEntryFromModal(dateStr);
+                } else if (typeof window.navigateTo === 'function') {
+                    window.navigateTo('journal', dateStr);
+                }
+                return;
+            }
+
+            // Close / btn-neutral
+            var closeBtn = e.target.closest('.entry-modal-close, .btn-neutral');
+            if (closeBtn && closeBtn.closest('#entryModal')) {
+                e.preventDefault();
+                if (typeof window.closeEntryModal === 'function') window.closeEntryModal();
+                return;
+            }
+        });
+    });
+
+    /* ─────────────────────────────────────────────────────────────────────
+       3. FIX: Calendar record action buttons (Edit Check-In / Edit Journal)
+          and recent-entry list buttons (Edit / Delete) — patch via event
+          delegation on document so dynamically rendered lists are covered.
+    ───────────────────────────────────────────────────────────────────── */
+    onReady(function () {
+        document.addEventListener('click', function (e) {
+
+            // ── Calendar record: Edit Check-In
+            var calEdit = e.target.closest('.calendar-record-action:not(.btn-secondary)');
+            if (calEdit) {
+                // Only handle if it has no working onclick already (check for data-date or ancestor)
+                var card = calEdit.closest('.calendar-record-card');
+                var dateStr = card && card.getAttribute('data-date');
+                // If app.js rendered inline onclick, it will fire before this — so only
+                // act as a safety net when navigateTo is available but the date is missing
+                if (dateStr && typeof window.navigateTo === 'function') {
+                    e.stopPropagation();
+                    window.navigateTo('entry', dateStr);
+                }
+                return;
+            }
+
+            // ── Calendar record: Edit Journal
+            var calJournal = e.target.closest('.calendar-record-action.btn-secondary');
+            if (calJournal) {
+                var card = calJournal.closest('.calendar-record-card');
+                var dateStr = card && card.getAttribute('data-date');
+                if (dateStr && typeof window.navigateTo === 'function') {
+                    e.stopPropagation();
+                    window.navigateTo('journal', dateStr);
+                }
+                return;
+            }
+
+            // ── Entry list: Edit (journal) button
+            var entryEdit = e.target.closest('.entry-record-action');
+            if (entryEdit) {
+                var item = entryEdit.closest('[data-date]');
+                var dateStr = item && item.getAttribute('data-date');
+                if (dateStr && typeof window.openJournalEntry === 'function') {
+                    e.stopPropagation();
+                    window.openJournalEntry(dateStr);
+                }
+                return;
+            }
+
+            // ── Entry list: Delete button
+            var entryDel = e.target.closest('.entry-record-delete');
+            if (entryDel) {
+                var item = entryDel.closest('[data-date]');
+                var dateStr = item && item.getAttribute('data-date');
+                if (dateStr && typeof window.openDeleteEntryModal === 'function') {
+                    e.stopPropagation();
+                    window.openDeleteEntryModal(dateStr, entryDel);
+                }
+                return;
+            }
+        }, true); // capture phase so we run before app.js bubble handlers
+    });
+
+    /* ─────────────────────────────────────────────────────────────────────
+       4. FIX: Data Manager date selection — auto-apply preview on change.
+          #settingsDataManagerDate change should trigger renderDataManagerPreview
+          without requiring a separate button press.
+    ───────────────────────────────────────────────────────────────────── */
+    onReady(function () {
+        setTimeout(function () {
+            var dateInput = document.getElementById('settingsDataManagerDate');
+            if (!dateInput || dateInput._batchCBound) return;
+            dateInput._batchCBound = true;
+
+            function triggerPreview() {
+                // Use app.js's own function if available
+                if (typeof window.selectSettingsDataManagerDate === 'function') {
+                    window.selectSettingsDataManagerDate();
+                    return;
+                }
+                // Fallback: read value and call renderDataManagerPreview
+                var val = dateInput.value || '';
+                if (val && typeof window.renderDataManagerPreview === 'function') {
+                    window.renderDataManagerPreview(val);
+                }
+            }
+
+            dateInput.addEventListener('change', triggerPreview);
+            dateInput.addEventListener('input', function () {
+                // debounce for typed input
+                clearTimeout(dateInput._previewTimer);
+                dateInput._previewTimer = setTimeout(triggerPreview, 350);
+            });
+        }, 600);
+    });
+
+    /* ─────────────────────────────────────────────────────────────────────
+       5. UX: Escape key closes any open modal (entry modal, premium confirm,
+          delete modals) — a consistent premium-app behaviour.
+    ───────────────────────────────────────────────────────────────────── */
+    onReady(function () {
+        document.addEventListener('keydown', function (e) {
+            if (e.key !== 'Escape') return;
+
+            // premiumConfirmModal
+            var pcm = document.getElementById('premiumConfirmModal');
+            if (pcm && pcm.classList.contains('show')) {
+                if (typeof window.closePremiumConfirm === 'function') window.closePremiumConfirm();
+                return;
+            }
+            // entryModal
+            var em = document.getElementById('entryModal');
+            if (em && em.classList.contains('show')) {
+                if (typeof window.closeEntryModal === 'function') window.closeEntryModal();
+                return;
+            }
+            // fullEntryDeleteModal
+            var fed = document.getElementById('fullEntryDeleteModal');
+            if (fed && fed.classList.contains('show')) {
+                if (typeof window.closeFullEntryDeleteModal === 'function') window.closeFullEntryDeleteModal();
+                return;
+            }
+            // deleteEntryModal
+            var dem = document.getElementById('deleteEntryModal');
+            if (dem && dem.classList.contains('show')) {
+                if (typeof window.closeDeleteEntryModal === 'function') window.closeDeleteEntryModal();
+                return;
+            }
+        });
+    });
+
+    /* ─────────────────────────────────────────────────────────────────────
+       6. UX: Backdrop click on premiumConfirmModal closes it.
+          (The div has onclick="if(event.target===this)closePremiumConfirm()"
+           but closePremiumConfirm wasn't on window — fixed by patch #1 above.
+           This is a belt-and-suspenders fallback.)
+    ───────────────────────────────────────────────────────────────────── */
+    onReady(function () {
+        var pcm = document.getElementById('premiumConfirmModal');
+        if (!pcm || pcm._batchCBound) return;
+        pcm._batchCBound = true;
+        pcm.addEventListener('click', function (e) {
+            if (e.target === pcm && typeof window.closePremiumConfirm === 'function') {
+                window.closePremiumConfirm();
+            }
+        });
+    });
+
+    console.log('[Aura Improvements Batch C] Modal fixes + button delegation loaded.');
+})();

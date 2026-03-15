@@ -1828,3 +1828,410 @@ input[type="range"]:active::-webkit-slider-thumb {
     .seasonal-dev-header { flex-direction: column; }
     .seasonal-dev-controls { width: 100%; }
 }
+
+/* ═══════════════════════════════════════════════════════════════════════
+   BATCH C — Entry modal premium redesign + calendar/entry list button polish
+   ═══════════════════════════════════════════════════════════════════════ */
+
+/* ── Overlay: richer blur + spring entrance ──────────────────────────── */
+.entry-modal-overlay {
+    background: rgba(0,0,0,0.38);
+    backdrop-filter: blur(8px) saturate(1.4);
+    -webkit-backdrop-filter: blur(8px) saturate(1.4);
+    transition: opacity 0.22s ease;
+}
+.entry-modal-overlay:not(.show) { pointer-events: none; }
+
+/* ── Modal shell: bigger, airier, floating ───────────────────────────── */
+.entry-modal.entry-modal-premium {
+    max-width: 460px;
+    border-radius: 20px;
+    box-shadow:
+        0 32px 80px rgba(0,0,0,0.22),
+        0 8px 24px rgba(0,0,0,0.12),
+        0 0 0 1px color-mix(in srgb, var(--accent) 12%, var(--border));
+    animation: modalSpring 0.32s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+@keyframes modalSpring {
+    from { opacity: 0; transform: scale(0.94) translateY(12px); }
+    to   { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+/* ── Header: gradient accent band ────────────────────────────────────── */
+.entry-modal-header {
+    padding: 20px 24px 16px;
+    background: linear-gradient(
+        160deg,
+        color-mix(in srgb, var(--accent) 8%, var(--surface)) 0%,
+        var(--surface) 70%
+    );
+    border-bottom: 1px solid color-mix(in srgb, var(--accent) 14%, var(--border));
+    position: relative;
+}
+.entry-modal-header::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 24px; right: 24px;
+    height: 1px;
+    background: linear-gradient(90deg,
+        color-mix(in srgb, var(--accent) 40%, transparent),
+        transparent 80%
+    );
+}
+.entry-modal-title-text {
+    font-size: 1.25rem;
+    font-weight: 300;
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+}
+.entry-modal-subtitle {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    opacity: 0.75;
+    margin: 3px 0 0;
+    letter-spacing: 0.04em;
+}
+
+/* Close button: rounder, more tactile */
+.entry-modal-close {
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    font-size: 0.7rem;
+    background: color-mix(in srgb, var(--accent) 5%, var(--surface));
+    border: 1.5px solid var(--border);
+    color: var(--text-muted);
+    transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.entry-modal-close:hover {
+    background: color-mix(in srgb, var(--accent) 14%, var(--surface));
+    border-color: color-mix(in srgb, var(--accent) 40%, var(--border));
+    color: var(--text);
+    transform: scale(1.08);
+}
+
+/* ── Body: tighter padding, no extra gaps ────────────────────────────── */
+.entry-modal-body {
+    padding: 6px 0 8px;
+}
+
+/* ── Field rows: more spacious, cleaner borders ──────────────────────── */
+.em-field-row {
+    padding: 11px 24px;
+    gap: 12px;
+    border-bottom: 1px solid color-mix(in srgb, var(--border) 50%, transparent);
+    transition: background 0.14s ease;
+}
+.em-field-row:hover {
+    background: color-mix(in srgb, var(--accent) 4%, transparent);
+}
+.em-field-icon {
+    font-size: 1rem;
+    width: 24px;
+    opacity: 0.85;
+}
+.em-field-label {
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    min-width: 68px;
+    flex-shrink: 0;
+}
+.em-field-value {
+    flex: 1;
+    font-size: 0.95rem;
+    color: var(--text);
+    line-height: 1.4;
+}
+.em-field-value.em-score {
+    font-size: 1.05rem;
+    font-family: var(--font-display);
+    font-weight: 400;
+}
+
+/* ── Edit / delete icon buttons: ghost pill style ────────────────────── */
+.em-field-actions { gap: 5px; }
+.em-btn {
+    width: 28px; height: 28px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: color-mix(in srgb, var(--accent) 4%, var(--surface));
+    color: var(--text-muted);
+    font-size: 0.78rem;
+    display: inline-flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    transition: all 0.16s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.em-btn:hover {
+    background: color-mix(in srgb, var(--accent) 14%, var(--surface));
+    border-color: color-mix(in srgb, var(--accent) 40%, var(--border));
+    color: var(--accent);
+    transform: scale(1.08);
+}
+.em-btn.em-del:hover {
+    background: rgba(185,28,28,0.08);
+    border-color: rgba(185,28,28,0.32);
+    color: #b91c1c;
+    transform: scale(1.08);
+}
+
+/* ── Inline edit row: cleaner, pill inputs ───────────────────────────── */
+.em-inline-edit-row {
+    padding: 0 24px 10px;
+    gap: 8px;
+    background: color-mix(in srgb, var(--accent) 4%, var(--bg));
+    border-bottom: 1px solid color-mix(in srgb, var(--border) 50%, transparent);
+}
+.em-inline-edit-row.open {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    padding: 10px 24px 12px;
+    animation: slideDown 0.2s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+@keyframes slideDown {
+    from { opacity: 0; transform: translateY(-6px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+.em-inline-input {
+    height: 36px;
+    padding: 0 12px;
+    border-radius: var(--radius-md);
+    border: 1.5px solid color-mix(in srgb, var(--accent) 30%, var(--border));
+    background: var(--surface);
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+    color: var(--text);
+    flex: 1;
+    min-width: 80px;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+.em-inline-input:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 16%, transparent);
+}
+
+/* Save / cancel inside inline edit */
+.entry-modal-body .em-save-btn {
+    height: 36px;
+    padding: 0 16px;
+    border-radius: var(--radius-md);
+    font-size: 0.85rem;
+    font-weight: 600;
+    background: var(--accent);
+    color: var(--surface);
+    border: none;
+    cursor: pointer;
+    transition: all 0.16s ease;
+    white-space: nowrap;
+}
+.entry-modal-body .em-save-btn:hover {
+    opacity: 0.9;
+    transform: translateY(-1px);
+}
+.entry-modal-body .em-cancel-btn {
+    width: 36px; height: 36px;
+    padding: 0;
+    border-radius: var(--radius-md);
+    font-size: 0.85rem;
+    font-weight: 500;
+    background: transparent;
+    color: var(--text-muted);
+    border: 1px solid var(--border);
+    cursor: pointer;
+    transition: all 0.16s ease;
+    display: inline-flex; align-items: center; justify-content: center;
+}
+.entry-modal-body .em-cancel-btn:hover {
+    background: color-mix(in srgb, var(--text-muted) 10%, transparent);
+    color: var(--text);
+}
+
+/* ── "Delete entire entry" button: subtle + dangerous ────────────────── */
+.entry-modal-delete-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    width: calc(100% - 48px);
+    margin: 12px 24px 6px;
+    padding: 10px 18px;
+    border-radius: var(--radius-md);
+    font-size: 0.85rem;
+    font-weight: 500;
+    background: transparent;
+    color: color-mix(in srgb, #b91c1c 70%, var(--text-muted));
+    border: 1px solid color-mix(in srgb, #b91c1c 25%, var(--border));
+    cursor: pointer;
+    transition: all 0.18s ease;
+    letter-spacing: 0.01em;
+}
+.entry-modal-delete-btn:hover {
+    background: rgba(185,28,28,0.07);
+    border-color: rgba(185,28,28,0.38);
+    color: #b91c1c;
+}
+
+/* ── Footer: cleaner layout, premium buttons ─────────────────────────── */
+.entry-modal-footer {
+    padding: 14px 20px;
+    gap: 8px;
+    border-top: 1px solid color-mix(in srgb, var(--border) 70%, transparent);
+    background: color-mix(in srgb, var(--accent) 2%, var(--surface));
+    justify-content: flex-start;
+}
+.entry-modal-footer-btn {
+    height: 38px;
+    padding: 0 18px;
+    border-radius: var(--radius-md);
+    font-size: 0.85rem;
+    font-weight: 500;
+    transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+/* "Full Edit" gets a gentle accent fill */
+#entryModalEditBtn.entry-modal-footer-btn {
+    background: var(--accent);
+    color: var(--surface);
+    border: none;
+    box-shadow: 0 2px 8px color-mix(in srgb, var(--accent) 28%, transparent);
+}
+#entryModalEditBtn.entry-modal-footer-btn:hover {
+    opacity: 0.92;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px color-mix(in srgb, var(--accent) 36%, transparent);
+}
+/* Journal button: ghost */
+#entryModalJournalBtn.entry-modal-footer-btn {
+    background: transparent;
+    border: 1.5px solid color-mix(in srgb, var(--accent) 35%, var(--border));
+    color: var(--accent);
+}
+#entryModalJournalBtn.entry-modal-footer-btn:hover {
+    background: color-mix(in srgb, var(--accent) 8%, var(--surface));
+}
+/* Close button: muted text-only */
+.entry-modal-footer .btn-neutral {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    margin-left: auto; /* push to right */
+}
+.entry-modal-footer .btn-neutral:hover {
+    background: color-mix(in srgb, var(--text-muted) 8%, transparent);
+    color: var(--text);
+}
+
+/* ── Empty state ─────────────────────────────────────────────────────── */
+.entry-modal-body > div[style*="text-align:center"] {
+    padding: 32px 28px !important;
+}
+
+/* ── Calendar record action buttons: premium pill style ─────────────── */
+.calendar-record-action {
+    height: 34px;
+    padding: 0 16px;
+    border-radius: 999px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    background: var(--accent);
+    color: var(--surface);
+    border: none;
+    cursor: pointer;
+    transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+    display: inline-flex;
+    align-items: center;
+}
+.calendar-record-action:hover {
+    opacity: 1;
+    transform: translateY(-1px);
+    box-shadow: 0 3px 10px color-mix(in srgb, var(--accent) 30%, transparent);
+}
+.calendar-record-action.btn-secondary {
+    background: transparent;
+    color: var(--accent);
+    border: 1.5px solid color-mix(in srgb, var(--accent) 35%, var(--border));
+    box-shadow: none;
+}
+.calendar-record-action.btn-secondary:hover {
+    background: color-mix(in srgb, var(--accent) 8%, var(--surface));
+    border-color: var(--accent);
+    transform: translateY(-1px);
+}
+
+/* ── Recent entries action buttons: match pill style ────────────────── */
+.entry-record-action {
+    height: 32px;
+    padding: 0 14px;
+    border-radius: 999px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    background: var(--accent);
+    color: var(--surface);
+    border: none;
+    cursor: pointer;
+    transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+    display: inline-flex;
+    align-items: center;
+}
+.entry-record-action:hover {
+    opacity: 1;
+    transform: translateY(-1px);
+    box-shadow: 0 3px 10px color-mix(in srgb, var(--accent) 28%, transparent);
+}
+.entry-record-delete {
+    height: 32px;
+    padding: 0 14px;
+    border-radius: 999px;
+    font-size: 0.8rem;
+    background: transparent;
+    color: var(--text-muted);
+    border: 1.5px solid var(--border);
+    cursor: pointer;
+    transition: all 0.18s ease;
+    display: inline-flex;
+    align-items: center;
+}
+.entry-record-delete:hover {
+    background: rgba(185,28,28,0.07);
+    border-color: rgba(185,28,28,0.32);
+    color: #b91c1c;
+}
+
+/* ── Premium confirm modal: align with design system ────────────────── */
+.premium-confirm-modal {
+    text-align: center;
+    padding: var(--space-xl) var(--space-lg);
+    max-width: 360px;
+}
+.premium-confirm-icon { font-size: 2rem; margin-bottom: var(--space-sm); }
+.premium-confirm-title {
+    font-family: var(--font-display);
+    font-size: 1.3rem;
+    font-weight: 300;
+    margin: 0 0 var(--space-sm);
+}
+
+/* Full-entry delete modal */
+.full-entry-delete-modal {
+    max-width: 380px;
+    padding: var(--space-xl) var(--space-lg);
+}
+
+/* ── Mobile adjustments ──────────────────────────────────────────────── */
+@media (max-width: 480px) {
+    .entry-modal.entry-modal-premium { max-width: 100%; border-radius: 20px 20px 0 0; }
+    .entry-modal-overlay { align-items: flex-end; padding: 0; }
+    .entry-modal-footer { gap: 6px; }
+    .entry-modal-footer-btn { height: 44px; font-size: 0.9rem; }
+    .entry-modal-footer .btn-neutral { margin-left: 0; }
+    .entry-modal-delete-btn { width: calc(100% - 32px); margin: 12px 16px 6px; }
+    .em-field-row { padding: 11px 16px; }
+    .em-inline-edit-row.open { padding: 10px 16px 12px; }
+}
