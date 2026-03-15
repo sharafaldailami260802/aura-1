@@ -3643,3 +3643,135 @@ canvas {
 [data-dark="true"] #data .backup-list li {
     background: color-mix(in srgb, var(--surface) 92%, var(--bg));
 }
+
+/* ═══════════════════════════════════════════════════════════════════════
+   BATCH D — Entry modal UX overhaul: stepper inputs, clean icons, buttons
+   ═══════════════════════════════════════════════════════════════════════ */
+
+/* ── 1. Hide redundant ISO date subtitle ────────────────────────────── */
+.entry-modal-subtitle {
+    display: none !important;
+}
+
+/* ── 2. Suppress native number input spinners completely ────────────── */
+.em-inline-input[type="number"]::-webkit-outer-spin-button,
+.em-inline-input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+.em-inline-input[type="number"] {
+    -moz-appearance: textfield;
+    appearance: textfield;
+    text-align: center;
+    font-weight: 600;
+    font-size: 1.05rem;
+    letter-spacing: 0.02em;
+    padding: 0 4px;
+}
+
+/* ── 3. Custom stepper wrapper (injected by BATCH D JS) ─────────────── */
+.em-stepper-wrap {
+    display: flex;
+    align-items: center;
+    flex: 0 1 160px;
+    min-width: 120px;
+    background: var(--surface);
+    border: 1.5px solid color-mix(in srgb, var(--accent) 35%, var(--border));
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+.em-stepper-wrap:focus-within {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 16%, transparent);
+}
+.em-stepper-wrap .em-inline-input {
+    border: none !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+    height: 40px;
+    background: transparent !important;
+    flex: 1;
+    min-width: 44px;
+}
+.em-stepper-btn {
+    flex-shrink: 0;
+    width: 38px;
+    height: 40px;
+    background: transparent;
+    border: none;
+    color: var(--accent);
+    font-size: 1.25rem;
+    font-weight: 300;
+    line-height: 1;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.12s ease;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+}
+.em-stepper-btn:hover  { background: color-mix(in srgb, var(--accent) 10%, transparent); }
+.em-stepper-btn:active { background: color-mix(in srgb, var(--accent) 22%, transparent); }
+.em-stepper-divider {
+    width: 1px;
+    height: 18px;
+    background: color-mix(in srgb, var(--border) 70%, transparent);
+    flex-shrink: 0;
+}
+
+/* ── 4. Clean SVG icon buttons for edit / delete ────────────────────── */
+/* Hide the raw emoji, replace with SVG mask */
+.em-btn { position: relative; font-size: 0 !important; }
+.em-btn::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    margin: auto;
+    width: 13px;
+    height: 13px;
+    background-color: currentColor;
+    display: block;
+}
+/* Pencil icon for edit */
+.em-btn:not(.em-del)::after {
+    -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7'/%3E%3Cpath d='M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z'/%3E%3C/svg%3E");
+    mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7'/%3E%3Cpath d='M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z'/%3E%3C/svg%3E");
+    -webkit-mask-size: contain;
+    mask-size: contain;
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+    -webkit-mask-position: center;
+    mask-position: center;
+}
+/* Trash icon for delete */
+.em-btn.em-del::after {
+    -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='3 6 5 6 21 6'/%3E%3Cpath d='M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6m3 0V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2'/%3E%3Cline x1='10' y1='11' x2='10' y2='17'/%3E%3Cline x1='14' y1='11' x2='14' y2='17'/%3E%3C/svg%3E");
+    mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='3 6 5 6 21 6'/%3E%3Cpath d='M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6m3 0V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2'/%3E%3Cline x1='10' y1='11' x2='10' y2='17'/%3E%3Cline x1='14' y1='11' x2='14' y2='17'/%3E%3C/svg%3E");
+    -webkit-mask-size: contain;
+    mask-size: contain;
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+    -webkit-mask-position: center;
+    mask-position: center;
+}
+
+/* ── 5. Footer button label cleanup — remove emoji prefix ───────────── */
+#entryModalEditBtn::before    { content: ''; }  /* kills ✏️ left of text */
+#entryModalJournalBtn::before { content: ''; }  /* kills 📓 left of text */
+
+/* Ensure emoji-free labels — re-declare the text via data-label if needed */
+#entryModalEditBtn    { font-size: 0.85rem; }
+#entryModalJournalBtn { font-size: 0.85rem; }
+
+/* ── 6. Pointer-events safety on footer buttons ─────────────────────── */
+.entry-modal-footer .btn,
+.entry-modal-footer .btn-secondary,
+.entry-modal-footer .btn-neutral,
+.entry-modal-footer-btn {
+    pointer-events: all;
+    cursor: pointer;
+    position: relative;
+    z-index: 1;
+}

@@ -1661,3 +1661,202 @@
 
     console.log('[Aura Batch D] Settings propagation: locale, dateFormat, timeFormat, theme fully patched.');
 })();
+
+/* ═══════════════════════════════════════════════════════════════════════
+   BATCH D — Entry modal: stepper inputs + bullet-proof footer buttons
+   ═══════════════════════════════════════════════════════════════════════ */
+(function () {
+    'use strict';
+
+    /* ── 1. Upgrade number inputs → custom stepper when edit row opens ── */
+    function upgradeStepperInputs(editRow) {
+        var inp = editRow.querySelector('.em-inline-input[type="number"]');
+        if (!inp || inp.dataset.stepperUpgraded) return;
+        inp.dataset.stepperUpgraded = '1';
+
+        var min  = parseFloat(inp.getAttribute('min'))  || 0;
+        var max  = parseFloat(inp.getAttribute('max'))  || 10;
+        var step = parseFloat(inp.getAttribute('step')) || 0.5;
+
+        var wrap = document.createElement('div');
+        wrap.className = 'em-stepper-wrap';
+        inp.parentNode.insertBefore(wrap, inp);
+
+        var btnMinus = document.createElement('button');
+        btnMinus.type = 'button';
+        btnMinus.className = 'em-stepper-btn';
+        btnMinus.setAttribute('aria-label', 'Decrease');
+        btnMinus.textContent = '−';
+
+        var divL = document.createElement('span');
+        divL.className = 'em-stepper-divider';
+
+        var divR = document.createElement('span');
+        divR.className = 'em-stepper-divider';
+
+        var btnPlus = document.createElement('button');
+        btnPlus.type = 'button';
+        btnPlus.className = 'em-stepper-btn';
+        btnPlus.setAttribute('aria-label', 'Increase');
+        btnPlus.textContent = '+';
+
+        wrap.appendChild(btnMinus);
+        wrap.appendChild(divL);
+        wrap.appendChild(inp);         // move input inside wrap
+        wrap.appendChild(divR);
+        wrap.appendChild(btnPlus);
+
+        function clamp(v) {
+            return Math.round(Math.min(max, Math.max(min, v)) / step) * step;
+        }
+        function nudge(dir) {
+            var cur = parseFloat(inp.value) || min;
+            inp.value = clamp(cur + dir * step).toFixed(
+                step % 1 !== 0 ? String(step).split('.')[1].length : 0
+            );
+            inp.dispatchEvent(new Event('input', { bubbles: true }));
+        }
+
+        btnMinus.addEventListener('click', function (e) { e.preventDefault(); nudge(-1); });
+        btnPlus.addEventListener('click',  function (e) { e.preventDefault(); nudge(+1); });
+
+        /* Long-press repeat */
+        var repeatTimer;
+        function startRepeat(dir) {
+            repeatTimer = setInterval(function () { nudge(dir); }, 120);
+        }
+        function stopRepeat() { clearInterval(repeatTimer); }
+        btnMinus.addEventListener('mousedown',  function () { startRepeat(-1); });
+        btnPlus.addEventListener('mousedown',   function () { startRepeat(+1); });
+        ['mouseup', 'mouseleave', 'touchend'].forEach(function (ev) {
+            btnMinus.addEventListener(ev, stopRepeat);
+            btnPlus.addEventListener(ev,  stopRepeat);
+        });
+    }
+
+    /* Watch for .em-inline-edit-row getting the "open" class */
+    var observer = new MutationObserver(function (mutations) {
+        mutations.forEach(function (m) {
+            if (m.type === 'attributes' && m.attributeName === 'class') {
+                var el = m.target;
+                if (el.classList.contains('em-inline-edit-row') && el.classList.contains('open')) {
+                    upgradeStepperInputs(el);
+                }
+            }
+        });
+    });
+
+    function attachStepperObserver() {
+        var body = document.getElementById('entryModalBody');
+        /* Re-observe when body innerHTML is replaced (new emFieldRow render) */
+        var bodyObserver = new MutationObserver(function () {
+            document.querySelectorAll('.em-inline-edit-row').forEach(function (row) {
+                observer.observe(row, { attributes: true });
+            });
+        });
+        if (body) {
+            bodyObserver.observe(body, { childList: true, subtree: false });
+        }
+        /* Also catch rows already in DOM */
+        document.querySelectorAll('.em-inline-edit-row').forEach(function (row) {
+            observer.observe(row, { attributes: true });
+        });
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', attachStepperObserver);
+    } else {
+        attachStepperObserver();
+    }
+
+    /* ── 2. Bullet-proof footer button binding ───────────────────────── */
+    /* Overwrite inline onclick attrs so they always use the live date  */
+    function rebindFooterButtons() {
+        var editBtn    = document.getElementById('entryModalEditBtn');
+        var journalBtn = document.getElementById('entryModalJournalBtn');
+        var closeBtn   = document.querySelector('#entryModal .btn-neutral');
+
+        if (editBtn && !editBtn._batchDBound) {
+            editBtn._batchDBound = true;
+            editBtn.removeAttribute('onclick');
+            editBtn.addEventListener('click', function (e) {
+                e.preventDefault();
+                var d = window.entryModalDate || '';
+                if (!d) return;
+                if (typeof window.openEntryForDate === 'function') window.openEntryForDate(d);
+                else if (typeof window.navigateTo === 'function') window.navigateTo('entry', d);
+            });
+        }
+
+        if (journalBtn && !journalBtn._batchDBound) {
+            journalBtn._batchDBound = true;
+            journalBtn.removeAttribute('onclick');
+            journalBtn.addEventListener('click', function (e) {
+                e.preventDefault();
+                var d = window.entryModalDate || '';
+                if (!d) return;
+                if (typeof window.openJournalEntryFromModal === 'function') window.openJournalEntryFromModal(d);
+                else if (typeof window.navigateTo === 'function') window.navigateTo('journal', d);
+            });
+        }
+
+        if (closeBtn && !closeBtn._batchDBound) {
+            closeBtn._batchDBound = true;
+            closeBtn.removeAttribute('onclick');
+            closeBtn.addEventListener('click', function (e) {
+                e.preventDefault();
+                if (typeof window.closeEntryModal === 'function') window.closeEntryModal();
+            });
+        }
+
+        /* Also fix the header × button */
+        var headerClose = document.querySelector('#entryModal .entry-modal-close');
+        if (headerClose && !headerClose._batchDBound) {
+            headerClose._batchDBound = true;
+            headerClose.removeAttribute('onclick');
+            headerClose.addEventListener('click', function (e) {
+                e.preventDefault();
+                if (typeof window.closeEntryModal === 'function') window.closeEntryModal();
+            });
+        }
+    }
+
+    /* Bind on load and re-bind whenever the modal opens */
+    function onReady(fn) {
+        if (document.readyState !== 'loading') { setTimeout(fn, 150); return; }
+        document.addEventListener('DOMContentLoaded', function () { setTimeout(fn, 500); });
+    }
+    onReady(rebindFooterButtons);
+
+    /* Re-bind after any showEntryModal call (modal may have been re-rendered) */
+    var _origShow = window.showEntryModal;
+    Object.defineProperty(window, 'showEntryModal', {
+        configurable: true,
+        get: function () { return _origShow; },
+        set: function (fn) {
+            _origShow = fn;
+        }
+    });
+    /* Patch via overlay click observer as a fallback */
+    document.addEventListener('click', function (e) {
+        var overlay = e.target.closest('.entry-modal-overlay');
+        if (overlay) setTimeout(rebindFooterButtons, 80);
+    }, true);
+
+    /* ── 3. Strip emoji prefixes from footer button text ─────────────── */
+    function cleanFooterLabels() {
+        var map = {
+            entryModalEditBtn:    'Full Edit',
+            entryModalJournalBtn: 'Journal'
+        };
+        Object.keys(map).forEach(function (id) {
+            var btn = document.getElementById(id);
+            if (btn && btn.textContent.trim() !== map[id]) {
+                /* Preserve only the text node, strip emoji */
+                btn.textContent = map[id];
+            }
+        });
+    }
+    onReady(cleanFooterLabels);
+
+})();
