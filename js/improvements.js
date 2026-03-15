@@ -1865,3 +1865,110 @@
         });
     }
 })();
+
+/* ═══════════════════════════════════════════════════════════════════════
+   BATCH G — NUCLEAR button fix
+   All previous batches (C/D/E/F) layered broken state on each other.
+   cloneNode() wipes every accumulated listener in one shot.
+   We then set a single onclick that reads window.entryModalDate live.
+   Footer is never re-rendered by showEntryModal so one-time bind is safe.
+   ═══════════════════════════════════════════════════════════════════════ */
+(function () {
+    'use strict';
+
+    function fixButtons() {
+        /* ── Edit Entry ─────────────────────────────────────────────── */
+        var editOld = document.getElementById('entryModalEditBtn');
+        if (editOld) {
+            var editNew = editOld.cloneNode(false); // false = no children
+            editNew.textContent = 'Edit Entry';
+            editNew.className   = editOld.className;
+            editNew.id          = 'entryModalEditBtn';
+            editNew.type        = 'button';
+            editNew.style.cssText = editOld.style.cssText;
+            editOld.parentNode.replaceChild(editNew, editOld);
+
+            editNew.onclick = function (e) {
+                e.stopPropagation();
+                var d = window.entryModalDate;
+                if (!d) return;
+                if (typeof window.openEntryForDate === 'function') {
+                    window.openEntryForDate(d);
+                } else {
+                    if (typeof window.closeEntryModal === 'function') window.closeEntryModal();
+                    setTimeout(function () {
+                        if (typeof window.navigate === 'function') window.navigate('entry', document.querySelector('.bottom-nav button[data-page="entry"]'));
+                    }, 60);
+                }
+            };
+        }
+
+        /* ── Journal ────────────────────────────────────────────────── */
+        var jOld = document.getElementById('entryModalJournalBtn');
+        if (jOld) {
+            var jNew = jOld.cloneNode(false);
+            jNew.textContent = 'Journal';
+            jNew.className   = jOld.className;
+            jNew.id          = 'entryModalJournalBtn';
+            jNew.type        = 'button';
+            jNew.style.cssText = jOld.style.cssText;
+            jOld.parentNode.replaceChild(jNew, jOld);
+
+            jNew.onclick = function (e) {
+                e.stopPropagation();
+                var d = window.entryModalDate;
+                if (!d) return;
+                if (typeof window.openJournalEntryFromModal === 'function') {
+                    window.openJournalEntryFromModal(d);
+                } else {
+                    if (typeof window.closeEntryModal === 'function') window.closeEntryModal();
+                    setTimeout(function () {
+                        if (typeof window.navigate === 'function') window.navigate('journal', document.querySelector('.bottom-nav button[data-page="journal"]'));
+                    }, 60);
+                }
+            };
+        }
+
+        /* ── Close ──────────────────────────────────────────────────── */
+        document.querySelectorAll('#entryModal .entry-modal-footer .btn-neutral').forEach(function (btn) {
+            var c = btn.cloneNode(true);
+            btn.parentNode.replaceChild(c, btn);
+            c.onclick = function (e) {
+                e.stopPropagation();
+                if (typeof window.closeEntryModal === 'function') window.closeEntryModal();
+            };
+        });
+
+        document.querySelectorAll('#entryModal .entry-modal-close').forEach(function (btn) {
+            var c = btn.cloneNode(true);
+            btn.parentNode.replaceChild(c, btn);
+            c.onclick = function (e) {
+                e.stopPropagation();
+                if (typeof window.closeEntryModal === 'function') window.closeEntryModal();
+            };
+        });
+    }
+
+    /* Run once after everything has loaded */
+    if (document.readyState === 'complete') {
+        setTimeout(fixButtons, 600);
+    } else {
+        window.addEventListener('load', function () { setTimeout(fixButtons, 600); });
+    }
+
+    /* Safety: also run once the first time the modal becomes visible */
+    var _once = false;
+    var _obs = new MutationObserver(function () {
+        var m = document.getElementById('entryModal');
+        if (m && m.classList.contains('show') && !_once) {
+            _once = true;
+            _obs.disconnect();
+            fixButtons();
+        }
+    });
+    document.addEventListener('DOMContentLoaded', function () {
+        var m = document.getElementById('entryModal');
+        if (m) _obs.observe(m, { attributes: true, attributeFilter: ['class'] });
+    });
+
+})();

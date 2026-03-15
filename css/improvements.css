@@ -4738,3 +4738,460 @@ canvas {
     .entry-modal-title-text { font-size: 1.9rem !important; }
     #entryModalEditBtn, #entryModalJournalBtn { height: 48px !important; }
 }
+
+/* ═══════════════════════════════════════════════════════════════════════
+   BATCH G — Entry Modal: Final Premium Redesign
+   ═══════════════════════════════════════════════════════════════════════ */
+
+/* ── 1. Overlay (hidden until .show) ───────────────────────────────────── */
+.entry-modal-overlay {
+    display: none !important;
+    background: rgba(0,0,0,0.65) !important;
+    backdrop-filter: blur(28px) saturate(180%) !important;
+    -webkit-backdrop-filter: blur(28px) saturate(180%) !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 20px !important;
+    z-index: 9999 !important;
+}
+.entry-modal-overlay.show {
+    display: flex !important;
+}
+
+/* ── 2. Card ─────────────────────────────────────────────────────────── */
+.entry-modal.entry-modal-premium {
+    position: relative !important;
+    width: 100% !important;
+    max-width: 420px !important;
+    max-height: calc(100dvh - 48px) !important;
+    background: var(--surface) !important;
+    border-radius: 30px !important;
+    overflow: hidden !important;
+    display: flex !important;
+    flex-direction: column !important;
+    box-shadow:
+        0 0 0 1px color-mix(in srgb, var(--accent) 25%, transparent),
+        0 40px 80px rgba(0,0,0,0.45),
+        0 12px 28px rgba(0,0,0,0.25) !important;
+    animation: gmIn 0.38s cubic-bezier(0.16,1,0.3,1) both !important;
+}
+@keyframes gmIn {
+    from { opacity:0; transform:translateY(20px) scale(0.95); }
+    to   { opacity:1; transform:translateY(0)    scale(1); }
+}
+.entry-modal.entry-modal-premium::before { display:none !important; }
+
+/* ── 3. Gradient header band ───────────────────────────────────────── */
+.entry-modal-header {
+    background: linear-gradient(160deg,
+        color-mix(in srgb, var(--accent) 22%, var(--surface)) 0%,
+        var(--surface) 100%) !important;
+    padding: 26px 28px 20px !important;
+    border-bottom: 1px solid color-mix(in srgb, var(--border) 50%, transparent) !important;
+    display: flex !important;
+    align-items: flex-start !important;
+    justify-content: space-between !important;
+    flex-shrink: 0 !important;
+    gap: 12px !important;
+}
+
+.entry-modal-title-text {
+    font-family: var(--font-display) !important;
+    font-size: 2.6rem !important;
+    font-weight: 300 !important;
+    letter-spacing: -0.025em !important;
+    line-height: 1.05 !important;
+    color: var(--text) !important;
+    margin: 0 !important;
+}
+
+.entry-modal-subtitle { display: none !important; }
+
+/* Header close pill */
+.entry-modal-close {
+    flex-shrink: 0 !important;
+    margin-top: 6px !important;
+    width: 30px !important;
+    height: 30px !important;
+    border-radius: 50% !important;
+    background: color-mix(in srgb, var(--text-muted) 14%, transparent) !important;
+    border: none !important;
+    color: var(--text-muted) !important;
+    font-size: 0.68rem !important;
+    cursor: pointer !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    transition: background 0.15s, transform 0.15s !important;
+}
+.entry-modal-close:hover {
+    background: color-mix(in srgb, var(--text-muted) 26%, transparent) !important;
+    transform: scale(1.1) rotate(90deg) !important;
+    color: var(--text) !important;
+}
+
+/* ── 4. Body scroll area ─────────────────────────────────────────────── */
+.entry-modal-body {
+    flex: 1 !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    scrollbar-width: none !important;
+    -ms-overflow-style: none !important;
+    display: block !important; /* reset any grid from BATCH F */
+}
+.entry-modal-body::-webkit-scrollbar { display: none !important; }
+
+/* ── 5. Stat trio ────────────────────────────────────────────────────── */
+.em-field-row {
+    display: flex !important;
+    flex-direction: row !important;
+    grid-column: unset !important;
+    grid-row: unset !important;
+    order: unset !important;
+    text-align: left !important;
+}
+
+.em-field-row[data-field="mood"],
+.em-field-row[data-field="energy"],
+.em-field-row[data-field="sleep"] {
+    flex: 1 !important;
+    min-width: 0 !important;
+}
+
+#entryModalBody {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr 1fr !important;
+    grid-auto-rows: auto !important;
+    align-items: stretch !important;
+}
+
+.em-field-row[data-field="mood"]   { grid-column:1; grid-row:1; }
+.em-field-row[data-field="energy"] { grid-column:2; grid-row:1; border-left: 1px solid color-mix(in srgb, var(--border) 50%, transparent) !important; border-right: 1px solid color-mix(in srgb, var(--border) 50%, transparent) !important; }
+.em-field-row[data-field="sleep"]  { grid-column:3; grid-row:1; }
+
+.em-inline-edit-row#em-edit-mood   { grid-column:1/-1; grid-row:2; }
+.em-inline-edit-row#em-edit-energy { grid-column:1/-1; grid-row:3; }
+.em-inline-edit-row#em-edit-sleep  { grid-column:1/-1; grid-row:4; }
+
+.em-field-row[data-field="activities"],
+.em-field-row[data-field="tags"],
+.em-field-row[data-field="journal"],
+.em-inline-edit-row#em-edit-activities,
+.em-inline-edit-row#em-edit-tags,
+.entry-modal-delete-btn { grid-column:1/-1 !important; }
+
+/* Stat cell layout */
+.em-field-row[data-field="mood"],
+.em-field-row[data-field="energy"],
+.em-field-row[data-field="sleep"] {
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    text-align: center !important;
+    padding: 20px 12px 16px !important;
+    gap: 0 !important;
+    border-bottom: 1px solid color-mix(in srgb, var(--border) 50%, transparent) !important;
+    transition: background 0.13s !important;
+    cursor: default !important;
+}
+.em-field-row[data-field="mood"]:hover,
+.em-field-row[data-field="energy"]:hover,
+.em-field-row[data-field="sleep"]:hover {
+    background: color-mix(in srgb, var(--accent) 5%, transparent) !important;
+}
+
+.em-field-row[data-field="mood"]   .em-field-icon,
+.em-field-row[data-field="energy"] .em-field-icon,
+.em-field-row[data-field="sleep"]  .em-field-icon {
+    font-size: 1.25rem !important;
+    width: auto !important;
+    height: auto !important;
+    opacity: 1 !important;
+    margin-bottom: 8px !important;
+    display: block !important;
+}
+
+.em-field-row[data-field="mood"]   .em-field-value,
+.em-field-row[data-field="energy"] .em-field-value,
+.em-field-row[data-field="sleep"]  .em-field-value {
+    flex: none !important;
+    font-size: 0.9rem !important;
+    color: var(--accent) !important;
+    text-align: center !important;
+    white-space: nowrap !important;
+    overflow: visible !important;
+}
+.em-field-row[data-field="mood"]   .em-field-value strong,
+.em-field-row[data-field="energy"] .em-field-value strong,
+.em-field-row[data-field="sleep"]  .em-field-value strong {
+    display: block !important;
+    font-family: var(--font-display) !important;
+    font-size: 2.2rem !important;
+    font-weight: 300 !important;
+    line-height: 1 !important;
+    color: var(--accent) !important;
+    margin-bottom: 2px !important;
+}
+
+.em-field-row[data-field="mood"]   .em-field-label,
+.em-field-row[data-field="energy"] .em-field-label,
+.em-field-row[data-field="sleep"]  .em-field-label {
+    font-size: 0.58rem !important;
+    letter-spacing: 0.14em !important;
+    font-weight: 700 !important;
+    text-transform: uppercase !important;
+    color: var(--text-muted) !important;
+    width: auto !important;
+    text-align: center !important;
+    margin-top: 4px !important;
+    opacity: 0.8 !important;
+}
+
+.em-field-row[data-field="mood"]   .em-field-actions,
+.em-field-row[data-field="energy"] .em-field-actions,
+.em-field-row[data-field="sleep"]  .em-field-actions {
+    margin-top: 8px !important;
+    flex-direction: row !important;
+    justify-content: center !important;
+    gap: 4px !important;
+    opacity: 0 !important;
+    transition: opacity 0.15s !important;
+}
+.em-field-row[data-field="mood"]:hover   .em-field-actions,
+.em-field-row[data-field="energy"]:hover .em-field-actions,
+.em-field-row[data-field="sleep"]:hover  .em-field-actions { opacity: 1 !important; }
+
+/* ── 6. Detail rows ──────────────────────────────────────────────────── */
+.em-field-row[data-field="activities"],
+.em-field-row[data-field="tags"],
+.em-field-row[data-field="journal"] {
+    flex-direction: row !important;
+    align-items: center !important;
+    padding: 14px 26px !important;
+    gap: 14px !important;
+    border-bottom: 1px solid color-mix(in srgb, var(--border) 40%, transparent) !important;
+    transition: background 0.12s !important;
+    text-align: left !important;
+}
+.em-field-row[data-field="activities"]:hover,
+.em-field-row[data-field="tags"]:hover,
+.em-field-row[data-field="journal"]:hover {
+    background: color-mix(in srgb, var(--accent) 5%, transparent) !important;
+}
+
+.em-field-row[data-field="activities"] .em-field-icon,
+.em-field-row[data-field="tags"]       .em-field-icon,
+.em-field-row[data-field="journal"]    .em-field-icon {
+    font-size: 1rem !important;
+    width: 22px !important;
+    opacity: 0.65 !important;
+    flex-direction: row !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    flex-shrink: 0 !important;
+}
+
+.em-field-row[data-field="activities"] .em-field-label,
+.em-field-row[data-field="tags"]       .em-field-label,
+.em-field-row[data-field="journal"]    .em-field-label {
+    font-size: 0.62rem !important;
+    letter-spacing: 0.12em !important;
+    font-weight: 700 !important;
+    color: var(--text-muted) !important;
+    width: 68px !important;
+    flex-shrink: 0 !important;
+    text-align: left !important;
+    opacity: 0.8 !important;
+}
+
+.em-field-row[data-field="activities"] .em-field-value,
+.em-field-row[data-field="tags"]       .em-field-value,
+.em-field-row[data-field="journal"]    .em-field-value {
+    flex: 1 !important;
+    font-size: 0.9rem !important;
+    color: var(--text) !important;
+    font-weight: 400 !important;
+    text-align: left !important;
+    overflow: hidden !important;
+    white-space: nowrap !important;
+    text-overflow: ellipsis !important;
+    min-width: 0 !important;
+}
+
+.em-field-row[data-field="activities"] .em-field-actions,
+.em-field-row[data-field="tags"]       .em-field-actions,
+.em-field-row[data-field="journal"]    .em-field-actions {
+    opacity: 0 !important;
+    transition: opacity 0.14s !important;
+    flex-direction: row !important;
+    gap: 4px !important;
+    flex-shrink: 0 !important;
+}
+.em-field-row[data-field="activities"]:hover .em-field-actions,
+.em-field-row[data-field="tags"]:hover       .em-field-actions,
+.em-field-row[data-field="journal"]:hover    .em-field-actions { opacity: 1 !important; }
+
+/* ── 7. Action buttons (em-btn) ──────────────────────────────────────── */
+.em-btn {
+    width: 26px !important; height: 26px !important;
+    border-radius: 7px !important;
+    border: 1px solid color-mix(in srgb, var(--border) 70%, transparent) !important;
+    background: transparent !important;
+    color: var(--text-muted) !important;
+    font-size: 0 !important;
+    cursor: pointer !important;
+    position: relative !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    transition: all 0.13s !important;
+}
+.em-btn::after {
+    content:'' !important; position:absolute !important; inset:0 !important; margin:auto !important;
+    width:11px !important; height:11px !important; background-color:currentColor !important;
+    display:block !important;
+    -webkit-mask-size:contain !important; mask-size:contain !important;
+    -webkit-mask-repeat:no-repeat !important; mask-repeat:no-repeat !important;
+    -webkit-mask-position:center !important; mask-position:center !important;
+}
+.em-btn:not(.em-del)::after {
+    -webkit-mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7'/%3E%3Cpath d='M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z'/%3E%3C/svg%3E") !important;
+    mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7'/%3E%3Cpath d='M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z'/%3E%3C/svg%3E") !important;
+}
+.em-btn.em-del::after {
+    -webkit-mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='3 6 5 6 21 6'/%3E%3Cpath d='M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6'/%3E%3Cpath d='M8 6V4a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2'/%3E%3C/svg%3E") !important;
+    mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='3 6 5 6 21 6'/%3E%3Cpath d='M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6'/%3E%3Cpath d='M8 6V4a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2'/%3E%3C/svg%3E") !important;
+}
+.em-btn:not(.em-del):hover { background: color-mix(in srgb, var(--accent) 10%, transparent) !important; color: var(--accent) !important; border-color: color-mix(in srgb, var(--accent) 35%, transparent) !important; }
+.em-btn.em-del:hover { background: rgba(185,28,28,0.09) !important; color: #b91c1c !important; border-color: rgba(185,28,28,0.28) !important; }
+
+/* ── 8. Inline edit rows ─────────────────────────────────────────────── */
+.em-inline-edit-row {
+    background: color-mix(in srgb, var(--accent) 5%, var(--bg)) !important;
+    border-bottom: 1px solid color-mix(in srgb, var(--border) 55%, transparent) !important;
+    padding: 12px 26px 14px !important; gap: 8px !important;
+    align-items: center !important; flex-wrap: wrap !important;
+}
+.em-inline-edit-row.open { animation: rowOpen 0.2s cubic-bezier(0.22,1,0.36,1) both !important; }
+@keyframes rowOpen { from { opacity:0; transform:translateY(-6px); } to { opacity:1; transform:translateY(0); } }
+
+.em-inline-input[type="number"]::-webkit-outer-spin-button,
+.em-inline-input[type="number"]::-webkit-inner-spin-button { -webkit-appearance:none !important; margin:0 !important; }
+.em-inline-input[type="number"] { -moz-appearance:textfield !important; appearance:textfield !important; text-align:center !important; font-weight:600 !important; }
+.em-inline-input { height:38px !important; flex:1 !important; min-width:80px !important; padding:0 12px !important; border-radius:10px !important; border:1.5px solid color-mix(in srgb, var(--accent) 35%, var(--border)) !important; background:var(--surface) !important; color:var(--text) !important; font-family:var(--font-body) !important; font-size:0.9rem !important; transition:border-color 0.15s, box-shadow 0.15s !important; }
+.em-inline-input:focus { outline:none !important; border-color:var(--accent) !important; box-shadow:0 0 0 3px color-mix(in srgb, var(--accent) 14%, transparent) !important; }
+.entry-modal-body .em-save-btn { height:38px !important; padding:0 18px !important; border-radius:10px !important; font-size:0.82rem !important; font-weight:600 !important; background:var(--accent) !important; color:var(--surface) !important; border:none !important; cursor:pointer !important; white-space:nowrap !important; transition:filter 0.14s !important; }
+.entry-modal-body .em-save-btn:hover { filter:brightness(1.1) !important; }
+.entry-modal-body .em-cancel-btn { width:38px !important; height:38px !important; border-radius:10px !important; background:transparent !important; color:var(--text-muted) !important; border:1px solid var(--border) !important; cursor:pointer !important; display:inline-flex !important; align-items:center !important; justify-content:center !important; font-size:0.9rem !important; transition:background 0.12s !important; }
+.entry-modal-body .em-cancel-btn:hover { background:color-mix(in srgb, var(--text-muted) 10%, transparent) !important; }
+
+/* stepper */
+.em-stepper-wrap { display:flex !important; align-items:center !important; flex:0 0 148px !important; background:var(--surface) !important; border:1.5px solid color-mix(in srgb, var(--accent) 35%, var(--border)) !important; border-radius:10px !important; overflow:hidden !important; }
+.em-stepper-wrap:focus-within { border-color:var(--accent) !important; box-shadow:0 0 0 3px color-mix(in srgb, var(--accent) 14%, transparent) !important; }
+.em-stepper-wrap .em-inline-input { border:none !important; box-shadow:none !important; border-radius:0 !important; height:38px !important; flex:1 !important; min-width:0 !important; padding:0 !important; background:transparent !important; }
+.em-stepper-btn { flex-shrink:0 !important; width:34px !important; height:38px !important; background:transparent !important; border:none !important; color:var(--accent) !important; font-size:1.1rem !important; cursor:pointer !important; display:flex !important; align-items:center !important; justify-content:center !important; transition:background 0.12s !important; user-select:none !important; }
+.em-stepper-btn:hover { background:color-mix(in srgb, var(--accent) 10%, transparent) !important; }
+.em-stepper-divider { width:1px !important; height:14px !important; background:color-mix(in srgb, var(--border) 80%, transparent) !important; }
+
+/* ── 9. Delete row ───────────────────────────────────────────────────── */
+.entry-modal-delete-btn {
+    display: flex !important; align-items: center !important; justify-content: center !important;
+    gap: 6px !important; width: calc(100% - 52px) !important; margin: 10px 26px 14px !important;
+    padding: 10px 0 !important; border-radius: 12px !important;
+    font-size: 0.76rem !important; font-weight: 500 !important; letter-spacing: 0.03em !important;
+    background: transparent !important;
+    color: color-mix(in srgb, #b91c1c 50%, var(--text-muted)) !important;
+    border: 1px solid color-mix(in srgb, #b91c1c 18%, var(--border)) !important;
+    cursor: pointer !important; transition: all 0.16s !important;
+}
+.entry-modal-delete-btn:hover { background: rgba(185,28,28,0.06) !important; border-color: rgba(185,28,28,0.3) !important; color:#b91c1c !important; }
+
+/* ── 10. Footer ──────────────────────────────────────────────────────── */
+.entry-modal-footer {
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    padding: 16px 22px 20px !important;
+    border-top: 1px solid color-mix(in srgb, var(--border) 50%, transparent) !important;
+    background: color-mix(in srgb, var(--accent) 4%, var(--surface)) !important;
+    flex-shrink: 0 !important;
+}
+
+/* Edit Entry */
+#entryModalEditBtn {
+    height: 46px !important;
+    padding: 0 26px !important;
+    border-radius: 999px !important;
+    background: var(--accent) !important;
+    color: var(--surface) !important;
+    border: none !important;
+    font-family: var(--font-body) !important;
+    font-size: 0.88rem !important;
+    font-weight: 600 !important;
+    letter-spacing: 0.02em !important;
+    cursor: pointer !important;
+    box-shadow: 0 4px 16px color-mix(in srgb, var(--accent) 40%, transparent) !important;
+    transition: filter 0.18s, transform 0.18s, box-shadow 0.18s !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    pointer-events: all !important;
+    position: relative !important;
+    z-index: 10 !important;
+}
+#entryModalEditBtn:hover { filter: brightness(1.12) !important; transform: translateY(-2px) !important; box-shadow: 0 6px 22px color-mix(in srgb, var(--accent) 50%, transparent) !important; }
+#entryModalEditBtn:active { filter: brightness(0.96) !important; transform: translateY(0) !important; }
+
+/* Journal */
+#entryModalJournalBtn {
+    height: 46px !important;
+    padding: 0 22px !important;
+    border-radius: 999px !important;
+    background: transparent !important;
+    color: var(--accent) !important;
+    border: 1.5px solid color-mix(in srgb, var(--accent) 55%, var(--border)) !important;
+    font-family: var(--font-body) !important;
+    font-size: 0.88rem !important;
+    font-weight: 600 !important;
+    letter-spacing: 0.02em !important;
+    cursor: pointer !important;
+    transition: all 0.18s !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    pointer-events: all !important;
+    position: relative !important;
+    z-index: 10 !important;
+}
+#entryModalJournalBtn:hover { background: color-mix(in srgb, var(--accent) 10%, transparent) !important; border-color: var(--accent) !important; transform: translateY(-2px) !important; }
+
+/* Close — ghost, auto pushed right */
+.entry-modal-footer .btn-neutral {
+    height: 46px !important;
+    padding: 0 20px !important;
+    border-radius: 999px !important;
+    background: transparent !important;
+    color: var(--text-muted) !important;
+    border: 1px solid color-mix(in srgb, var(--border) 90%, transparent) !important;
+    font-family: var(--font-body) !important;
+    font-size: 0.88rem !important;
+    font-weight: 500 !important;
+    cursor: pointer !important;
+    margin-left: auto !important;
+    transition: background 0.15s, color 0.15s, border-color 0.15s !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    pointer-events: all !important;
+    position: relative !important;
+    z-index: 10 !important;
+}
+.entry-modal-footer .btn-neutral:hover { background: color-mix(in srgb, var(--text-muted) 10%, transparent) !important; color: var(--text) !important; }
+
+/* ── 11. Mobile sheet ────────────────────────────────────────────────── */
+@media (max-width: 520px) {
+    .entry-modal-overlay { align-items: flex-end !important; padding: 0 !important; }
+    .entry-modal.entry-modal-premium { border-radius: 26px 26px 0 0 !important; max-width: 100% !important; max-height: 90dvh !important; animation: gmInMob 0.32s cubic-bezier(0.22,1,0.36,1) both !important; }
+    @keyframes gmInMob { from { transform:translateY(100%); } to { transform:translateY(0); } }
+    .entry-modal-title-text { font-size: 2rem !important; }
+    .entry-modal-header { padding: 22px 22px 18px !important; }
+    #entryModalEditBtn, #entryModalJournalBtn, .entry-modal-footer .btn-neutral { height: 50px !important; }
+}
