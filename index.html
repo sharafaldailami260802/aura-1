@@ -68,76 +68,76 @@
                 </button>
             </div>
 
-            <div class="section-label">Tracking</div>
+            <div class="section-label" data-i18n="tracking">Tracking</div>
             <button onclick="navigate('dashboard', this)" class="nav active" aria-label="Go to Overview" aria-current="page">
                 <span class="nav-icon">📊</span>
-                <span>Overview</span>
+                <span data-i18n="overview">Overview</span>
             </button>
             <button onclick="navigate('entry', this)" class="nav" aria-label="Go to Daily Check-In">
                 <span class="nav-icon">✨</span>
-                <span>Daily Check-In</span>
+                <span data-i18n="daily_checkin">Daily Check-In</span>
             </button>
             <button onclick="navigate('calendar', this)" class="nav" aria-label="Go to Calendar">
                 <span class="nav-icon">📅</span>
-                <span>Calendar</span>
+                <span data-i18n="calendar_title">Calendar</span>
             </button>
             <button onclick="navigate('journal', this)" class="nav" aria-label="Go to Journal">
                 <span class="nav-icon">📔</span>
-                <span>Journal</span>
+                <span data-i18n="journal">Journal</span>
             </button>
 
-            <div class="section-label">Analytics</div>
+            <div class="section-label" data-i18n="analytics_section">Analytics</div>
             <button onclick="navigate('mood', this)" class="nav" aria-label="Go to Mood Trends">
                 <span class="nav-icon">📈</span>
-                <span>Mood Trends</span>
+                <span data-i18n="mood_trends">Mood Trends</span>
             </button>
             <button onclick="navigate('sleep', this)" class="nav" aria-label="Go to Sleep Analysis">
                 <span class="nav-icon">🌙</span>
-                <span>Sleep Analysis</span>
+                <span data-i18n="sleep_analysis">Sleep Analysis</span>
             </button>
             <button onclick="navigate('energy', this)" class="nav" aria-label="Go to Energy Patterns">
                 <span class="nav-icon">⚡</span>
-                <span>Energy Patterns</span>
+                <span data-i18n="energy_patterns">Energy Patterns</span>
             </button>
             <button onclick="navigate('insights', this)" class="nav" aria-label="Go to Insights">
                 <span class="nav-icon">💡</span>
-                <span>Insights</span>
+                <span data-i18n="insights">Insights</span>
             </button>
 
-            <div class="section-label">Explore</div>
+            <div class="section-label" data-i18n="explore_section">Explore</div>
             <button onclick="navigate('correlations', this)" class="nav" aria-label="Go to Correlations">
                 <span class="nav-icon">🔗</span>
-                <span>Correlations</span>
+                <span data-i18n="correlations">Correlations</span>
             </button>
             <button onclick="navigate('circadian', this)" class="nav" aria-label="Go to Mood Velocity">
                 <span class="nav-icon">⏰</span>
-                <span>Mood Velocity</span>
+                <span data-i18n="mood_velocity">Mood Velocity</span>
             </button>
             <button onclick="navigate('predictions', this)" class="nav" aria-label="Go to Forecast">
                 <span class="nav-icon">🔮</span>
-                <span>Forecast</span>
+                <span data-i18n="forecast">Forecast</span>
             </button>
             <button onclick="navigate('patterns', this)" class="nav" aria-label="Go to My Patterns">
                 <span class="nav-icon">🎯</span>
-                <span>My Patterns</span>
+                <span data-i18n="my_patterns">My Patterns</span>
             </button>
             <button onclick="navigate('seasonal', this)" class="nav" aria-label="Go to Seasonal Rhythm">
                 <span class="nav-icon">🍂</span>
-                <span>Seasonal Rhythm</span>
+                <span data-i18n="seasonal_rhythm">Seasonal Rhythm</span>
             </button>
             <button onclick="navigate('reports', this)" class="nav" aria-label="Go to Reports">
                 <span class="nav-icon">📋</span>
-                <span>Reports</span>
+                <span data-i18n="reports">Reports</span>
             </button>
 
-            <div class="section-label">Data</div>
+            <div class="section-label" data-i18n="data_section">Data</div>
             <button onclick="navigate('settings', this)" class="nav">
                 <span class="nav-icon">⚙️</span>
-                <span>Settings</span>
+                <span data-i18n="settings">Settings</span>
             </button>
             <button onclick="navigate('data', this)" class="nav">
                 <span class="nav-icon">💾</span>
-                <span>Export & Backup</span>
+                <span data-i18n="export_backup">Export & Backup</span>
             </button>
         </aside>
         <div id="sidebarOverlay" class="sidebar-overlay" aria-hidden="true" onclick="closeSidebar()"></div>
@@ -155,28 +155,28 @@
                                 <path d="M52 128 Q 76 104, 96 128 T 140 128" fill="none" stroke="currentColor" stroke-width="8" stroke-linecap="round" opacity="0.7"/>
                             </svg>
                         </div>
-                        <h2 class="des-title">Welcome to Aura Mood</h2>
-                        <p class="des-subtitle">Track your mood, sleep, and energy every day. Patterns emerge after a week. Insights sharpen over a month.</p>
+                        <h2 class="des-title" data-i18n="welcome_title">Welcome to Aura Mood</h2>
+                        <p class="des-subtitle" data-i18n="welcome_subtitle">Track your mood, sleep, and energy every day. Patterns emerge after a week. Insights sharpen over a month.</p>
                         <div class="des-actions">
-                            <button type="button" class="btn des-cta-primary" onclick="navigate('entry', document.querySelector('.nav[aria-label=\'Go to Daily Check-In\']') || document.querySelector('.bottom-nav [data-page=entry]'))">
+                            <button type="button" class="btn des-cta-primary" onclick="navigate('entry', document.querySelector('.nav[aria-label=\'Go to Daily Check-In\']') || document.querySelector('.bottom-nav [data-page=entry]'))" data-i18n="start_checkin_btn">
                                 Start today's check-in →
                             </button>
-                            <button type="button" class="btn btn-secondary des-cta-secondary" onclick="addSampleData().then(function(){ if (typeof hideDashboardEmptyState === 'function') hideDashboardEmptyState(); })">
+                            <button type="button" class="btn btn-secondary des-cta-secondary" onclick="addSampleData().then(function(){ if (typeof hideDashboardEmptyState === 'function') hideDashboardEmptyState(); })" data-i18n="explore_sample_btn">
                                 Explore with sample data
                             </button>
                         </div>
                         <div class="des-features">
                             <div class="des-feature">
                                 <span class="des-feature-icon" aria-hidden="true">📈</span>
-                                <span class="des-feature-text">Mood trends &amp; forecasting</span>
+                                <span class="des-feature-text" data-i18n="feature_mood">Mood trends &amp; forecasting</span>
                             </div>
                             <div class="des-feature">
                                 <span class="des-feature-icon" aria-hidden="true">🌙</span>
-                                <span class="des-feature-text">Sleep pattern analysis</span>
+                                <span class="des-feature-text" data-i18n="feature_sleep">Sleep pattern analysis</span>
                             </div>
                             <div class="des-feature">
                                 <span class="des-feature-icon" aria-hidden="true">💡</span>
-                                <span class="des-feature-text">Personalised insights</span>
+                                <span class="des-feature-text" data-i18n="feature_insights">Personalised insights</span>
                             </div>
                         </div>
                     </div>
@@ -187,23 +187,23 @@
                 </div>
                 <div class="metrics">
                     <div class="metric">
-                        <h3>Mood Today</h3>
+                        <h3 data-i18n="mood_today">Mood Today</h3>
                         <span class="metric-value skeleton" id="todayMood">--</span>
                     </div>
                     <div class="metric">
-                        <h3>Sleep Duration</h3>
+                        <h3 data-i18n="sleep_duration">Sleep Duration</h3>
                         <span class="metric-value skeleton" id="todaySleep">--</span>
                         <span class="metric-unit">hrs</span>
                     </div>
                     <div class="metric">
-                        <h3>Energy Level</h3>
+                        <h3 data-i18n="energy_level">Energy Level</h3>
                         <span class="metric-value skeleton" id="todayEnergy">--</span>
                     </div>
                     <div class="metric metric-streak" id="streakCard">
                         <div style="display:flex;align-items:flex-start;justify-content:space-between;width:100%;">
                             <div style="flex:1;">
                                 <div class="streak-icon-wrap" aria-hidden="true">🔥</div>
-                                <h3 style="font-size:0.72rem;text-transform:uppercase;letter-spacing:0.09em;color:var(--text-muted);font-weight:600;margin-bottom:4px;">Streak</h3>
+                                <h3 style="font-size:0.72rem;text-transform:uppercase;letter-spacing:0.09em;color:var(--text-muted);font-weight:600;margin-bottom:4px;" data-i18n="streak">Streak</h3>
                                 <div class="streak-value-row">
                                     <span class="metric-value skeleton" id="streak">--</span>
                                     <span class="metric-unit">days</span>
@@ -225,22 +225,22 @@
                 <div class="dashboard-grid">
                     <div class="card dashboard-metric-card" data-widget="mood">
                         <div class="dashboard-card-header">
-                            <h3>Mood Timeline</h3>
-                            <button type="button" class="dashboard-card-link" onclick="navigate('mood', document.querySelector('.nav[onclick*=\'mood\']'))" aria-label="Open Mood Trends">View full →</button>
+                            <h3 data-i18n="mood_timeline">Mood Timeline</h3>
+                            <button type="button" class="dashboard-card-link" onclick="navigate('mood', document.querySelector('.nav[onclick*=\'mood\']'))" aria-label="Open Mood Trends" data-i18n="view_full">View full →</button>
                         </div>
                         <div class="dashboard-chart-wrap"><canvas id="moodChart"></canvas></div>
                     </div>
                     <div class="card dashboard-metric-card" data-widget="sleep">
                         <div class="dashboard-card-header">
-                            <h3>Sleep Patterns</h3>
-                            <button type="button" class="dashboard-card-link" onclick="navigate('sleep', document.querySelector('.nav[onclick*=\'sleep\']'))" aria-label="Open Sleep Analysis">View full →</button>
+                            <h3 data-i18n="sleep_patterns">Sleep Patterns</h3>
+                            <button type="button" class="dashboard-card-link" onclick="navigate('sleep', document.querySelector('.nav[onclick*=\'sleep\']'))" aria-label="Open Sleep Analysis" data-i18n="view_full">View full →</button>
                         </div>
                         <div class="dashboard-chart-wrap"><canvas id="sleepChart"></canvas></div>
                     </div>
                     <div class="card dashboard-metric-card" data-widget="energy">
                         <div class="dashboard-card-header">
-                            <h3>Energy Flow</h3>
-                            <button type="button" class="dashboard-card-link" onclick="navigate('energy', document.querySelector('.nav[onclick*=\'energy\']'))" aria-label="Open Energy Patterns">View full →</button>
+                            <h3 data-i18n="energy_flow">Energy Flow</h3>
+                            <button type="button" class="dashboard-card-link" onclick="navigate('energy', document.querySelector('.nav[onclick*=\'energy\']'))" aria-label="Open Energy Patterns" data-i18n="view_full">View full →</button>
                         </div>
                         <div class="dashboard-chart-wrap"><canvas id="energyChart"></canvas></div>
                     </div>
@@ -250,41 +250,41 @@
                 <div class="dashboard-analytics-nav" id="deepDiveGroup" aria-hidden="false">
                     <div class="dashboard-analytics-nav-header" id="deepDiveToggle">
                         <div>
-                            <p class="dashboard-analytics-eyebrow">Go deeper</p>
-                            <h2 class="dashboard-analytics-title">Analytics</h2>
+                            <p class="dashboard-analytics-eyebrow" data-i18n="go_deeper">Go deeper</p>
+                            <h2 class="dashboard-analytics-title" data-i18n="analytics_title">Analytics</h2>
                         </div>
-                        <p class="dashboard-analytics-hint">Explore patterns, correlations, and forecasts from your data.</p>
+                        <p class="dashboard-analytics-hint" data-i18n="analytics_hint">Explore patterns, correlations, and forecasts from your data.</p>
                     </div>
                     <div class="dashboard-analytics-grid">
                         <button type="button" class="dashboard-nav-tile" onclick="navigate('insights', document.querySelector('.nav[onclick*=\'insights\']'))">
                             <span class="dashboard-nav-tile-icon" aria-hidden="true">💡</span>
-                            <span class="dashboard-nav-tile-label">Insights</span>
-                            <span class="dashboard-nav-tile-desc">Patterns from your data</span>
+                            <span class="dashboard-nav-tile-label" data-i18n="insights">Insights</span>
+                            <span class="dashboard-nav-tile-desc" data-i18n="insights_tile_desc">Patterns from your data</span>
                         </button>
                         <button type="button" class="dashboard-nav-tile" onclick="navigate('correlations', document.querySelector('.nav[onclick*=\'correlations\']'))">
                             <span class="dashboard-nav-tile-icon" aria-hidden="true">🔗</span>
-                            <span class="dashboard-nav-tile-label">Correlations</span>
-                            <span class="dashboard-nav-tile-desc">Sleep, mood &amp; energy links</span>
+                            <span class="dashboard-nav-tile-label" data-i18n="correlations">Correlations</span>
+                            <span class="dashboard-nav-tile-desc" data-i18n="correlations_tile_desc">Sleep, mood &amp; energy links</span>
                         </button>
                         <button type="button" class="dashboard-nav-tile" onclick="navigate('predictions', document.querySelector('.nav[onclick*=\'predictions\']'))">
                             <span class="dashboard-nav-tile-icon" aria-hidden="true">🔮</span>
-                            <span class="dashboard-nav-tile-label">Forecast</span>
-                            <span class="dashboard-nav-tile-desc">Where your mood may go</span>
+                            <span class="dashboard-nav-tile-label" data-i18n="forecast">Forecast</span>
+                            <span class="dashboard-nav-tile-desc" data-i18n="forecast_tile_desc">Where your mood may go</span>
                         </button>
                         <button type="button" class="dashboard-nav-tile" onclick="navigate('patterns', document.querySelector('.nav[onclick*=\'patterns\']'))">
                             <span class="dashboard-nav-tile-icon" aria-hidden="true">🎯</span>
-                            <span class="dashboard-nav-tile-label">My Patterns</span>
-                            <span class="dashboard-nav-tile-desc">Sleep timeline &amp; rhythms</span>
+                            <span class="dashboard-nav-tile-label" data-i18n="my_patterns">My Patterns</span>
+                            <span class="dashboard-nav-tile-desc" data-i18n="patterns_tile_desc">Sleep timeline &amp; rhythms</span>
                         </button>
                         <button type="button" class="dashboard-nav-tile" onclick="navigate('seasonal', document.querySelector('.nav[onclick*=\'seasonal\']'))">
                             <span class="dashboard-nav-tile-icon" aria-hidden="true">🍂</span>
-                            <span class="dashboard-nav-tile-label">Seasonal</span>
-                            <span class="dashboard-nav-tile-desc">Monthly &amp; yearly rhythm</span>
+                            <span class="dashboard-nav-tile-label" data-i18n="seasonal_rhythm">Seasonal</span>
+                            <span class="dashboard-nav-tile-desc" data-i18n="seasonal_tile_desc">Monthly &amp; yearly rhythm</span>
                         </button>
                         <button type="button" class="dashboard-nav-tile" onclick="navigate('circadian', document.querySelector('.nav[onclick*=\'circadian\']'))">
                             <span class="dashboard-nav-tile-icon" aria-hidden="true">⏰</span>
-                            <span class="dashboard-nav-tile-label">Mood Velocity</span>
-                            <span class="dashboard-nav-tile-desc">Day-to-day change</span>
+                            <span class="dashboard-nav-tile-label" data-i18n="mood_velocity">Mood Velocity</span>
+                            <span class="dashboard-nav-tile-desc" data-i18n="velocity_tile_desc">Day-to-day change</span>
                         </button>
                     </div>
                 </div>
@@ -294,8 +294,8 @@
             <!-- Daily Check-In -->
             <div id="entry" class="page">
                 <header class="page-hero entry-page-header">
-                    <h1>Daily Check-In</h1>
-                    <p class="page-hero-subtitle">Log your mood, sleep, and energy. One entry per day — quick or detailed, your choice.</p>
+                    <h1 data-i18n="daily_checkin">Daily Check-In</h1>
+                    <p class="page-hero-subtitle" data-i18n="entry_subtitle">Log your mood, sleep, and energy. One entry per day — quick or detailed, your choice.</p>
                 </header>
 
                 <div class="form checkin-form-wrap">
@@ -306,7 +306,7 @@
                             <div class="entry-progress-bar-track">
                                 <div class="entry-progress-bar-fill" id="entryProgressBarFill" style="width: 0%;"></div>
                             </div>
-                            <p class="entry-progress-label" id="entryProgressLabel">Fill in the sections below</p>
+                            <p class="entry-progress-label" id="entryProgressLabel" data-i18n="fill_sections">Fill in the sections below</p>
                         </div>
                     </div>
 
@@ -317,7 +317,7 @@
 
                             <div class="entry-section entry-section-date">
                                 <div class="entry-section-header">
-                                    <span class="entry-section-heading">Date</span>
+                                    <span class="entry-section-heading" data-i18n="date_heading">Date</span>
                                 </div>
                                 <div class="entry-section-content" style="max-height: none;">
                                     <div class="form-group" style="margin-bottom: 0;">
@@ -329,12 +329,12 @@
 
                             <div class="entry-section entry-section-1 collapsible-mobile" id="entrySectionMoodEnergy" data-section="mood-energy">
                                 <button type="button" class="entry-section-header" onclick="toggleEntrySection('entrySectionMoodEnergy')" aria-expanded="false" aria-controls="entrySectionMoodEnergyContent">
-                                    <span class="entry-section-heading">Mood &amp; Energy <span class="entry-section-check" id="checkMoodEnergy">✓</span></span>
+                                    <span class="entry-section-heading" data-i18n="mood_energy_heading">Mood &amp; Energy <span class="entry-section-check" id="checkMoodEnergy">✓</span></span>
                                     <span class="entry-section-chevron">▼</span>
                                 </button>
                                 <div class="entry-section-content" id="entrySectionMoodEnergyContent">
                                     <div class="form-group" id="fg-mood">
-                                        <label>
+                                        <label data-i18n="mood_label">
                                             Mood
                                             <span class="form-value" id="moodValue">5</span>
                                         </label>
@@ -343,7 +343,7 @@
                                         <p id="error-mood" class="form-error" aria-live="polite"></p>
                                     </div>
                                     <div class="form-group">
-                                        <label>
+                                        <label data-i18n="energy_label">
                                             Energy Level
                                             <span class="form-value" id="energyValue">5</span>
                                         </label>
@@ -356,12 +356,12 @@
 
                             <div class="entry-section entry-section-2 collapsible-mobile" id="entrySectionSleep" data-section="sleep">
                                 <button type="button" class="entry-section-header" onclick="toggleEntrySection('entrySectionSleep')" aria-expanded="false" aria-controls="entrySectionSleepContent">
-                                    <span class="entry-section-heading">Sleep <span class="entry-section-check" id="checkSleep">✓</span></span>
+                                    <span class="entry-section-heading" data-i18n="sleep_heading">Sleep <span class="entry-section-check" id="checkSleep">✓</span></span>
                                     <span class="entry-section-chevron">▼</span>
                                 </button>
                                 <div class="entry-section-content" id="entrySectionSleepContent">
                                     <div class="form-group" id="fg-sleep">
-                                        <label>
+                                        <label data-i18n="sleep_duration_label">
                                             Sleep Duration
                                             <span class="form-value"><span id="sleepValue">7</span> hrs</span>
                                         </label>
@@ -370,7 +370,7 @@
                                         <p id="error-sleep" class="form-error" aria-live="polite"></p>
                                     </div>
                                     <div class="form-group">
-                                        <label>
+                                        <label data-i18n="sleep_quality_label">
                                             Sleep Quality
                                             <span class="form-value" id="sleepQualityValue">5</span>
                                         </label>
@@ -378,22 +378,22 @@
                                                oninput="var v=roundMoodEnergySleepQuality(parseFloat(this.value)); this.value=v; document.getElementById('sleepQualityValue').innerText=v;">
                                     </div>
                                     <div class="form-group">
-                                        <label>Primary Sleep Time</label>
+                                        <label data-i18n="primary_sleep_time">Primary Sleep Time</label>
                                         <input type="text" id="sleepTime" class="aura-time-input form-input" value="23:00" placeholder="HH:mm" aria-label="Sleep time" data-aura-time="23:00">
                                     </div>
                                     <div class="form-group">
-                                        <label>Primary Wake Time</label>
+                                        <label data-i18n="primary_wake_time">Primary Wake Time</label>
                                         <input type="text" id="wakeTime" class="aura-time-input form-input" value="07:00" placeholder="HH:mm" aria-label="Wake time" data-aura-time="07:00">
                                     </div>
                                     <div class="form-group">
-                                        <label>
+                                        <label data-i18n="sleep_segments_label">
                                             Sleep Segments
                                             <span class="form-hint-inline">(up to 3 per night)</span>
                                         </label>
                                         <p class="sleep-segments-intro">Capture split or interrupted sleep in separate segments.</p>
                                         <div class="sleep-segments-module">
                                             <div id="sleepSegmentsList" class="sleep-segments-list"></div>
-                                            <button type="button" id="addSleepSegmentBtn" class="btn btn-secondary add-sleep-segment" onclick="addSleepSegment()">+ Add Sleep Segment</button>
+                                            <button type="button" id="addSleepSegmentBtn" class="btn btn-secondary add-sleep-segment" onclick="addSleepSegment()" data-i18n="add_sleep_segment">+ Add Sleep Segment</button>
                                             <p id="sleepSegmentSummary" class="sleep-segment-summary" aria-live="polite"></p>
                                             <p id="sleepSegmentsError" class="form-error" aria-live="polite" style="display:none;"></p>
                                         </div>
@@ -414,16 +414,16 @@
 
                             <div class="entry-section entry-section-3 collapsible-mobile" id="entrySectionActivitiesTags" data-section="activities-tags">
                                 <button type="button" class="entry-section-header" onclick="toggleEntrySection('entrySectionActivitiesTags')" aria-expanded="false" aria-controls="entrySectionActivitiesTagsContent">
-                                    <span class="entry-section-heading">Activities &amp; Tags <span class="entry-section-check" id="checkActivitiesTags">✓</span></span>
+                                    <span class="entry-section-heading" data-i18n="activities_tags_heading">Activities &amp; Tags <span class="entry-section-check" id="checkActivitiesTags">✓</span></span>
                                     <span class="entry-section-chevron">▼</span>
                                 </button>
                                 <div class="entry-section-content" id="entrySectionActivitiesTagsContent">
                                     <div class="form-group">
-                                        <label>Activities</label>
+                                        <label data-i18n="activities_label">Activities</label>
                                         <input type="text" id="activities" class="form-input" placeholder="e.g. exercise, reading, work (comma-separated)">
                                     </div>
                                     <div class="form-group">
-                                        <label>Tags</label>
+                                        <label data-i18n="tags_label">Tags</label>
                                         <input type="text" id="tags" class="form-input" placeholder="e.g. #weekend #family (comma or space separated)" autocomplete="off">
                                         <p class="tag-suggestions-label" id="tagSuggestionsLabel">Suggested tags <span class="tag-suggestions-hint">Tap to add</span></p>
                                         <div id="tagSuggestions" class="tag-suggestions"></div>
@@ -508,20 +508,20 @@
                 </header>
                 
                 <div class="calendar-view-tabs">
-                    <button type="button" class="active" data-view="year" onclick="setCalendarView('year', this)">Year heatmap</button>
-                    <button type="button" data-view="month" onclick="setCalendarView('month', this)">Month grid</button>
-                    <button type="button" data-view="week" onclick="setCalendarView('week', this)">Week timeline</button>
-                    <button type="button" data-view="list" onclick="setCalendarView('list', this)">List</button>
+                    <button type="button" class="active" data-view="year" onclick="setCalendarView('year', this)" data-i18n="calendar_year_heatmap">Year heatmap</button>
+                    <button type="button" data-view="month" onclick="setCalendarView('month', this)" data-i18n="calendar_month_grid">Month grid</button>
+                    <button type="button" data-view="week" onclick="setCalendarView('week', this)" data-i18n="calendar_week_timeline">Week timeline</button>
+                    <button type="button" data-view="list" onclick="setCalendarView('list', this)" data-i18n="calendar_list_view">List</button>
                 </div>
                 
                 <div id="calendarYearPanel" class="calendar-view-panel active">
                     <div class="calendar-container">
                         <div class="heatmap-card-header">
                             <div class="heatmap-header-left">
-                                <h2 class="heatmap-section-title">Year in Mood</h2>
-                                <p class="heatmap-section-subtitle">Track your mood consistency across the past year.</p>
+                                <h2 class="heatmap-section-title" data-i18n="year_in_mood_title">Year in Mood</h2>
+                                <p class="heatmap-section-subtitle" data-i18n="year_in_mood_subtitle">Track your mood consistency across the past year.</p>
                                 <div class="heatmap-streak-stat">
-                                    <span class="heatmap-streak-label">Current streak</span>
+                                    <span class="heatmap-streak-label" data-i18n="current_streak_label">Current streak</span>
                                     <span id="heatmapStreakHint" class="heatmap-streak-value"></span>
                                 </div>
                             </div>
@@ -1105,10 +1105,10 @@
                 <div id="reportYear" class="report-panel card" role="tabpanel" style="display: none;">
                     <div class="report-panel-header">
                         <div>
-                            <p class="report-panel-eyebrow">Summary</p>
-                            <h3 class="report-panel-title">Year in review</h3>
+                            <p class="report-panel-eyebrow" data-i18n="summary_eyebrow">Summary</p>
+                            <h3 class="report-panel-title" data-i18n="report_year_title">Year in review</h3>
                         </div>
-                        <button type="button" class="report-export-btn" onclick="exportReportPNG('reportYear')" aria-label="Export year review as image">
+                        <button type="button" class="report-export-btn" onclick="exportReportPNG('reportYear')" aria-label="Export year review as image" data-i18n="export_btn_label">
                             ↓ Export
                         </button>
                     </div>
@@ -1116,7 +1116,7 @@
                 </div>
 
                 <div class="report-pdf-row">
-                    <button type="button" class="btn btn-secondary" onclick="exportReportPDF()">Export report as PDF</button>
+                    <button type="button" class="btn btn-secondary" onclick="exportReportPDF()" data-i18n="export_report_pdf">Export report as PDF</button>
                 </div>
             </div>
             
@@ -1125,40 +1125,40 @@
                 <!-- Page hero: lightweight, no gradient card -->
                 <header class="page-hero insights-hero">
                     <div class="insights-hero-copy">
-                        <p class="insights-eyebrow">Personal Analytics</p>
-                        <h1>Insights</h1>
-                        <p class="page-hero-subtitle" id="insightsOverviewText">Patterns from your data. The more you log, the sharper these become.</p>
+                        <p class="insights-eyebrow" data-i18n="insights_hero_eyebrow">Personal Analytics</p>
+                        <h1 data-i18n="insights">Insights</h1>
+                        <p class="page-hero-subtitle" id="insightsOverviewText" data-i18n="insights_hero_subtitle">Patterns from your data. The more you log, the sharper these become.</p>
                     </div>
                     <!-- Quick-action strip: jump to data pages -->
                     <div class="insights-hero-actions" aria-label="Jump to analytics">
                         <button type="button" class="insights-hero-chip" onclick="navigate('correlations', document.querySelector('.nav[onclick*=\'correlations\']'))">
-                            <span aria-hidden="true">🔗</span> Correlations
+                            <span aria-hidden="true">🔗</span> <span data-i18n="correlations">Correlations</span>
                         </button>
                         <button type="button" class="insights-hero-chip" onclick="navigate('patterns', document.querySelector('.nav[onclick*=\'patterns\']'))">
-                            <span aria-hidden="true">🎯</span> My Patterns
+                            <span aria-hidden="true">🎯</span> <span data-i18n="my_patterns">My Patterns</span>
                         </button>
                         <button type="button" class="insights-hero-chip" onclick="navigate('predictions', document.querySelector('.nav[onclick*=\'predictions\']'))">
-                            <span aria-hidden="true">🔮</span> Forecast
+                            <span aria-hidden="true">🔮</span> <span data-i18n="forecast">Forecast</span>
                         </button>
                     </div>
                 </header>
 
                 <!-- Dynamic insight content: rendered by generateInsights() -->
                 <div id="insightsDashboardContent" class="insights-dashboard-stack">
-                    <p class="insight-empty">More insights will appear as you record additional entries. Track mood, sleep, and activities to uncover patterns.</p>
+                    <p class="insight-empty" data-i18n="insights_empty">More insights will appear as you record additional entries. Track mood, sleep, and activities to uncover patterns.</p>
                 </div>
 
             </div>
             
             <!-- Settings -->
             <div id="settings" class="page">
-                <h1>Settings</h1>
+                <h1 data-i18n="settings">Settings</h1>
                 <div class="card">
-                    <h3>Appearance</h3>
-                    <p class="card-desc">Theme and display preferences.</p>
+                    <h3 data-i18n="s_appearance">Appearance</h3>
+                    <p class="card-desc" data-i18n="s_appearance_desc">Theme and display preferences.</p>
                     <div class="data-options-block">
                         <div class="form-group">
-                            <label for="themeSelect">Theme</label>
+                            <label for="themeSelect" data-i18n="s_theme">Theme</label>
                             <select id="themeSelect" class="theme-select" onchange="setTheme(this.value)">
                                 <option value="aura">Aura (sage / terracotta)</option>
                                 <option value="midnight">Midnight (deep blues)</option>
@@ -1168,26 +1168,26 @@
                             </select>
                         </div>
                         <div class="form-group">
-                            <label>Dark mode</label>
+                            <label data-i18n="s_dark_mode">Dark mode</label>
                             <button type="button" id="darkModeTogglePage" class="theme-toggle" aria-label="Toggle dark mode" onclick="toggleDarkFromPage()">
                                 <span class="theme-toggle-icon sun">☀️</span>
                                 <span class="theme-toggle-icon moon">🌙</span>
                             </button>
                         </div>
                         <div class="form-group">
-                            <label class="checkbox-label">
+                            <label class="checkbox-label" data-i18n="s_sound">
                                 <input type="checkbox" id="soundEnabledToggle" onchange="setSoundEnabled(this.checked)">
                                 Success sound
                             </label>
                         </div>
                         <div class="form-group">
-                            <label class="checkbox-label">
+                            <label class="checkbox-label" data-i18n="s_particles">
                                 <input type="checkbox" id="particlesEnabledToggle" onchange="setParticlesEnabled(this.checked)">
                                 Ambient particles
                             </label>
                         </div>
                         <div class="form-group">
-                            <label class="checkbox-label">
+                            <label class="checkbox-label" data-i18n="s_parallax">
                                 <input type="checkbox" id="parallaxEnabledToggle" onchange="setParallaxEnabled(this.checked)">
                                 Parallax scrolling
                             </label>
@@ -1195,11 +1195,11 @@
                     </div>
                 </div>
                 <div class="card">
-                    <h3>Preferences</h3>
-                    <p class="card-desc">Defaults and display options.</p>
+                    <h3 data-i18n="s_preferences">Preferences</h3>
+                    <p class="card-desc" data-i18n="s_preferences_desc">Defaults and display options.</p>
                     <div class="data-options-block">
                         <div class="form-group">
-                            <label for="localeDropdownTrigger">Language</label>
+                            <label for="localeDropdownTrigger" data-i18n="s_language">Language</label>
                             <div id="localeDropdown" class="locale-dropdown" role="combobox" aria-expanded="false" aria-haspopup="listbox" aria-controls="localeDropdownList">
                                 <button type="button" id="localeDropdownTrigger" class="locale-dropdown-trigger" aria-expanded="false" aria-controls="localeDropdownList" aria-label="Select language">
                                     <span class="locale-dropdown-label">English</span>
@@ -1228,7 +1228,7 @@
                             <input type="text" id="prefLocaleCustom" class="form-input" placeholder="e.g. ko, sv, fi" style="display: none; margin-top: var(--space-xs);" aria-label="Custom locale code" onchange="if (window.auraLocale === '_custom') savePreference('locale', this.value.trim() || 'en')">
                         </div>
                         <div class="form-group">
-                            <label for="prefDateFormat">Date format</label>
+                            <label for="prefDateFormat" data-i18n="s_date_format">Date format</label>
                             <select id="prefDateFormat" class="theme-select" onchange="savePreference('dateFormat', this.value)">
                                 <option value="DM">Day / Month / Year (DD.MM.YYYY) — Germany, UK, Europe</option>
                                 <option value="MD">Month / Day / Year (MM/DD/YYYY) — USA</option>
@@ -1236,19 +1236,19 @@
                             </select>
                         </div>
                         <div class="form-group">
-                            <label for="prefTimeFormat">Time format</label>
+                            <label for="prefTimeFormat" data-i18n="s_time_format">Time format</label>
                             <select id="prefTimeFormat" class="theme-select" onchange="savePreference('timeFormat', this.value)">
                                 <option value="12">12-hour</option>
                                 <option value="24">24-hour</option>
                             </select>
                         </div>
                         <div class="form-group">
-                            <label for="prefDefaultSleep">Default sleep time</label>
+                            <label for="prefDefaultSleep" data-i18n="pref_default_sleep_time">Default sleep time</label>
                             <input type="text" id="prefDefaultSleep" class="aura-time-input form-input" placeholder="HH:mm" aria-label="Default sleep time">
                             <p class="form-hint">Used to prefill new or incomplete check-ins. Does not overwrite saved days.</p>
                         </div>
                         <div class="form-group">
-                            <label for="prefDefaultWake">Default wake time</label>
+                            <label for="prefDefaultWake" data-i18n="pref_default_wake_time">Default wake time</label>
                             <input type="text" id="prefDefaultWake" class="aura-time-input form-input" placeholder="HH:mm" aria-label="Default wake time">
                             <p class="form-hint">Applies as a default only when a wake time has not been set yet.</p>
                         </div>
@@ -1257,7 +1257,7 @@
                             <input type="text" id="prefFavoriteTags" class="form-input" placeholder="e.g. work, exercise" onchange="savePreference('favoriteTags', this.value)">
                         </div>
                         <div class="form-group">
-                            <label for="prefChartDays">Chart default days</label>
+                            <label for="prefChartDays" data-i18n="s_chart_days">Chart default days</label>
                             <select id="prefChartDays" class="theme-select" onchange="savePreference('chartDays', this.value)">
                                 <option value="7">7 days</option>
                                 <option value="14">14 days</option>
@@ -1266,32 +1266,32 @@
                             </select>
                         </div>
                         <div class="form-group">
-                            <label class="checkbox-label">
+                            <label class="checkbox-label" data-i18n="s_reduce_motion">
                                 <input type="checkbox" id="prefReduceMotion" onchange="savePreference('reduceMotion', this.checked)">
                                 Reduce motion
                             </label>
                         </div>
                         <div class="form-group">
-                            <label class="checkbox-label">
+                            <label class="checkbox-label" data-i18n="s_notifications">
                                 <input type="checkbox" id="prefNotifications" onchange="savePreference('notifications', this.checked)">
                                 Enable notifications (browser)
                             </label>
                         </div>
-                        <h4 class="backup-list-title" style="margin-top: var(--space-md);">Dashboard widgets</h4>
+                        <h4 class="backup-list-title" style="margin-top: var(--space-md);" data-i18n="s_dashboard_widgets">Dashboard widgets</h4>
                         <div class="form-group">
-                            <label class="checkbox-label">
+                            <label class="checkbox-label" data-i18n="s_show_mood">
                                 <input type="checkbox" id="prefWidgetMood" onchange="saveDashboardVisible('mood', this.checked)">
                                 Show Mood chart
                             </label>
                         </div>
                         <div class="form-group">
-                            <label class="checkbox-label">
+                            <label class="checkbox-label" data-i18n="s_show_sleep">
                                 <input type="checkbox" id="prefWidgetSleep" onchange="saveDashboardVisible('sleep', this.checked)">
                                 Show Sleep chart
                             </label>
                         </div>
                         <div class="form-group">
-                            <label class="checkbox-label">
+                            <label class="checkbox-label" data-i18n="s_show_energy">
                                 <input type="checkbox" id="prefWidgetEnergy" onchange="saveDashboardVisible('energy', this.checked)">
                                 Show Energy chart
                             </label>
@@ -1299,8 +1299,8 @@
                     </div>
                 </div>
                 <div class="card">
-                    <h3>Custom metrics</h3>
-                    <p class="card-desc">Add your own trackable metrics (e.g. anxiety, pain, productivity). They appear in check-in, charts, and correlations.</p>
+                    <h3 data-i18n="s_custom_metrics">Custom metrics</h3>
+                    <p class="card-desc" data-i18n="s_custom_metrics_desc">Add your own trackable metrics (e.g. anxiety, pain, productivity). They appear in check-in, charts, and correlations.</p>
                     <div class="data-options-block">
                         <div class="form-group">
                             <label for="newMetricName">Add metric</label>
@@ -1350,8 +1350,8 @@
                     </div>
                 </div>
                 <div class="card">
-                    <h3>Privacy &amp; data</h3>
-                    <p class="card-desc">Optional passcode lock, private mode, data retention, and complete deletion.</p>
+                    <h3 data-i18n="s_privacy">Data &amp; Privacy</h3>
+                    <p class="card-desc" data-i18n="s_privacy_desc">All data is stored locally on your device.</p>
                     <div class="privacy-options-block">
                         <div class="form-group">
                             <label class="checkbox-label">
@@ -1387,7 +1387,7 @@
                         <p class="card-desc" style="margin-top: var(--space-sm); color: var(--text-muted); font-size: 0.9rem;">This adds demo data. Use &lsquo;Delete all my data&rsquo; to remove it when done.</p>
                     </div>
                     <div class="privacy-delete-wrap">
-                        <button type="button" class="btn btn-danger" onclick="openDeleteAllModal()">Delete all my data</button>
+                        <button type="button" class="btn btn-danger" onclick="openDeleteAllModal()" data-i18n="s_delete_all">Delete all my data</button>
                     </div>
                 </div>
             </div>
@@ -1395,37 +1395,37 @@
             <!-- Export & Backup -->
             <div id="data" class="page">
                 <header class="page-hero">
-                    <h1>Export &amp; Backup</h1>
-                    <p class="page-hero-subtitle">Your data belongs to you. Download, back up, or import at any time.</p>
+                    <h1 data-i18n="export_page_title">Export &amp; Backup</h1>
+                    <p class="page-hero-subtitle" data-i18n="export_page_subtitle">Your data belongs to you. Download, back up, or import at any time.</p>
                 </header>
 
                 <!-- Export data -->
                 <div class="card data-section-card">
                     <div class="data-section-header">
                         <div>
-                            <p class="data-section-eyebrow">Download</p>
-                            <h3 class="data-section-title">Export data</h3>
+                            <p class="data-section-eyebrow" data-i18n="download_eyebrow">Download</p>
+                            <h3 class="data-section-title" data-i18n="export_data_title">Export data</h3>
                         </div>
                     </div>
-                    <p class="card-desc">Download entries as JSON or CSV. Optionally filter by date range or tags.</p>
+                    <p class="card-desc" data-i18n="export_data_desc">Download entries as JSON or CSV. Optionally filter by date range or tags.</p>
                     <div class="data-filter-block">
                         <div class="data-filter-row">
                             <div class="form-group">
-                                <label for="exportDateFrom">From</label>
+                                <label for="exportDateFrom" data-i18n="from_label">From</label>
                                 <input type="text" id="exportDateFrom" class="aura-date-input" placeholder="YYYY-MM-DD" aria-label="Export from date">
                             </div>
                             <div class="form-group">
-                                <label for="exportDateTo">To</label>
+                                <label for="exportDateTo" data-i18n="to_label">To</label>
                                 <input type="text" id="exportDateTo" class="aura-date-input" placeholder="YYYY-MM-DD" aria-label="Export to date">
                             </div>
                             <div class="form-group data-filter-tags">
-                                <label for="exportTags">Tags (optional)</label>
+                                <label for="exportTags" data-i18n="tags_optional">Tags (optional)</label>
                                 <input type="text" id="exportTags" class="form-input" placeholder="e.g. work, exercise">
                             </div>
                         </div>
                         <div class="data-action-row">
-                            <button type="button" class="btn" onclick="exportJSON()">Export as JSON</button>
-                            <button type="button" class="btn btn-secondary" onclick="exportCSV()">Export as CSV</button>
+                            <button type="button" class="btn" onclick="exportJSON()" data-i18n="export_json">Export as JSON</button>
+                            <button type="button" class="btn btn-secondary" onclick="exportCSV()" data-i18n="export_csv">Export as CSV</button>
                         </div>
                     </div>
                 </div>
@@ -1434,21 +1434,21 @@
                 <div class="card data-section-card">
                     <div class="data-section-header">
                         <div>
-                            <p class="data-section-eyebrow">Auto-saved</p>
-                            <h3 class="data-section-title">Backups</h3>
+                            <p class="data-section-eyebrow" data-i18n="backups_eyebrow">Auto-saved</p>
+                            <h3 class="data-section-title" data-i18n="backups_title">Backups</h3>
                         </div>
                         <div class="data-section-meta">
-                            <span class="data-section-meta-label">Last backup</span>
+                            <span class="data-section-meta-label" data-i18n="last_backup_label">Last backup</span>
                             <strong id="lastBackupDate" class="data-section-meta-value">Never</strong>
                         </div>
                     </div>
-                    <p class="card-desc">A JSON backup is created automatically every 24 hours. The last 7 are kept in your browser.</p>
+                    <p class="card-desc" data-i18n="backup_desc">A JSON backup is created automatically every 24 hours. The last 7 are kept in your browser.</p>
                     <p id="backupReminder" class="backup-reminder">⏱ It's been a while — consider downloading a backup.</p>
                     <div class="data-action-row">
-                        <button type="button" class="btn" onclick="downloadBackupNow()">Download backup now</button>
+                        <button type="button" class="btn" onclick="downloadBackupNow()" data-i18n="download_backup_now">Download backup now</button>
                     </div>
                     <div class="data-restore-block">
-                        <p class="data-restore-label">Restore from a previous backup</p>
+                        <p class="data-restore-label" data-i18n="restore_label">Restore from a previous backup</p>
                         <ul id="backupList" class="backup-list"></ul>
                     </div>
                 </div>
@@ -1457,11 +1457,11 @@
                 <div class="card data-section-card">
                     <div class="data-section-header">
                         <div>
-                            <p class="data-section-eyebrow">Migrate</p>
-                            <h3 class="data-section-title">Import data</h3>
+                            <p class="data-section-eyebrow" data-i18n="import_eyebrow">Migrate</p>
+                            <h3 class="data-section-title" data-i18n="import_title">Import data</h3>
                         </div>
                     </div>
-                    <p class="card-desc">Import from Aura Mood JSON/CSV, or from Daylio and Bearable exports. You'll see a preview before anything is imported.</p>
+                    <p class="card-desc" data-i18n="import_desc">Import from Aura Mood JSON/CSV, or from Daylio and Bearable exports. You'll see a preview before anything is imported.</p>
                     <div class="data-action-row">
                         <div class="import-file-wrap">
                             <input type="file" id="importFile" accept=".json,.csv,application/json,text/csv" aria-label="Choose file to import">
@@ -1503,7 +1503,7 @@
     <!-- Delete All Data Modal (Privacy: complete data deletion) -->
     <div id="deleteAllModal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="deleteAllModalTitle" aria-describedby="deleteAllModalDesc">
         <div class="modal">
-            <h3 id="deleteAllModalTitle">Delete all my data</h3>
+            <h3 id="deleteAllModalTitle" data-i18n="s_delete_all">Delete all my data</h3>
             <p id="deleteAllModalDesc">This permanently deletes all entries, journal, backups, and settings. This cannot be undone.</p>
             <p id="deleteAllModalError" class="modal-error"></p>
             <div id="deleteAllPasscodeWrap">

@@ -2955,13 +2955,15 @@ var lastStreakMilestone = 0;
 
 function buildDashboardGreeting() {
     var hour = new Date().getHours();
-    var greeting = hour < 12 ? 'Good morning' : hour < 17 ? 'Good afternoon' : 'Good evening';
-    return greeting;
+    var key = hour < 12 ? 'good_morning' : hour < 17 ? 'good_afternoon' : 'good_evening';
+    return (typeof window.getTranslation === 'function') ? window.getTranslation(key) : (key === 'good_morning' ? 'Good morning' : key === 'good_afternoon' ? 'Good afternoon' : 'Good evening');
 }
 
 function buildDashboardNarrative() {
+    var fallbacks = { narrative_start: 'Start logging your first check-in to see patterns emerge here.', narrative_trend_up: 'Your mood has been climbing this week.', narrative_trend_down: 'Your mood has dipped a little this week.' };
+    var t = typeof window.getTranslation === 'function' ? window.getTranslation : function(k) { return fallbacks[k] || k; };
     var allDates = Object.keys(entries).sort();
-    if (!allDates.length) return 'Start logging your first check-in to see patterns emerge here.';
+    if (!allDates.length) return t('narrative_start');
 
     var today = getLocalTodayYMD();
     var todayEntry = entries[today];
@@ -2977,8 +2979,8 @@ function buildDashboardNarrative() {
         var firstAvg = firstHalf.reduce(function(a, b) { return a + b; }, 0) / firstHalf.length;
         var secondAvg = secondHalf.reduce(function(a, b) { return a + b; }, 0) / secondHalf.length;
         var diff = secondAvg - firstAvg;
-        if (diff > 0.5) trendText = 'Your mood has been climbing this week.';
-        else if (diff < -0.5) trendText = 'Your mood has dipped a little this week.';
+        if (diff > 0.5) trendText = t('narrative_trend_up');
+        else if (diff < -0.5) trendText = t('narrative_trend_down');
         else trendText = 'Your mood has been steady this week.';
     }
 
@@ -7718,7 +7720,8 @@ var translations = {
         edit_journal_entry: 'Edit journal entry',
         journal_saved_placeholder: 'Your journal entry for today has already been saved.',
         one_journal_per_day: 'Only one journal entry can be created per day.',
-        add_photo: '📷 Add Photo'
+        add_photo: '📷 Add Photo',
+        s_appearance: 'Appearance', s_appearance_desc: 'Theme and display preferences.', s_theme: 'Theme', s_dark_mode: 'Dark mode', s_sound: 'Success sound', s_particles: 'Ambient particles', s_parallax: 'Parallax scrolling', s_preferences: 'Preferences', s_preferences_desc: 'Defaults and display options.', s_language: 'Language', s_date_format: 'Date format', s_time_format: 'Time format', s_chart_days: 'Chart default days', s_reduce_motion: 'Reduce motion', s_notifications: 'Enable notifications (browser)', s_dashboard_widgets: 'Dashboard widgets', s_show_mood: 'Show Mood chart', s_show_sleep: 'Show Sleep chart', s_show_energy: 'Show Energy chart', s_custom_metrics: 'Custom metrics', s_custom_metrics_desc: 'Add your own trackable metrics (e.g. anxiety, pain, productivity).', s_privacy: 'Data & Privacy', s_privacy_desc: 'All data is stored locally on your device.', s_delete_all: 'Delete all my data'
     },
     de: {
         save_entry: 'Eintrag speichern',
@@ -7738,7 +7741,8 @@ var translations = {
         edit_journal_entry: 'Tagebucheintrag bearbeiten',
         journal_saved_placeholder: 'Dein Tagebucheintrag für heute wurde bereits gespeichert.',
         one_journal_per_day: 'Pro Tag kann nur ein Tagebucheintrag erstellt werden.',
-        add_photo: '📷 Foto hinzufügen'
+        add_photo: '📷 Foto hinzufügen',
+        s_appearance: 'Aussehen', s_appearance_desc: 'Design und Anzeigeeinstellungen.', s_theme: 'Design', s_dark_mode: 'Dunkelmodus', s_sound: 'Erfolgston', s_particles: 'Umgebungspartikel', s_parallax: 'Parallax-Scrollen', s_preferences: 'Einstellungen', s_preferences_desc: 'Standard- und Anzeigeoptionen.', s_language: 'Sprache', s_date_format: 'Datumsformat', s_time_format: 'Zeitformat', s_chart_days: 'Standardzeitraum', s_reduce_motion: 'Bewegung reduzieren', s_notifications: 'Benachrichtigungen aktivieren', s_dashboard_widgets: 'Dashboard-Widgets', s_show_mood: 'Stimmungsdiagramm anzeigen', s_show_sleep: 'Schlafdiagramm anzeigen', s_show_energy: 'Energiediagramm anzeigen', s_custom_metrics: 'Eigene Metriken', s_custom_metrics_desc: 'Füge eigene Metriken hinzu (z. B. Angst, Schmerz, Produktivität).', s_privacy: 'Daten & Datenschutz', s_privacy_desc: 'Alle Daten werden lokal auf deinem Gerät gespeichert.', s_delete_all: 'Alle Daten löschen'
     },
     fr: {
         save_entry: 'Enregistrer',
@@ -7758,7 +7762,8 @@ var translations = {
         edit_journal_entry: 'Modifier l\'entrée du journal',
         journal_saved_placeholder: 'Votre entrée du journal pour aujourd\'hui a déjà été enregistrée.',
         one_journal_per_day: 'Un seul entrée de journal peut être créée par jour.',
-        add_photo: '📷 Ajouter une photo'
+        add_photo: '📷 Ajouter une photo',
+        s_appearance: 'Apparence', s_appearance_desc: 'Thème et préférences d\'affichage.', s_theme: 'Thème', s_dark_mode: 'Mode sombre', s_sound: 'Son de succès', s_particles: 'Particules ambiantes', s_parallax: 'Défilement parallaxe', s_preferences: 'Préférences', s_preferences_desc: 'Options par défaut et d\'affichage.', s_language: 'Langue', s_date_format: 'Format de date', s_time_format: 'Format de l\'heure', s_chart_days: 'Jours par défaut du graphique', s_reduce_motion: 'Réduire les animations', s_notifications: 'Activer les notifications (navigateur)', s_dashboard_widgets: 'Widgets du tableau de bord', s_show_mood: 'Afficher le graphique d\'humeur', s_show_sleep: 'Afficher le graphique de sommeil', s_show_energy: 'Afficher le graphique d\'énergie', s_custom_metrics: 'Métriques personnalisées', s_custom_metrics_desc: 'Ajoutez vos propres métriques (ex. anxiété, douleur, productivité).', s_privacy: 'Données & Confidentialité', s_privacy_desc: 'Toutes les données sont stockées localement sur votre appareil.', s_delete_all: 'Supprimer toutes mes données'
     },
     es: {
         save_entry: 'Guardar entrada',
@@ -7778,7 +7783,8 @@ var translations = {
         edit_journal_entry: 'Editar entrada del diario',
         journal_saved_placeholder: 'Tu entrada del diario de hoy ya ha sido guardada.',
         one_journal_per_day: 'Solo se puede crear una entrada de diario por día.',
-        add_photo: '📷 Añadir foto'
+        add_photo: '📷 Añadir foto',
+        s_appearance: 'Apariencia', s_appearance_desc: 'Tema y preferencias de visualización.', s_theme: 'Tema', s_dark_mode: 'Modo oscuro', s_sound: 'Sonido de éxito', s_particles: 'Partículas ambientales', s_parallax: 'Desplazamiento parallax', s_preferences: 'Preferencias', s_preferences_desc: 'Opciones predeterminadas y de visualización.', s_language: 'Idioma', s_date_format: 'Formato de fecha', s_time_format: 'Formato de hora', s_chart_days: 'Días predeterminados del gráfico', s_reduce_motion: 'Reducir movimiento', s_notifications: 'Activar notificaciones (navegador)', s_dashboard_widgets: 'Widgets del panel', s_show_mood: 'Mostrar gráfico de ánimo', s_show_sleep: 'Mostrar gráfico de sueño', s_show_energy: 'Mostrar gráfico de energía', s_custom_metrics: 'Métricas personalizadas', s_custom_metrics_desc: 'Añade tus propias métricas (p. ej. ansiedad, dolor, productividad).', s_privacy: 'Datos y Privacidad', s_privacy_desc: 'Todos los datos se almacenan localmente en tu dispositivo.', s_delete_all: 'Eliminar todos mis datos'
     }
 };
 function applyTranslations() {
