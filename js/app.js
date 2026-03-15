@@ -3267,6 +3267,7 @@ function showEntryModalFromJournal(dateStr) {
 }
 function showEntryModal(dateStr) {
     entryModalDate = dateStr;
+    if (typeof window !== 'undefined') window.entryModalDate = dateStr;
     var modal = document.getElementById('entryModal');
     var title = document.getElementById('entryModalTitle');
     var subtitle = document.getElementById('entryModalSubtitle');
@@ -8538,6 +8539,7 @@ if (typeof navigateFromBottom === 'function') window.navigateFromBottom = naviga
 if (typeof navigateToEntry === 'function') window.navigateToEntry = navigateToEntry;
 if (typeof openDeleteAllModal === 'function') window.openDeleteAllModal = openDeleteAllModal;
 if (typeof openDeleteEntryModal === 'function') window.openDeleteEntryModal = openDeleteEntryModal;
+if (typeof emDeleteAll === 'function') window.emDeleteAll = emDeleteAll;
 if (typeof openEntryForDate === 'function') window.openEntryForDate = openEntryForDate;
 if (typeof openSelectedDayCheckIn === 'function') window.openSelectedDayCheckIn = openSelectedDayCheckIn;
 if (typeof openSelectedDayJournal === 'function') window.openSelectedDayJournal = openSelectedDayJournal;
