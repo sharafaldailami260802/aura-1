@@ -1383,5 +1383,281 @@
         });
     });
 
+    /* ── Forecast: show patterns card when renderPredictions populates it ── */
+    (function patchForecastPatterns() {
+        function onReady(fn) {
+            if (document.readyState !== 'loading' && window.navigate) { setTimeout(fn, 200); return; }
+            document.addEventListener('DOMContentLoaded', function () { setTimeout(fn, 900); });
+        }
+        onReady(function () {
+            var orig = window.renderPredictions;
+            if (typeof orig !== 'function') return;
+            window.renderPredictions = function () {
+                var result = orig.apply(this, arguments);
+                setTimeout(function () {
+                    var patternsEl = document.getElementById('predictionPatterns');
+                    var patternsCard = document.getElementById('predictionPatternsCard');
+                    if (patternsEl && patternsCard) {
+                        var hasContent = (patternsEl.textContent || '').trim().length > 0;
+                        patternsCard.style.display = hasContent ? '' : 'none';
+                    }
+                }, 100);
+                return result;
+            };
+        });
+    })();
+
     console.log('[Aura Improvements Batch C] Modal fixes + button delegation loaded.');
+})();
+
+/* ═══════════════════════════════════════════════════════════════════════
+   BATCH D — Settings propagation fixes
+   1. Language: use full translation table on initial load
+   2. Date format: refresh ALL date-bearing surfaces, not just active page
+   3. Time format: refresh dynamically-added sleep segment inputs
+   4. Theme: rerender active analytics chart after colour change
+   5. Visual feedback: toast on settings save
+   ═══════════════════════════════════════════════════════════════════════ */
+(function () {
+    'use strict';
+
+    function onReady(fn) {
+        if (document.readyState !== 'loading' && window.navigate) { setTimeout(fn, 300); return; }
+        document.addEventListener('DOMContentLoaded', function () { setTimeout(fn, 1000); });
+    }
+
+    /* ── Full translation table (mirrors improvements.js v2 T object) ── */
+    var T_FULL = {
+        en: { save_entry:'Save Entry', calendar_title:'Calendar', calendar_subtitle:'Explore your mood history across days, weeks and months.', daily_checkin:'Daily Check-In', journal:'Journal', settings:'Settings', daily_summary:'Daily Summary', export_heatmap:'Export Heatmap', delete_entry:'Delete Entry', low_mood:'Low mood', neutral:'Neutral', good_mood:'Good mood', today:'Today', edit_journal_entry:'Edit journal entry', journal_saved_placeholder:'Your journal entry for today has already been saved.', one_journal_per_day:'Only one journal entry can be created per day.', add_photo:'📷 Add Photo' },
+        de: { save_entry:'Eintrag speichern', calendar_title:'Kalender', calendar_subtitle:'Entdecke deine Stimmungsverläufe nach Tagen, Wochen und Monaten.', daily_checkin:'Tages-Check-in', journal:'Tagebuch', settings:'Einstellungen', daily_summary:'Tageszusammenfassung', export_heatmap:'Heatmap exportieren', delete_entry:'Eintrag löschen', low_mood:'Niedrige Stimmung', neutral:'Neutral', good_mood:'Gute Stimmung', today:'Heute', edit_journal_entry:'Tagebucheintrag bearbeiten', journal_saved_placeholder:'Dein Tagebucheintrag wurde bereits gespeichert.', one_journal_per_day:'Pro Tag kann nur ein Tagebucheintrag erstellt werden.', add_photo:'📷 Foto hinzufügen' },
+        fr: { save_entry:'Enregistrer', calendar_title:'Calendrier', calendar_subtitle:'Explorez votre historique d\'humeur par jour, semaine et mois.', daily_checkin:'Bilan du jour', journal:'Journal', settings:'Paramètres', daily_summary:'Résumé du jour', export_heatmap:'Exporter la heatmap', delete_entry:'Supprimer', low_mood:'Humeur basse', neutral:'Neutre', good_mood:'Bonne humeur', today:'Aujourd\'hui', edit_journal_entry:'Modifier l\'entrée', journal_saved_placeholder:'Votre entrée a déjà été enregistrée.', one_journal_per_day:'Un seul entrée par jour.', add_photo:'📷 Ajouter une photo' },
+        es: { save_entry:'Guardar entrada', calendar_title:'Calendario', calendar_subtitle:'Explora tu historial de ánimo por días, semanas y meses.', daily_checkin:'Registro diario', journal:'Diario', settings:'Ajustes', daily_summary:'Resumen del día', export_heatmap:'Exportar mapa de calor', delete_entry:'Eliminar', low_mood:'Ánimo bajo', neutral:'Neutral', good_mood:'Buen ánimo', today:'Hoy', edit_journal_entry:'Editar entrada', journal_saved_placeholder:'Tu entrada ya ha sido guardada.', one_journal_per_day:'Solo una entrada por día.', add_photo:'📷 Añadir foto' },
+        it: { save_entry:'Salva voce', calendar_title:'Calendario', calendar_subtitle:'Esplora la storia dell\'umore per giorni, settimane e mesi.', daily_checkin:'Check-in quotidiano', journal:'Diario', settings:'Impostazioni', daily_summary:'Riepilogo quotidiano', export_heatmap:'Esporta heatmap', delete_entry:'Elimina', low_mood:'Umore basso', neutral:'Neutro', good_mood:'Buon umore', today:'Oggi', edit_journal_entry:'Modifica voce', journal_saved_placeholder:'La voce è già stata salvata.', one_journal_per_day:'Una sola voce per giorno.', add_photo:'📷 Aggiungi foto' },
+        pt: { save_entry:'Guardar entrada', calendar_title:'Calendário', calendar_subtitle:'Explore o historial de humor por dias, semanas e meses.', daily_checkin:'Check-in diário', journal:'Diário', settings:'Definições', daily_summary:'Resumo diário', export_heatmap:'Exportar heatmap', delete_entry:'Eliminar', low_mood:'Humor baixo', neutral:'Neutro', good_mood:'Bom humor', today:'Hoje', edit_journal_entry:'Editar entrada', journal_saved_placeholder:'A entrada já foi guardada.', one_journal_per_day:'Apenas uma entrada por dia.', add_photo:'📷 Adicionar foto' },
+        nl: { save_entry:'Invoer opslaan', calendar_title:'Kalender', calendar_subtitle:'Verken uw stemmingsgeschiedenis per dag, week en maand.', daily_checkin:'Dagelijkse check-in', journal:'Dagboek', settings:'Instellingen', daily_summary:'Dagelijks overzicht', export_heatmap:'Heatmap exporteren', delete_entry:'Verwijderen', low_mood:'Lage stemming', neutral:'Neutraal', good_mood:'Goede stemming', today:'Vandaag', edit_journal_entry:'Dagboek bewerken', journal_saved_placeholder:'De dagboekvermelding is al opgeslagen.', one_journal_per_day:'Eén dagboekvermelding per dag.', add_photo:'📷 Foto toevoegen' },
+        pl: { save_entry:'Zapisz wpis', calendar_title:'Kalendarz', calendar_subtitle:'Przeglądaj historię nastroju po dniach, tygodniach i miesiącach.', daily_checkin:'Codzienny check-in', journal:'Dziennik', settings:'Ustawienia', daily_summary:'Podsumowanie dnia', export_heatmap:'Eksportuj heatmapę', delete_entry:'Usuń', low_mood:'Zły nastrój', neutral:'Neutralny', good_mood:'Dobry nastrój', today:'Dziś', edit_journal_entry:'Edytuj wpis', journal_saved_placeholder:'Wpis w dzienniku jest już zapisany.', one_journal_per_day:'Jeden wpis w dzienniku na dzień.', add_photo:'📷 Dodaj zdjęcie' },
+        ru: { save_entry:'Сохранить запись', calendar_title:'Календарь', calendar_subtitle:'Изучайте историю настроения за дни, недели и месяцы.', daily_checkin:'Ежедневный чек-ин', journal:'Дневник', settings:'Настройки', daily_summary:'Итог дня', export_heatmap:'Экспорт тепловой карты', delete_entry:'Удалить', low_mood:'Плохое настроение', neutral:'Нейтрально', good_mood:'Хорошее настроение', today:'Сегодня', edit_journal_entry:'Редактировать запись', journal_saved_placeholder:'Запись уже сохранена.', one_journal_per_day:'Одна запись в день.', add_photo:'📷 Добавить фото' },
+        tr: { save_entry:'Kaydı kaydet', calendar_title:'Takvim', calendar_subtitle:'Gün, hafta ve aylara göre ruh hali geçmişinizi keşfedin.', daily_checkin:'Günlük kontrol', journal:'Günlük', settings:'Ayarlar', daily_summary:'Günlük özet', export_heatmap:'Isı haritası dışa aktar', delete_entry:'Sil', low_mood:'Düşük ruh hali', neutral:'Nötr', good_mood:'İyi ruh hali', today:'Bugün', edit_journal_entry:'Günlük girişini düzenle', journal_saved_placeholder:'Günlük girişiniz zaten kaydedildi.', one_journal_per_day:'Günde yalnızca bir günlük girişi.', add_photo:'📷 Fotoğraf ekle' },
+        ja: { save_entry:'保存', calendar_title:'カレンダー', calendar_subtitle:'日、週、月ごとのムード履歴を確認する。', daily_checkin:'デイリーチェックイン', journal:'日記', settings:'設定', daily_summary:'1日のまとめ', export_heatmap:'ヒートマップを書き出す', delete_entry:'削除', low_mood:'低い気分', neutral:'普通', good_mood:'良い気分', today:'今日', edit_journal_entry:'日記を編集', journal_saved_placeholder:'今日の日記はすでに保存されています。', one_journal_per_day:'1日に作成できる日記は1件のみです。', add_photo:'📷 写真を追加' },
+        zh: { save_entry:'保存记录', calendar_title:'日历', calendar_subtitle:'按日、周、月浏览心情历史。', daily_checkin:'每日打卡', journal:'日记', settings:'设置', daily_summary:'每日总结', export_heatmap:'导出热力图', delete_entry:'删除记录', low_mood:'情绪低落', neutral:'中性', good_mood:'情绪良好', today:'今天', edit_journal_entry:'编辑日记', journal_saved_placeholder:'今天的日记已保存。', one_journal_per_day:'每天只能创建一条日记。', add_photo:'📷 添加照片' },
+        hi: { save_entry:'प्रविष्टि सहेजें', calendar_title:'कैलेंडर', calendar_subtitle:'दिनों, हफ्तों और महीनों में अपना मूड इतिहास देखें।', daily_checkin:'दैनिक चेक-इन', journal:'डायरी', settings:'सेटिंग्स', daily_summary:'दैनिक सारांश', export_heatmap:'हीटमैप निर्यात करें', delete_entry:'प्रविष्टि हटाएं', low_mood:'कम मनोदशा', neutral:'तटस्थ', good_mood:'अच्छी मनोदशा', today:'आज', edit_journal_entry:'डायरी प्रविष्टि संपादित करें', journal_saved_placeholder:'आज की डायरी प्रविष्टि पहले से सहेजी गई है।', one_journal_per_day:'प्रति दिन केवल एक डायरी प्रविष्टि।', add_photo:'📷 फ़ोटो जोड़ें' },
+        ar: { save_entry:'حفظ الإدخال', calendar_title:'التقويم', calendar_subtitle:'استعرض سجل مزاجك عبر الأيام والأسابيع والأشهر.', daily_checkin:'الفحص اليومي', journal:'اليوميات', settings:'الإعدادات', daily_summary:'ملخص اليوم', export_heatmap:'تصدير خريطة الحرارة', delete_entry:'حذف الإدخال', low_mood:'مزاج منخفض', neutral:'محايد', good_mood:'مزاج جيد', today:'اليوم', edit_journal_entry:'تعديل إدخال اليوميات', journal_saved_placeholder:'تم حفظ إدخال يومياتك لهذا اليوم بالفعل.', one_journal_per_day:'إدخال يوميات واحد فقط في اليوم.', add_photo:'📷 إضافة صورة' }
+    };
+
+    /* Safe text-node replacement preserving child elements */
+    function applyAllTranslations(locale) {
+        var loc = String(locale || 'en').split('-')[0];
+        var t = T_FULL[loc] || T_FULL['en'];
+        document.querySelectorAll('[data-i18n]').forEach(function (el) {
+            var key = el.getAttribute('data-i18n');
+            var val = t[key];
+            if (val == null) return;
+            if (el.getAttribute('data-i18n-placeholder')) { el.placeholder = val; return; }
+            /* Replace first non-empty text node only — preserves ✓ check spans etc. */
+            var replaced = false;
+            for (var i = 0; i < el.childNodes.length; i++) {
+                if (el.childNodes[i].nodeType === 3 && el.childNodes[i].textContent.trim()) {
+                    el.childNodes[i].textContent = val + ' ';
+                    replaced = true;
+                    break;
+                }
+            }
+            if (!replaced && !el.children.length) el.textContent = val;
+        });
+    }
+
+    /* Refresh all date-bearing elements across the whole app */
+    function refreshAllDates() {
+        if (typeof window.refreshAllDateInputsDisplay === 'function') window.refreshAllDateInputsDisplay();
+
+        if (typeof window.renderEntryList === 'function') window.renderEntryList();
+        if (typeof window.renderCalendarCurrentView === 'function') window.renderCalendarCurrentView();
+        if (typeof window.renderSettingsDataManagerRecent === 'function') window.renderSettingsDataManagerRecent();
+        if (typeof window.updateLastBackupDisplay === 'function') window.updateLastBackupDisplay();
+        if (typeof window.renderBackupList === 'function') window.renderBackupList();
+
+        var em = document.getElementById('entryModal');
+        if (em && em.classList.contains('show') && window.entryModalDate && typeof window.showEntryModal === 'function') {
+            window.showEntryModal(window.entryModalDate);
+        }
+
+        if (typeof window.renderDataManagerPreview === 'function' && typeof window.getDataManagerSelectedDate === 'function') {
+            window.renderDataManagerPreview(window.getDataManagerSelectedDate());
+        }
+    }
+
+    /* Refresh all time-bearing elements including dynamic sleep segments */
+    function refreshAllTimes() {
+        if (typeof window.refreshAllTimeInputsDisplay === 'function') window.refreshAllTimeInputsDisplay();
+
+        document.querySelectorAll('.sleep-start, .sleep-end').forEach(function (inp) {
+            var stored = inp.getAttribute('data-aura-time');
+            if (stored && typeof window.setTimeInputDisplay === 'function') {
+                window.setTimeInputDisplay(inp, stored);
+            }
+        });
+
+        ['prefDefaultSleep', 'prefDefaultWake'].forEach(function (id) {
+            var el = document.getElementById(id);
+            if (!el) return;
+            var stored = el.getAttribute('data-aura-time');
+            if (stored && typeof window.setTimeInputDisplay === 'function') {
+                window.setTimeInputDisplay(el, stored);
+            }
+        });
+
+        if (typeof window.renderSleepTimeline === 'function') window.renderSleepTimeline();
+
+        if (typeof window.renderBackupList === 'function') window.renderBackupList();
+        if (typeof window.updateLastBackupDisplay === 'function') window.updateLastBackupDisplay();
+
+        var em = document.getElementById('entryModal');
+        if (em && em.classList.contains('show') && window.entryModalDate && typeof window.showEntryModal === 'function') {
+            window.showEntryModal(window.entryModalDate);
+        }
+    }
+
+    /* Rerender the currently visible analytics chart after theme change */
+    function refreshActiveChart() {
+        var active = document.querySelector('.page.active');
+        if (!active) return;
+        var id = active.id;
+        setTimeout(function () {
+            if (id === 'circadian' && typeof window.renderCircadian === 'function') window.renderCircadian();
+            if (id === 'correlations') {
+                if (typeof window.renderCorrPair === 'function' && window._corrCachedEntries) {
+                    var btn = document.querySelector('.corr-pair-tab.active');
+                    var pair = btn ? btn.dataset.pair : 'sleep-mood';
+                    window.renderCorrPair(pair, window._corrCachedEntries);
+                } else if (typeof window.renderCorrelations === 'function') {
+                    window.renderCorrelations();
+                }
+            }
+            if (id === 'seasonal' && typeof window.renderSeasonal === 'function') window.renderSeasonal();
+            if (id === 'patterns') {
+                if (typeof window.renderRadarChart === 'function') window.renderRadarChart();
+                if (typeof window.renderDistributionChart === 'function') window.renderDistributionChart();
+                if (typeof window.renderDayOfWeekChart === 'function') window.renderDayOfWeekChart();
+            }
+        }, 350);
+    }
+
+    /* ── 1. Patch loadPreferencesIntoUI for correct initial-load translations ── */
+    onReady(function () {
+        var origLoad = window.loadPreferencesIntoUI;
+        if (typeof origLoad !== 'function') return;
+        window.loadPreferencesIntoUI = function () {
+            var result = origLoad.apply(this, arguments);
+            setTimeout(function () {
+                var loc = window.auraLocale || 'en';
+                applyAllTranslations(loc);
+            }, 150);
+            return result;
+        };
+    });
+
+    /* ── 2. Patch savePreference for comprehensive propagation ─────────────── */
+    onReady(function () {
+        var origSave = window.savePreference;
+        if (typeof origSave !== 'function') return;
+
+        window.savePreference = function (key, value) {
+            var result = origSave.apply(this, arguments);
+
+            setTimeout(function () {
+                if (key === 'dateFormat') {
+                    refreshAllDates();
+                    if (typeof window.showToast === 'function') window.showToast('Date format updated ✓');
+                }
+
+                if (key === 'timeFormat') {
+                    refreshAllTimes();
+                    if (typeof window.showToast === 'function') window.showToast('Time format updated ✓');
+                }
+
+                if (key === 'locale') {
+                    var loc = String(value || 'en');
+                    if (loc === '_custom') {
+                        var customEl = document.getElementById('prefLocaleCustom');
+                        loc = customEl ? (customEl.value.trim() || 'en') : 'en';
+                    }
+                    applyAllTranslations(loc);
+                    if (window.quillEditor) {
+                        var placeholder = T_FULL[loc.split('-')[0]] && T_FULL[loc.split('-')[0]]['journal']
+                            ? 'Write something about your ' + (loc.startsWith('de') ? 'Tag' : 'day') + '…'
+                            : 'Write something about your day…';
+                        var qlBlank = document.querySelector('.ql-editor.ql-blank');
+                        if (qlBlank) qlBlank.setAttribute('data-placeholder', placeholder);
+                    }
+                    if (typeof window.renderCalendarCurrentView === 'function') window.renderCalendarCurrentView();
+                    if (typeof window.renderHeatmap === 'function') window.renderHeatmap();
+                    if (typeof window.showToast === 'function') window.showToast('Language updated ✓');
+                }
+
+                if (key === 'reduceMotion') {
+                    var qlToolbar = document.querySelector('.ql-toolbar');
+                    if (qlToolbar) qlToolbar.style.transition = value ? 'none' : '';
+                }
+            }, 80);
+
+            return result;
+        };
+    });
+
+    /* ── 3. Patch setTheme / toggleDark to refresh active analytics chart ── */
+    onReady(function () {
+        var origSetTheme = window.setTheme;
+        if (typeof origSetTheme === 'function') {
+            window.setTheme = function (name) {
+                var r = origSetTheme.apply(this, arguments);
+                refreshActiveChart();
+                return r;
+            };
+        }
+
+        var origToggleDark = window.toggleDark;
+        if (typeof origToggleDark === 'function') {
+            window.toggleDark = function () {
+                var r = origToggleDark.apply(this, arguments);
+                refreshActiveChart();
+                return r;
+            };
+            window.toggleDarkFromPage = window.toggleDark;
+        }
+    });
+
+    /* ── 4. Settings page: show visual feedback chip when any select changes ── */
+    onReady(function () {
+        var settingsPage = document.getElementById('settings');
+        if (!settingsPage) return;
+
+        var selectors = ['#themeSelect', '#prefDateFormat', '#prefTimeFormat', '#prefChartDays'];
+        selectors.forEach(function (sel) {
+            var el = document.querySelector(sel);
+            if (!el || el._settingsFeedbackBound) return;
+            el._settingsFeedbackBound = true;
+            el.addEventListener('change', function () {
+                el.style.transition = 'box-shadow 0.18s ease';
+                el.style.boxShadow = '0 0 0 3px color-mix(in srgb, var(--accent) 35%, transparent)';
+                setTimeout(function () { el.style.boxShadow = ''; }, 800);
+            });
+        });
+    });
+
+    /* ── 5. On navigate to settings: always apply full translations ─────────── */
+    onReady(function () {
+        var origNav = window.navigate;
+        if (typeof origNav !== 'function') return;
+        window.navigate = function (page) {
+            var r = origNav.apply(this, arguments);
+            if (page === 'settings') {
+                setTimeout(function () {
+                    applyAllTranslations(window.auraLocale || 'en');
+                }, 200);
+            }
+            return r;
+        };
+    });
+
+    console.log('[Aura Batch D] Settings propagation: locale, dateFormat, timeFormat, theme fully patched.');
 })();
