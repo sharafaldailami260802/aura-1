@@ -846,3 +846,985 @@ input[type="range"]:active::-webkit-slider-thumb {
         font-size: 0.8rem;
     }
 }
+
+/* ═══════════════════════════════════════════════════════════════════════
+   BATCH A — Premium CSS polish
+   1. Check-In: single-column, no dead rail column
+   2. Check-In: tags as premium pill chips with input preview
+   3. Heatmap: use theme accent vars, not hardcoded colours
+   4. Journal: full editorial two-column layout + hero
+   5. Export & Backup: premium button rows
+   6. Settings page: section-header card titles polish
+   7. Global: form controls, chart-export btn, empty states
+   ═══════════════════════════════════════════════════════════════════════ */
+
+/* ── 1. Check-In: collapse the dead grid column when rail is gone ───── */
+.checkin-desktop-layout {
+    display: block !important;   /* single column — rail removed */
+}
+.checkin-form {
+    max-width: 680px;            /* comfortable reading width */
+}
+@media (min-width: 1024px) {
+    .checkin-form {
+        max-width: 760px;
+    }
+}
+
+/* ── 2. Tags in Check-In: convert raw text to chip previews ─────────── */
+/* Tag input wrapper */
+#tags {
+    display: none;               /* hidden; visual chips shown instead */
+}
+.tag-chip-input-wrap {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 8px;
+    min-height: 48px;
+    align-items: center;
+    padding: 8px 14px;
+    border: 2px solid var(--border-input);
+    border-radius: var(--radius-md);
+    background: var(--surface);
+    cursor: text;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+.tag-chip-input-wrap:focus-within {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 16%, transparent);
+}
+.tag-chip-live {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 4px 10px 4px 12px;
+    border-radius: 999px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    background: color-mix(in srgb, var(--accent) 16%, transparent);
+    border: 1px solid color-mix(in srgb, var(--accent) 35%, transparent);
+    color: var(--accent-dark);
+    animation: chipPop 0.18s cubic-bezier(0.22, 1, 0.36, 1);
+}
+@keyframes chipPop {
+    from { transform: scale(0.82); opacity: 0; }
+    to   { transform: scale(1);    opacity: 1; }
+}
+.tag-chip-live-remove {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: color-mix(in srgb, var(--accent) 22%, transparent);
+    border: none;
+    cursor: pointer;
+    font-size: 0.65rem;
+    color: var(--accent-dark);
+    line-height: 1;
+    padding: 0;
+    transition: background 0.15s ease;
+    flex-shrink: 0;
+}
+.tag-chip-live-remove:hover {
+    background: color-mix(in srgb, var(--accent) 40%, transparent);
+}
+.tag-chip-text-input {
+    border: none;
+    background: transparent;
+    outline: none;
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+    color: var(--text);
+    min-width: 80px;
+    flex: 1;
+    padding: 2px 0;
+}
+.tag-chip-text-input::placeholder {
+    color: var(--text-muted);
+    opacity: 0.7;
+}
+
+/* ── 3. Heatmap: align to theme palette ──────────────────────────────── */
+/* Already using --heat-good / --heat-mid / --heat-bad via CSS vars,
+   but we re-harmonise the container and scroll-wrap appearance */
+.calendar-container {
+    background: color-mix(in srgb, var(--accent) 3%, var(--surface));
+    border: 1px solid color-mix(in srgb, var(--accent) 12%, var(--border));
+    border-radius: var(--radius-xl);
+    padding: var(--space-lg);
+}
+.year-heatmap-scroll-wrap {
+    background: transparent;
+    padding: var(--space-xs) 0;
+}
+/* Day cells: softer empty state, stronger filled tones */
+.day {
+    background: color-mix(in srgb, var(--accent) 7%, var(--bg));
+    border-color: color-mix(in srgb, var(--accent) 10%, transparent);
+    border-radius: 5px;
+}
+.day.good  { background: var(--heat-good);  box-shadow: 0 1px 4px color-mix(in srgb, var(--heat-good) 35%, transparent); }
+.day.mid   { background: var(--heat-mid);    box-shadow: 0 1px 4px color-mix(in srgb, var(--heat-mid)  30%, transparent); }
+.day.bad   { background: var(--heat-bad);    box-shadow: 0 1px 4px color-mix(in srgb, var(--heat-bad)  30%, transparent); }
+.day:hover {
+    transform: scale(1.18);
+    outline: 2px solid var(--accent);
+    outline-offset: 1px;
+    z-index: 1;
+}
+/* Legend dots: use same vars for perfect colour match */
+.legend-dot-low  { background: var(--heat-bad);  }
+.legend-dot-mid  { background: var(--heat-mid);  }
+.legend-dot-good { background: var(--heat-good); }
+
+/* Calendar legend: styled row */
+.calendar-legend {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    margin-top: var(--space-md);
+    flex-wrap: wrap;
+}
+.calendar-legend-label {
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.09em;
+    color: var(--text-muted);
+    font-weight: 700;
+    margin-right: 4px;
+}
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 0.78rem;
+    color: var(--text-muted);
+}
+.legend-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 3px;
+}
+.legend-dot-today {
+    background: transparent;
+    border: 2px solid var(--accent);
+}
+
+/* ── 4. Journal: editorial two-column layout & hero ──────────────────── */
+.journal-page-hero {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: var(--space-md);
+    margin-bottom: var(--space-lg);
+    padding-bottom: var(--space-md);
+    border-bottom: 1px solid var(--border);
+    flex-wrap: wrap;
+}
+.journal-hero-eyebrow {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    font-weight: 700;
+    color: var(--accent);
+    margin: 0 0 6px 0;
+}
+.journal-hero-title {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 4vw, 3.2rem);
+    font-weight: 300;
+    letter-spacing: -0.03em;
+    color: var(--text);
+    margin: 0 0 6px 0;
+    line-height: 1.1;
+}
+.journal-hero-subtitle {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    line-height: 1.5;
+    margin: 0;
+    max-width: 380px;
+}
+.journal-hero-nav {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    flex-shrink: 0;
+}
+.journal-hero-nav-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--text-muted);
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: all 0.18s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.journal-hero-nav-btn:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    transform: scale(1.08);
+    box-shadow: var(--shadow-sm);
+}
+.journal-hero-date {
+    font-size: 0.88rem;
+    font-weight: 500;
+    color: var(--text-muted);
+    white-space: nowrap;
+    min-width: 110px;
+    text-align: center;
+}
+/* Two-column grid */
+.journal-page-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-lg);
+    align-items: start;
+}
+@media (min-width: 1024px) {
+    .journal-page-grid {
+        grid-template-columns: 1.7fr 0.75fr;
+    }
+}
+/* Editor card */
+.journal-editor-card {
+    padding: 0;
+    overflow: hidden;
+    background: linear-gradient(160deg,
+        color-mix(in srgb, var(--accent) 3%, var(--surface)),
+        var(--surface) 55%
+    );
+    border-color: color-mix(in srgb, var(--accent) 16%, var(--border));
+}
+.journal-editor-meta-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 20px 10px;
+    gap: var(--space-sm);
+    border-bottom: 1px solid var(--border);
+}
+#journalEntryMeta {
+    font-size: 0.82rem;
+    color: var(--text-muted);
+    margin: 0;
+    padding: 5px 12px;
+    background: color-mix(in srgb, var(--accent) 9%, transparent);
+    border-radius: var(--radius-md);
+    border: 1px solid color-mix(in srgb, var(--accent) 20%, transparent);
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+}
+#journalEntryMeta::before { content: '📅'; font-size: 0.82rem; }
+#journalUnsavedIndicator {
+    font-size: 0.78rem;
+    color: var(--accent-secondary);
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    margin: 0;
+}
+#journalEditor {
+    min-height: 460px;
+}
+.ql-toolbar.ql-snow {
+    border-radius: 0 !important;
+    border-left: none !important;
+    border-right: none !important;
+    border-top: none !important;
+    padding: 10px 16px !important;
+    background: color-mix(in srgb, var(--accent) 4%, var(--bg)) !important;
+}
+.ql-container.ql-snow {
+    border-radius: 0 !important;
+    border: none !important;
+}
+.ql-editor {
+    min-height: 440px !important;
+    padding: 22px 24px !important;
+    font-size: 1.05rem !important;
+    line-height: 1.85 !important;
+    font-family: var(--font-body) !important;
+}
+.journal-editor-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: var(--space-sm);
+    padding: 14px 20px;
+    border-top: 1px solid var(--border);
+    background: color-mix(in srgb, var(--bg) 50%, transparent);
+}
+#journalWordCount {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    margin: 0;
+    letter-spacing: 0.03em;
+}
+.journal-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin: 0;
+    padding: 0;
+    border: none;
+}
+.journal-photo-grid {
+    padding: 0 20px 16px;
+}
+/* Sidebar cards */
+.journal-sidebar-card {
+    border-radius: var(--radius-xl);
+    padding: var(--space-md);
+}
+.journal-sidebar-card-header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: var(--space-sm);
+}
+.journal-sidebar-card-header h3 {
+    font-family: var(--font-body);
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-muted);
+    margin: 0;
+}
+.journal-sidebar-card-header p {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    opacity: 0.7;
+    margin: 0;
+}
+.journal-entries-card .entry-list {
+    margin: 0;
+    padding: 0;
+}
+.journal-entries-card .entry-list-item {
+    margin-bottom: 6px;
+}
+/* Tag cloud in sidebar: tighter */
+.tag-cloud-section .tag-cloud {
+    padding: 4px 0;
+    gap: 6px 8px;
+}
+/* Remove old journal card styling that conflicts */
+#journal .card:first-child {
+    background: unset;
+    border-color: unset;
+}
+
+/* ── 5. Export & Backup: premium action rows ─────────────────────────── */
+#data .comparison-controls {
+    background: color-mix(in srgb, var(--accent) 4%, var(--surface));
+    border: 1px solid color-mix(in srgb, var(--accent) 14%, var(--border));
+    border-radius: var(--radius-lg);
+    padding: var(--space-lg);
+    gap: var(--space-md);
+}
+#data .comparison-controls .btn,
+#data .comparison-controls .btn-secondary {
+    align-self: flex-end;
+    min-height: 44px;
+    padding: 0 24px;
+}
+/* Action button groups inside data cards */
+.backup-actions {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: var(--space-lg);
+}
+.backup-actions .btn,
+#data .card .btn,
+#data .card .btn-secondary {
+    min-height: 44px;
+    padding: 0 22px;
+    font-size: 0.88rem;
+    border-radius: var(--radius-md);
+    font-weight: 600;
+}
+/* Import file wrapper */
+.import-file-wrap {
+    position: relative;
+    display: inline-block;
+}
+.import-file-wrap input[type="file"] {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    cursor: pointer;
+    width: 100%;
+}
+.import-file-wrap .btn-secondary {
+    pointer-events: none;
+}
+
+/* ── 6. Settings: section card title bars ────────────────────────────── */
+#settings .card h3 {
+    font-family: var(--font-body);
+    font-size: 0.78rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--text-muted);
+    margin-bottom: 4px;
+}
+#settings .card .card-desc {
+    font-size: 0.88rem;
+    color: var(--text-muted);
+    margin-bottom: var(--space-md);
+    line-height: 1.5;
+}
+/* Remove the old "Settings" section label from sidebar nav title */
+/* (sidebar label "Data" already covers both Settings + Export) */
+
+/* ── 7. Chart export buttons: ghost pill style ───────────────────────── */
+.chart-export-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: var(--space-md);
+    padding: 0 18px;
+    height: 36px;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--text-muted);
+    font-size: 0.78rem;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.18s ease;
+}
+.chart-export-btn:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: color-mix(in srgb, var(--accent) 6%, transparent);
+    transform: none;
+    box-shadow: none;
+}
+
+/* ── 8. Heatmap export button: match ghost style ─────────────────────── */
+.heatmap-export-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 0 18px;
+    height: 36px;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--text-muted);
+    font-size: 0.78rem;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    cursor: pointer;
+    transition: all 0.18s ease;
+}
+.heatmap-export-btn:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: color-mix(in srgb, var(--accent) 6%, transparent);
+    transform: none;
+    box-shadow: none;
+}
+
+/* ── 9. Month grid: label and colour clarity ─────────────────────────── */
+#calendarMonthPanel .calendar-container {
+    padding: var(--space-lg);
+}
+.month-grid {
+    gap: 6px;
+}
+/* Make month nav buttons look like premium ghost pills */
+.cal-nav-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 0 18px;
+    height: 38px;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--text-muted);
+    font-size: 0.88rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.18s ease;
+}
+.cal-nav-btn:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: color-mix(in srgb, var(--accent) 6%, transparent);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-sm);
+}
+
+/* ── 10. Page hero: consistent cross-page header sizing ──────────────── */
+.page-hero h1,
+#mood h1, #sleep h1, #energy h1, #circadian h1,
+#correlations h1, #patterns h1, #seasonal h1,
+#reports h1, #insights h1, #settings h1, #data h1,
+#journal .journal-hero-title {
+    font-family: var(--font-display);
+    font-weight: 300;
+    letter-spacing: -0.025em;
+    line-height: 1.15;
+}
+.page-subtitle {
+    font-size: 0.95rem;
+    color: var(--text-muted);
+    margin-top: 4px;
+    margin-bottom: var(--space-lg);
+    line-height: 1.55;
+}
+
+/* ── 11. Report panel content: more breathing room ───────────────────── */
+.report-panel.card {
+    padding: var(--space-lg) var(--space-lg) var(--space-md);
+}
+.report-panel h3 {
+    font-family: var(--font-display);
+    font-size: 1.8rem;
+    font-weight: 300;
+    color: var(--text);
+    margin-bottom: var(--space-md);
+    letter-spacing: -0.02em;
+}
+
+/* ── 12. Data Manager: cleaner, more practical ───────────────────────── */
+.data-manager-card {
+    overflow: hidden;
+}
+.data-manager-header {
+    margin-bottom: var(--space-md);
+}
+.data-manager-header h3 {
+    font-family: var(--font-body) !important;
+    font-size: 0.78rem !important;
+    font-weight: 700 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.1em !important;
+    color: var(--text-muted) !important;
+}
+.data-manager-controls {
+    display: flex;
+    gap: var(--space-md);
+    flex-wrap: wrap;
+    align-items: flex-end;
+    margin-bottom: var(--space-md);
+}
+.data-manager-actions {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-top: var(--space-md);
+    padding-top: var(--space-md);
+    border-top: 1px solid var(--border);
+}
+.data-manager-actions .btn,
+.data-manager-actions .btn-secondary {
+    min-height: 44px;
+    padding: 0 22px;
+    font-size: 0.88rem;
+    border-radius: var(--radius-md);
+    font-weight: 600;
+}
+.data-manager-recent-header h4 {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-weight: 700;
+    color: var(--text-muted);
+    margin-bottom: 4px;
+}
+.data-manager-recent-header p {
+    font-size: 0.82rem;
+    color: var(--text-muted);
+    margin: 0 0 var(--space-sm);
+}
+
+/* ── 13. Dark mode: data/export page harmony ─────────────────────────── */
+[data-dark="true"] #data .comparison-controls,
+[data-dark="true"] .data-options-block {
+    background: color-mix(in srgb, var(--accent) 6%, var(--surface));
+}
+[data-dark="true"] .backup-list li {
+    background: color-mix(in srgb, var(--accent) 4%, var(--surface));
+    border: 1px solid var(--border);
+}
+
+/* ── 14. Entry section headers: consistent and refined ───────────────── */
+.entry-section-header {
+    background: none;
+    border: none;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 0;
+    cursor: pointer;
+    font-family: var(--font-body);
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--text);
+    transition: color 0.15s ease;
+    border-bottom: 1px solid var(--border);
+}
+.entry-section-header:hover {
+    color: var(--accent);
+}
+
+/* ── 15. Insight panel: breathable card grid ─────────────────────────── */
+.insights-dashboard-stack {
+    display: grid;
+    gap: var(--space-md);
+}
+.insight-overview-card {
+    padding: var(--space-lg) var(--space-xl);
+    border-radius: var(--radius-xl);
+    margin-bottom: var(--space-lg);
+}
+.insight-overview-card h3 {
+    font-family: var(--font-display);
+    font-size: 1.8rem;
+    font-weight: 300;
+    letter-spacing: -0.02em;
+    color: inherit;
+    margin-bottom: 8px;
+}
+.insight-overview-card .insight-overview-eyebrow {
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-weight: 700;
+    opacity: 0.75;
+    margin-bottom: 8px;
+    display: block;
+}
+
+/* ── Mobile: journal page adapts gracefully ──────────────────────────── */
+@media (max-width: 767px) {
+    .journal-page-hero {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: var(--space-sm);
+    }
+    .journal-hero-title { font-size: 2.2rem; }
+    .journal-hero-subtitle { max-width: none; }
+    .journal-hero-nav {
+        align-self: stretch;
+        justify-content: center;
+    }
+    .journal-page-grid {
+        grid-template-columns: 1fr;
+    }
+    .journal-editor-footer {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}
+
+/* ── Export actions: inline button row ───────────────────────────────── */
+.data-export-actions {
+    display: flex;
+    gap: 10px;
+    align-items: flex-end;
+    flex-wrap: wrap;
+}
+.data-export-actions .btn,
+.data-export-actions .btn-secondary {
+    min-height: 44px;
+    padding: 0 22px;
+    font-size: 0.88rem;
+    border-radius: var(--radius-md);
+    font-weight: 600;
+}
+/* Export & Backup: hero subtitle */
+#data .page-hero-subtitle {
+    max-width: 540px;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+   BATCH B — Correlations toggle + Seasonal deviation chart
+   ═══════════════════════════════════════════════════════════════════════ */
+
+/* ── Correlations: main card ─────────────────────────────────────────── */
+.corr-main-card {
+    margin-bottom: var(--space-lg);
+    padding: var(--space-lg);
+}
+.corr-main-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: var(--space-md);
+    margin-bottom: var(--space-sm);
+}
+
+/* Pair tab pills */
+.corr-pair-tabs {
+    display: flex;
+    gap: 4px;
+    padding: 4px;
+    background: color-mix(in srgb, var(--accent) 6%, var(--surface));
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    flex-wrap: wrap;
+}
+.corr-pair-tab {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    height: 36px;
+    padding: 0 18px;
+    border-radius: 999px;
+    border: none;
+    font-family: var(--font-body);
+    font-size: 0.83rem;
+    font-weight: 500;
+    cursor: pointer;
+    background: transparent;
+    color: var(--text-muted);
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    white-space: nowrap;
+}
+.corr-pair-tab:hover {
+    color: var(--text);
+    background: color-mix(in srgb, var(--accent) 10%, transparent);
+}
+.corr-pair-tab.active {
+    background: var(--accent);
+    color: var(--surface);
+    font-weight: 600;
+    box-shadow: 0 2px 8px color-mix(in srgb, var(--accent) 35%, transparent);
+}
+.corr-tab-icon { font-size: 0.9em; }
+
+/* R² badge */
+.corr-r2-badge {
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--accent-dark);
+    background: color-mix(in srgb, var(--accent) 10%, transparent);
+    border: 1px solid color-mix(in srgb, var(--accent) 25%, transparent);
+    border-radius: var(--radius-md);
+    padding: 5px 14px;
+    min-width: 80px;
+    text-align: center;
+    transition: all 0.3s ease;
+}
+.corr-r2-badge:empty { display: none; }
+
+.corr-desc-row {
+    margin-bottom: var(--space-md);
+}
+.corr-pair-desc {
+    font-size: 0.88rem;
+    color: var(--text-muted);
+    margin: 0;
+    line-height: 1.5;
+}
+.corr-chart-wrap {
+    height: 340px;
+    position: relative;
+}
+.corr-chart-wrap canvas { border-radius: var(--radius-md); }
+.corr-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: var(--space-sm);
+    margin-top: var(--space-md);
+    padding-top: var(--space-md);
+    border-top: 1px solid var(--border);
+}
+
+/* Matrix card: tidied */
+.corr-matrix-card {
+    padding: var(--space-lg);
+}
+.corr-matrix-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: var(--space-md);
+    flex-wrap: wrap;
+    margin-bottom: var(--space-lg);
+}
+.corr-matrix-eyebrow {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-weight: 700;
+    color: var(--accent);
+    margin: 0 0 6px;
+}
+.corr-matrix-title {
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    font-weight: 300;
+    letter-spacing: -0.02em;
+    margin: 0;
+}
+.corr-matrix-hint {
+    font-size: 0.82rem;
+    color: var(--text-muted);
+    max-width: 260px;
+    line-height: 1.5;
+    margin: 0;
+    text-align: right;
+}
+
+/* Mobile: stacked tabs */
+@media (max-width: 640px) {
+    .corr-pair-tabs {
+        border-radius: var(--radius-lg);
+        width: 100%;
+    }
+    .corr-pair-tab {
+        flex: 1;
+        justify-content: center;
+        font-size: 0.78rem;
+        padding: 0 10px;
+    }
+    .corr-main-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .corr-r2-badge { align-self: flex-start; }
+}
+
+/* ── Seasonal deviation card ─────────────────────────────────────────── */
+.seasonal-deviation-card {
+    padding: var(--space-lg);
+    background: linear-gradient(
+        145deg,
+        color-mix(in srgb, var(--accent) 4%, var(--surface)),
+        var(--surface) 65%
+    );
+    border-color: color-mix(in srgb, var(--accent) 14%, var(--border));
+}
+.seasonal-dev-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: var(--space-md);
+    margin-bottom: var(--space-lg);
+}
+.seasonal-dev-eyebrow {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-weight: 700;
+    color: var(--accent);
+    margin: 0 0 6px;
+}
+.seasonal-dev-title {
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    font-weight: 300;
+    letter-spacing: -0.02em;
+    margin: 0 0 6px;
+}
+.seasonal-dev-desc {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    max-width: 440px;
+    line-height: 1.55;
+    margin: 0;
+}
+
+/* Metric toggle checkboxes */
+.seasonal-dev-controls {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    flex-shrink: 0;
+}
+.seasonal-dev-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 7px 16px;
+    border-radius: 999px;
+    border: 1.5px solid var(--border);
+    background: var(--surface);
+    cursor: pointer;
+    font-size: 0.82rem;
+    font-weight: 500;
+    color: var(--text-muted);
+    transition: all 0.18s ease;
+    user-select: none;
+}
+.seasonal-dev-toggle input[type="checkbox"] {
+    appearance: none;
+    width: 14px;
+    height: 14px;
+    border-radius: 4px;
+    border: 1.5px solid currentColor;
+    background: transparent;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    display: inline-block;
+    position: relative;
+    flex-shrink: 0;
+}
+.seasonal-dev-toggle input[type="checkbox"]:checked {
+    background: currentColor;
+}
+.seasonal-dev-toggle input[type="checkbox"]:checked::after {
+    content: '';
+    position: absolute;
+    top: 1px; left: 3px;
+    width: 4px; height: 7px;
+    border: 1.5px solid var(--surface);
+    border-top: none; border-left: none;
+    transform: rotate(45deg);
+}
+.seasonal-dev-toggle:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+}
+.seasonal-dev-toggle:has(input:checked) {
+    border-color: var(--accent);
+    background: color-mix(in srgb, var(--accent) 10%, var(--surface));
+    color: var(--accent-dark);
+}
+/* Per-metric colour theming */
+.seasonal-dev-toggle[data-metric="mood"] { --toggle-color: var(--chart-1); }
+.seasonal-dev-toggle[data-metric="sleep"] { --toggle-color: var(--accent-secondary); }
+.seasonal-dev-toggle[data-metric="energy"] { --toggle-color: var(--chart-3); }
+
+.seasonal-dev-chart-wrap {
+    height: 300px;
+    position: relative;
+}
+.seasonal-dev-hint {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    margin: var(--space-sm) 0 0;
+    font-style: italic;
+    letter-spacing: 0.01em;
+}
+
+@media (max-width: 640px) {
+    .seasonal-dev-header { flex-direction: column; }
+    .seasonal-dev-controls { width: 100%; }
+}

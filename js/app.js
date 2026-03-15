@@ -3499,6 +3499,7 @@ function openJournalEntryFromModal(dateStr) {
     entryModalJournalMode = false;
     setWorkingEntryDate(targetDate);
     currentJournalEntryDate = targetDate;
+    if (typeof window !== 'undefined') window.currentJournalDate = currentJournalEntryDate;
     navigate('journal', getNavButtonForPage('journal'));
 }
 function openDeleteEntryModalFromEntryModal(dateStr) {
@@ -6824,6 +6825,7 @@ function openJournalEntry(dateStr, options) {
     options = options || {};
     if (!options.force && !confirmDiscardJournalChanges()) return false;
     currentJournalEntryDate = dateStr || getWorkingEntryDate();
+    if (typeof window !== 'undefined') window.currentJournalDate = currentJournalEntryDate;
     if (currentJournalEntryDate) setWorkingEntryDate(currentJournalEntryDate);
     journalLoadInProgress = true;
     if (quillEditor) {

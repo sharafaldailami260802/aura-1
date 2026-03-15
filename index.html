@@ -703,44 +703,51 @@
             </div>
             
             <div id="correlations" class="page">
-                <h1>Data Correlations</h1>
-                <p class="page-subtitle">See how sleep, mood, activity, and energy relate over time.</p>
-                <div class="dashboard-grid">
-                    <div class="card analytics-card">
-                        <header class="correlation-card-header">
-                            <p class="correlation-card-eyebrow">Sleep &amp; mood</p>
-                            <h3 class="correlation-card-title">Sleep vs Mood</h3>
-                            <p class="correlation-card-desc">How sleep duration relates to mood.</p>
-                        </header>
-                        <div class="chart-container">
-                            <canvas id="correlationsChart"></canvas>
+                <header class="page-hero">
+                    <h1>Data Correlations</h1>
+                    <p class="page-hero-subtitle">Discover how sleep, mood, and energy relate to each other over time.</p>
+                </header>
+
+                <!-- Primary: switchable scatter chart -->
+                <div class="card corr-main-card">
+                    <div class="corr-main-header">
+                        <div class="corr-pair-tabs" id="corrPairTabs" role="tablist" aria-label="Choose metric pair">
+                            <button type="button" class="corr-pair-tab active" data-pair="sleep-mood" role="tab" aria-selected="true">
+                                <span class="corr-tab-icon">🌙</span> Sleep × Mood
+                            </button>
+                            <button type="button" class="corr-pair-tab" data-pair="sleep-energy" role="tab" aria-selected="false">
+                                <span class="corr-tab-icon">⚡</span> Sleep × Energy
+                            </button>
+                            <button type="button" class="corr-pair-tab" data-pair="mood-energy" role="tab" aria-selected="false">
+                                <span class="corr-tab-icon">✨</span> Mood × Energy
+                            </button>
                         </div>
-                        <div class="chart-meta">
-                            <p id="r2SleepMood" class="chart-r2"></p>
-                            <button type="button" class="btn chart-export-btn" onclick="exportChartPNG('correlationsChart')">Export PNG</button>
-                        </div>
+                        <div class="corr-r2-badge" id="corrR2Badge"></div>
                     </div>
-                    <div class="card analytics-card">
-                        <header class="correlation-card-header">
-                            <p class="correlation-card-eyebrow">Activity &amp; energy</p>
-                            <h3 class="correlation-card-title">Activity vs Energy</h3>
-                            <p class="correlation-card-desc">How activity level relates to energy.</p>
-                        </header>
-                        <div class="chart-container">
-                            <canvas id="activityEnergyChart"></canvas>
-                        </div>
-                        <div class="chart-meta">
-                            <p id="r2ActivityEnergy" class="chart-r2"></p>
-                            <button type="button" class="btn chart-export-btn" onclick="exportChartPNG('activityEnergyChart')">Export PNG</button>
-                        </div>
+                    <div class="corr-desc-row">
+                        <p class="corr-pair-desc" id="corrPairDesc">How your sleep duration relates to mood.</p>
+                    </div>
+                    <div class="corr-chart-wrap">
+                        <canvas id="correlationsChart"></canvas>
+                        <!-- hidden canvases kept so app.js doesn't break -->
+                        <canvas id="activityEnergyChart" style="display:none;" aria-hidden="true"></canvas>
+                    </div>
+                    <div class="corr-footer">
+                        <p id="r2SleepMood" class="chart-r2" style="display:none;"></p>
+                        <p id="r2ActivityEnergy" class="chart-r2" style="display:none;"></p>
+                        <button type="button" class="chart-export-btn" onclick="exportChartPNG('correlationsChart')">↓ Export PNG</button>
                     </div>
                 </div>
-                <div class="card correlation-matrix-card" style="margin-top: var(--space-lg);">
-                    <header class="correlation-matrix-header">
-                        <p class="correlation-matrix-eyebrow">Insight panel</p>
-                        <h3 class="correlation-matrix-title">Correlation Matrix (R²)</h3>
-                        <p class="correlation-matrix-desc">Strength of relationships between metrics. Higher values indicate stronger correlation.</p>
-                    </header>
+
+                <!-- Secondary: correlation matrix (kept, tidied) -->
+                <div class="card corr-matrix-card">
+                    <div class="corr-matrix-header">
+                        <div>
+                            <p class="corr-matrix-eyebrow">Relationship strength</p>
+                            <h3 class="corr-matrix-title">Correlation overview (R²)</h3>
+                        </div>
+                        <p class="corr-matrix-hint">Higher R² = stronger connection between the two metrics.</p>
+                    </div>
                     <div id="correlationMatrix" class="correlation-matrix"></div>
                 </div>
             </div>
@@ -854,10 +861,40 @@
             <div id="sleepTimelineTooltip" class="sleep-timeline-tooltip" role="tooltip" aria-hidden="true"></div>
             
             <div id="seasonal" class="page">
-                <h1>Seasonal &amp; Custom Rhythm Analysis</h1>
+                <header class="page-hero">
+                    <h1>Seasonal &amp; Rhythm Analysis</h1>
+                    <p class="page-hero-subtitle">Uncover how your mood, sleep and energy shift across seasons and years.</p>
+                </header>
+
+                <!-- NEW: Seasonal Deviation (sine-wave style) -->
+                <div class="card seasonal-deviation-card" style="margin-bottom: var(--space-lg);">
+                    <div class="seasonal-dev-header">
+                        <div>
+                            <p class="seasonal-dev-eyebrow">Seasonal pattern</p>
+                            <h3 class="seasonal-dev-title">Monthly rhythm</h3>
+                            <p class="seasonal-dev-desc">How each metric drifts above or below your personal average across the year — great for spotting SAD-like or seasonal patterns.</p>
+                        </div>
+                        <div class="seasonal-dev-controls" role="group" aria-label="Select metrics to display">
+                            <label class="seasonal-dev-toggle" data-metric="mood">
+                                <input type="checkbox" checked value="mood"> <span>Mood</span>
+                            </label>
+                            <label class="seasonal-dev-toggle" data-metric="sleep">
+                                <input type="checkbox" value="sleep"> <span>Sleep</span>
+                            </label>
+                            <label class="seasonal-dev-toggle" data-metric="energy">
+                                <input type="checkbox" value="energy"> <span>Energy</span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="comparison-chart-wrap seasonal-dev-chart-wrap">
+                        <canvas id="seasonalDeviationChart"></canvas>
+                    </div>
+                    <p class="seasonal-dev-hint">Values show deviation from your personal average for that metric. Zero = your baseline.</p>
+                </div>
+
                 <div class="card" style="margin-bottom: var(--space-lg);">
-                    <h3>Monthly comparison (average mood by month)</h3>
-                    <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: var(--space-sm);">All your data combined by month.</p>
+                    <h3>Monthly comparison</h3>
+                    <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: var(--space-sm);">Average mood by calendar month across all your data.</p>
                     <div class="comparison-chart-wrap seasonal-chart-wrap">
                         <canvas id="seasonalChart"></canvas>
                     </div>

@@ -405,3 +405,653 @@
 
     console.log('[Aura Improvements v2] Loaded — velocity, insights, i18n, dark-mode charts, report tabs, escape key all patched.');
 })();
+
+/* ═══════════════════════════════════════════════════════════════════════
+   BATCH A — JS enhancements (IIFE, non-breaking)
+   1. Tag chip UI: converts #tags text input into visual pill chips
+   2. Journal page: hero date nav (prev/next day)
+   3. Heatmap: refresh cell colours on theme change
+   ═══════════════════════════════════════════════════════════════════════ */
+(function () {
+    'use strict';
+
+    function onReady(fn) {
+        if (document.readyState !== 'loading' && window.navigate) { setTimeout(fn, 200); return; }
+        document.addEventListener('DOMContentLoaded', function () { setTimeout(fn, 800); });
+    }
+
+    /* ── 1. TAG CHIP UI ──────────────────────────────────────────────── */
+    onReady(function () {
+        var realInput = document.getElementById('tags');
+        if (!realInput) return;
+        if (document.getElementById('tagChipInputWrap')) return; // already init
+
+        // Build the visual wrapper right after the original input
+        var wrap = document.createElement('div');
+        wrap.id = 'tagChipInputWrap';
+        wrap.className = 'tag-chip-input-wrap';
+        wrap.setAttribute('aria-label', 'Tags');
+
+        var textInput = document.createElement('input');
+        textInput.type = 'text';
+        textInput.className = 'tag-chip-text-input';
+        textInput.placeholder = 'Add a tag…';
+        textInput.setAttribute('autocomplete', 'off');
+        textInput.setAttribute('spellcheck', 'false');
+
+        wrap.appendChild(textInput);
+        realInput.parentNode.insertBefore(wrap, realInput.nextSibling);
+
+        function getChips() {
+            return Array.from(wrap.querySelectorAll('.tag-chip-live'));
+        }
+
+        function syncToReal() {
+            var tags = getChips().map(function (c) { return c.dataset.tag; }).join(', ');
+            realInput.value = tags;
+            // Trigger change so app.js picks it up
+            realInput.dispatchEvent(new Event('input', { bubbles: true }));
+            realInput.dispatchEvent(new Event('change', { bubbles: true }));
+        }
+
+        function addTag(raw) {
+            var tag = raw.replace(/^#+/, '').trim().toLowerCase();
+            if (!tag) return;
+            // Prevent duplicates
+            if (getChips().some(function (c) { return c.dataset.tag === tag; })) return;
+
+            var chip = document.createElement('span');
+            chip.className = 'tag-chip-live';
+            chip.dataset.tag = tag;
+            chip.innerHTML = '#' + tag +
+                '<button class="tag-chip-live-remove" aria-label="Remove ' + tag + '" tabindex="-1">×</button>';
+            chip.querySelector('.tag-chip-live-remove').addEventListener('click', function (e) {
+                e.stopPropagation();
+                chip.style.transform = 'scale(0.8)';
+                chip.style.opacity = '0';
+                chip.style.transition = 'all 0.14s ease';
+                setTimeout(function () { chip.remove(); syncToReal(); }, 140);
+            });
+            wrap.insertBefore(chip, textInput);
+            syncToReal();
+        }
+
+        function parseTags(str) {
+            return str.split(/[,\s]+/).filter(Boolean);
+        }
+
+        textInput.addEventListener('keydown', function (e) {
+            if ((e.key === 'Enter' || e.key === ',') && textInput.value.trim()) {
+                e.preventDefault();
+                parseTags(textInput.value).forEach(addTag);
+                textInput.value = '';
+            }
+            if (e.key === 'Backspace' && !textInput.value) {
+                var chips = getChips();
+                if (chips.length) chips[chips.length - 1].remove();
+                syncToReal();
+            }
+        });
+
+        textInput.addEventListener('blur', function () {
+            if (textInput.value.trim()) {
+                parseTags(textInput.value).forEach(addTag);
+                textInput.value = '';
+            }
+        });
+
+        wrap.addEventListener('click', function () { textInput.focus(); });
+
+        // Sync existing value from realInput (in case form is prepopulated)
+        function loadFromReal() {
+            var existing = realInput.value.trim();
+            wrap.querySelectorAll('.tag-chip-live').forEach(function (c) { c.remove(); });
+            if (existing) parseTags(existing).forEach(addTag);
+        }
+        loadFromReal();
+
+        // Watch for programmatic updates to #tags (app.js may set it on load)
+        var obs = new MutationObserver(function () { });
+        // Poll once after page is shown — handles edit mode
+        var origNav = window.navigate;
+        if (typeof origNav === 'function') {
+            window.navigate = function (page) {
+                var r = origNav.apply(this, arguments);
+                if (page === 'entry') setTimeout(loadFromReal, 400);
+                return r;
+            };
+        }
+
+        // Expose globally so suggestion chips can use it
+        window.auraAddTagChip = addTag;
+
+        // Patch tag-suggestion chips: clicking one should also add a chip
+        // (suggestions are rendered by app.js into #tagSuggestions)
+        document.addEventListener('click', function (e) {
+            var chip = e.target.closest('#tagSuggestions .em-tag-chip');
+            if (!chip) return;
+            var label = chip.textContent.replace(/^#+/, '').trim();
+            if (label) addTag(label);
+        });
+    });
+
+    /* ── 2. JOURNAL PAGE: prev/next day navigation ───────────────────── */
+    onReady(function () {
+        var prevBtn = document.getElementById('journalPrevDay');
+        var nextBtn = document.getElementById('journalNextDay');
+        var heroDate = document.getElementById('journalHeroDate');
+        if (!prevBtn || !nextBtn) return;
+
+        function formatHeroDate(dateStr) {
+            if (!dateStr) return '';
+            try {
+                var d = new Date(dateStr + 'T12:00:00');
+                return d.toLocaleDateString(undefined, { weekday: 'short', month: 'long', day: 'numeric' });
+            } catch (e) { return dateStr; }
+        }
+
+        function updateHeroDate() {
+            if (heroDate && typeof window.currentJournalDate !== 'undefined') {
+                heroDate.textContent = formatHeroDate(window.currentJournalDate);
+            }
+        }
+
+        // Hook into existing prev/next if they exist in app.js
+        function shiftDay(delta) {
+            // Try to use app.js journal date functions
+            if (typeof window.journalNavigateDay === 'function') {
+                window.journalNavigateDay(delta);
+                setTimeout(updateHeroDate, 200);
+                return;
+            }
+            // Fallback: read the date from journalEntryMeta text
+            var meta = document.getElementById('journalEntryMeta');
+            var metaText = meta ? meta.textContent.trim() : '';
+            var match = metaText.match(/\d{4}-\d{2}-\d{2}/);
+            var base = match ? match[0] : (typeof window.currentJournalDate !== 'undefined' ? window.currentJournalDate : new Date().toISOString().slice(0,10));
+            var d = new Date(base + 'T12:00:00');
+            d.setDate(d.getDate() + delta);
+            var newDate = d.toISOString().slice(0,10);
+            // Open journal for that date via app.js if possible
+            if (typeof window.openJournalForDate === 'function') {
+                window.openJournalForDate(newDate);
+            } else if (typeof window.navigateTo === 'function') {
+                window.navigateTo('journal', newDate);
+            }
+            setTimeout(updateHeroDate, 200);
+        }
+
+        prevBtn.addEventListener('click', function () { shiftDay(-1); });
+        nextBtn.addEventListener('click', function () { shiftDay(+1); });
+
+        // Update hero date whenever journal page is opened
+        var origNav2 = window.navigate;
+        if (typeof origNav2 === 'function') {
+            window.navigate = function (page) {
+                var r = origNav2.apply(this, arguments);
+                if (page === 'journal') setTimeout(updateHeroDate, 350);
+                return r;
+            };
+        }
+        updateHeroDate();
+    });
+
+    /* ── 3. HEATMAP: re-apply cells on theme change ──────────────────── */
+    onReady(function () {
+        function onThemeChange2() {
+            setTimeout(function () {
+                if (typeof window.renderYearHeatmap === 'function') window.renderYearHeatmap();
+            }, 420);
+        }
+        ['darkModeToggle', 'darkModeTogglePage'].forEach(function (id) {
+            var el = document.getElementById(id);
+            if (el) el.addEventListener('click', onThemeChange2);
+        });
+    });
+
+    console.log('[Aura Improvements Batch A] Tags, journal nav, heatmap theming loaded.');
+})();
+
+/* ═══════════════════════════════════════════════════════════════════════
+   BATCH B — Correlations metric-pair toggle + Seasonal deviation chart
+   ═══════════════════════════════════════════════════════════════════════ */
+(function () {
+    'use strict';
+
+    function onReady(fn) {
+        if (document.readyState !== 'loading' && window.navigate) { setTimeout(fn, 200); return; }
+        document.addEventListener('DOMContentLoaded', function () { setTimeout(fn, 900); });
+    }
+
+    /* ── Colour helpers ─────────────────────────────────────────────── */
+    function cssVar(name) {
+        return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+    }
+    function hexToRgba(hex, a) {
+        if (!hex || hex.indexOf('rgb') === 0) return hex || 'rgba(139,157,131,0.7)';
+        var h = hex.replace('#', '');
+        if (h.length !== 6) return hex;
+        return 'rgba(' + parseInt(h.slice(0,2),16) + ',' + parseInt(h.slice(2,4),16) + ',' + parseInt(h.slice(4,6),16) + ',' + a + ')';
+    }
+    function colorA(name, a) { return hexToRgba(cssVar(name), a); }
+
+    /* ── DB helper ──────────────────────────────────────────────────── */
+    function loadEntries(cb) {
+        if (typeof Dexie === 'undefined') { cb({}); return; }
+        try {
+            var db = new Dexie('AuraAnalyticsDB');
+            db.version(1).stores({ entries:'id,date', appState:'key', backupMeta:'key' });
+            db.version(2).stores({ entries:'id,date', appState:'key', backupMeta:'key', backups:'id' });
+            db.entries.toArray().then(function(list) {
+                var map = {};
+                (list || []).forEach(function(e) { if (e && e.date) map[e.date] = e; });
+                cb(map);
+            }).catch(function() { cb({}); });
+        } catch(e) { cb({}); }
+    }
+
+    /* ─────────────────────────────────────────────────────────────────
+       1. CORRELATIONS: metric-pair toggle
+    ───────────────────────────────────────────────────────────────── */
+    var corrChartInst = null;
+
+    var PAIR_CONFIG = {
+        'sleep-mood': {
+            xKey:   function(e) { return e.sleepTotal != null ? e.sleepTotal : e.sleep; },
+            yKey:   function(e) { return e.mood; },
+            xLabel: 'Sleep (hours)', yLabel: 'Mood (1–10)',
+            xMin: 0, xMax: 12, yMin: 1, yMax: 10,
+            label:  'Sleep vs Mood',
+            desc:   'How your sleep duration relates to next-day mood.',
+            color:  '--chart-1'
+        },
+        'sleep-energy': {
+            xKey:   function(e) { return e.sleepTotal != null ? e.sleepTotal : e.sleep; },
+            yKey:   function(e) { return e.energy; },
+            xLabel: 'Sleep (hours)', yLabel: 'Energy (1–10)',
+            xMin: 0, xMax: 12, yMin: 1, yMax: 10,
+            label:  'Sleep vs Energy',
+            desc:   'How much sleep affects your energy levels.',
+            color:  '--accent-secondary'
+        },
+        'mood-energy': {
+            xKey:   function(e) { return e.mood; },
+            yKey:   function(e) { return e.energy; },
+            xLabel: 'Mood (1–10)', yLabel: 'Energy (1–10)',
+            xMin: 1, xMax: 10, yMin: 1, yMax: 10,
+            label:  'Mood vs Energy',
+            desc:   'The relationship between how you feel emotionally and your physical energy.',
+            color:  '--chart-3'
+        }
+    };
+
+    function computeR2(xs, ys) {
+        if (!xs || !ys || xs.length < 3) return null;
+        var n = xs.length;
+        var mx = xs.reduce(function(a,b){return a+b;},0)/n;
+        var my = ys.reduce(function(a,b){return a+b;},0)/n;
+        var num=0, dxdx=0, dydy=0;
+        for(var i=0;i<n;i++) { num+=(xs[i]-mx)*(ys[i]-my); dxdx+=(xs[i]-mx)*(xs[i]-mx); dydy+=(ys[i]-my)*(ys[i]-my); }
+        if(!dxdx||!dydy) return 0;
+        var r = num/Math.sqrt(dxdx*dydy);
+        return r*r;
+    }
+
+    function regressionLine(xs, ys, xMin, xMax) {
+        if (!xs || xs.length < 3) return null;
+        var n = xs.length;
+        var mx = xs.reduce(function(a,b){return a+b;},0)/n;
+        var my = ys.reduce(function(a,b){return a+b;},0)/n;
+        var num=0, den=0;
+        for(var i=0;i<n;i++){ num+=(xs[i]-mx)*(ys[i]-my); den+=(xs[i]-mx)*(xs[i]-mx); }
+        if(!den) return null;
+        var slope = num/den, intercept = my - slope*mx;
+        return [{x: xMin, y: slope*xMin+intercept}, {x: xMax, y: slope*xMax+intercept}];
+    }
+
+    function renderCorrPair(pairKey, emap) {
+        var canvas = document.getElementById('correlationsChart');
+        if (!canvas) return;
+        var cfg = PAIR_CONFIG[pairKey];
+        if (!cfg) return;
+
+        var dates = Object.keys(emap).sort();
+        var xs = [], ys = [];
+        dates.forEach(function(d) {
+            var e = emap[d];
+            var x = cfg.xKey(e), y = cfg.yKey(e);
+            if (typeof x === 'number' && !isNaN(x) && typeof y === 'number' && !isNaN(y)) {
+                xs.push(x); ys.push(y);
+            }
+        });
+
+        var r2 = computeR2(xs, ys);
+        var badge = document.getElementById('corrR2Badge');
+        if (badge) {
+            badge.textContent = r2 != null ? 'R² = ' + (r2*100).toFixed(1) + '%' : (xs.length < 3 ? 'Need 3+ entries' : '');
+        }
+        var descEl = document.getElementById('corrPairDesc');
+        if (descEl) descEl.textContent = cfg.desc;
+
+        var c1 = cssVar(cfg.color);
+        var pts = xs.map(function(x,i){ return {x:x, y:ys[i]}; });
+        var reg = regressionLine(xs, ys, cfg.xMin, cfg.xMax);
+        var isDark = document.documentElement.getAttribute('data-dark') === 'true';
+
+        var datasets = [{
+            label: cfg.label,
+            data: pts.length ? pts : [{x: cfg.xMin, y: (cfg.yMin+cfg.yMax)/2}],
+            backgroundColor: hexToRgba(c1, 0.32),
+            borderColor: c1,
+            pointRadius: 5, pointHoverRadius: 8,
+            pointBorderWidth: 1.5,
+            pointBorderColor: hexToRgba(c1, 0.7),
+            type: 'scatter'
+        }];
+        if (reg) datasets.push({
+            label: 'Trend',
+            data: reg,
+            type: 'line',
+            borderColor: isDark ? 'rgba(255,255,255,0.45)' : 'rgba(0,0,0,0.28)',
+            borderWidth: 2,
+            borderDash: [5, 4],
+            pointRadius: 0, pointHoverRadius: 0,
+            fill: false, tension: 0
+        });
+
+        if (corrChartInst) { corrChartInst.destroy(); corrChartInst = null; }
+        var existing = window.Chart && window.Chart.getChart && window.Chart.getChart(canvas);
+        if (existing) existing.destroy();
+
+        if (typeof Chart === 'undefined') return;
+        corrChartInst = new Chart(canvas, {
+            type: 'scatter',
+            data: { datasets: datasets },
+            options: {
+                responsive: true, maintainAspectRatio: false,
+                parsing: false,
+                animation: { duration: 380, easing: 'easeOutQuart' },
+                layout: { padding: { top: 8, right: 16, bottom: 8, left: 8 } },
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        enabled: true,
+                        callbacks: {
+                            title: function(items) {
+                                var pt = items[0] && items[0].raw;
+                                if (!pt || typeof pt.x !== 'number') return cfg.label;
+                                return pt.x.toFixed(1) + ' ' + cfg.xLabel.split(' ')[0] + ' · ' + cfg.yLabel.split(' ')[0] + ' ' + pt.y;
+                            },
+                            label: function(ctx) {
+                                if (ctx.raw && typeof ctx.raw.x === 'number') return cfg.xLabel + ': ' + ctx.raw.x.toFixed(1) + ', ' + cfg.yLabel + ': ' + ctx.raw.y;
+                                return ctx.dataset.label || '';
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        type: 'linear', min: cfg.xMin, max: cfg.xMax,
+                        title: { display: true, text: cfg.xLabel, font: { size: 11, weight: '600' }, color: cssVar('--text-muted') },
+                        grid: { display: false },
+                        ticks: { maxTicksLimit: 7, font: { size: 11 }, padding: 8, color: cssVar('--text-muted') }
+                    },
+                    y: {
+                        min: cfg.yMin, max: cfg.yMax,
+                        title: { display: true, text: cfg.yLabel, font: { size: 11, weight: '600' }, color: cssVar('--text-muted') },
+                        grid: { color: isDark ? 'rgba(255,255,255,0.07)' : 'rgba(0,0,0,0.07)' },
+                        ticks: { maxTicksLimit: 6, font: { size: 11 }, padding: 8, color: cssVar('--text-muted') }
+                    }
+                }
+            }
+        });
+    }
+
+    onReady(function () {
+        var tabs = document.getElementById('corrPairTabs');
+        if (!tabs) return;
+
+        var currentPair = 'sleep-mood';
+        var cachedEntries = null;
+
+        function switchPair(pairKey) {
+            currentPair = pairKey;
+            tabs.querySelectorAll('.corr-pair-tab').forEach(function(btn) {
+                var active = btn.dataset.pair === pairKey;
+                btn.classList.toggle('active', active);
+                btn.setAttribute('aria-selected', String(active));
+            });
+            if (cachedEntries) renderCorrPair(pairKey, cachedEntries);
+        }
+
+        tabs.addEventListener('click', function(e) {
+            var btn = e.target.closest('.corr-pair-tab');
+            if (!btn || !btn.dataset.pair) return;
+            switchPair(btn.dataset.pair);
+        });
+
+        // Hook into navigate so we reload entries each time correlations opens
+        var origNav = window.navigate;
+        if (typeof origNav === 'function') {
+            window.navigate = function(page) {
+                var r = origNav.apply(this, arguments);
+                if (page === 'correlations') {
+                    setTimeout(function() {
+                        loadEntries(function(emap) {
+                            cachedEntries = emap;
+                            renderCorrPair(currentPair, emap);
+                        });
+                    }, 400);
+                }
+                return r;
+            };
+        }
+
+        // Also intercept window.renderCorrelations re-calls (theme change etc.)
+        var origRender = window.renderCorrelations;
+        if (typeof origRender === 'function') {
+            window.renderCorrelations = function() {
+                var r = origRender.apply(this, arguments);
+                setTimeout(function() {
+                    loadEntries(function(emap) {
+                        cachedEntries = emap;
+                        renderCorrPair(currentPair, emap);
+                    });
+                }, 250);
+                return r;
+            };
+        }
+    });
+
+    /* ─────────────────────────────────────────────────────────────────
+       2. SEASONAL DEVIATION: sine-wave style monthly deviation chart
+    ───────────────────────────────────────────────────────────────── */
+    var devChartInst = null;
+
+    var METRIC_CFG = {
+        mood:   { key: 'mood',   label: 'Mood',   colorVar: '--chart-1',          scale: 10 },
+        sleep:  { key: 'sleep',  label: 'Sleep',  colorVar: '--accent-secondary',  scale: 12,
+                  extract: function(e) { return e.sleepTotal != null ? e.sleepTotal : e.sleep; } },
+        energy: { key: 'energy', label: 'Energy', colorVar: '--chart-3',           scale: 10 }
+    };
+
+    function buildDevDataset(metricKey, emap) {
+        var cfg = METRIC_CFG[metricKey];
+        if (!cfg) return null;
+        var months = [0,1,2,3,4,5,6,7,8,9,10,11];
+        var buckets = months.map(function() { return []; });
+        Object.keys(emap).forEach(function(date) {
+            var e = emap[date];
+            var val = cfg.extract ? cfg.extract(e) : e[cfg.key];
+            if (typeof val !== 'number' || isNaN(val)) return;
+            var m = new Date(date + 'T12:00:00').getMonth();
+            buckets[m].push(val);
+        });
+        var avgs = buckets.map(function(b) { return b.length ? b.reduce(function(a,v){return a+v;},0)/b.length : null; });
+        var allVals = avgs.filter(function(v){return v!=null;});
+        if (!allVals.length) return null;
+        var mean = allVals.reduce(function(a,b){return a+b;},0)/allVals.length;
+        var devs = avgs.map(function(v) { return v != null ? parseFloat((v - mean).toFixed(2)) : null; });
+
+        // Smooth with simple 3-point average for sine-wave feel
+        var smooth = devs.map(function(v, i) {
+            if (v == null) return null;
+            var prev = devs[(i + 11) % 12], next = devs[(i + 1) % 12];
+            var vals = [v];
+            if (prev != null) vals.push(prev);
+            if (next != null) vals.push(next);
+            return parseFloat((vals.reduce(function(a,b){return a+b;},0)/vals.length).toFixed(2));
+        });
+
+        var c = cssVar(cfg.colorVar);
+        return {
+            label: cfg.label,
+            data: smooth,
+            borderColor: c,
+            backgroundColor: hexToRgba(c, 0.12),
+            borderWidth: 2.5,
+            pointRadius: 5,
+            pointHoverRadius: 8,
+            pointBackgroundColor: hexToRgba(c, 0.9),
+            pointBorderColor: c,
+            pointBorderWidth: 1.5,
+            tension: 0.45,
+            fill: true
+        };
+    }
+
+    function renderSeasonalDeviation(emap, activeMetrics) {
+        var canvas = document.getElementById('seasonalDeviationChart');
+        if (!canvas) return;
+        if (devChartInst) { devChartInst.destroy(); devChartInst = null; }
+        var existing = window.Chart && window.Chart.getChart && window.Chart.getChart(canvas);
+        if (existing) existing.destroy();
+        if (typeof Chart === 'undefined') return;
+
+        var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+        var datasets = [];
+        activeMetrics.forEach(function(m) {
+            var ds = buildDevDataset(m, emap);
+            if (ds) datasets.push(ds);
+        });
+
+        var isDark = document.documentElement.getAttribute('data-dark') === 'true';
+        var gridColor = isDark ? 'rgba(255,255,255,0.07)' : 'rgba(0,0,0,0.07)';
+        var tickColor = cssVar('--text-muted');
+
+        devChartInst = new Chart(canvas, {
+            type: 'line',
+            data: { labels: months, datasets: datasets },
+            options: {
+                responsive: true, maintainAspectRatio: false,
+                animation: { duration: 500, easing: 'easeOutQuart' },
+                interaction: { mode: 'index', intersect: false },
+                layout: { padding: { top: 12, right: 16, bottom: 8, left: 8 } },
+                plugins: {
+                    legend: {
+                        display: datasets.length > 1,
+                        position: 'top',
+                        align: 'end',
+                        labels: { boxWidth: 12, boxHeight: 12, borderRadius: 6, padding: 16, font: { size: 11 }, color: tickColor }
+                    },
+                    tooltip: {
+                        enabled: true,
+                        callbacks: {
+                            title: function(items) { return items[0] ? months[items[0].dataIndex] : ''; },
+                            label: function(ctx) {
+                                var v = ctx.raw;
+                                if (v == null) return ctx.dataset.label + ': no data';
+                                var sign = v >= 0 ? '+' : '';
+                                return ctx.dataset.label + ': ' + sign + v.toFixed(2) + ' vs your average';
+                            }
+                        }
+                    },
+                    // Zero reference line via annotation-less approach: drawn in afterDraw
+                },
+                scales: {
+                    x: {
+                        grid: { display: false },
+                        ticks: { font: { size: 11 }, color: tickColor, padding: 8 }
+                    },
+                    y: {
+                        grid: { color: gridColor },
+                        ticks: {
+                            font: { size: 11 }, color: tickColor, padding: 8,
+                            callback: function(v) {
+                                var sign = v > 0 ? '+' : '';
+                                return sign + v.toFixed(1);
+                            }
+                        },
+                        title: { display: true, text: 'Deviation from average', font: { size: 10, weight: '600' }, color: tickColor }
+                    }
+                }
+            },
+            plugins: [{
+                // Draw zero baseline
+                id: 'zeroLine',
+                afterDraw: function(chart) {
+                    var yAxis = chart.scales['y'];
+                    if (!yAxis) return;
+                    var y0 = yAxis.getPixelForValue(0);
+                    var ctx = chart.ctx;
+                    var ca = chart.chartArea;
+                    ctx.save();
+                    ctx.beginPath();
+                    ctx.moveTo(ca.left, y0);
+                    ctx.lineTo(ca.right, y0);
+                    ctx.strokeStyle = isDark ? 'rgba(255,255,255,0.28)' : 'rgba(0,0,0,0.25)';
+                    ctx.lineWidth = 1.5;
+                    ctx.setLineDash([4, 4]);
+                    ctx.stroke();
+                    ctx.restore();
+                }
+            }]
+        });
+    }
+
+    onReady(function () {
+        var container = document.querySelector('.seasonal-deviation-card');
+        if (!container) return;
+
+        var cachedEntries = null;
+        function getActiveMetrics() {
+            return Array.from(container.querySelectorAll('.seasonal-dev-toggle input:checked'))
+                        .map(function(cb) { return cb.value; });
+        }
+
+        function refresh() {
+            if (!cachedEntries) return;
+            var active = getActiveMetrics();
+            renderSeasonalDeviation(cachedEntries, active.length ? active : ['mood']);
+        }
+
+        // Toggle checkboxes
+        container.querySelectorAll('.seasonal-dev-toggle input[type="checkbox"]').forEach(function(cb) {
+            cb.addEventListener('change', function() {
+                // Always keep at least one active
+                var checked = getActiveMetrics();
+                if (!checked.length) { cb.checked = true; }
+                refresh();
+            });
+        });
+
+        // Hook navigate
+        var origNav2 = window.navigate;
+        if (typeof origNav2 === 'function') {
+            window.navigate = function(page) {
+                var r = origNav2.apply(this, arguments);
+                if (page === 'seasonal') {
+                    setTimeout(function() {
+                        loadEntries(function(emap) {
+                            cachedEntries = emap;
+                            refresh();
+                        });
+                    }, 400);
+                }
+                return r;
+            };
+        }
+    });
+
+    console.log('[Aura Improvements Batch B] Correlations toggle + seasonal deviation loaded.');
+})();
