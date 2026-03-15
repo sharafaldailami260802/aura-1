@@ -1186,11 +1186,19 @@ function navigate(page, button) {
                 var from = document.getElementById('customRangeFrom');
                 var to = document.getElementById('customRangeTo');
                 if (from && to) {
-                    if (!from.value) {
+                    var fromStr = typeof getDateInputValue === 'function' ? getDateInputValue(from) : from.value;
+                    if (!fromStr) {
                         var t = new Date();
-                        to.value = t.toISOString().split('T')[0];
+                        var toYmd = t.toISOString().split('T')[0];
                         t.setDate(t.getDate() - 30);
-                        from.value = t.toISOString().split('T')[0];
+                        var fromYmd = t.toISOString().split('T')[0];
+                        if (typeof setDateInputDisplay === 'function') {
+                            setDateInputDisplay(to, toYmd);
+                            setDateInputDisplay(from, fromYmd);
+                        } else {
+                            to.value = toYmd;
+                            from.value = fromYmd;
+                        }
                     }
                     renderCustomRangeChart();
                 }
@@ -3126,15 +3134,14 @@ function getStreakAtDate(dateStr) {
     return count;
 }
 
+function getUserDateDisplay(dateStr) {
+    return dateStr && typeof formatDisplayDate === 'function' ? formatDisplayDate(dateStr, window.auraDateFormat || 'MD') : (dateStr || '');
+}
 function showDayPreview(e, dateStr) {
     var tip = document.getElementById('dayPreviewTooltip');
     if (!tip) return;
     var entry = entries[dateStr];
-    var dateLabel = dateStr ? (function() {
-        var p = dateStr.split('-').map(Number);
-        var d = new Date(p[0], p[1] - 1, p[2]);
-        return d.toLocaleDateString(typeof getLocale === 'function' ? getLocale() : 'en', { weekday: 'short', month: 'short', day: 'numeric' });
-    })() : dateStr;
+    var dateLabel = getUserDateDisplay(dateStr);
     var msg = '';
     if (entry) {
         msg = '<strong>' + dateLabel + '</strong>';
@@ -3174,12 +3181,7 @@ function showEntryModal(dateStr) {
     var editBtn = document.getElementById('entryModalEditBtn');
     var journalBtn = document.getElementById('entryModalJournalBtn');
     var entry = entries[dateStr];
-    
-    // Format date nicely
-    var d = new Date(dateStr + 'T12:00:00');
-    var dayNames = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
-    var monthNames = ['January','February','March','April','May','June','July','August','September','October','November','December'];
-    title.textContent = dayNames[d.getDay()] + ', ' + monthNames[d.getMonth()] + ' ' + d.getDate();
+    title.textContent = getUserDateDisplay(dateStr) || dateStr;
     if (subtitle) subtitle.textContent = dateStr;
     
     if (editBtn) editBtn.style.display = '';
@@ -3536,8 +3538,9 @@ function selectSettingsDataManagerDate(dateStr) {
     settingsDataManagerSelectedDate = dateStr || '';
     if (input && typeof setDateInputDisplay === 'function') {
         setDateInputDisplay(input, settingsDataManagerSelectedDate);
-    } else if (input) {
-        input.value = settingsDataManagerSelectedDate;
+    } else if (input && settingsDataManagerSelectedDate) {
+        input.setAttribute('data-aura-date', settingsDataManagerSelectedDate);
+        input.value = typeof formatDisplayDate === 'function' ? formatDisplayDate(settingsDataManagerSelectedDate, window.auraDateFormat || 'MD') : settingsDataManagerSelectedDate;
     }
     renderDataManagerPreview(settingsDataManagerSelectedDate);
 }
@@ -6966,8 +6969,10 @@ function setFilterTag(tag) {
 
 function runSearch() {
     var q = (document.getElementById('searchQuery').value || '').toLowerCase().trim();
-    var from = document.getElementById('searchDateFrom').value;
-    var to = document.getElementById('searchDateTo').value;
+    var fromEl = document.getElementById('searchDateFrom');
+    var toEl = document.getElementById('searchDateTo');
+    var from = fromEl && typeof getDateInputValue === 'function' ? getDateInputValue(fromEl) : (fromEl ? fromEl.value : '');
+    var to = toEl && typeof getDateInputValue === 'function' ? getDateInputValue(toEl) : (toEl ? toEl.value : '');
     var moodMin = document.getElementById('searchMoodMin').value;
     var moodMax = document.getElementById('searchMoodMax').value;
     var tagStr = (document.getElementById('searchTags').value || '').toLowerCase().trim();
@@ -7853,6 +7858,31 @@ function refreshAllDateInputsDisplay() {
         if (val) setDateInputDisplay(inp, val);
     });
 }
+function refreshPreferenceDrivenUi() {
+    if (typeof refreshDateInputPlaceholders === 'function') refreshDateInputPlaceholders();
+    if (typeof refreshAllDateInputsDisplay === 'function') refreshAllDateInputsDisplay();
+    var activePage = document.querySelector('.page.active');
+    var activeId = activePage ? activePage.id : '';
+    if (activeId === 'settings') {
+        if (typeof renderSettingsDataManagerRecent === 'function') renderSettingsDataManagerRecent();
+        if (typeof renderDataManagerPreview === 'function') {
+            var selected = typeof getDataManagerSelectedDate === 'function' ? getDataManagerSelectedDate() : '';
+            renderDataManagerPreview(selected);
+        }
+    }
+    if (activeId === 'journal') {
+        if (typeof renderEntryList === 'function') renderEntryList();
+    }
+    if (activeId === 'calendar') {
+        if (typeof renderCalendarCurrentView === 'function') renderCalendarCurrentView();
+    }
+    if (typeof entryModalDate !== 'undefined' && entryModalDate) {
+        var entryModal = document.getElementById('entryModal');
+        if (entryModal && entryModal.classList.contains('show') && typeof showEntryModal === 'function') {
+            showEntryModal(entryModalDate);
+        }
+    }
+}
 function getStickyAmPm() {
     if (window.auraLastTimePeriod === undefined) {
         try { window.auraLastTimePeriod = localStorage.getItem('auraLastTimePeriod') || 'PM'; } catch (e) { window.auraLastTimePeriod = 'PM'; }
@@ -8006,11 +8036,8 @@ async function savePreference(key, value) {
     if (key === 'dateFormat') {
         if (v !== 'MD' && v !== 'DM' && v !== 'YMD') v = 'MD';
         window.auraDateFormat = v;
-        if (typeof refreshAllDateInputsDisplay === 'function') refreshAllDateInputsDisplay();
-        if (typeof renderEntryList === 'function') renderEntryList();
-        if (typeof renderBackupList === 'function') renderBackupList();
-        if (typeof renderCalendarList === 'function') renderCalendarList();
-        updateLastBackupDisplay();
+        if (typeof refreshPreferenceDrivenUi === 'function') refreshPreferenceDrivenUi();
+        if (typeof updateLastBackupDisplay === 'function') updateLastBackupDisplay();
     }
     if (key === 'timeFormat') {
         if (v !== '12' && v !== '24') v = '12';
@@ -8034,6 +8061,7 @@ async function savePreference(key, value) {
     if (key === 'locale') {
         window.auraLocale = (v && v !== '_custom') ? v : 'en';
         if (typeof applyTranslations === 'function') applyTranslations();
+        if (typeof refreshPreferenceDrivenUi === 'function') refreshPreferenceDrivenUi();
         if (typeof renderCalendarCurrentView === 'function') renderCalendarCurrentView();
         if (typeof renderMonthGrid === 'function') renderMonthGrid();
         if (typeof renderWeekTimeline === 'function') renderWeekTimeline();
