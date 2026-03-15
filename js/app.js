@@ -2181,26 +2181,21 @@ function updateSleepSegmentSummary() {
     }
     if (result.error) {
         summaryEl.textContent = '';
-        updateSupportRail();
         return;
     }
     if (segments.length === 0) {
         summaryEl.textContent = '';
-        updateSupportRail();
         return;
     }
     if (result.count === 0) {
         summaryEl.textContent = 'Add start and end times to complete each segment.';
-        updateSupportRail();
         return;
     }
     if (result.count === 1) {
         summaryEl.textContent = 'Total sleep: ' + result.totalHours + 'h (1 segment)';
-        updateSupportRail();
         return;
     }
     summaryEl.textContent = 'Total sleep: ' + result.totalHours + 'h across ' + result.count + ' segments.';
-    updateSupportRail();
 }
 function updateAddSleepSegmentButton() {
     var btn = document.getElementById('addSleepSegmentBtn');
@@ -2234,26 +2229,34 @@ function buildSleepSegmentCard(index, startVal, endVal) {
         '<div class="sleep-segment-row">' +
             '<div class="sleep-segment-times">' +
                 '<div class="sleep-segment-field">' +
-                    '<span class="sleep-segment-field-label">Start Time</span>' +
-                    '<input type="text" class="aura-time-input form-input sleep-start" placeholder="Start Time" aria-label="Segment ' + index + ' start time">' +
+                    '<span class="sleep-segment-field-label">Start</span>' +
+                    '<input type="text" class="aura-time-input form-input sleep-start" placeholder="HH:mm" aria-label="Segment ' + index + ' start time">' +
                 '</div>' +
                 '<span class="sleep-segment-arrow" aria-hidden="true">→</span>' +
                 '<div class="sleep-segment-field">' +
-                    '<span class="sleep-segment-field-label">End Time</span>' +
-                    '<input type="text" class="aura-time-input form-input sleep-end" placeholder="End Time" aria-label="Segment ' + index + ' end time">' +
+                    '<span class="sleep-segment-field-label">End</span>' +
+                    '<input type="text" class="aura-time-input form-input sleep-end" placeholder="HH:mm" aria-label="Segment ' + index + ' end time">' +
                 '</div>' +
             '</div>' +
-            '<button type="button" class="sleep-segment-remove" onclick="removeSleepSegment(this)">Delete Segment</button>' +
+            '<button type="button" class="sleep-segment-remove" onclick="removeSleepSegment(this)" aria-label="Remove segment">×</button>' +
         '</div>' +
         '<div class="sleep-segment-meta">' +
             '<span class="sleep-segment-duration" aria-hidden="true"></span>' +
             '<span class="sleep-segment-status">Enter start and end time</span>' +
         '</div>';
+    // NOTE: DO NOT call bindDynamicAuraTimeInput here.
+    // Inputs are not in the DOM yet; binding must happen after appendChild.
+    // Caller (addSleepSegment / setSleepSegmentsInForm) is responsible.
     var startInput = card.querySelector('.sleep-start');
-    var endInput = card.querySelector('.sleep-end');
-    if (startInput && startVal) setTimeInputDisplay(startInput, startVal);
-    if (endInput && endVal) setTimeInputDisplay(endInput, endVal);
-    bindSleepSegmentInputs(card);
+    var endInput   = card.querySelector('.sleep-end');
+    if (startInput && startVal) {
+        startInput.value = startVal;
+        startInput.setAttribute('data-aura-time', startVal);
+    }
+    if (endInput && endVal) {
+        endInput.value = endVal;
+        endInput.setAttribute('data-aura-time', endVal);
+    }
     return card;
 }
 function renumberSleepSegments(container) {
@@ -2276,6 +2279,7 @@ function setSleepSegmentsInForm(segments) {
     segs.forEach(function(seg, i) {
         var card = buildSleepSegmentCard(i + 1, seg.start, seg.end);
         container.appendChild(card);
+        bindSleepSegmentInputs(card);  // bind AFTER append
         refreshSleepSegmentCardUI(card);
     });
     renumberSleepSegments(container);
@@ -2290,6 +2294,7 @@ function addSleepSegment() {
     var index = existing + 1;
     var card = buildSleepSegmentCard(index, '', '');
     container.appendChild(card);
+    bindSleepSegmentInputs(card);   // bind AFTER append
     renumberSleepSegments(container);
     updateSleepSegmentSummary();
     updateAddSleepSegmentButton();
@@ -3552,10 +3557,12 @@ function renderDataManagerPreview(dateStr) {
     var status = document.getElementById('settingsDataManagerStatus');
     var checkInBtn = document.getElementById('settingsEditCheckInBtn');
     var journalBtn = document.getElementById('settingsEditJournalBtn');
+    var disabledHint = document.getElementById('dataManagerDisabledHint');
     if (!preview) return;
     if (status) status.textContent = '';
     if (checkInBtn) checkInBtn.disabled = true;
     if (journalBtn) journalBtn.disabled = true;
+    if (disabledHint) disabledHint.hidden = false;
     if (!dateStr) {
         preview.className = 'data-manager-preview is-empty';
         preview.innerHTML = ''
@@ -3576,6 +3583,7 @@ function renderDataManagerPreview(dateStr) {
         if (status) status.textContent = 'No saved data for ' + dateStr + '.';
         return;
     }
+    if (disabledHint) disabledHint.hidden = true;
     var meta = getDayRecordMeta(entry);
     var dateFmt = window.auraDateFormat || 'MD';
     var displayDate = typeof formatDisplayDate === 'function' ? formatDisplayDate(dateStr, dateFmt) : dateStr;
@@ -5177,10 +5185,8 @@ function renderCustomRangeChart() {
 var reportTabState = 'weekly';
 function setReportTab(tab, button) {
     reportTabState = tab || reportTabState;
-    document.querySelectorAll('.report-tabs button').forEach(function(b) {
+    document.querySelectorAll('.report-tabs .report-tab-btn').forEach(function(b) {
         b.classList.toggle('active', b.getAttribute('data-report') === reportTabState);
-        b.classList.toggle('btn', b.getAttribute('data-report') === reportTabState);
-        b.classList.toggle('btn-secondary', b.getAttribute('data-report') !== reportTabState);
     });
     document.getElementById('reportWeekly').style.display = reportTabState === 'weekly' ? 'block' : 'none';
     document.getElementById('reportMonthly').style.display = reportTabState === 'monthly' ? 'block' : 'none';
@@ -8151,6 +8157,11 @@ async function savePreference(key, value) {
         window.auraDateFormat = v;
         if (typeof refreshPreferenceDrivenUi === 'function') refreshPreferenceDrivenUi();
         if (typeof updateLastBackupDisplay === 'function') updateLastBackupDisplay();
+        if (typeof renderSettingsDataManagerRecent === 'function') renderSettingsDataManagerRecent();
+        if (typeof renderDataManagerPreview === 'function') {
+            var selected = typeof getDataManagerSelectedDate === 'function' ? getDataManagerSelectedDate() : '';
+            renderDataManagerPreview(selected);
+        }
     }
     if (key === 'timeFormat') {
         if (v !== '12' && v !== '24') v = '12';

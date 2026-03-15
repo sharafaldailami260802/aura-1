@@ -104,28 +104,28 @@
                 <span>Insights</span>
             </button>
 
-            <div class="section-label">Deep Dive</div>
-            <button onclick="navigate('correlations', this)" class="nav nav-deep-dive-item" aria-label="Go to Correlations">
+            <div class="section-label">Explore</div>
+            <button onclick="navigate('correlations', this)" class="nav" aria-label="Go to Correlations">
                 <span class="nav-icon">🔗</span>
                 <span>Correlations</span>
             </button>
-            <button onclick="navigate('circadian', this)" class="nav nav-deep-dive-item" aria-label="Go to Mood Velocity">
+            <button onclick="navigate('circadian', this)" class="nav" aria-label="Go to Mood Velocity">
                 <span class="nav-icon">⏰</span>
                 <span>Mood Velocity</span>
             </button>
-            <button onclick="navigate('predictions', this)" class="nav nav-deep-dive-item" aria-label="Go to Forecast">
+            <button onclick="navigate('predictions', this)" class="nav" aria-label="Go to Forecast">
                 <span class="nav-icon">🔮</span>
                 <span>Forecast</span>
             </button>
-            <button onclick="navigate('patterns', this)" class="nav nav-deep-dive-item" aria-label="Go to My Patterns">
+            <button onclick="navigate('patterns', this)" class="nav" aria-label="Go to My Patterns">
                 <span class="nav-icon">🎯</span>
                 <span>My Patterns</span>
             </button>
-            <button onclick="navigate('seasonal', this)" class="nav nav-deep-dive-item" aria-label="Go to Seasonal Rhythm">
+            <button onclick="navigate('seasonal', this)" class="nav" aria-label="Go to Seasonal Rhythm">
                 <span class="nav-icon">🍂</span>
                 <span>Seasonal Rhythm</span>
             </button>
-            <button onclick="navigate('reports', this)" class="nav nav-deep-dive-item" aria-label="Go to Reports">
+            <button onclick="navigate('reports', this)" class="nav" aria-label="Go to Reports">
                 <span class="nav-icon">📋</span>
                 <span>Reports</span>
             </button>
@@ -223,16 +223,25 @@
                 </div>
                 
                 <div class="dashboard-grid">
-                    <div class="card" data-widget="mood">
-                        <h3>Mood Timeline</h3>
+                    <div class="card dashboard-metric-card" data-widget="mood">
+                        <div class="dashboard-card-header">
+                            <h3>Mood Timeline</h3>
+                            <button type="button" class="dashboard-card-link" onclick="navigate('mood', document.querySelector('.nav[onclick*=\'mood\']'))" aria-label="Open Mood Trends">View full →</button>
+                        </div>
                         <div class="dashboard-chart-wrap"><canvas id="moodChart"></canvas></div>
                     </div>
-                    <div class="card" data-widget="sleep">
-                        <h3>Sleep Patterns</h3>
+                    <div class="card dashboard-metric-card" data-widget="sleep">
+                        <div class="dashboard-card-header">
+                            <h3>Sleep Patterns</h3>
+                            <button type="button" class="dashboard-card-link" onclick="navigate('sleep', document.querySelector('.nav[onclick*=\'sleep\']'))" aria-label="Open Sleep Analysis">View full →</button>
+                        </div>
                         <div class="dashboard-chart-wrap"><canvas id="sleepChart"></canvas></div>
                     </div>
-                    <div class="card" data-widget="energy">
-                        <h3>Energy Flow</h3>
+                    <div class="card dashboard-metric-card" data-widget="energy">
+                        <div class="dashboard-card-header">
+                            <h3>Energy Flow</h3>
+                            <button type="button" class="dashboard-card-link" onclick="navigate('energy', document.querySelector('.nav[onclick*=\'energy\']'))" aria-label="Open Energy Patterns">View full →</button>
+                        </div>
                         <div class="dashboard-chart-wrap"><canvas id="energyChart"></canvas></div>
                     </div>
                 </div>
@@ -670,6 +679,9 @@
                         <canvas id="sleepChartFull"></canvas>
                     </div>
                 </div>
+                <div class="analytics-insight-strip" id="sleepInsightStrip" style="display:none;">
+                    <!-- populated by improvements.js buildSleepInsights -->
+                </div>
             </div>
             
             <div id="energy" class="page">
@@ -683,6 +695,9 @@
                     <div class="comparison-chart-wrap analytics-chart-wrap">
                         <canvas id="energyChartFull"></canvas>
                     </div>
+                </div>
+                <div class="analytics-insight-strip" id="energyInsightStrip" style="display:none;">
+                    <!-- populated by improvements.js buildEnergyInsights -->
                 </div>
             </div>
             
@@ -770,7 +785,6 @@
                                 <span class="prediction-band-swatch"></span>
                                 <span>Shaded band shows expected range based on your recent variability</span>
                             </div>
-                            <p id="predictionNote" style="color: var(--text-muted); font-size: 0.9rem; margin-top: var(--space-sm);"></p>
                             <button type="button" class="btn chart-export-btn" onclick="exportChartPNG('predictionChart')">Export PNG</button>
                         </div>
                     </div>
@@ -831,9 +845,17 @@
                         <button type="button" class="btn chart-export-btn" onclick="exportChartPNG('distributionChart')">Export PNG</button>
                     </div>
                     </div>
-                <div class="card card--secondary" style="margin-top: var(--space-lg);">
-                    <h3>Sleep Timeline</h3>
-                    <p class="patterns-card-desc">When you slept across each night—surfaces consistency and fragmentation.</p>
+                <div class="card card--secondary patterns-sleep-card" style="margin-top: var(--space-lg);">
+                    <div class="patterns-sleep-header">
+                        <div>
+                            <h3>Sleep Timeline</h3>
+                            <p class="patterns-card-desc">When you slept and woke — shows consistency and gaps across nights.</p>
+                        </div>
+                        <div class="sleep-timeline-legend" aria-hidden="true">
+                            <span class="stl-legend-dot stl-legend-main"></span><span>Main sleep</span>
+                            <span class="stl-legend-dot stl-legend-frag"></span><span>Fragment</span>
+                        </div>
+                    </div>
                     <div class="sleep-timeline-controls" id="sleepTimelineControls">
                         <button type="button" class="btn" data-range="30" onclick="setSleepTimelineRange(30, this)">Last 30 days</button>
                         <button type="button" class="btn-secondary" data-range="7" onclick="setSleepTimelineRange(7, this)">Last 7 days</button>
@@ -874,16 +896,29 @@
                             <h3 class="seasonal-dev-title">Monthly rhythm</h3>
                             <p class="seasonal-dev-desc">How each metric drifts above or below your personal average across the year — great for spotting SAD-like or seasonal patterns.</p>
                         </div>
-                        <div class="seasonal-dev-controls" role="group" aria-label="Select metrics to display">
-                            <label class="seasonal-dev-toggle" data-metric="mood">
-                                <input type="checkbox" checked value="mood"> <span>Mood</span>
-                            </label>
-                            <label class="seasonal-dev-toggle" data-metric="sleep">
-                                <input type="checkbox" value="sleep"> <span>Sleep</span>
-                            </label>
-                            <label class="seasonal-dev-toggle" data-metric="energy">
-                                <input type="checkbox" value="energy"> <span>Energy</span>
-                            </label>
+                        <div class="seasonal-dev-controls-wrap">
+                            <div class="seasonal-dev-controls" role="group" aria-label="Select metrics to display">
+                                <label class="seasonal-dev-toggle" data-metric="mood">
+                                    <input type="checkbox" checked value="mood">
+                                    <span class="seasonal-dev-toggle-label">Mood</span>
+                                </label>
+                                <label class="seasonal-dev-toggle" data-metric="sleep">
+                                    <input type="checkbox" value="sleep">
+                                    <span class="seasonal-dev-toggle-label">Sleep</span>
+                                </label>
+                                <label class="seasonal-dev-toggle" data-metric="energy">
+                                    <input type="checkbox" value="energy">
+                                    <span class="seasonal-dev-toggle-label">Energy</span>
+                                </label>
+                            </div>
+                            <div class="seasonal-dev-range-wrap">
+                                <label for="seasonalDevRange" class="seasonal-dev-range-label">History</label>
+                                <select id="seasonalDevRange" class="theme-select seasonal-dev-range-select">
+                                    <option value="0">All time</option>
+                                    <option value="365">Last year</option>
+                                    <option value="730">Last 2 years</option>
+                                </select>
+                            </div>
                         </div>
                     </div>
                     <div class="comparison-chart-wrap seasonal-dev-chart-wrap">
@@ -938,11 +973,14 @@
             </div>
             
             <div id="reports" class="page">
-                <h1>Reports</h1>
+                <header class="page-hero">
+                    <h1>Reports</h1>
+                    <p class="page-hero-subtitle">Weekly, monthly, and annual summaries of your data.</p>
+                </header>
                 <div class="report-tabs" style="display: flex; gap: var(--space-xs); margin-bottom: var(--space-lg); flex-wrap: wrap;">
-                    <button type="button" class="btn active" data-report="weekly" onclick="setReportTab('weekly', this)">Weekly summary</button>
-                    <button type="button" class="btn-secondary" data-report="monthly" onclick="setReportTab('monthly', this)">Monthly recap</button>
-                    <button type="button" class="btn-secondary" data-report="year" onclick="setReportTab('year', this)">Year in review</button>
+                    <button type="button" class="report-tab-btn active" data-report="weekly" onclick="setReportTab('weekly', this)">Weekly summary</button>
+                    <button type="button" class="report-tab-btn" data-report="monthly" onclick="setReportTab('monthly', this)">Monthly recap</button>
+                    <button type="button" class="report-tab-btn" data-report="year" onclick="setReportTab('year', this)">Year in review</button>
                 </div>
                 <div id="reportWeekly" class="report-panel card">
                     <h3>Last 7 days</h3>
@@ -1165,8 +1203,9 @@
                         </div>
                     </div>
                     <div class="data-manager-actions">
-                        <button type="button" class="btn" id="settingsEditCheckInBtn" onclick="openSelectedDayCheckIn()" disabled>Edit Check-In</button>
-                        <button type="button" class="btn btn-secondary" id="settingsEditJournalBtn" onclick="openSelectedDayJournal()" disabled>Edit Journal</button>
+                        <p id="dataManagerDisabledHint" class="data-manager-actions-hint" aria-live="polite">Select a saved day above to enable editing.</p>
+                        <button type="button" class="btn" id="settingsEditCheckInBtn" onclick="openSelectedDayCheckIn()" disabled><span aria-hidden="true">✎</span> Edit Check-In</button>
+                        <button type="button" class="btn btn-secondary" id="settingsEditJournalBtn" onclick="openSelectedDayJournal()" disabled><span aria-hidden="true">📓</span> Edit Journal</button>
                     </div>
                     <div class="data-manager-recent">
                         <div class="data-manager-recent-header">
@@ -1239,7 +1278,7 @@
                             <input type="text" id="exportTags" class="form-input" placeholder="e.g. work, exercise">
                         </div>
                         <button type="button" class="btn" onclick="exportJSON()">Export as JSON</button>
-                        <button type="button" class="btn-secondary" onclick="exportCSV()">Export as CSV</button>
+                        <button type="button" class="btn btn-secondary-styled" onclick="exportCSV()">Export as CSV</button>
                     </div>
                 </div>
                 <div class="card">
@@ -1340,9 +1379,9 @@
             <label style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px;"><input type="radio" name="importConflict" value="overwrite" checked> Use imported</label>
             <label style="display: flex; align-items: center; gap: 8px; margin-bottom: var(--space-md);"><input type="radio" name="importConflict" value="newer"> Keep newer</label>
             <div class="modal-actions">
-                <button type="button" class="btn-secondary" onclick="closeImportPreviewModal()">Cancel</button>
-                <button type="button" class="btn" onclick="confirmImportMerge()">Import (merge)</button>
-                <button type="button" class="btn-secondary" onclick="confirmImportReplace()">Import (replace)</button>
+                <button type="button" class="btn btn-secondary-styled" onclick="confirmImportMerge()">Import (merge)</button>
+                <button type="button" class="btn btn-secondary-styled" onclick="confirmImportReplace()">Import (replace all)</button>
+                <button type="button" class="btn-neutral" onclick="closeImportPreviewModal()">Cancel</button>
             </div>
         </div>
     </div>

@@ -125,6 +125,62 @@
     background: color-mix(in srgb, var(--accent) 10%, transparent) !important;
     color: var(--text) !important;
 }
+.report-tabs .report-tab-btn {
+    display: inline-flex;
+    align-items: center;
+    height: 36px;
+    padding: 0 20px;
+    border-radius: 999px;
+    border: none;
+    font-family: var(--font-body);
+    font-size: 0.88rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    background: transparent;
+    color: var(--text-muted);
+    white-space: nowrap;
+}
+.report-tabs .report-tab-btn.active {
+    background: var(--accent);
+    color: var(--surface);
+    font-weight: 600;
+    box-shadow: 0 2px 8px color-mix(in srgb, var(--accent) 35%, transparent),
+                inset 0 1px 0 rgba(255,255,255,0.15);
+}
+.report-tabs .report-tab-btn:not(.active):hover {
+    color: var(--text);
+    background: color-mix(in srgb, var(--accent) 10%, transparent);
+}
+
+/* Secondary-styled btn: same shape as primary, muted fill */
+.btn.btn-secondary-styled {
+    background: color-mix(in srgb, var(--accent) 12%, var(--surface));
+    color: var(--accent-dark);
+    border: 1px solid var(--border-input);
+    box-shadow: none;
+}
+.btn.btn-secondary-styled:hover {
+    background: color-mix(in srgb, var(--accent) 20%, var(--surface));
+    box-shadow: var(--shadow-sm);
+}
+.btn-neutral {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    height: var(--btn-height);
+    padding: 0 20px;
+    border-radius: var(--radius-md);
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+.btn-neutral:hover {
+    border-color: var(--accent);
+    color: var(--text);
+}
 
 /* ── Calendar view tabs: same pill treatment ──────────────────────── */
 .calendar-view-tabs {
@@ -425,11 +481,6 @@
 /* ── Mood Velocity: use accent colors not heat colors ─────────────── */
 /* This is handled via JS override — see velocity patch below */
 
-/* ── Forecast page: cleanup ───────────────────────────────────────── */
-.forecast-support-cards .card--support:last-child {
-    display: none !important;
-}
-
 /* ── Sleep Analysis & Energy: insight strips ──────────────────────── */
 .page-analytics-insights {
     margin-top: var(--space-lg);
@@ -475,6 +526,49 @@
     font-size: 0.8rem;
     color: var(--text-muted);
     margin: 3px 0 0 0;
+}
+/* Analytics insight strips (sleep + energy pages) */
+.analytics-insight-strip {
+    margin-top: var(--space-lg);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+}
+.insight-strip-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-md) var(--space-lg);
+    display: flex;
+    gap: var(--space-sm);
+    align-items: flex-start;
+    box-shadow: var(--shadow-sm);
+    transition: box-shadow var(--transition-smooth);
+}
+.insight-strip-card:hover {
+    box-shadow: var(--shadow-md);
+}
+.insight-strip-icon {
+    font-size: 1.4rem;
+    line-height: 1;
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+.insight-strip-body {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+.insight-strip-text {
+    font-size: 0.92rem;
+    color: var(--text);
+    line-height: 1.5;
+    font-weight: 500;
+}
+.insight-strip-sub {
+    font-size: 0.82rem;
+    color: var(--text-muted);
+    line-height: 1.45;
 }
 
 /* ── Heatmap: aesthetic alignment ─────────────────────────────────── */
@@ -565,44 +659,6 @@
     margin-bottom: 6px;
 }
 #data .backup-list li:last-child { margin-bottom: 0; }
-
-/* ── Correlation page: tab switcher for metric pairs ─────────────── */
-.correlation-pair-tabs {
-    display: flex;
-    gap: 6px;
-    margin-bottom: var(--space-md);
-    padding: 4px;
-    background: color-mix(in srgb, var(--accent) 6%, var(--surface));
-    border: 1px solid var(--border);
-    border-radius: 999px;
-    width: fit-content;
-    flex-wrap: wrap;
-}
-.correlation-pair-tab {
-    display: inline-flex;
-    align-items: center;
-    height: 34px;
-    padding: 0 16px;
-    border-radius: 999px;
-    border: none;
-    font-family: var(--font-body);
-    font-size: 0.82rem;
-    font-weight: 500;
-    cursor: pointer;
-    background: transparent;
-    color: var(--text-muted);
-    transition: all 0.2s ease;
-}
-.correlation-pair-tab:hover {
-    color: var(--text);
-    background: color-mix(in srgb, var(--accent) 10%, transparent);
-}
-.correlation-pair-tab.active {
-    background: var(--accent);
-    color: var(--surface);
-    font-weight: 600;
-    box-shadow: 0 2px 8px color-mix(in srgb, var(--accent) 30%, transparent);
-}
 
 /* ── Buttons: system-wide micro polish ───────────────────────────── */
 .btn {
@@ -703,11 +759,6 @@ input[type="range"]:active::-webkit-slider-thumb {
     transform: scale(1.1);
 }
 
-/* ── Forecast: hide repetitive patterns card ──────────────────────── */
-#predictions .forecast-support-cards > .card--support:nth-child(2) {
-    display: none;
-}
-
 /* ── Insights page: less crowded layout ──────────────────────────── */
 .insights-section {
     padding: var(--space-lg);
@@ -791,16 +842,94 @@ input[type="range"]:active::-webkit-slider-thumb {
 #patterns .card {
     transition: transform 0.22s ease, box-shadow 0.22s ease;
 }
-
-/* ── Deep Dive nav items (now direct under section label) ────────── */
-.nav.nav-deep-dive-item {
-    font-size: 0.9rem;
-    opacity: 0.9;
-    padding-left: var(--space-md);
+/* Patterns page: visual hierarchy spacing */
+#patterns .patterns-hero-chart {
+    margin-bottom: var(--space-xl);
 }
-.nav.nav-deep-dive-item .nav-icon {
-    font-size: 1rem;
-    opacity: 0.75;
+#patterns .patterns-secondary .card + .card {
+    margin-top: var(--space-xl);
+}
+/* Sleep timeline card header */
+.patterns-sleep-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: var(--space-md);
+    flex-wrap: wrap;
+    margin-bottom: var(--space-md);
+}
+.sleep-timeline-legend {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    flex-wrap: wrap;
+}
+.stl-legend-dot {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+.stl-legend-main {
+    background: var(--accent);
+}
+.stl-legend-frag {
+    background: var(--accent-secondary);
+    opacity: 0.8;
+}
+/* Sleep timeline: taller rows for readability */
+.sleep-timeline-chart {
+    min-height: 220px;
+}
+[data-dark="true"] .sleep-timeline-chart rect {
+    filter: brightness(1.15);
+}
+.patterns-radar-card {
+    border: 1.5px solid color-mix(in srgb, var(--accent) 22%, var(--border));
+}
+#patterns .card--secondary {
+    opacity: 0.96;
+}
+
+/* Dashboard: card header with view link */
+.dashboard-card-header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: 12px;
+}
+.dashboard-card-header h3 {
+    margin-bottom: 0;
+}
+.dashboard-card-link {
+    background: none;
+    border: none;
+    font-family: var(--font-body);
+    font-size: 0.78rem;
+    font-weight: 500;
+    color: var(--accent);
+    cursor: pointer;
+    padding: 0;
+    opacity: 0;
+    transform: translateX(-4px);
+    transition: opacity 0.18s ease, transform 0.18s ease, color 0.15s ease;
+    white-space: nowrap;
+}
+.dashboard-metric-card:hover .dashboard-card-link {
+    opacity: 1;
+    transform: translateX(0);
+}
+.dashboard-card-link:hover {
+    color: var(--accent-dark);
+}
+@media (max-width: 768px) {
+    .dashboard-card-link {
+        opacity: 1;
+        transform: none;
+    }
 }
 
 /* ── Reduce motion support ───────────────────────────────────────── */
@@ -834,7 +963,7 @@ input[type="range"]:active::-webkit-slider-thumb {
 @media (max-width: 768px) {
     .report-tabs,
     .calendar-view-tabs,
-    .correlation-pair-tabs {
+    .corr-pair-tabs {
         width: 100%;
         border-radius: var(--radius-lg);
     }
@@ -1404,6 +1533,15 @@ input[type="range"]:active::-webkit-slider-thumb {
     margin-bottom: var(--space-md);
     letter-spacing: -0.02em;
 }
+/* Reports: panel breathing room and empty state */
+#reports .report-panel.card {
+    min-height: 200px;
+}
+#reports .report-panel h3 {
+    border-bottom: 1px solid var(--border);
+    padding-bottom: var(--space-sm);
+    margin-bottom: var(--space-lg);
+}
 
 /* ── 12. Data Manager: cleaner, more practical ───────────────────────── */
 .data-manager-card {
@@ -1431,9 +1569,20 @@ input[type="range"]:active::-webkit-slider-thumb {
     display: flex;
     gap: 10px;
     flex-wrap: wrap;
+    align-items: center;
     margin-top: var(--space-md);
     padding-top: var(--space-md);
     border-top: 1px solid var(--border);
+}
+.data-manager-actions-hint {
+    width: 100%;
+    margin: 0 0 6px;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+}
+.data-manager-actions .btn [aria-hidden="true"],
+.data-manager-actions .btn-secondary [aria-hidden="true"] {
+    margin-right: 6px;
 }
 .data-manager-actions .btn,
 .data-manager-actions .btn-secondary {
@@ -1490,8 +1639,9 @@ input[type="range"]:active::-webkit-slider-thumb {
 
 /* ── 15. Insight panel: breathable card grid ─────────────────────────── */
 .insights-dashboard-stack {
-    display: grid;
-    gap: var(--space-md);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xl);
 }
 .insight-overview-card {
     padding: var(--space-lg) var(--space-xl);
@@ -1514,6 +1664,127 @@ input[type="range"]:active::-webkit-slider-thumb {
     opacity: 0.75;
     margin-bottom: 8px;
     display: block;
+}
+/* Insights: section spacing and card constraints */
+.insights-section {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+}
+.insights-section-heading {
+    font-size: 0.68rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-weight: 700;
+    color: var(--text-muted);
+    margin-bottom: 2px;
+}
+.insights-section-title {
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    font-weight: 300;
+    letter-spacing: -0.02em;
+    color: var(--text);
+    margin-bottom: 4px;
+}
+.insights-section-description {
+    font-size: 0.88rem;
+    color: var(--text-muted);
+    line-height: 1.55;
+    margin-bottom: var(--space-sm);
+}
+/* Insight cards: single column on most screens, 2-col only on wide */
+.insight-cards-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-md);
+}
+@media (min-width: 1100px) {
+    .insight-cards-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+/* Individual card: constrain text density */
+.insight-detail-card {
+    padding: var(--space-md) var(--space-lg);
+}
+.insight-detail-title {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 4px;
+    color: var(--text);
+}
+.insight-detail-kicker {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.09em;
+    font-weight: 700;
+    color: var(--text-muted);
+    display: block;
+    margin-bottom: 4px;
+}
+.insight-detail-text {
+    font-size: 0.9rem;
+    line-height: 1.6;
+    color: var(--text);
+    margin-top: 6px;
+}
+.insight-nudge {
+    font-size: 0.85rem;
+    color: var(--accent-dark);
+    margin-top: 6px;
+    font-style: italic;
+    line-height: 1.5;
+}
+.insight-detail-context {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    margin-top: 8px;
+    line-height: 1.4;
+}
+/* Strength bar: smaller, less prominent */
+.insight-strength {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 4px;
+    flex-shrink: 0;
+}
+.insight-strength-label {
+    font-size: 0.68rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    font-weight: 600;
+    opacity: 0.7;
+}
+.insight-strength-bar {
+    width: 56px;
+    height: 3px;
+    background: var(--border);
+    border-radius: 999px;
+    overflow: hidden;
+}
+.insight-strength-fill {
+    height: 100%;
+    background: var(--accent);
+    border-radius: 999px;
+    transition: width 0.4s ease;
+}
+
+/* Forecast: support cards breathing room */
+.forecast-support-cards {
+    margin-top: var(--space-lg);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+}
+.prediction-interpretation {
+    max-width: 680px;
+}
+.prediction-interpretation p {
+    font-size: 0.92rem;
+    line-height: 1.65;
+    color: var(--text);
 }
 
 /* ── Mobile: journal page adapts gracefully ──────────────────────────── */
@@ -1751,12 +2022,21 @@ input[type="range"]:active::-webkit-slider-thumb {
     margin: 0;
 }
 
-/* Metric toggle checkboxes */
+/* Metric toggle checkboxes + history range */
+.seasonal-dev-controls-wrap {
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+    flex-wrap: wrap;
+}
 .seasonal-dev-controls {
     display: flex;
-    gap: 8px;
+    gap: 6px;
     flex-wrap: wrap;
-    flex-shrink: 0;
+    padding: 4px;
+    background: color-mix(in srgb, var(--accent) 6%, var(--surface));
+    border: 1px solid var(--border);
+    border-radius: 999px;
 }
 .seasonal-dev-toggle {
     display: inline-flex;
@@ -1803,14 +2083,41 @@ input[type="range"]:active::-webkit-slider-thumb {
     color: var(--accent);
 }
 .seasonal-dev-toggle:has(input:checked) {
+    background: var(--accent);
     border-color: var(--accent);
-    background: color-mix(in srgb, var(--accent) 10%, var(--surface));
-    color: var(--accent-dark);
+    color: var(--surface);
 }
 /* Per-metric colour theming */
 .seasonal-dev-toggle[data-metric="mood"] { --toggle-color: var(--chart-1); }
 .seasonal-dev-toggle[data-metric="sleep"] { --toggle-color: var(--accent-secondary); }
 .seasonal-dev-toggle[data-metric="energy"] { --toggle-color: var(--chart-3); }
+.seasonal-dev-toggle-label {
+    font-size: 0.82rem;
+    font-weight: 500;
+    color: var(--text-muted);
+    transition: color 0.15s ease;
+}
+.seasonal-dev-toggle:has(input:checked) .seasonal-dev-toggle-label {
+    color: var(--surface);
+    font-weight: 600;
+}
+.seasonal-dev-range-wrap {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.seasonal-dev-range-label {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    font-weight: 500;
+    white-space: nowrap;
+}
+.seasonal-dev-range-select {
+    height: 34px;
+    padding: 0 10px;
+    font-size: 0.82rem;
+    border-radius: var(--radius-md);
+}
 
 .seasonal-dev-chart-wrap {
     height: 300px;
@@ -2234,4 +2541,113 @@ input[type="range"]:active::-webkit-slider-thumb {
     .entry-modal-delete-btn { width: calc(100% - 32px); margin: 12px 16px 6px; }
     .em-field-row { padding: 11px 16px; }
     .em-inline-edit-row.open { padding: 10px 16px 12px; }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+   MOTION LAYER — Premium micro-interactions
+   All animations respect prefers-reduced-motion and .reduce-motion
+   ═══════════════════════════════════════════════════════════════════════ */
+
+/* Page enter animation */
+.page.active {
+    animation: pageEnter 0.32s cubic-bezier(0.16,1,0.3,1) both;
+}
+@keyframes pageEnter {
+    from { opacity: 0; transform: translateY(10px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Nav item: subtle left-nudge on hover */
+.nav:not(.active):hover {
+    padding-left: calc(var(--space-sm) + 4px);
+}
+.nav {
+    transition: background var(--transition-fast),
+                color var(--transition-fast),
+                padding-left var(--transition-fast);
+}
+
+/* Card: slightly richer lift */
+.card {
+    transition: transform 0.22s cubic-bezier(0.16,1,0.3,1),
+                box-shadow 0.22s cubic-bezier(0.16,1,0.3,1),
+                border-color 0.22s ease;
+}
+.card:hover {
+    transform: translateY(-3px);
+    border-color: color-mix(in srgb, var(--accent) 25%, var(--border));
+}
+
+/* Buttons: press feedback */
+.btn:active,
+.btn-secondary:active {
+    transform: scale(0.97);
+    transition: transform 0.08s ease;
+}
+
+/* FAB entrance */
+.fab {
+    animation: fabPop 0.45s cubic-bezier(0.34,1.56,0.64,1) 0.6s both;
+}
+@keyframes fabPop {
+    from { opacity: 0; transform: scale(0.6); }
+    to   { opacity: 1; transform: scale(1); }
+}
+
+/* Metric cards: staggered entrance on dashboard load */
+.metrics .metric:nth-child(1) { animation-delay: 0.05s; }
+.metrics .metric:nth-child(2) { animation-delay: 0.10s; }
+.metrics .metric:nth-child(3) { animation-delay: 0.15s; }
+.metrics .metric:nth-child(4) { animation-delay: 0.20s; }
+.metric {
+    animation: fadeSlideUp 0.35s cubic-bezier(0.16,1,0.3,1) both;
+}
+@keyframes fadeSlideUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Chart canvas: fade in on reveal */
+canvas {
+    animation: canvasFade 0.4s ease 0.15s both;
+}
+@keyframes canvasFade {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+/* Entry section expand/collapse: smooth height */
+.entry-section-content {
+    transition: max-height 0.3s cubic-bezier(0.16,1,0.3,1),
+                opacity 0.25s ease;
+}
+
+/* Insight strip cards: subtle entrance */
+.insight-strip-card {
+    animation: fadeSlideUp 0.3s cubic-bezier(0.16,1,0.3,1) both;
+}
+
+/* Respect reduce-motion (belt-and-suspenders alongside existing rules) */
+@media (prefers-reduced-motion: reduce) {
+    .page.active,
+    .metric,
+    .fab,
+    canvas,
+    .insight-strip-card {
+        animation: none !important;
+    }
+    .card:hover,
+    .metric:hover {
+        transform: none !important;
+    }
+}
+.reduce-motion .page.active,
+.reduce-motion .metric,
+.reduce-motion .fab,
+.reduce-motion canvas {
+    animation: none !important;
+}
+.reduce-motion .card:hover,
+.reduce-motion .metric:hover {
+    transform: none !important;
 }

@@ -66,23 +66,45 @@
         if (typeof orig !== 'function') return;
 
         function applyVelocityColors() {
-            var chart = window.circadianChart;
-            if (!chart || !chart.data || !chart.data.datasets || !chart.data.datasets[0]) return;
             var s = getComputedStyle(document.documentElement);
-            var accent = s.getPropertyValue('--accent').trim() || '#8B9D83';
-            var chart3 = s.getPropertyValue('--chart-3').trim() || '#C97D60';
-            var isDark = document.documentElement.getAttribute('data-dark') === 'true';
-            var pos = hexToRgba(accent, 0.82);
-            var neg = hexToRgba(chart3, 0.78);
-            var neutral = isDark ? 'rgba(148,163,184,0.22)' : 'rgba(0,0,0,0.09)';
-            var velocities = chart.data.datasets[0].data;
-            if (!velocities || !velocities.length) return;
-            chart.data.datasets[0].backgroundColor = velocities.map(function (v) {
-                if (typeof v === 'number' && v > 0.5)  return pos;
-                if (typeof v === 'number' && v < -0.5) return neg;
-                return neutral;
-            });
-            chart.update('none');
+            var accent    = s.getPropertyValue('--accent').trim()            || '#8B9D83';
+            var accentDark= s.getPropertyValue('--accent-dark').trim()       || '#6B7D63';
+            var accentSec = s.getPropertyValue('--accent-secondary').trim()  || '#C97D60';
+            var chart3    = s.getPropertyValue('--chart-3').trim()           || '#C97D60';
+            var isDark    = document.documentElement.getAttribute('data-dark') === 'true';
+
+            // 1. Velocity bar colours
+            var chart = window.circadianChart;
+            if (chart && chart.data && chart.data.datasets && chart.data.datasets[0]) {
+                var velocities = chart.data.datasets[0].data;
+                if (velocities && velocities.length) {
+                    var pos     = hexToRgba(accent, 0.82);
+                    var neg     = hexToRgba(chart3, 0.78);
+                    var neutral = isDark ? 'rgba(148,163,184,0.22)' : 'rgba(0,0,0,0.09)';
+                    chart.data.datasets[0].backgroundColor = velocities.map(function (v) {
+                        if (typeof v === 'number' && v > 0.5)  return pos;
+                        if (typeof v === 'number' && v < -0.5) return neg;
+                        return neutral;
+                    });
+                    chart.update('none');
+                }
+            }
+
+            // 2. Stability score bar fill — app.js sets inline background using heat colours;
+            //    override with accent palette to stay theme-consistent.
+            var barFill = document.querySelector('#stabilityScorePanel .stability-score-bar-fill');
+            if (barFill) {
+                var pill = document.querySelector('#stabilityScorePanel .stability-pill');
+                if (pill) {
+                    if (pill.classList.contains('stable')) {
+                        barFill.style.background = hexToRgba(accentDark, 0.85);
+                    } else if (pill.classList.contains('moderate')) {
+                        barFill.style.background = hexToRgba(accentSec, 0.75);
+                    } else {
+                        barFill.style.background = hexToRgba(chart3, 0.82);
+                    }
+                }
+            }
         }
 
         window.renderCircadian = function () {
@@ -192,12 +214,53 @@
             insights.push({ icon: trend > 0 ? '📈' : '📉', text: trend > 0 ? 'Energy trending up this week (+' + trend.toFixed(1) + ' vs average).' : 'Energy dipped this week (' + trend.toFixed(1) + ' vs average).', sub: trend < 0 ? 'Watch for sleep deficits or increased stress.' : 'Whatever you\'re doing — keep it up.' });
         }
 
+        // Energy–sleep correlation hint
+        var sleepNums = [], energyNums = [];
+        dates.forEach(function (d) {
+            var e = entries[d];
+            var s = e && (e.sleepTotal != null ? e.sleepTotal : e.sleep);
+            var en = e && e.energy;
+            if (typeof s === 'number' && !isNaN(s) && typeof en === 'number' && !isNaN(en)) {
+                sleepNums.push(s);
+                energyNums.push(en);
+            }
+        });
+        if (sleepNums.length >= 7) {
+            var paired = sleepNums.map(function (s, i) { return { x: s, y: energyNums[i] }; });
+            var sorted = paired.slice().sort(function (a, b) { return a.x - b.x; });
+            var lowEnergy = safeAvg(sorted.slice(0, Math.floor(sorted.length / 2)).map(function (p) { return p.y; }));
+            var highEnergy = safeAvg(sorted.slice(Math.ceil(sorted.length / 2)).map(function (p) { return p.y; }));
+            if (lowEnergy != null && highEnergy != null) {
+                var diff = highEnergy - lowEnergy;
+                if (diff > 0.8) {
+                    insights.push({ icon: '🔗', text: 'More sleep tends to come with higher energy for you.', sub: 'On nights with more sleep, your energy the next day averages ' + diff.toFixed(1) + ' points higher.' });
+                } else if (diff < -0.8) {
+                    insights.push({ icon: '🤔', text: 'Your energy doesn\'t closely track your sleep duration.', sub: 'Other factors — activity, stress, or timing — may matter more for you.' });
+                }
+            }
+        }
+
         return insights.slice(0, 3);
     }
 
     function renderInsights(pageId, insights) {
         var page = document.getElementById(pageId);
         if (!page) return;
+        var stripId = pageId + 'InsightStrip';
+        var container = document.getElementById(stripId);
+        if (container) {
+            container.style.display = (insights && insights.length) ? '' : 'none';
+            if (!insights || !insights.length) return;
+            container.innerHTML = insights.map(function (ins) {
+                return '<div class="insight-strip-card">' +
+                    '<span class="insight-strip-icon" aria-hidden="true">' + (ins.icon || '') + '</span>' +
+                    '<div class="insight-strip-body">' +
+                    '<p class="insight-strip-text">' + safe(ins.text) + '</p>' +
+                    (ins.sub ? '<p class="insight-strip-sub">' + safe(ins.sub) + '</p>' : '') +
+                    '</div></div>';
+            }).join('');
+            return;
+        }
         var old = page.querySelector('.page-analytics-insights');
         if (old) old.remove();
         if (!insights || !insights.length) return;
@@ -262,7 +325,19 @@
                 var active = document.querySelector('.page.active');
                 if (!active) return;
                 if (active.id === 'circadian' && typeof window.renderCircadian === 'function') window.renderCircadian();
-                if (active.id === 'correlations' && typeof window.renderCorrelations === 'function') window.renderCorrelations();
+                if (active.id === 'correlations') {
+                    setTimeout(function () {
+                        loadEntries(function (emap) {
+                            if (typeof window.renderCorrPair === 'function') {
+                                var activePairBtn = document.querySelector('.corr-pair-tab.active');
+                                var pair = activePairBtn ? activePairBtn.dataset.pair : 'sleep-mood';
+                                window.renderCorrPair(pair, emap);
+                            } else if (typeof window.renderCorrelations === 'function') {
+                                window.renderCorrelations();
+                            }
+                        });
+                    }, 200);
+                }
                 if (active.id === 'seasonal') {
                     if (typeof window.renderSeasonal === 'function') window.renderSeasonal();
                     if (typeof window.renderYearOverYear === 'function') window.renderYearOverYear();
@@ -806,16 +881,21 @@
             }
         });
     }
+    if (typeof renderCorrPair === 'function') window.renderCorrPair = renderCorrPair;
+
+    var _corrCurrentPair = 'sleep-mood';
+    var _corrCachedEntries = null;
 
     onReady(function () {
         var tabs = document.getElementById('corrPairTabs');
         if (!tabs) return;
 
-        var currentPair = 'sleep-mood';
-        var cachedEntries = null;
+        var currentPair = _corrCurrentPair;
+        var cachedEntries = _corrCachedEntries;
 
         function switchPair(pairKey) {
             currentPair = pairKey;
+            _corrCurrentPair = pairKey;
             tabs.querySelectorAll('.corr-pair-tab').forEach(function(btn) {
                 var active = btn.dataset.pair === pairKey;
                 btn.classList.toggle('active', active);
@@ -839,6 +919,7 @@
                     setTimeout(function() {
                         loadEntries(function(emap) {
                             cachedEntries = emap;
+                            _corrCachedEntries = emap;
                             renderCorrPair(currentPair, emap);
                         });
                     }, 400);
@@ -855,6 +936,7 @@
                 setTimeout(function() {
                     loadEntries(function(emap) {
                         cachedEntries = emap;
+                        _corrCachedEntries = emap;
                         renderCorrPair(currentPair, emap);
                     });
                 }, 250);
@@ -928,10 +1010,23 @@
         if (existing) existing.destroy();
         if (typeof Chart === 'undefined') return;
 
+        var rangeEl = document.getElementById('seasonalDevRange');
+        var rangeDays = rangeEl ? parseInt(rangeEl.value, 10) : 0;
+        var filteredMap = emap;
+        if (rangeDays > 0) {
+            var cutoff = new Date();
+            cutoff.setDate(cutoff.getDate() - rangeDays);
+            var cutoffStr = cutoff.toISOString().split('T')[0];
+            filteredMap = {};
+            Object.keys(emap).forEach(function (d) {
+                if (d >= cutoffStr) filteredMap[d] = emap[d];
+            });
+        }
+
         var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
         var datasets = [];
         activeMetrics.forEach(function(m) {
-            var ds = buildDevDataset(m, emap);
+            var ds = buildDevDataset(m, filteredMap);
             if (ds) datasets.push(ds);
         });
 
@@ -1034,6 +1129,11 @@
                 refresh();
             });
         });
+
+        var rangeEl = document.getElementById('seasonalDevRange');
+        if (rangeEl) {
+            rangeEl.addEventListener('change', function() { refresh(); });
+        }
 
         // Hook navigate
         var origNav2 = window.navigate;
