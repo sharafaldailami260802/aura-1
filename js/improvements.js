@@ -1769,175 +1769,99 @@
         attachStepperObserver();
     }
 
-    /* ── 2. Bullet-proof footer button binding ───────────────────────── */
-    /* Overwrite inline onclick attrs so they always use the live date  */
-    function rebindFooterButtons() {
-        var editBtn    = document.getElementById('entryModalEditBtn');
-        var journalBtn = document.getElementById('entryModalJournalBtn');
-        var closeBtn   = document.querySelector('#entryModal .btn-neutral');
-
-        if (editBtn && !editBtn._batchDBound) {
-            editBtn._batchDBound = true;
-            editBtn.removeAttribute('onclick');
-            editBtn.addEventListener('click', function (e) {
-                e.preventDefault();
-                var d = window.entryModalDate || '';
-                if (!d) return;
-                if (typeof window.openEntryForDate === 'function') window.openEntryForDate(d);
-                else if (typeof window.navigateTo === 'function') window.navigateTo('entry', d);
-            });
-        }
-
-        if (journalBtn && !journalBtn._batchDBound) {
-            journalBtn._batchDBound = true;
-            journalBtn.removeAttribute('onclick');
-            journalBtn.addEventListener('click', function (e) {
-                e.preventDefault();
-                var d = window.entryModalDate || '';
-                if (!d) return;
-                if (typeof window.openJournalEntryFromModal === 'function') window.openJournalEntryFromModal(d);
-                else if (typeof window.navigateTo === 'function') window.navigateTo('journal', d);
-            });
-        }
-
-        if (closeBtn && !closeBtn._batchDBound) {
-            closeBtn._batchDBound = true;
-            closeBtn.removeAttribute('onclick');
-            closeBtn.addEventListener('click', function (e) {
-                e.preventDefault();
-                if (typeof window.closeEntryModal === 'function') window.closeEntryModal();
-            });
-        }
-
-        /* Also fix the header × button */
-        var headerClose = document.querySelector('#entryModal .entry-modal-close');
-        if (headerClose && !headerClose._batchDBound) {
-            headerClose._batchDBound = true;
-            headerClose.removeAttribute('onclick');
-            headerClose.addEventListener('click', function (e) {
-                e.preventDefault();
-                if (typeof window.closeEntryModal === 'function') window.closeEntryModal();
-            });
-        }
-    }
-
-    /* Bind on load and re-bind whenever the modal opens */
-    function onReady(fn) {
-        if (document.readyState !== 'loading') { setTimeout(fn, 150); return; }
-        document.addEventListener('DOMContentLoaded', function () { setTimeout(fn, 500); });
-    }
-    onReady(rebindFooterButtons);
-
-    /* Re-bind after any showEntryModal call (modal may have been re-rendered) */
-    var _origShow = window.showEntryModal;
-    Object.defineProperty(window, 'showEntryModal', {
-        configurable: true,
-        get: function () { return _origShow; },
-        set: function (fn) {
-            _origShow = fn;
-        }
-    });
-    /* Patch via overlay click observer as a fallback */
-    document.addEventListener('click', function (e) {
-        var overlay = e.target.closest('.entry-modal-overlay');
-        if (overlay) setTimeout(rebindFooterButtons, 80);
-    }, true);
-
-    /* ── 3. Strip emoji prefixes from footer button text ─────────────── */
-    function cleanFooterLabels() {
-        var map = {
-            entryModalEditBtn:    'Full Edit',
-            entryModalJournalBtn: 'Journal'
-        };
-        Object.keys(map).forEach(function (id) {
-            var btn = document.getElementById(id);
-            if (btn && btn.textContent.trim() !== map[id]) {
-                /* Preserve only the text node, strip emoji */
-                btn.textContent = map[id];
-            }
-        });
-    }
-    onReady(cleanFooterLabels);
-
+    /* Footer buttons handled by BATCH F only — no rebind/defineProperty here */
 })();
 
 /* ═══════════════════════════════════════════════════════════════════════
-   BATCH E — Footer buttons: nuclear rebind (replaces BATCH D approach)
-   Root cause: _batchDBound flag prevents rebind; Object.defineProperty
-   race on showEntryModal. This uses pure delegation — no flags, no patch.
+   BATCH F — DEFINITIVE button fix + full modal redesign wiring
+   Strategy: wrap showEntryModal at window.load (after app.js has fully
+   run) and set onclick directly with date captured at call time.
+   No delegation, no flags, no stopPropagation — just clean direct binding.
    ═══════════════════════════════════════════════════════════════════════ */
 (function () {
     'use strict';
 
-    /* Single trusted delegation on the overlay — reads date fresh every time */
-    function attachDelegation() {
-        var overlay = document.getElementById('entryModal');
-        if (!overlay || overlay._batchEBound) return;
-        overlay._batchEBound = true;
+    function applyButtonBindings(dateStr) {
+        var editBtn    = document.getElementById('entryModalEditBtn');
+        var journalBtn = document.getElementById('entryModalJournalBtn');
+        var closeBtns  = document.querySelectorAll('#entryModal .entry-modal-footer .btn-neutral, #entryModal .entry-modal-close');
 
-        overlay.addEventListener('click', function (e) {
-            /* --- Full Edit --- */
-            if (e.target.closest('#entryModalEditBtn')) {
-                e.stopImmediatePropagation();
-                var d = window.entryModalDate;
-                if (!d) return;
+        if (editBtn) {
+            editBtn.onclick = null;
+            editBtn.addEventListener('click', function handler(e) {
+                e.stopPropagation();
+                editBtn.removeEventListener('click', handler);
                 if (typeof window.openEntryForDate === 'function') {
-                    window.openEntryForDate(d);
-                } else if (typeof window.navigate === 'function') {
+                    window.openEntryForDate(dateStr);
+                } else {
                     if (typeof window.closeEntryModal === 'function') window.closeEntryModal();
-                    setTimeout(function () { window.navigate('entry', null); }, 80);
+                    setTimeout(function () {
+                        var btn = document.querySelector('.bottom-nav button[data-page="entry"], .sidebar .nav[data-page="entry"]');
+                        if (typeof window.navigate === 'function') window.navigate('entry', btn);
+                    }, 60);
                 }
-                return;
-            }
+            });
+            /* Clean label */
+            editBtn.textContent = 'Edit Entry';
+        }
 
-            /* --- Journal --- */
-            if (e.target.closest('#entryModalJournalBtn')) {
-                e.stopImmediatePropagation();
-                var d = window.entryModalDate;
-                if (!d) return;
+        if (journalBtn) {
+            journalBtn.onclick = null;
+            journalBtn.addEventListener('click', function handler(e) {
+                e.stopPropagation();
+                journalBtn.removeEventListener('click', handler);
                 if (typeof window.openJournalEntryFromModal === 'function') {
-                    window.openJournalEntryFromModal(d);
-                } else if (typeof window.navigate === 'function') {
+                    window.openJournalEntryFromModal(dateStr);
+                } else {
                     if (typeof window.closeEntryModal === 'function') window.closeEntryModal();
-                    setTimeout(function () { window.navigate('journal', null); }, 80);
+                    setTimeout(function () {
+                        var btn = document.querySelector('.bottom-nav button[data-page="journal"], .sidebar .nav[data-page="journal"]');
+                        if (typeof window.navigate === 'function') window.navigate('journal', btn);
+                    }, 60);
                 }
-                return;
-            }
+            });
+            journalBtn.textContent = 'Journal';
+        }
 
-            /* --- Close (btn-neutral OR header × button) --- */
-            if (e.target.closest('.entry-modal-footer .btn-neutral') ||
-                e.target.closest('.entry-modal-close')) {
-                e.stopImmediatePropagation();
+        closeBtns.forEach(function (btn) {
+            btn.onclick = function (e) {
+                e.stopPropagation();
                 if (typeof window.closeEntryModal === 'function') window.closeEntryModal();
-                return;
-            }
-        }, true); /* useCapture: true — fires before any other listener */
-    }
-
-    /* Strip emoji labels cleanly */
-    function cleanLabels() {
-        var map = { entryModalEditBtn: 'Full Edit', entryModalJournalBtn: 'Journal' };
-        Object.keys(map).forEach(function (id) {
-            var btn = document.getElementById(id);
-            if (btn) btn.textContent = map[id];
+            };
+            if (btn.classList.contains('btn-neutral')) btn.textContent = 'Close';
         });
     }
 
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', function () {
-            setTimeout(function () { attachDelegation(); cleanLabels(); }, 400);
-        });
+    function patchShowEntryModal() {
+        var orig = window.showEntryModal;
+        if (!orig || orig._batchFPatched) return;
+
+        window.showEntryModal = function (dateStr) {
+            orig.call(this, dateStr);
+            /* Set bindings after the modal has rendered */
+            requestAnimationFrame(function () {
+                applyButtonBindings(dateStr);
+            });
+        };
+        window.showEntryModal._batchFPatched = true;
+
+        /* Also expose showEntryModalFromJournal wrapper */
+        var origJ = window.showEntryModalFromJournal;
+        if (origJ && !origJ._batchFPatched) {
+            window.showEntryModalFromJournal = function (dateStr) {
+                origJ.call(this, dateStr);
+                requestAnimationFrame(function () { applyButtonBindings(dateStr); });
+            };
+            window.showEntryModalFromJournal._batchFPatched = true;
+        }
+    }
+
+    /* Wait for app.js to fully run and expose functions */
+    if (document.readyState === 'complete') {
+        setTimeout(patchShowEntryModal, 300);
     } else {
-        setTimeout(function () { attachDelegation(); cleanLabels(); }, 200);
+        window.addEventListener('load', function () {
+            setTimeout(patchShowEntryModal, 300);
+        });
     }
-
-    /* Also re-attach if modal is torn down and recreated */
-    var bodyEl = document.body;
-    if (bodyEl) {
-        new MutationObserver(function () {
-            var overlay = document.getElementById('entryModal');
-            if (overlay && !overlay._batchEBound) { attachDelegation(); cleanLabels(); }
-        }).observe(bodyEl, { childList: true, subtree: true });
-    }
-
 })();

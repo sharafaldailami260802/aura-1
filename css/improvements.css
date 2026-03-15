@@ -4277,3 +4277,464 @@ canvas {
     #entryModalEditBtn.entry-modal-footer-btn,
     #entryModalJournalBtn.entry-modal-footer-btn { height: 46px !important; }
 }
+
+/* ═══════════════════════════════════════════════════════════════════════
+   BATCH F — Entry Modal: Premium Redesign v2
+   Layout: large stats hero (mood/energy/sleep) + compact detail list
+   ═══════════════════════════════════════════════════════════════════════ */
+
+/* ── Overlay (hidden until .show to avoid modal on load) ───────────────── */
+.entry-modal-overlay {
+    display: none !important;
+    background: rgba(0,0,0,0.6) !important;
+    backdrop-filter: blur(20px) saturate(160%) !important;
+    -webkit-backdrop-filter: blur(20px) saturate(160%) !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 24px !important;
+}
+.entry-modal-overlay.show {
+    display: flex !important;
+}
+
+/* ── Card ─────────────────────────────────────────────────────────────── */
+.entry-modal.entry-modal-premium {
+    width: 100% !important;
+    max-width: 440px !important;
+    max-height: calc(100dvh - 56px) !important;
+    background: var(--surface) !important;
+    border-radius: 32px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    overflow: hidden !important;
+    box-shadow:
+        0 0 0 1px color-mix(in srgb, var(--accent) 20%, transparent),
+        0 32px 72px rgba(0,0,0,0.38),
+        0 8px 24px rgba(0,0,0,0.22) !important;
+    animation: fModalIn 0.35s cubic-bezier(0.22,1,0.36,1) both !important;
+}
+@keyframes fModalIn {
+    from { opacity:0; transform:scale(0.94) translateY(12px); }
+    to   { opacity:1; transform:scale(1)    translateY(0); }
+}
+/* No pseudo before bar — clean top */
+.entry-modal.entry-modal-premium::before { display: none !important; }
+
+/* ── Header zone ─────────────────────────────────────────────────────── */
+.entry-modal-header {
+    padding: 28px 28px 0 !important;
+    border-bottom: none !important;
+    background: transparent !important;
+    display: flex !important;
+    align-items: flex-start !important;
+    justify-content: space-between !important;
+    flex-shrink: 0 !important;
+}
+.entry-modal-title-text {
+    font-family: var(--font-display) !important;
+    font-size: 2.4rem !important;
+    font-weight: 300 !important;
+    letter-spacing: -0.02em !important;
+    line-height: 1.1 !important;
+    color: var(--text) !important;
+    margin: 0 !important;
+}
+.entry-modal-subtitle { display: none !important; }
+
+/* Header close */
+.entry-modal-close {
+    width: 32px !important; height: 32px !important;
+    border-radius: 50% !important;
+    background: color-mix(in srgb, var(--text-muted) 12%, transparent) !important;
+    border: none !important; color: var(--text-muted) !important;
+    font-size: 0.72rem !important; cursor: pointer !important;
+    display: flex !important; align-items: center !important;
+    justify-content: center !important;
+    transition: background 0.15s, color 0.15s !important;
+    margin-top: 4px !important; flex-shrink: 0 !important;
+}
+.entry-modal-close:hover {
+    background: color-mix(in srgb, var(--text-muted) 22%, transparent) !important;
+    color: var(--text) !important;
+}
+
+/* ── Stats hero: mood / energy / sleep as 3 big numbers ─────────────── */
+.entry-modal-body { flex: 1 !important; overflow-y: auto !important; scrollbar-width: none !important; }
+.entry-modal-body::-webkit-scrollbar { display: none !important; }
+
+/* Stats row shared base */
+.em-field-row[data-field="mood"],
+.em-field-row[data-field="energy"],
+.em-field-row[data-field="sleep"] {
+    padding: 0 !important;
+    border-bottom: none !important;
+    background: transparent !important;
+}
+
+/* Build the 3-column stats strip */
+.em-field-row[data-field="mood"] {
+    display: flex !important;
+    align-items: stretch !important;
+    justify-content: stretch !important;
+    padding: 20px 22px 4px !important;
+    gap: 0 !important;
+    border-bottom: none !important;
+}
+
+.em-field-row[data-field="mood"],
+.em-field-row[data-field="energy"],
+.em-field-row[data-field="sleep"] {
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    text-align: center !important;
+    flex: 1 !important;
+    padding: 16px 10px !important;
+    margin: 0 !important;
+    min-width: 0 !important;
+    border-bottom: none !important;
+    gap: 2px !important;
+    background: transparent !important;
+    transition: background 0.12s !important;
+    border-radius: 16px !important;
+}
+.em-field-row[data-field="mood"]:hover,
+.em-field-row[data-field="energy"]:hover,
+.em-field-row[data-field="sleep"]:hover {
+    background: color-mix(in srgb, var(--accent) 5%, transparent) !important;
+}
+
+.em-field-row[data-field="mood"] ~ .em-field-row[data-field="energy"],
+.em-field-row[data-field="energy"] ~ .em-field-row[data-field="sleep"] {
+    border-left: 1px solid color-mix(in srgb, var(--border) 60%, transparent) !important;
+}
+
+#entryModalBody {
+    display: flex !important;
+    flex-direction: column !important;
+}
+
+.em-field-row[data-field="mood"] { order: 1 !important; }
+.em-field-row[data-field="energy"] { order: 2 !important; }
+.em-field-row[data-field="sleep"]  { order: 3 !important; }
+
+#entryModalBody {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr 1fr !important;
+    grid-template-rows: auto auto auto !important;
+    overflow-y: auto !important;
+}
+
+.em-field-row[data-field="mood"]   { grid-column: 1 !important; grid-row: 1 !important; }
+.em-field-row[data-field="energy"] { grid-column: 2 !important; grid-row: 1 !important; }
+.em-field-row[data-field="sleep"]  { grid-column: 3 !important; grid-row: 1 !important; }
+
+.em-inline-edit-row[id="em-edit-mood"]   { grid-column: 1 / -1 !important; grid-row: 2 !important; display: none !important; }
+.em-inline-edit-row[id="em-edit-energy"] { grid-column: 1 / -1 !important; grid-row: 3 !important; display: none !important; }
+.em-inline-edit-row[id="em-edit-sleep"]  { grid-column: 1 / -1 !important; grid-row: 4 !important; display: none !important; }
+.em-inline-edit-row.open { display: flex !important; }
+
+.em-field-row[data-field="activities"],
+.em-field-row[data-field="tags"],
+.em-field-row[data-field="journal"],
+.em-inline-edit-row[id="em-edit-activities"],
+.em-inline-edit-row[id="em-edit-tags"],
+.entry-modal-delete-btn {
+    grid-column: 1 / -1 !important;
+}
+
+.em-field-row[data-field="activities"] {
+    border-top: 1px solid color-mix(in srgb, var(--border) 70%, transparent) !important;
+    margin-top: 4px !important;
+}
+
+/* ── Stat card internals ─────────────────────────────────────────────── */
+.em-field-row[data-field="mood"]   .em-field-icon,
+.em-field-row[data-field="energy"] .em-field-icon,
+.em-field-row[data-field="sleep"]  .em-field-icon {
+    font-size: 1.3rem !important;
+    width: auto !important;
+    margin-bottom: 4px !important;
+    opacity: 1 !important;
+}
+
+.em-field-row[data-field="mood"]   .em-field-label,
+.em-field-row[data-field="energy"] .em-field-label,
+.em-field-row[data-field="sleep"]  .em-field-label {
+    font-size: 0.6rem !important;
+    letter-spacing: 0.12em !important;
+    font-weight: 700 !important;
+    color: var(--text-muted) !important;
+    width: auto !important;
+    text-align: center !important;
+    margin-bottom: 2px !important;
+}
+
+.em-field-row[data-field="mood"]   .em-field-value,
+.em-field-row[data-field="energy"] .em-field-value,
+.em-field-row[data-field="sleep"]  .em-field-value {
+    flex: none !important;
+    text-align: center !important;
+    font-size: 0.9rem !important;
+    font-weight: 600 !important;
+}
+.em-field-row[data-field="mood"]   .em-field-value strong,
+.em-field-row[data-field="energy"] .em-field-value strong,
+.em-field-row[data-field="sleep"]  .em-field-value strong {
+    font-size: 1.9rem !important;
+    font-family: var(--font-display) !important;
+    font-weight: 300 !important;
+    display: block !important;
+    line-height: 1 !important;
+    margin-bottom: 0 !important;
+}
+
+.em-field-row[data-field="mood"]   .em-field-actions,
+.em-field-row[data-field="energy"] .em-field-actions,
+.em-field-row[data-field="sleep"]  .em-field-actions {
+    flex-direction: row !important;
+    gap: 4px !important;
+    margin-top: 6px !important;
+    opacity: 0 !important;
+    transition: opacity 0.15s !important;
+}
+.em-field-row[data-field="mood"]:hover   .em-field-actions,
+.em-field-row[data-field="energy"]:hover .em-field-actions,
+.em-field-row[data-field="sleep"]:hover  .em-field-actions {
+    opacity: 1 !important;
+}
+
+/* ── Detail rows (activities / tags / journal) ───────────────────────── */
+.em-field-row[data-field="activities"],
+.em-field-row[data-field="tags"],
+.em-field-row[data-field="journal"] {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    padding: 13px 24px !important;
+    gap: 12px !important;
+    text-align: left !important;
+    border-bottom: 1px solid color-mix(in srgb, var(--border) 45%, transparent) !important;
+    border-radius: 0 !important;
+    flex: none !important;
+    min-height: 0 !important;
+    transition: background 0.12s !important;
+}
+.em-field-row[data-field="activities"]:hover,
+.em-field-row[data-field="tags"]:hover,
+.em-field-row[data-field="journal"]:hover {
+    background: color-mix(in srgb, var(--accent) 4%, transparent) !important;
+}
+.em-field-row[data-field="activities"] .em-field-icon,
+.em-field-row[data-field="tags"]       .em-field-icon,
+.em-field-row[data-field="journal"]    .em-field-icon {
+    font-size: 1rem !important;
+    width: 24px !important;
+    align-items: center !important;
+    flex-direction: row !important;
+    opacity: 0.7 !important;
+}
+.em-field-row[data-field="activities"] .em-field-label,
+.em-field-row[data-field="tags"]       .em-field-label,
+.em-field-row[data-field="journal"]    .em-field-label {
+    font-size: 0.65rem !important;
+    letter-spacing: 0.1em !important;
+    font-weight: 700 !important;
+    width: 72px !important;
+    flex-shrink: 0 !important;
+    color: var(--text-muted) !important;
+    text-align: left !important;
+}
+.em-field-row[data-field="activities"] .em-field-value,
+.em-field-row[data-field="tags"]       .em-field-value,
+.em-field-row[data-field="journal"]    .em-field-value {
+    text-align: left !important;
+    font-size: 0.9rem !important;
+    flex: 1 !important;
+    font-weight: 400 !important;
+    color: var(--text) !important;
+    overflow: hidden !important;
+    white-space: nowrap !important;
+    text-overflow: ellipsis !important;
+}
+.em-field-row[data-field="activities"] .em-field-actions,
+.em-field-row[data-field="tags"]       .em-field-actions,
+.em-field-row[data-field="journal"]    .em-field-actions {
+    opacity: 0 !important;
+    transition: opacity 0.12s !important;
+    flex-direction: row !important;
+    margin-top: 0 !important;
+}
+.em-field-row[data-field="activities"]:hover .em-field-actions,
+.em-field-row[data-field="tags"]:hover       .em-field-actions,
+.em-field-row[data-field="journal"]:hover    .em-field-actions {
+    opacity: 1 !important;
+}
+
+/* ── em-btn icons ────────────────────────────────────────────────────── */
+.em-btn {
+    width: 28px !important; height: 28px !important;
+    border-radius: 7px !important;
+    border: 1px solid color-mix(in srgb, var(--border) 70%, transparent) !important;
+    background: transparent !important;
+    color: var(--text-muted) !important;
+    font-size: 0 !important;
+    cursor: pointer !important;
+    display: inline-flex !important; align-items: center !important;
+    justify-content: center !important;
+    transition: all 0.13s ease !important; position: relative !important;
+}
+.em-btn::after {
+    content: '' !important; position: absolute !important; inset: 0 !important;
+    margin: auto !important; width: 12px !important; height: 12px !important;
+    background-color: currentColor !important; display: block !important;
+    -webkit-mask-size: contain !important; mask-size: contain !important;
+    -webkit-mask-repeat: no-repeat !important; mask-repeat: no-repeat !important;
+    -webkit-mask-position: center !important; mask-position: center !important;
+}
+.em-btn:not(.em-del)::after {
+    -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7'/%3E%3Cpath d='M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z'/%3E%3C/svg%3E") !important;
+    mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7'/%3E%3Cpath d='M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z'/%3E%3C/svg%3E") !important;
+}
+.em-btn.em-del::after {
+    -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='3 6 5 6 21 6'/%3E%3Cpath d='M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6m3 0V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2'/%3E%3C/svg%3E") !important;
+    mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='3 6 5 6 21 6'/%3E%3Cpath d='M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6m3 0V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2'/%3E%3C/svg%3E") !important;
+}
+.em-btn:not(.em-del):hover { background: color-mix(in srgb, var(--accent) 10%, transparent) !important; color: var(--accent) !important; border-color: color-mix(in srgb, var(--accent) 35%, transparent) !important; }
+.em-btn.em-del:hover { background: rgba(185,28,28,0.09) !important; color: #b91c1c !important; border-color: rgba(185,28,28,0.3) !important; }
+
+/* ── Inline edit rows ────────────────────────────────────────────────── */
+.em-inline-edit-row {
+    grid-column: 1 / -1 !important;
+    background: color-mix(in srgb, var(--accent) 5%, var(--bg)) !important;
+    border-bottom: 1px solid color-mix(in srgb, var(--border) 55%, transparent) !important;
+    padding: 12px 24px 14px !important;
+    gap: 8px !important;
+    align-items: center !important;
+    flex-wrap: wrap !important;
+}
+.em-inline-edit-row.open {
+    animation: inlineSlide 0.2s cubic-bezier(0.22,1,0.36,1) both !important;
+}
+@keyframes inlineSlide {
+    from { opacity:0; transform:translateY(-5px); }
+    to   { opacity:1; transform:translateY(0); }
+}
+.em-inline-input {
+    height: 38px !important; flex: 1 !important; min-width: 80px !important;
+    padding: 0 12px !important; border-radius: 10px !important;
+    border: 1.5px solid color-mix(in srgb, var(--accent) 35%, var(--border)) !important;
+    background: var(--surface) !important; color: var(--text) !important;
+    font-family: var(--font-body) !important; font-size: 0.9rem !important;
+    transition: border-color 0.15s, box-shadow 0.15s !important;
+}
+.em-inline-input[type="number"] { -moz-appearance: textfield !important; appearance: textfield !important; text-align: center !important; font-weight: 600 !important; }
+.em-inline-input[type="number"]::-webkit-outer-spin-button,
+.em-inline-input[type="number"]::-webkit-inner-spin-button { -webkit-appearance: none !important; margin: 0 !important; }
+.em-inline-input:focus { outline: none !important; border-color: var(--accent) !important; box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 15%, transparent) !important; }
+
+.entry-modal-body .em-save-btn {
+    height: 38px !important; padding: 0 18px !important; border-radius: 10px !important;
+    font-size: 0.82rem !important; font-weight: 600 !important;
+    background: var(--accent) !important; color: var(--surface) !important;
+    border: none !important; cursor: pointer !important; white-space: nowrap !important;
+    transition: filter 0.15s !important;
+}
+.entry-modal-body .em-save-btn:hover { filter: brightness(1.1) !important; }
+.entry-modal-body .em-cancel-btn {
+    width: 38px !important; height: 38px !important; border-radius: 10px !important;
+    background: transparent !important; color: var(--text-muted) !important;
+    border: 1px solid var(--border) !important; cursor: pointer !important;
+    display: inline-flex !important; align-items: center !important;
+    justify-content: center !important; font-size: 0.9rem !important;
+    transition: background 0.13s !important;
+}
+.entry-modal-body .em-cancel-btn:hover { background: color-mix(in srgb, var(--text-muted) 10%, transparent) !important; }
+
+/* Stepper */
+.em-stepper-wrap { display: flex !important; align-items: center !important; flex: 0 0 152px !important; background: var(--surface) !important; border: 1.5px solid color-mix(in srgb, var(--accent) 35%, var(--border)) !important; border-radius: 10px !important; overflow: hidden !important; }
+.em-stepper-wrap:focus-within { border-color: var(--accent) !important; box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 14%, transparent) !important; }
+.em-stepper-wrap .em-inline-input { border: none !important; box-shadow: none !important; border-radius: 0 !important; height: 38px !important; text-align: center !important; font-weight: 600 !important; flex: 1 !important; min-width: 0 !important; padding: 0 !important; background: transparent !important; }
+.em-stepper-btn { flex-shrink: 0 !important; width: 34px !important; height: 38px !important; background: transparent !important; border: none !important; color: var(--accent) !important; font-size: 1.1rem !important; cursor: pointer !important; display: flex !important; align-items: center !important; justify-content: center !important; transition: background 0.12s !important; user-select: none !important; }
+.em-stepper-btn:hover { background: color-mix(in srgb, var(--accent) 10%, transparent) !important; }
+.em-stepper-divider { width: 1px !important; height: 14px !important; background: color-mix(in srgb, var(--border) 80%, transparent) !important; }
+
+/* ── Delete row ──────────────────────────────────────────────────────── */
+.entry-modal-delete-btn {
+    grid-column: 1 / -1 !important;
+    display: flex !important; align-items: center !important;
+    justify-content: center !important; gap: 6px !important;
+    width: calc(100% - 48px) !important; margin: 10px 24px 12px !important;
+    padding: 10px 0 !important; border-radius: 12px !important;
+    font-size: 0.78rem !important; font-weight: 500 !important;
+    letter-spacing: 0.03em !important; background: transparent !important;
+    color: color-mix(in srgb, #b91c1c 55%, var(--text-muted)) !important;
+    border: 1px solid color-mix(in srgb, #b91c1c 20%, var(--border)) !important;
+    cursor: pointer !important; transition: all 0.16s !important;
+}
+.entry-modal-delete-btn:hover { background: rgba(185,28,28,0.06) !important; border-color: rgba(185,28,28,0.32) !important; color: #b91c1c !important; }
+
+/* ── Footer ──────────────────────────────────────────────────────────── */
+.entry-modal-footer {
+    display: flex !important; align-items: center !important;
+    gap: 8px !important; padding: 14px 20px 18px !important;
+    border-top: 1px solid color-mix(in srgb, var(--border) 55%, transparent) !important;
+    background: color-mix(in srgb, var(--accent) 3%, var(--surface)) !important;
+    flex-shrink: 0 !important;
+}
+
+/* Edit Entry — solid pill */
+#entryModalEditBtn {
+    height: 44px !important; padding: 0 24px !important;
+    border-radius: 999px !important;
+    background: var(--accent) !important; color: var(--surface) !important;
+    border: none !important; font-size: 0.85rem !important;
+    font-weight: 600 !important; letter-spacing: 0.02em !important;
+    cursor: pointer !important;
+    box-shadow: 0 2px 12px color-mix(in srgb, var(--accent) 32%, transparent) !important;
+    transition: filter 0.16s, transform 0.16s, box-shadow 0.16s !important;
+    display: inline-flex !important; align-items: center !important;
+    pointer-events: all !important; position: relative !important; z-index: 5 !important;
+}
+#entryModalEditBtn:hover {
+    filter: brightness(1.12) !important; transform: translateY(-1px) !important;
+    box-shadow: 0 4px 18px color-mix(in srgb, var(--accent) 42%, transparent) !important;
+}
+#entryModalEditBtn:active { filter: brightness(0.96) !important; transform: translateY(0) !important; }
+
+/* Journal — outline pill */
+#entryModalJournalBtn {
+    height: 44px !important; padding: 0 20px !important;
+    border-radius: 999px !important; background: transparent !important;
+    color: var(--accent) !important;
+    border: 1.5px solid color-mix(in srgb, var(--accent) 50%, var(--border)) !important;
+    font-size: 0.85rem !important; font-weight: 600 !important;
+    letter-spacing: 0.02em !important; cursor: pointer !important;
+    transition: background 0.16s, transform 0.16s, border-color 0.16s !important;
+    display: inline-flex !important; align-items: center !important;
+    pointer-events: all !important; position: relative !important; z-index: 5 !important;
+}
+#entryModalJournalBtn:hover { background: color-mix(in srgb, var(--accent) 10%, transparent) !important; border-color: var(--accent) !important; transform: translateY(-1px) !important; }
+
+/* Close — minimal ghost, pushed right */
+.entry-modal-footer .btn-neutral {
+    height: 44px !important; padding: 0 18px !important;
+    border-radius: 999px !important; background: transparent !important;
+    color: var(--text-muted) !important;
+    border: 1px solid color-mix(in srgb, var(--border) 80%, transparent) !important;
+    font-size: 0.85rem !important; font-weight: 500 !important;
+    cursor: pointer !important; margin-left: auto !important;
+    transition: background 0.15s, color 0.15s !important;
+    display: inline-flex !important; align-items: center !important;
+    pointer-events: all !important; position: relative !important; z-index: 5 !important;
+}
+.entry-modal-footer .btn-neutral:hover { background: color-mix(in srgb, var(--text-muted) 10%, transparent) !important; color: var(--text) !important; }
+
+/* ── Mobile ──────────────────────────────────────────────────────────── */
+@media (max-width: 520px) {
+    .entry-modal-overlay { align-items: flex-end !important; padding: 0 !important; }
+    .entry-modal.entry-modal-premium { border-radius: 28px 28px 0 0 !important; max-width: 100% !important; max-height: 88dvh !important; animation: fModalInMob 0.3s cubic-bezier(0.22,1,0.36,1) both !important; }
+    @keyframes fModalInMob { from { transform: translateY(100%); } to { transform: translateY(0); } }
+    .entry-modal-title-text { font-size: 1.9rem !important; }
+    #entryModalEditBtn, #entryModalJournalBtn { height: 48px !important; }
+}
