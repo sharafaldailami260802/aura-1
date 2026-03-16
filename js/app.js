@@ -991,6 +991,11 @@ async function initStorage() {
             window.addEventListener('scroll', parallaxScrollHandler, { passive: true });
         }
     }
+    var localeRow = await db.appState.get('pref_locale');
+    if (localeRow && localeRow.value) {
+        window.auraLocale = String(localeRow.value);
+        try { localStorage.setItem('aura_locale', window.auraLocale); } catch (e) {}
+    }
     var dateFmt = await getPreference('dateFormat');
     var timeFmt = await getPreference('timeFormat');
     window.auraDateFormat = (dateFmt === 'DM' || dateFmt === 'MD' || dateFmt === 'YMD') ? dateFmt : 'MD';
@@ -1031,6 +1036,7 @@ async function initStorage() {
         document.getElementById('passcodeLockScreen').style.display = 'flex';
         document.getElementById('passcodeLockScreen').setAttribute('aria-hidden', 'false');
     }
+    if (window.auraLocale && typeof window.runI18n === 'function') window.runI18n(window.auraLocale);
         console.log('[Aura] Init storage complete');
     } catch (err) {
         console.error('[Aura] initStorage failed:', err);
@@ -1281,6 +1287,11 @@ function navigate(page, button) {
     } else if (page === 'insights') {
         generateInsights();
     }
+
+    /* Re-apply i18n so the active page is fully translated (fixes delayed or missing translation) */
+    setTimeout(function () {
+        if (typeof window.runI18n === 'function') window.runI18n();
+    }, 0);
 }
 
 function openSidebar() {
@@ -2956,19 +2967,42 @@ var lastStreakMilestone = 0;
 function buildDashboardGreeting() {
     var hour = new Date().getHours();
     var key = hour < 12 ? 'good_morning' : hour < 17 ? 'good_afternoon' : 'good_evening';
-    return (typeof window.getTranslation === 'function') ? window.getTranslation(key) : (key === 'good_morning' ? 'Good morning' : key === 'good_afternoon' ? 'Good afternoon' : 'Good evening');
+    if (typeof window.__dpT === 'function') return window.__dpT(key);
+    var locale = String(window.auraLocale || 'en').split('-')[0];
+    var S = window.AURA_STRINGS;
+    var row = S && (S[locale] || S.en);
+    var val = row && row[key] != null ? row[key] : (S && S.en && S.en[key]);
+    return val != null ? val : (key === 'good_morning' ? 'Good morning' : key === 'good_afternoon' ? 'Good afternoon' : 'Good evening');
+}
+
+function auraTr(key, vars) {
+    if (typeof window.__dpT === 'function') return window.__dpT(key, vars || {});
+    var locale = String(window.auraLocale || 'en').split('-')[0];
+    var S = window.AURA_STRINGS;
+    var row = S && (S[locale] || S.en);
+    var s = (row && row[key] != null) ? row[key] : (S && S.en && S.en[key]);
+    if (s == null) return key;
+    if (!vars) return s;
+    return String(s).replace(/\{(\w+)\}/g, function(_, x) { return vars[x] != null ? String(vars[x]) : ''; });
 }
 
 function buildDashboardNarrative() {
-    var fallbacks = { narrative_start: 'Start logging your first check-in to see patterns emerge here.', narrative_trend_up: 'Your mood has been climbing this week.', narrative_trend_down: 'Your mood has dipped a little this week.' };
-    var t = typeof window.getTranslation === 'function' ? window.getTranslation : function(k) { return fallbacks[k] || k; };
+    var locale = String(window.auraLocale || 'en').split('-')[0];
+    var S = window.AURA_STRINGS;
+    var row = S && (S[locale] || S.en);
+    var t = function (k, v) {
+        if (typeof window.__dpT === 'function') return window.__dpT(k, v);
+        var s = (row && row[k] != null) ? row[k] : (S && S.en && S.en[k]);
+        if (s == null) return k;
+        if (!v) return s;
+        return String(s).replace(/\{(\w+)\}/g, function (_, x) { return v[x] != null ? String(v[x]) : ''; });
+    };
     var allDates = Object.keys(entries).sort();
     if (!allDates.length) return t('narrative_start');
 
     var today = getLocalTodayYMD();
     var todayEntry = entries[today];
 
-    // Recent 7-day mood trend
     var last7 = allDates.filter(function(d) { return d <= today; }).slice(-7);
     var last7Moods = last7.map(function(d) { return entries[d] && entries[d].mood; }).filter(function(m) { return typeof m === 'number' && !isNaN(m); });
 
@@ -2981,10 +3015,9 @@ function buildDashboardNarrative() {
         var diff = secondAvg - firstAvg;
         if (diff > 0.5) trendText = t('narrative_trend_up');
         else if (diff < -0.5) trendText = t('narrative_trend_down');
-        else trendText = 'Your mood has been steady this week.';
+        else trendText = t('narrative_steady');
     }
 
-    // Streak
     var streak = 0;
     var checkDate = new Date();
     checkDate.setHours(0, 0, 0, 0);
@@ -2994,24 +3027,23 @@ function buildDashboardNarrative() {
         checkDate.setDate(checkDate.getDate() - 1);
     }
 
-    // Today's status
     var todayText = '';
     if (todayEntry && todayEntry.mood != null) {
-        var moodLabel = todayEntry.mood >= 7.5 ? 'a strong' : todayEntry.mood >= 5 ? 'a moderate' : 'a low';
-        todayText = 'Today you logged ' + moodLabel + ' mood of ' + todayEntry.mood.toFixed(1) + '.';
+        var moodKey = todayEntry.mood >= 7.5 ? 'narrative_strong_mood' : todayEntry.mood >= 5 ? 'narrative_moderate_mood' : 'narrative_low_mood';
+        var moodLabel = t(moodKey);
+        todayText = t('narrative_logged_mood', { moodLabel: moodLabel, n: todayEntry.mood.toFixed(1) });
     } else {
-        todayText = 'No check-in yet today.';
+        todayText = t('no_checkin_today');
     }
 
-    // Best tag recently
     var tagCounts = {};
     last7.forEach(function(d) {
-        (entries[d] && entries[d].tags || []).forEach(function(t) { tagCounts[t] = (tagCounts[t] || 0) + 1; });
+        (entries[d] && entries[d].tags || []).forEach(function(tag) { tagCounts[tag] = (tagCounts[tag] || 0) + 1; });
     });
     var topTag = Object.keys(tagCounts).sort(function(a, b) { return tagCounts[b] - tagCounts[a]; })[0];
-    var tagText = topTag ? 'You\'ve been tagging \u201c' + topTag + '\u201d a lot lately.' : '';
+    var tagText = topTag ? t('tagging_recently', { tag: topTag }) : '';
 
-    var streakText = streak >= 3 ? streak + '-day streak\u2014keep it up.' : streak > 0 ? 'Day ' + streak + ' of your streak.' : '';
+    var streakText = streak >= 3 ? t('streak_days', { n: streak }) : streak > 0 ? t('streak_day', { n: streak }) : '';
 
     var parts = [todayText, trendText, tagText, streakText].filter(Boolean);
     return parts.slice(0, 3).join(' ');
@@ -3289,7 +3321,8 @@ function showEntryModal(dateStr) {
     if (entry) {
         var sleepTotal = entry.sleepTotal != null ? entry.sleepTotal : entry.sleep;
         var segCount = entry.sleepSegmentCount != null ? entry.sleepSegmentCount : (entry.sleepSegments && entry.sleepSegments.length) || 0;
-        var sleepLabel = sleepTotal != null ? '<strong>' + sleepTotal.toFixed(1) + '</strong> hrs' : '–';
+        var hrs = typeof auraTr === 'function' ? auraTr('hrs_short') : 'hrs';
+        var sleepLabel = sleepTotal != null ? '<strong>' + sleepTotal.toFixed(1) + '</strong> ' + hrs : '–';
         if (sleepTotal != null && segCount > 1) sleepLabel += ' <span style="font-size:0.85em;opacity:0.85;">(' + segCount + ' segments)</span>';
         var journalPreview = notesValueToPlainText(entry);
         var hasJournal = !!(journalPreview || (Array.isArray(entry.photos) && entry.photos.length));
@@ -3344,20 +3377,22 @@ function showEntryModal(dateStr) {
             activitiesHtml = escapeHtml(entry.activities.join(', '));
         }
         
+        var tr = typeof auraTr === 'function' ? auraTr : function(k) { return k; };
         body.innerHTML =
-            emFieldRow('😊', 'Mood', (entry.mood != null ? '<strong>' + roundMoodEnergySleepQuality(entry.mood).toFixed(1) + '</strong><span style="font-size:0.8em;opacity:0.5;font-family:var(--font-body);"> /10</span>' : '–'), 'mood', '1–10') +
-            emFieldRow('⚡', 'Energy', (entry.energy != null ? '<strong>' + roundMoodEnergySleepQuality(entry.energy).toFixed(1) + '</strong><span style="font-size:0.8em;opacity:0.5;font-family:var(--font-body);"> /10</span>' : '–'), 'energy', '1–10') +
-            emFieldRow('🌙', 'Sleep', sleepLabel, 'sleep', '0–12 hours') +
-            (activitiesHtml ? emFieldRow('🏃', 'Activities', activitiesHtml, 'activities', 'activity1, activity2', 'tags') : '') +
-            emFieldRow('🏷️', 'Tags', tagsHtml, 'tags', 'e.g. happy, calm', 'tags') +
-            (hasJournal ? 
-                emFieldRow('📓', 'Journal', '<span style="font-size:0.88rem;line-height:1.5;color:var(--text-muted);">' + (window.auraPrivateMode ? '••••••' : escapeHtml(String(journalPreview).slice(0, 140)) + (journalPreview.length > 140 ? '…' : '')) + '</span>', 'journal', false, false, true) : '') +
-            '<button type="button" class="btn btn-danger entry-modal-delete-btn" onclick="emDeleteAll(\'' + safeDate + '\')">🗑 Delete entire entry for this day</button>';
+            emFieldRow('😊', tr('mood_label_short'), (entry.mood != null ? '<strong>' + roundMoodEnergySleepQuality(entry.mood).toFixed(1) + '</strong><span style="font-size:0.8em;opacity:0.5;font-family:var(--font-body);"> /10</span>' : '–'), 'mood', '1–10') +
+            emFieldRow('⚡', tr('energy_label_short'), (entry.energy != null ? '<strong>' + roundMoodEnergySleepQuality(entry.energy).toFixed(1) + '</strong><span style="font-size:0.8em;opacity:0.5;font-family:var(--font-body);"> /10</span>' : '–'), 'energy', '1–10') +
+            emFieldRow('🌙', tr('sleep_label_short'), sleepLabel, 'sleep', '0–12 hours') +
+            (activitiesHtml ? emFieldRow('🏃', tr('activities_label'), activitiesHtml, 'activities', 'activity1, activity2', 'tags') : '') +
+            emFieldRow('🏷️', tr('tags_label'), tagsHtml, 'tags', 'e.g. happy, calm', 'tags') +
+            (hasJournal ?
+                emFieldRow('📓', tr('journal'), '<span style="font-size:0.88rem;line-height:1.5;color:var(--text-muted);">' + (window.auraPrivateMode ? '••••••' : escapeHtml(String(journalPreview).slice(0, 140)) + (journalPreview.length > 140 ? '…' : '')) + '</span>', 'journal', false, false, true) : '') +
+            '<button type="button" class="btn btn-danger entry-modal-delete-btn" onclick="emDeleteAll(\'' + safeDate + '\')">🗑 ' + tr('delete_entire_entry_for_day') + '</button>';
     } else {
+        var trEmpty = typeof auraTr === 'function' ? auraTr : function(k) { return k; };
         body.innerHTML = '<div style="padding:24px 22px;color:var(--text-muted);text-align:center;">' +
             '<div style="font-size:2rem;margin-bottom:8px;">📭</div>' +
-            '<div style="font-size:0.95rem;">No entry for this day.</div>' +
-            '<div style="font-size:0.85rem;margin-top:4px;">Click Edit Check-In to add one.</div>' +
+            '<div style="font-size:0.95rem;">' + trEmpty('no_entry_day') + '</div>' +
+            '<div style="font-size:0.85rem;margin-top:4px;">' + trEmpty('click_edit_checkin') + '</div>' +
             '</div>';
         if (journalBtn) journalBtn.style.display = 'none';
     }
@@ -3566,12 +3601,13 @@ function renderDataManagerPreview(dateStr) {
     if (checkInBtn) checkInBtn.disabled = true;
     if (journalBtn) journalBtn.disabled = true;
     if (disabledHint) disabledHint.hidden = false;
+    var dmTr = typeof auraTr === 'function' ? auraTr : function(k) { return k; };
     if (!dateStr) {
         preview.className = 'data-manager-preview is-empty';
         preview.innerHTML = ''
             + '<div class="data-manager-preview-empty">'
-            + '  <p class="data-manager-preview-title">Choose a saved day</p>'
-            + '  <p class="data-manager-preview-copy">Select a date to see what data exists and open the correct editor.</p>'
+            + '  <p class="data-manager-preview-title">' + (typeof escapeHtml === 'function' ? escapeHtml(dmTr('choose_saved_day')) : dmTr('choose_saved_day')) + '</p>'
+            + '  <p class="data-manager-preview-copy">' + (typeof escapeHtml === 'function' ? escapeHtml(dmTr('data_manager_select_date_copy')) : dmTr('data_manager_select_date_copy')) + '</p>'
             + '</div>';
         return;
     }
@@ -3580,7 +3616,7 @@ function renderDataManagerPreview(dateStr) {
         preview.className = 'data-manager-preview is-empty';
         preview.innerHTML = ''
             + '<div class="data-manager-preview-empty">'
-            + '  <p class="data-manager-preview-title">No saved data for this day</p>'
+            + '  <p class="data-manager-preview-title">' + (typeof escapeHtml === 'function' ? escapeHtml(dmTr('no_saved_data_day')) : dmTr('no_saved_data_day')) + '</p>'
             + '  <p class="data-manager-preview-copy">Try another date. Only saved days can be edited from here.</p>'
             + '</div>';
         if (status) status.textContent = 'No saved data for ' + dateStr + '.';
@@ -4112,32 +4148,50 @@ function renderEntryList() {
     if (filterByTag) dates = dates.filter(function(d) { return (entries[d].tags || []).indexOf(filterByTag) >= 0; });
     var total = dates.length;
     if (total === 0) {
+        var tr = typeof window.__dpT === 'function' ? window.__dpT : function (k, v) {
+            var loc = String(window.auraLocale || 'en').split('-')[0];
+            var row = window.AURA_STRINGS && (window.AURA_STRINGS[loc] || window.AURA_STRINGS.en);
+            var s = row && row[k] != null ? row[k] : k;
+            if (!v) return s;
+            return s.replace(/\{(\w+)\}/g, function (_, x) { return v[x] != null ? String(v[x]) : ''; });
+        };
         if (filterByTag) {
-            ul.innerHTML = '<li style="color: var(--text-muted); padding: var(--space-md) 0; font-size: 0.9rem;">No entries tagged \u201c' + escapeHtml(filterByTag) + '\u201d yet.</li>';
+            ul.innerHTML = '<li style="color: var(--text-muted); padding: var(--space-md) 0; font-size: 0.9rem;">' + escapeHtml(tr('no_entries_tagged', { tag: filterByTag })) + '</li>';
         } else {
             ul.innerHTML = '<li class="entry-list-empty-state" style="padding: var(--space-lg) 0; text-align: center;">' +
                 '<div style="font-size: 2rem; margin-bottom: var(--space-sm); opacity: 0.3;" aria-hidden="true">📔</div>' +
-                '<p style="margin: 0 0 var(--space-sm); color: var(--text-muted); font-size: 0.9rem;">No journal entries yet.</p>' +
-                '<button type="button" class="btn btn-secondary" onclick="navigate(\'entry\')" style="font-size: 0.85rem; height: 36px; padding: 0 14px;">Start your first check-in \u2192</button>' +
+                '<p style="margin: 0 0 var(--space-sm); color: var(--text-muted); font-size: 0.9rem;">' + escapeHtml(tr('no_journal_entries_yet')) + '</p>' +
+                '<button type="button" class="btn btn-secondary" onclick="navigate(\'entry\')" style="font-size: 0.85rem; height: 36px; padding: 0 14px;">' + escapeHtml(tr('start_first_checkin')) + '</button>' +
                 '</li>';
         }
         return;
     }
     var slice = dates.slice(0, RECENT_ENTRIES_LIMIT);
     var dateFmt = window.auraDateFormat || 'MD';
+    var tr = typeof window.__dpT === 'function' ? window.__dpT : function (k, v) {
+        var loc = String(window.auraLocale || 'en').split('-')[0];
+        var row = window.AURA_STRINGS && (window.AURA_STRINGS[loc] || window.AURA_STRINGS.en);
+        var s = row && row[k] != null ? row[k] : k;
+        if (!v) return s;
+        return s.replace(/\{(\w+)\}/g, function (_, x) { return v[x] != null ? String(v[x]) : ''; });
+    };
     ul.innerHTML = slice.map(function(date) {
         var e = entries[date];
         var displayDate = formatDisplayDate(date, dateFmt);
         var moodStr = e && e.mood != null ? e.mood.toFixed(1) : '\u2013';
         var energyStr = e && e.energy != null ? e.energy.toFixed(1) : '\u2013';
-        var previewText = getJournalSnippet(e) || 'No journal text saved';
+        var previewText = getJournalSnippet(e) || tr('no_journal_saved');
         var safeDate = date.replace(/'/g, "\\'");
         var activeClass = date === currentJournalEntryDate ? ' active' : '';
         var meta = typeof getDayRecordMeta === 'function' ? getDayRecordMeta(e) : { hasJournal: false, photoCount: 0 };
         var extraPill = '';
-        if (meta.hasJournal) extraPill += '<span class="entry-record-pill">Journal</span>';
-        if (meta.photoCount > 0) extraPill += '<span class="entry-record-pill">' + meta.photoCount + ' photo' + (meta.photoCount === 1 ? '' : 's') + '</span>';
-        return '<li class="entry-list-item' + activeClass + '" data-date="' + date + '"><div class="entry-row-swipe"><div class="entry-row-content entry-record-card"><div class="entry-record-main"><div class="entry-record-date-block"><span class="entry-date">' + escapeHtml(displayDate) + '</span><span class="entry-record-subtitle">' + escapeHtml(previewText) + '</span></div><div class="entry-record-meta"><span class="entry-record-pill">Mood ' + escapeHtml(moodStr) + '</span><span class="entry-record-pill">Energy ' + escapeHtml(energyStr) + '</span>' + extraPill + '</div></div><div class="entry-record-actions"><button type="button" class="entry-record-action" onclick="event.stopPropagation(); openJournalEntry(\'' + safeDate + '\');">Edit</button><button type="button" class="entry-record-delete" title="Delete journal" aria-label="Delete journal for ' + date + '" onclick="event.stopPropagation(); openDeleteEntryModal(\'' + safeDate + '\', this)">Delete</button></div></div></div></li>';
+        if (meta.hasJournal) extraPill += '<span class="entry-record-pill">' + tr('journal') + '</span>';
+        if (meta.photoCount > 0) extraPill += '<span class="entry-record-pill">' + (meta.photoCount === 1 ? tr('entry_photo_count', { n: meta.photoCount }) : tr('entry_photos_count', { n: meta.photoCount })) + '</span>';
+        var moodLabel = tr('mood_label_short') + ' ' + escapeHtml(moodStr);
+        var energyLabel = tr('energy_label_short') + ' ' + escapeHtml(energyStr);
+        var editBtn = tr('entry_edit_btn');
+        var deleteBtn = tr('entry_delete_btn');
+        return '<li class="entry-list-item' + activeClass + '" data-date="' + date + '"><div class="entry-row-swipe"><div class="entry-row-content entry-record-card"><div class="entry-record-main"><div class="entry-record-date-block"><span class="entry-date">' + escapeHtml(displayDate) + '</span><span class="entry-record-subtitle">' + escapeHtml(previewText) + '</span></div><div class="entry-record-meta"><span class="entry-record-pill">' + moodLabel + '</span><span class="entry-record-pill">' + energyLabel + '</span>' + extraPill + '</div></div><div class="entry-record-actions"><button type="button" class="entry-record-action" onclick="event.stopPropagation(); openJournalEntry(\'' + safeDate + '\');">' + editBtn + '</button><button type="button" class="entry-record-delete" title="' + deleteBtn + '" aria-label="' + deleteBtn + ' ' + date + '" onclick="event.stopPropagation(); openDeleteEntryModal(\'' + safeDate + '\', this)">' + deleteBtn + '</button></div></div></div></li>';
     }).join('');
     if (typeof setupEntryListTouch === 'function') setupEntryListTouch();
 }
@@ -4997,6 +5051,11 @@ function renderMoodVelocity() {
                             label: function(ctx) {
                                 var v = ctx.raw;
                                 if (typeof v !== 'number') return ctx.dataset.label + ': ' + v;
+                                if (typeof window.__dpT === 'function') {
+                                    if (v > 0) return window.__dpT('vel_improved', { n: v.toFixed(1), s: v !== 1 ? 's' : '' });
+                                    if (v < 0) return window.__dpT('vel_dipped', { n: Math.abs(v).toFixed(1), s: Math.abs(v) !== 1 ? 's' : '' });
+                                    return window.__dpT('vel_no_change');
+                                }
                                 if (v > 0) return 'Mood improved by ' + v.toFixed(1) + ' point' + (v !== 1 ? 's' : '');
                                 if (v < 0) return 'Mood dipped by ' + Math.abs(v).toFixed(1) + ' point' + (v !== -1 ? 's' : '');
                                 return 'No change';
@@ -5059,7 +5118,7 @@ function renderMoodVelocity() {
     }
     panelEl.innerHTML =
         '<div class="stability-score-block">' +
-        '<p class="stability-eyebrow">14-day stability</p>' +
+        '<p class="stability-eyebrow" id="stabilityEyebrow">14-day stability</p>' +
         '<div class="stability-score-primary">' +
         '<span class="stability-score-value">' + score + '</span>' +
         '<span class="stability-pill ' + pillClass + '">' + labelText + '</span>' +
@@ -5227,8 +5286,15 @@ function renderReportWeekly() {
     var avgMood = moodCount ? (moodSum / moodCount).toFixed(1) : '–';
     var avgSleep = sleepCount ? (sleepSum / sleepCount).toFixed(1) : '–';
     var avgEnergy = energyCount ? (energySum / energyCount).toFixed(1) : '–';
-    el.innerHTML = '<p style="margin-bottom: var(--space-md);"><strong>Days tracked:</strong> ' + list.length + ' of 7</p>' +
-        '<p><strong>Average mood:</strong> ' + avgMood + '</p><p><strong>Average sleep:</strong> ' + avgSleep + ' hrs</p><p><strong>Average energy:</strong> ' + avgEnergy + '</p>';
+    var tr = typeof window.__dpT === 'function' ? window.__dpT : function (k, v) {
+        var loc = String(window.auraLocale || 'en').split('-')[0];
+        var row = window.AURA_STRINGS && (window.AURA_STRINGS[loc] || window.AURA_STRINGS.en);
+        var s = row && row[k] != null ? row[k] : k;
+        if (!v) return s;
+        return s.replace(/\{(\w+)\}/g, function (_, x) { return v[x] != null ? String(v[x]) : ''; });
+    };
+    el.innerHTML = '<p style="margin-bottom: var(--space-md);"><strong>' + tr('report_days_tracked', { n: list.length, total: 7 }) + '</strong></p>' +
+        '<p><strong>' + tr('report_avg_mood', { n: avgMood }) + '</strong></p><p><strong>' + tr('report_avg_sleep', { n: avgSleep }) + '</strong></p><p><strong>' + tr('report_avg_energy', { n: avgEnergy }) + '</strong></p>';
 }
 
 function renderReportMonthly() {
@@ -5249,9 +5315,16 @@ function renderReportMonthly() {
         if (typeof s === 'number' && !isNaN(s) && s >= 0 && s <= 24) { sleepSum += s; sleepCount++; }
     });
     var avgSleep = sleepCount ? (sleepSum / sleepCount).toFixed(1) : '–';
-    var monthName = new Date(year, month).toLocaleDateString(typeof getLocale === 'function' ? getLocale() : 'en', { month: 'long' });
+    var monthName = new Date(year, month).toLocaleDateString(typeof getLocale === 'function' ? getLocale() : (window.auraLocale || 'en'), { month: 'long' });
+    var tr = typeof window.__dpT === 'function' ? window.__dpT : function (k, v) {
+        var loc = String(window.auraLocale || 'en').split('-')[0];
+        var row = window.AURA_STRINGS && (window.AURA_STRINGS[loc] || window.AURA_STRINGS.en);
+        var s = row && row[k] != null ? row[k] : k;
+        if (!v) return s;
+        return s.replace(/\{(\w+)\}/g, function (_, x) { return v[x] != null ? String(v[x]) : ''; });
+    };
     el.innerHTML = '<p style="margin-bottom: var(--space-md);"><strong>' + monthName + ' ' + year + '</strong></p>' +
-        '<p><strong>Entries:</strong> ' + dates.length + '</p><p><strong>Average mood:</strong> ' + avgMood + '</p><p><strong>Average sleep:</strong> ' + avgSleep + ' hrs</p>';
+        '<p><strong>' + tr('report_entries', { n: dates.length }) + '</strong></p><p><strong>' + tr('report_avg_mood', { n: avgMood }) + '</strong></p><p><strong>' + tr('report_avg_sleep', { n: avgSleep }) + '</strong></p>';
 }
 
 function renderReportYear() {
@@ -5264,12 +5337,19 @@ function renderReportYear() {
     var streak = 0;
     var check = new Date();
     while (entries[formatLocalDateYMD(check)]) { streak++; check.setDate(check.getDate() - 1); }
-    el.innerHTML = '<p style="font-size: 1.2rem; margin-bottom: var(--space-md);"><strong>Your ' + year + ' in numbers</strong></p>' +
-        '<p><strong>Total days tracked:</strong> ' + dates.length + '</p>' +
-        '<p><strong>Average mood:</strong> ' + avgMood + '</p>' +
-        '<p><strong>Current streak:</strong> ' + streak + ' days</p>' +
-        (best.best ? '<p><strong>Best day:</strong> ' + best.best + '</p>' : '') +
-        (best.worst ? '<p><strong>Challenging day (lowest mood):</strong> ' + best.worst + '</p>' : '');
+    var tr = typeof window.__dpT === 'function' ? window.__dpT : function (k, v) {
+        var loc = String(window.auraLocale || 'en').split('-')[0];
+        var row = window.AURA_STRINGS && (window.AURA_STRINGS[loc] || window.AURA_STRINGS.en);
+        var s = row && row[k] != null ? row[k] : k;
+        if (!v) return s;
+        return s.replace(/\{(\w+)\}/g, function (_, x) { return v[x] != null ? String(v[x]) : ''; });
+    };
+    el.innerHTML = '<p style="font-size: 1.2rem; margin-bottom: var(--space-md);"><strong>' + tr('report_year_in_numbers', { year: year }) + '</strong></p>' +
+        '<p><strong>' + tr('report_total_days_tracked', { n: dates.length }) + '</strong></p>' +
+        '<p><strong>' + tr('report_avg_mood', { n: avgMood }) + '</strong></p>' +
+        '<p><strong>' + tr('report_current_streak', { n: streak }) + '</strong></p>' +
+        (best.best ? '<p><strong>' + tr('report_best_day') + ':</strong> ' + best.best + '</p>' : '') +
+        (best.worst ? '<p><strong>' + tr('report_challenging') + ':</strong> ' + best.worst + '</p>' : '');
 }
 
 function exportReportPNG(panelId) {
@@ -5454,7 +5534,7 @@ function renderInsightsResult(result) {
 function createInsightCandidate(section, title, description, supportCount, score, options) {
     options = options || {};
     var entryWord = supportCount === 1 ? 'entry' : 'entries';
-    return {
+    var out = {
         section: section,
         title: title,
         description: description,
@@ -5466,6 +5546,11 @@ function createInsightCandidate(section, title, description, supportCount, score
         nudge: options.nudge || '',
         strength: score >= 5 ? 'strong' : score >= 3 ? 'moderate' : 'emerging'
     };
+    if (options.titleKey) { out.titleKey = options.titleKey; out.titleVars = options.titleVars || {}; }
+    if (options.descKey) { out.descKey = options.descKey; out.descVars = options.descVars || {}; }
+    if (options.contextKey) { out.contextKey = options.contextKey; out.contextVars = options.contextVars || {}; }
+    if (options.nudgeKey) { out.nudgeKey = options.nudgeKey; out.nudgeVars = options.nudgeVars || {}; }
+    return out;
 }
 var correlationInsightsEngine = {
     analyze: function(records) {
@@ -5596,19 +5681,27 @@ var correlationInsightsEngine = {
             var avgWith = averageMoodForRecords(stat.records);
             var diff = avgWith - overallMood;
             if (Math.abs(diff) < 0.20) return;
-            candidates.push(createInsightCandidate(
+            var diffVal = (avgWith - overallMood).toFixed(1);
+                var diffAbs = Math.abs(avgWith - overallMood).toFixed(1);
+                candidates.push(createInsightCandidate(
                 'tags',
                 diff > 0 ? '\u201c' + stat.label + '\u201d days tend to lift you' : '\u201c' + stat.label + '\u201d days weigh on you',
                 diff > 0
-                    ? 'On days tagged \u201c' + stat.label + '\u201d your mood averages ' + (avgWith - overallMood).toFixed(1) + ' points above your baseline. It\'s a reliable signal.'
-                    : '\u201c' + stat.label + '\u201d days drag your average down by about ' + Math.abs(avgWith - overallMood).toFixed(1) + ' points. Worth paying attention to what those days have in common.',
+                    ? 'On days tagged \u201c' + stat.label + '\u201d your mood averages ' + diffVal + ' points above your baseline. It\'s a reliable signal.'
+                    : '\u201c' + stat.label + '\u201d days drag your average down by about ' + diffAbs + ' points. Worth paying attention to what those days have in common.',
                 stat.records.length,
                 Math.abs(diff) * Math.sqrt(stat.records.length),
                 {
                     kicker: 'Tags',
                     icon: '#',
-                    nudge: diff < 0 ? 'Worth noticing what \u201c' + stat.label + '\u201d days have in common.' : '',
-                    context: 'Seen across ' + stat.records.length + ' tagged ' + (stat.records.length === 1 ? 'entry' : 'entries') + '.'
+                    titleKey: diff > 0 ? 'insight_tag_lift' : 'insight_tag_weigh',
+                    titleVars: { tag: stat.label },
+                    descKey: diff > 0 ? 'insight_desc_tag_lift' : 'insight_desc_tag_weigh',
+                    descVars: { tag: stat.label, diff: diff > 0 ? diffVal : diffAbs },
+                    nudgeKey: diff < 0 ? 'insight_nudge_tag_weigh' : null,
+                    nudgeVars: { tag: stat.label },
+                    contextKey: 'insight_context_tag_seen',
+                    contextVars: { n: stat.records.length }
                 }
             ));
         });
@@ -5662,7 +5755,11 @@ var correlationInsightsEngine = {
                     Math.abs(energyDiff) * Math.sqrt(highEnergy.length + lowEnergy.length),
                     {
                         kicker: 'Activity Insight',
-                        context: 'Based on ' + highEnergy.length + ' higher-energy entries and ' + lowEnergy.length + ' lower-energy entries.'
+                        titleKey: 'insight_title_energy_alignment',
+                        descKey: energyDiff > 0 ? 'insight_desc_energy_alignment' : null,
+                        descVars: energyDiff > 0 ? { highMood: highEnergyAvg.toFixed(1), lowMood: lowEnergyAvg.toFixed(1) } : {},
+                        contextKey: 'insight_context_energy',
+                        contextVars: { highN: highEnergy.length, lowN: lowEnergy.length }
                     }
                 ));
             }
@@ -5681,8 +5778,12 @@ var correlationInsightsEngine = {
                         {
                             kicker: 'Stability',
                             icon: '\u25d4',
-                            nudge: 'Sleep and activity levels often drive short-term volatility.',
-                            context: 'Based on the last ' + recentRecords.length + ' days.'
+                            titleKey: 'insight_title_mood_variable',
+                            descKey: 'insight_desc_mood_variable',
+                            descVars: { stdDev: recentStdDev.toFixed(1) },
+                            nudgeKey: 'insight_nudge_volatility',
+                            contextKey: 'insight_context_last_days',
+                            contextVars: { n: recentRecords.length }
                         }
                     ));
                 } else if (recentStdDev <= 1.1) {
@@ -6058,10 +6159,10 @@ function updateRadarTitle() {
     var titleEl = document.getElementById('radarTitle');
     if (!titleEl) return;
     if (radarModeState === 'weekly') {
-        titleEl.textContent = 'Mood Patterns — Last 7 Days';
+        titleEl.textContent = auraTr('radar_mood_patterns');
     } else {
         var monthLabel = formatRadarMonth(selectedRadarMonth);
-        titleEl.textContent = monthLabel ? monthLabel + ' Mood Overview' : 'Monthly Mood Overview';
+        titleEl.textContent = monthLabel ? auraTr('radar_month_overview', { month: monthLabel }) : auraTr('radar_monthly');
     }
 }
 function renderRadarChart() {
@@ -6118,12 +6219,13 @@ function renderRadarChart() {
     }
     if (controls) controls.classList.toggle('radar-mode-weekly', radarModeState === 'weekly');
     if (monthSelectWrap) monthSelectWrap.style.display = radarModeState === 'monthly' ? '' : 'none';
-    var days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    var dayKeys = ['day_sun', 'day_mon', 'day_tue', 'day_wed', 'day_thu', 'day_fri', 'day_sat'];
+    var days = dayKeys.map(function(k) { return auraTr(k); });
     var result;
     var contextText;
     if (radarModeState === 'weekly') {
         result = getWeeklyRadarData();
-        contextText = 'Weekly Balance (Last 7 Days)';
+        contextText = auraTr('radar_weekly_balance');
     } else {
         var val = selectedRadarMonth;
         if (!val) {
@@ -6132,16 +6234,16 @@ function renderRadarChart() {
         }
         if (!val) {
             result = { avg: days.map(function() { return null; }), entryCount: 0 };
-            contextText = 'Monthly';
+            contextText = auraTr('radar_monthly');
         } else {
             var parts = val.split('-');
             var year = parseInt(parts[0], 10);
             var month = parseInt(parts[1], 10) - 1;
             result = getMonthlyRadarData(month, year);
-            contextText = MONTH_NAMES[month] + ' ' + year + ' Overview';
+            contextText = auraTr('radar_month_overview', { month: (MONTH_NAMES[month] || '') + ' ' + year });
         }
     }
-    contextLabel.textContent = contextText || 'Weekly Balance (Last 7 Days)';
+    contextLabel.textContent = contextText || auraTr('radar_weekly_balance');
     updateRadarTitle();
     if (result.entryCount === 0) {
         emptyEl.style.display = 'block';
@@ -6803,7 +6905,16 @@ function updateJournalWordCount() {
     var text = quillEditor.getText();
     var words = text.trim() ? text.trim().split(/\s+/).length : 0;
     var el = document.getElementById('journalWordCount');
-    if (el) el.textContent = words + ' word' + (words !== 1 ? 's' : '');
+    if (el) {
+        var locale = String(window.auraLocale || 'en').split('-')[0];
+        var row = window.AURA_STRINGS && (window.AURA_STRINGS[locale] || window.AURA_STRINGS.en);
+        var msg = (typeof window.__dpT === 'function')
+            ? window.__dpT('words_count', { n: words })
+            : (row && row.words_count)
+            ? row.words_count.replace(/\{n\}/g, String(words))
+            : (words + ' word' + (words !== 1 ? 's' : ''));
+        el.textContent = msg;
+    }
 }
 function updateJournalMeta() {
     var titleEl = document.getElementById('journalPageTitle');
@@ -6813,16 +6924,20 @@ function updateJournalMeta() {
     var unsavedEl = document.getElementById('journalUnsavedIndicator');
     var hasDate = !!currentJournalEntryDate;
     var formattedDate = hasDate ? formatDisplayDate(currentJournalEntryDate, window.auraDateFormat || 'MD') : '';
-    if (titleEl) titleEl.textContent = formattedDate ? 'Journal — ' + formattedDate : 'Journal';
+    var jTr = typeof auraTr === 'function' ? auraTr : function(k) { return k; };
+    if (titleEl) titleEl.textContent = formattedDate ? (jTr('journal_title_prefix') + formattedDate) : jTr('journal');
     if (metaEl) {
         metaEl.textContent = hasDate
-            ? 'Write something about your day…'
-            : 'Select a date in Daily Check-In to start writing.';
+            ? jTr('journal_write_placeholder')
+            : jTr('journal_select_date_hint');
     }
     if (saveBtn) saveBtn.disabled = !hasDate || !journalDirty;
     if (photoBtn) photoBtn.disabled = !hasDate;
     if (unsavedEl) unsavedEl.hidden = !hasDate || !journalDirty;
-    if (quillEditor) quillEditor.enable(!!hasDate);
+    if (quillEditor) {
+        quillEditor.enable(!!hasDate);
+        if (quillEditor.root && typeof auraTr === 'function') quillEditor.root.setAttribute('data-placeholder', auraTr('journal_write_placeholder'));
+    }
 }
 function setJournalDirty(dirty) {
     journalDirty = !!dirty;
@@ -6866,7 +6981,7 @@ function initJournalEditor() {
     if (!container || quillEditor) return;
     quillEditor = new Quill('#journalEditor', {
         theme: 'snow',
-        placeholder: 'Write something about your day…',
+        placeholder: typeof auraTr === 'function' ? auraTr('journal_write_placeholder') : 'Write something about your day…',
         modules: {
             toolbar: [
                 [{ header: [1, 2, 3, false] }],
@@ -7229,18 +7344,30 @@ async function saveBackupToStore() {
 function renderBackupList() {
     var ul = document.getElementById('backupList');
     if (!ul || !db.backups) return;
+    var tr = typeof window.__dpT === 'function' ? window.__dpT : function (k) {
+        var loc = String(window.auraLocale || 'en').split('-')[0];
+        var row = window.AURA_STRINGS && (window.AURA_STRINGS[loc] || window.AURA_STRINGS.en);
+        return (row && row[k] != null) ? row[k] : k;
+    };
     db.backups.toArray().then(function(list) {
         list.sort(function(a, b) { return b.id - a.id; });
         var df = window.auraDateFormat || 'MD';
         var tf = window.auraTimeFormat || '12';
-        ul.innerHTML = list.length === 0 ? '<li style="color: var(--text-muted);">No backups stored yet. Download a backup to keep it here.</li>' : list.map(function(b) {
+        var restoreLabel = tr('backup_restore_btn');
+        var emptyMsg = tr('backup_empty_msg');
+        ul.innerHTML = list.length === 0 ? '<li style="color: var(--text-muted);">' + emptyMsg + '</li>' : list.map(function(b) {
             var disp = formatDisplayDateTime(b.timestamp, df, tf);
-            return '<li><span>' + disp + '</span><button type="button" class="btn-secondary" onclick="restoreBackup(' + b.id + ')">Restore</button></li>';
+            return '<li><span>' + disp + '</span><button type="button" class="btn-secondary" onclick="restoreBackup(' + b.id + ')">' + restoreLabel + '</button></li>';
         }).join('');
     });
 }
 async function restoreBackup(id) {
-    if (!confirm('Restore this backup? Current data will be replaced.')) return;
+    var tr = typeof window.__dpT === 'function' ? window.__dpT : function (k) {
+        var loc = String(window.auraLocale || 'en').split('-')[0];
+        var row = window.AURA_STRINGS && (window.AURA_STRINGS[loc] || window.AURA_STRINGS.en);
+        return (row && row[k] != null) ? row[k] : k;
+    };
+    if (!confirm(tr('backup_restore_confirm'))) return;
     try {
         var b = await db.backups.get(id);
         if (!b || !b.data) return;
@@ -7258,8 +7385,16 @@ async function restoreBackup(id) {
         renderEntryList();
         updateDashboard();
         generateInsights();
-        showToast('Backup restored');
-    } catch (e) { alert('Restore failed: ' + e.message); }
+        var toastMsg = (typeof window.__dpT === 'function' ? window.__dpT('toast_backup_restored') : (window.AURA_STRINGS && (window.AURA_STRINGS[String(window.auraLocale || 'en').split('-')[0]] || window.AURA_STRINGS.en).toast_backup_restored)) || 'Backup restored';
+        showToast(toastMsg);
+    } catch (e) {
+        var tr = typeof window.__dpT === 'function' ? window.__dpT : function (k) {
+            var loc = String(window.auraLocale || 'en').split('-')[0];
+            var row = window.AURA_STRINGS && (window.AURA_STRINGS[loc] || window.AURA_STRINGS.en);
+            return (row && row[k] != null) ? row[k] : k;
+        };
+        alert(tr('backup_restore_failed') + ': ' + e.message);
+    }
 }
 function downloadBackupNow() {
     registerBackupSync();
@@ -7617,7 +7752,7 @@ function renderCustomMetricsList() {
     var el = document.getElementById('customMetricsList');
     if (!el) return;
     getCustomMetrics().then(function(list) {
-        if (list.length === 0) { el.innerHTML = '<li style="color: var(--text-muted); padding: var(--space-sm) 0;">No custom metrics yet. Add one above.</li>'; return; }
+        if (list.length === 0) { var msg = typeof auraTr === 'function' ? auraTr('no_custom_metrics_yet') : 'No custom metrics yet. Add one above.'; el.innerHTML = '<li style="color: var(--text-muted); padding: var(--space-sm) 0;">' + (typeof escapeHtml === 'function' ? escapeHtml(msg) : msg) + '</li>'; return; }
         el.innerHTML = list.map(function(m) {
             var typeLabel = m.type === 'yesno' ? 'Yes/No' : '1–10';
             var visLabel = m.visible ? 'Hide' : 'Show';
@@ -7790,14 +7925,32 @@ var translations = {
     }
 };
 function applyTranslations() {
+    /* Prefer master i18n when available so one source of truth */
+    if (typeof window.applyI18n === 'function') {
+        window.applyI18n(window.auraLocale || (typeof getLocale === 'function' ? getLocale() : 'en'));
+        return;
+    }
     var loc = (typeof getLocale === 'function' ? getLocale() : 'en').split('-')[0];
     var t = translations[loc] || translations.en;
     document.querySelectorAll('[data-i18n]').forEach(function(el) {
         var key = el.getAttribute('data-i18n');
         var val = t[key];
         if (val !== undefined && val !== null) {
-            if (el.getAttribute('data-i18n-placeholder')) el.placeholder = val;
-            else el.textContent = val;
+            if (el.getAttribute('data-i18n-placeholder')) {
+                el.placeholder = val;
+                return;
+            }
+            /* Replace only first text node so labels keep their <input> / <button> children */
+            var replaced = false;
+            for (var i = 0; i < el.childNodes.length; i++) {
+                var cn = el.childNodes[i];
+                if (cn.nodeType === 3 && (cn.textContent || '').trim()) {
+                    cn.textContent = val;
+                    replaced = true;
+                    break;
+                }
+            }
+            if (!replaced && !el.children.length) el.textContent = val;
         }
     });
 }
@@ -8200,8 +8353,11 @@ async function savePreference(key, value) {
     if (key === 'reduceMotion') applyReduceMotion(!!v);
     if (key === 'chartDays') { window.auraChartDays = parseInt(v, 10) || 30; if (typeof renderCharts === 'function') renderCharts(); }
     if (key === 'locale') {
-        window.auraLocale = (v && v !== '_custom') ? v : 'en';
-        if (typeof applyTranslations === 'function') applyTranslations();
+        var loc = (v && v !== '_custom') ? v : 'en';
+        window.auraLocale = loc;
+        try { localStorage.setItem('aura_locale', loc); } catch (e) {}
+        if (typeof window.runI18n === 'function') window.runI18n(loc);
+        else if (typeof applyTranslations === 'function') applyTranslations();
         if (typeof refreshPreferenceDrivenUi === 'function') refreshPreferenceDrivenUi();
         if (typeof renderCalendarCurrentView === 'function') renderCalendarCurrentView();
         if (typeof renderMonthGrid === 'function') renderMonthGrid();

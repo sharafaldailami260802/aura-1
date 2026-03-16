@@ -420,11 +420,11 @@
                                 <div class="entry-section-content" id="entrySectionActivitiesTagsContent">
                                     <div class="form-group">
                                         <label data-i18n="activities_label">Activities</label>
-                                        <input type="text" id="activities" class="form-input" placeholder="e.g. exercise, reading, work (comma-separated)">
+                                        <input type="text" id="activities" class="form-input" data-i18n="activities_placeholder" data-i18n-placeholder="true" placeholder="e.g. exercise, reading, work (comma-separated)">
                                     </div>
                                     <div class="form-group">
                                         <label data-i18n="tags_label">Tags</label>
-                                        <input type="text" id="tags" class="form-input" placeholder="e.g. #weekend #family (comma or space separated)" autocomplete="off">
+                                        <input type="text" id="tags" class="form-input" data-i18n="tags_placeholder" data-i18n-placeholder="true" placeholder="Add a tag…" autocomplete="off">
                                         <p class="tag-suggestions-label" id="tagSuggestionsLabel">Suggested tags <span class="tag-suggestions-hint">Tap to add</span></p>
                                         <div id="tagSuggestions" class="tag-suggestions"></div>
                                     </div>
@@ -457,15 +457,15 @@
                                                 </div>
                                             </div>
                                             <div class="journal-editor-wrap" id="journalEditorWrap">
-                                                <textarea id="notes" class="form-input journal-textarea" placeholder="What stood out today? What affected your mood? What are you grateful for?"></textarea>
+                                                <textarea id="notes" class="form-input journal-textarea" data-i18n="journal_ph" data-i18n-placeholder="true" placeholder="What stood out today? What affected your mood? What are you grateful for?"></textarea>
                                             </div>
                                         </div>
                                         <div class="journal-save-row">
-                                            <span class="journal-save-helper">Saved when you click <strong>Save Entry</strong> below, or press ⌘S.</span>
+                                            <span class="journal-save-helper" data-i18n="checkin_save_hint">Saved when you click <strong>Save Entry</strong> below, or press ⌘S.</span>
                                         </div>
                                     </div>
                                     <div class="form-group" style="margin-top: var(--space-md);">
-                                        <label>Photos</label>
+                                        <label data-i18n="photos_label">Photos</label>
                                         <div class="photo-upload-wrap">
                                             <input type="file" id="photoInput" accept="image/*" multiple>
                                             <span class="btn btn-secondary photo-upload-btn" id="photoUploadLabel" data-i18n="add_photo">📷 Add Photo</span>
@@ -655,16 +655,16 @@
                         <div class="journal-editor-footer">
                             <p id="journalWordCount" class="journal-word-count">0 words</p>
                             <div class="journal-actions">
-                                <button type="button" class="btn" id="saveJournalBtn" onclick="saveJournal()">Save Journal</button>
+                                <button type="button" class="btn" id="saveJournalBtn" onclick="saveJournal()" data-i18n="save_journal">Save Journal</button>
                             </div>
                         </div>
 
                         <!-- Photos -->
                         <div class="journal-photos-wrap" style="padding: 0 20px 20px;">
-                            <label class="journal-section-label">Photos</label>
+                            <label class="journal-section-label" data-i18n="photos_label">Photos</label>
                             <input type="file" id="journalPhotoInput" accept="image/*" multiple style="display: none;">
                             <div style="margin-top: var(--space-xs);">
-                                <button type="button" class="btn btn-secondary" id="journalPhotoAddBtn" onclick="document.getElementById('journalPhotoInput').click();">📷 Add Photo</button>
+                                <button type="button" class="btn btn-secondary" id="journalPhotoAddBtn" onclick="document.getElementById('journalPhotoInput').click();" data-i18n="add_photo">📷 Add Photo</button>
                             </div>
                             <div id="journalPhotoThumbs" class="journal-photo-grid"></div>
                         </div>
@@ -677,8 +677,8 @@
                         <!-- Recent entries -->
                         <div class="card journal-sidebar-card journal-entries-card">
                             <div class="journal-sidebar-card-header">
-                                <h3>Recent entries</h3>
-                                <p>Tap to open</p>
+                                <h3 data-i18n="recent_entries">Recent entries</h3>
+                                <p data-i18n="tap_to_open">Tap to open</p>
                             </div>
                             <ul id="entryList" class="entry-list" tabindex="-1"></ul>
                         </div>
@@ -894,11 +894,11 @@
                 <section class="patterns-hero-chart" aria-label="Mood balance chart">
                     <div class="card card--chart patterns-radar-card">
                         <div class="patterns-toolbar radar-controls" id="radarControls">
-                            <button type="button" class="radar-mode active" data-mode="weekly" id="radarModeWeekly">Last 7 Days</button>
-                            <button type="button" class="radar-mode" data-mode="monthly" id="radarModeMonthly">Monthly</button>
+                            <button type="button" class="radar-mode active" data-mode="weekly" id="radarModeWeekly" data-i18n="radar_last_7_days">Last 7 Days</button>
+                            <button type="button" class="radar-mode" data-mode="monthly" id="radarModeMonthly" data-i18n="radar_monthly">Monthly</button>
                             <div class="radar-month-picker" id="radarMonthSelectWrap" style="display: none;">
                                 <button type="button" class="month-trigger" id="radarMonthTrigger" aria-label="Select month" aria-haspopup="true" aria-expanded="false">
-                                    <span class="selected-month" id="radarSelectedMonthLabel">Select month</span>
+                                    <span class="selected-month" id="radarSelectedMonthLabel" data-i18n="radar_select_month">Select month</span>
                                     <span class="month-chevron" aria-hidden="true">▾</span>
                                 </button>
                                 <div class="month-popover hidden" id="radarMonthPopover" role="listbox">
@@ -908,7 +908,7 @@
                         </div>
                         <h3 id="radarTitle" class="patterns-hero-chart-title">Mood Patterns — Last 7 Days</h3>
                         <p id="radarChartContextLabel" class="radar-context-label">Weekly Balance (Last 7 Days)</p>
-                        <p id="radarChartEmpty" class="radar-empty-message" style="display: none;">No entries in this time period.</p>
+                        <p id="radarChartEmpty" class="radar-empty-message" style="display: none;" data-i18n="radar_no_entries">No entries in this time period.</p>
                         <div id="radarChartWrap" class="chart-container pattern-chart-wrap">
                             <canvas id="radarChart"></canvas>
                         </div>
@@ -917,7 +917,7 @@
                 </section>
 
                 <div class="patterns-explainer">
-                    <p class="patterns-explainer-text">Balance of your mood across days of the week. Switch to monthly to see a single month’s overview.</p>
+                    <p class="patterns-explainer-text" data-i18n="radar_balance_desc">Balance of your mood across days of the week. Switch to monthly to see a single month’s overview.</p>
                 </div>
 
                 <section class="patterns-secondary" aria-label="Additional patterns">
@@ -1061,30 +1061,28 @@
             
             <div id="reports" class="page">
                 <header class="page-hero">
-                    <h1>Reports</h1>
-                    <p class="page-hero-subtitle">Weekly, monthly, and annual summaries of your data.</p>
+                    <h1 data-i18n="nav_reports">Reports</h1>
+                    <p class="page-hero-subtitle" data-i18n="report_subtitle">Weekly, monthly, and annual summaries of your data.</p>
                 </header>
 
                 <!-- Tab pills: scoped class avoids specificity fights -->
                 <div class="report-tabs report-tabs-pill" role="tablist" aria-label="Report period">
                     <button type="button" class="report-tab-btn active" role="tab" aria-selected="true"
-                            data-report="weekly" onclick="setReportTab('weekly', this)">Weekly</button>
+                            data-report="weekly" onclick="setReportTab('weekly', this)" data-i18n="report_weekly">Weekly</button>
                     <button type="button" class="report-tab-btn" role="tab" aria-selected="false"
-                            data-report="monthly" onclick="setReportTab('monthly', this)">Monthly</button>
+                            data-report="monthly" onclick="setReportTab('monthly', this)" data-i18n="report_monthly">Monthly</button>
                     <button type="button" class="report-tab-btn" role="tab" aria-selected="false"
-                            data-report="year" onclick="setReportTab('year', this)">Year in review</button>
+                            data-report="year" onclick="setReportTab('year', this)" data-i18n="report_year_in_review">Year in review</button>
                 </div>
 
                 <!-- Report panels -->
                 <div id="reportWeekly" class="report-panel card" role="tabpanel">
                     <div class="report-panel-header">
                         <div>
-                            <p class="report-panel-eyebrow">Summary</p>
-                            <h3 class="report-panel-title">Last 7 days</h3>
+                            <p class="report-panel-eyebrow" data-i18n="report_summary">Summary</p>
+                            <h3 class="report-panel-title" data-i18n="report_last_7_days">Last 7 days</h3>
                         </div>
-                        <button type="button" class="report-export-btn" onclick="exportReportPNG('reportWeekly')" aria-label="Export weekly report as image">
-                            ↓ Export
-                        </button>
+                        <button type="button" class="report-export-btn" onclick="exportReportPNG('reportWeekly')" aria-label="Export weekly report as image" data-i18n="report_export_btn">↓ Export</button>
                     </div>
                     <div id="reportWeeklyContent" class="report-panel-content"></div>
                 </div>
@@ -1092,12 +1090,10 @@
                 <div id="reportMonthly" class="report-panel card" role="tabpanel" style="display: none;">
                     <div class="report-panel-header">
                         <div>
-                            <p class="report-panel-eyebrow">Summary</p>
-                            <h3 class="report-panel-title">This month</h3>
+                            <p class="report-panel-eyebrow" data-i18n="report_summary">Summary</p>
+                            <h3 class="report-panel-title" data-i18n="report_this_month">This month</h3>
                         </div>
-                        <button type="button" class="report-export-btn" onclick="exportReportPNG('reportMonthly')" aria-label="Export monthly report as image">
-                            ↓ Export
-                        </button>
+                        <button type="button" class="report-export-btn" onclick="exportReportPNG('reportMonthly')" aria-label="Export monthly report as image" data-i18n="report_export_btn">↓ Export</button>
                     </div>
                     <div id="reportMonthlyContent" class="report-panel-content"></div>
                 </div>
@@ -1303,14 +1299,14 @@
                     <p class="card-desc" data-i18n="s_custom_metrics_desc">Add your own trackable metrics (e.g. anxiety, pain, productivity). They appear in check-in, charts, and correlations.</p>
                     <div class="data-options-block">
                         <div class="form-group">
-                            <label for="newMetricName">Add metric</label>
+                            <label for="newMetricName" data-i18n="add_metric">Add metric</label>
                             <div style="display: flex; flex-wrap: wrap; gap: var(--space-sm); align-items: flex-end;">
-                                <input type="text" id="newMetricName" class="form-input" placeholder="e.g. Anxiety" style="max-width: 180px;">
+                                <input type="text" id="newMetricName" class="form-input" data-i18n-placeholder="add_metric_placeholder" placeholder="e.g. Anxiety" style="max-width: 180px;">
                                 <select id="newMetricType" class="theme-select" style="min-width: 120px;">
-                                    <option value="scale">1–10 scale</option>
+                                    <option value="scale" data-i18n="scale_1_10">1–10 scale</option>
                                     <option value="yesno">Yes / No</option>
                                 </select>
-                                <button type="button" class="btn" onclick="addCustomMetric()">Add</button>
+                                <button type="button" class="btn" onclick="addCustomMetric()" data-i18n="add_btn">Add</button>
                             </div>
                         </div>
                         <ul id="customMetricsList" class="custom-metrics-list"></ul>
@@ -1319,20 +1315,20 @@
                 <div class="card data-manager-card" id="settingsDataManagerCard">
                     <div class="data-manager-header">
                         <div>
-                            <h3>Data Manager</h3>
-                            <p class="card-desc">Review any saved day and jump straight into the right editor.</p>
+<h3 data-i18n="data_manager">Data Manager</h3>
+                        <p class="card-desc" data-i18n="data_manager_desc">Review any saved day and jump straight into the right editor.</p>
                         </div>
                     </div>
                     <div class="data-manager-controls">
                         <div class="form-group">
-                            <label for="settingsDataManagerDate">Saved day</label>
+                            <label for="settingsDataManagerDate" data-i18n="saved_day">Saved day</label>
                             <input type="text" id="settingsDataManagerDate" class="aura-date-input form-input" placeholder="YYYY-MM-DD" aria-label="Saved day to manage">
                         </div>
                         <div id="settingsDataManagerStatus" class="data-manager-status" aria-live="polite"></div>
                     </div>
                     <div id="settingsDataManagerPreview" class="data-manager-preview is-empty">
                         <div class="data-manager-preview-empty">
-                            <p class="data-manager-preview-title">Choose a saved day</p>
+                            <p class="data-manager-preview-title" data-i18n="choose_saved_day">Choose a saved day</p>
                             <p class="data-manager-preview-copy">Select a date to see what data exists and open the correct editor.</p>
                         </div>
                     </div>
@@ -1354,37 +1350,37 @@
                     <p class="card-desc" data-i18n="s_privacy_desc">All data is stored locally on your device.</p>
                     <div class="privacy-options-block">
                         <div class="form-group">
-                            <label class="checkbox-label">
+                            <label class="checkbox-label" data-i18n="s_passcode_lock">
                                 <input type="checkbox" id="passcodeLockEnabled" onchange="togglePasscodeLock(this.checked)">
                                 Passcode lock
                             </label>
                         </div>
                         <div class="form-group">
-                            <label class="checkbox-label">
+                            <label class="checkbox-label" data-i18n="s_encrypt_entries">
                                 <input type="checkbox" id="encryptEntriesToggle" onchange="setEncryptEntries(this.checked)">
                                 Encrypt entries (optional)
                             </label>
                         </div>
                         <div class="form-group">
-                            <label class="checkbox-label">
+                            <label class="checkbox-label" data-i18n="s_private_mode">
                                 <input type="checkbox" id="privateModeToggle" onchange="setPrivateMode(this.checked)">
                                 Private mode (hide journal previews in lists)
                             </label>
                         </div>
                         <div class="form-group">
-                            <label for="dataRetention">Data retention</label>
+                            <label for="dataRetention" data-i18n="s_data_retention">Data retention</label>
                             <select id="dataRetention" class="theme-select" onchange="setDataRetention(this.value)">
-                                <option value="forever">Keep forever</option>
-                                <option value="365">1 year</option>
-                                <option value="180">6 months</option>
-                                <option value="90">90 days</option>
-                                <option value="30">30 days</option>
+                                <option value="forever" data-i18n="s_keep_forever">Keep forever</option>
+                                <option value="365" data-i18n="s_retention_1year">1 year</option>
+                                <option value="180" data-i18n="s_retention_6months">6 months</option>
+                                <option value="90" data-i18n="s_retention_90days">90 days</option>
+                                <option value="30" data-i18n="s_retention_30days">30 days</option>
                             </select>
                         </div>
                     </div>
                     <div class="privacy-delete-wrap" style="margin-bottom: var(--space-md);">
-                        <button type="button" class="btn btn-secondary" onclick="addSampleData()">Load 90 days of sample data</button>
-                        <p class="card-desc" style="margin-top: var(--space-sm); color: var(--text-muted); font-size: 0.9rem;">This adds demo data. Use &lsquo;Delete all my data&rsquo; to remove it when done.</p>
+                        <button type="button" class="btn btn-secondary" onclick="addSampleData()" data-i18n="s_load_sample_data">Load 90 days of sample data</button>
+                        <p class="card-desc" style="margin-top: var(--space-sm); color: var(--text-muted); font-size: 0.9rem;" data-i18n="s_load_sample_desc">This adds demo data. Use &lsquo;Delete all my data&rsquo; to remove it when done.</p>
                     </div>
                     <div class="privacy-delete-wrap">
                         <button type="button" class="btn btn-danger" onclick="openDeleteAllModal()" data-i18n="s_delete_all">Delete all my data</button>
@@ -1465,9 +1461,9 @@
                     <div class="data-action-row">
                         <div class="import-file-wrap">
                             <input type="file" id="importFile" accept=".json,.csv,application/json,text/csv" aria-label="Choose file to import">
-                            <span class="btn btn-secondary">Choose file</span>
+                            <span class="btn btn-secondary" data-i18n="import_choose_file">Choose file</span>
                         </div>
-                        <button type="button" class="btn" onclick="previewImport()">Preview import</button>
+                        <button type="button" class="btn" onclick="previewImport()" data-i18n="import_preview_btn">Preview import</button>
                     </div>
                     <p id="importResult" class="import-result"></p>
                 </div>
@@ -1620,5 +1616,6 @@
     <script src="js/improvements_locale_complete_fix.js"></script>
     <script src="js/i18n.js"></script>
     <script src="js/i18n_sweep.js"></script>
+    <script src="js/i18n_deep_patch.js"></script>
 </body>
 </html>

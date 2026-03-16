@@ -45,9 +45,11 @@
         nav_patterns:'My Patterns', nav_seasonal:'Seasonal Rhythm', nav_reports:'Reports',
         nav_export:'Export & Backup', nav_menu:'Menu', nav_seasonal_short:'Seasonal',
 
-        /* Dashboard */
+        /* Dashboard — app name "Aura Mood" must never be translated */
         dash_welcome_title:'Welcome to Aura Mood',
         dash_welcome_subtitle:'Track your mood, sleep, and energy every day. Patterns emerge after a week. Insights sharpen over a month.',
+        welcome_title:'Welcome to Aura Mood',
+        welcome_subtitle:'Track your mood, sleep, and energy every day. Patterns emerge after a week. Insights sharpen over a month.',
         dash_start_checkin:"Start today's check-in →",
         dash_sample_data:'Explore with sample data',
         dash_feat_mood:'Mood trends & forecasting',
@@ -92,6 +94,8 @@
         checkin_sleep_segments:'Sleep Segments',
         checkin_activities:'Activities', checkin_tags:'Tags', checkin_photos:'Photos',
         activities_label:'Activities', tags_label:'Tags',
+        activities_placeholder:'e.g. exercise, reading, work (comma-separated)',
+        tags_placeholder:'Add a tag…',
         checkin_suggested_tags:'Suggested tags', checkin_tap_to_add:'Tap to add',
         checkin_daily_reflection:'Daily Reflection',
         checkin_reflection_desc:'Capture how the day felt, what mattered, and what you noticed.',
@@ -129,6 +133,92 @@
         journal_saved_placeholder:'Your journal entry for today has already been saved.',
         one_journal_per_day:'Only one journal entry can be created per day.',
         add_photo:'\ud83d\udcf7 Add Photo',
+        journal_ph:'What stood out today? What affected your mood? What are you grateful for?',
+        checkin_save_hint:'Saved when you click Save Entry below, or press \u2318S.',
+        journal_write_placeholder:'Write something about your day…',
+        photos_label:'Photos',
+        words_count:'{n} words',
+        recent_entries:'Recent entries',
+        tap_to_open:'Tap to open',
+        no_journal_saved:'No journal text saved',
+        entry_edit_btn:'Edit',
+        entry_delete_btn:'Delete',
+        mood_label_short:'Mood',
+        energy_label_short:'Energy',
+        sleep_label_short:'Sleep',
+        hrs_short:'hrs',
+        entry_photo_count:'{n} photo',
+        entry_photos_count:'{n} photos',
+        no_entries_tagged:'No entries tagged \u201c{tag}\u201d yet.',
+        no_journal_entries_yet:'No journal entries yet.',
+        start_first_checkin:'Start your first check-in \u2192',
+
+        /* Reports */
+        report_subtitle:'Weekly, monthly, and annual summaries of your data.',
+        report_weekly:'Weekly',
+        report_monthly:'Monthly',
+        report_year_in_review:'Year in review',
+        report_summary:'Summary',
+        report_export_btn:'Export',
+        report_days_tracked:'Days tracked: {n} of {total}',
+        report_avg_mood:'Average mood: {n}',
+        report_avg_sleep:'Average sleep: {n} hrs',
+        report_avg_energy:'Average energy: {n}',
+        report_year_in_numbers:'Your {year} in numbers',
+        report_total_days_tracked:'Total days tracked: {n}',
+        report_current_streak:'Current streak: {n} days',
+        report_last_7_days:'Last 7 days',
+        report_this_month:'This month',
+        report_entries:'Entries: {n}',
+
+        /* Patterns / Radar */
+        radar_last_7_days:'Last 7 Days',
+        radar_monthly:'Monthly',
+        radar_mood_patterns:'Mood Patterns — Last 7 Days',
+        radar_weekly_balance:'Weekly Balance (Last 7 Days)',
+        radar_balance_desc:'Balance of your mood across days of the week. Switch to monthly to see a single month\'s overview.',
+        radar_select_month:'Select month',
+        radar_no_entries:'No entries in this time period.',
+        radar_month_overview:'{month} Mood Overview',
+        day_sun:'Sun', day_mon:'Mon', day_tue:'Tue', day_wed:'Wed', day_thu:'Thu', day_fri:'Fri', day_sat:'Sat',
+        journal_select_date_hint:'Select a date in Daily Check-In to start writing.',
+        journal_title_prefix:'Journal — ',
+
+        /* Settings — Data & Privacy */
+        s_passcode_lock:'Passcode lock',
+        s_encrypt_entries:'Encrypt entries (optional)',
+        s_private_mode:'Private mode (hide journal previews in lists)',
+        s_data_retention:'Data retention',
+        s_keep_forever:'Keep forever',
+        s_retention_1year:'1 year',
+        s_retention_6months:'6 months',
+        s_retention_90days:'90 days',
+        s_retention_30days:'30 days',
+        s_load_sample_data:'Load 90 days of sample data',
+        s_load_sample_desc:'This adds demo data. Use \'Delete all my data\' to remove it when done.',
+
+        /* Import / Backup */
+        import_choose_file:'Choose file',
+        import_preview_btn:'Preview import',
+        backup_title:'Backups',
+        backups_title:'Backups',
+        backup_restore_btn:'Restore',
+        backup_empty_msg:'No backups stored yet. Download a backup to keep it here.',
+        backup_restore_confirm:'Restore this backup? Current data will be replaced.',
+        backup_restore_failed:'Restore failed',
+        toast_backup_restored:'Backup restored',
+        restore_label:'Restore from a previous backup',
+        download_backup_now:'Download backup now',
+        backup_desc:'A JSON backup is created automatically every 24 hours. The last 7 are kept in your browser.',
+        last_backup_label:'Last backup',
+        backups_eyebrow:'Auto-saved',
+        import_eyebrow:'Migrate',
+        import_title:'Import data',
+        import_desc:'Import from Aura Mood JSON/CSV, or from Daylio and Bearable exports. You\'ll see a preview before anything is imported.',
+        summary_eyebrow:'Summary',
+        report_year_title:'Year in review',
+        export_btn_label:'Export',
+        export_report_pdf:'Export report as PDF',
 
         /* Analytics pages */
         page_mood_subtitle:'Patterns and trends in your emotional wellbeing.',
@@ -193,6 +283,18 @@
         s_show_mood:'Show Mood chart', s_show_sleep:'Show Sleep chart', s_show_energy:'Show Energy chart',
         s_custom_metrics:'Custom metrics',
         s_custom_metrics_desc:'Add your own trackable metrics (e.g. anxiety, pain, productivity).',
+        add_metric:'Add metric',
+        add_metric_placeholder:'e.g. Anxiety',
+        scale_1_10:'1-10 scale',
+        add_btn:'Add',
+        no_custom_metrics_yet:'No custom metrics yet. Add one above.',
+        data_manager:'Data Manager',
+        data_manager_desc:'Review any saved day and jump straight into the right editor.',
+        saved_day:'Saved day',
+        choose_saved_day:'Choose a saved day',
+        no_saved_data_day:'No saved data for this day',
+        data_manager_select_date_copy:'Select a date to see what data exists and open the correct editor.',
+        delete_entire_entry_for_day:'Delete entire entry for this day',
         s_privacy:'Data & Privacy',
         s_privacy_desc:'All data is stored locally on your device.',
         s_delete_all:'Delete all my data',
@@ -292,6 +394,8 @@
         nav_export:'Export & Backup', nav_menu:'Menü', nav_seasonal_short:'Saisonal',
         dash_welcome_title:'Willkommen bei Aura Mood',
         dash_welcome_subtitle:'Verfolge täglich deine Stimmung, deinen Schlaf und deine Energie. Muster zeigen sich nach einer Woche.',
+        welcome_title:'Willkommen bei Aura Mood',
+        welcome_subtitle:'Verfolge täglich deine Stimmung, deinen Schlaf und deine Energie. Muster zeigen sich nach einer Woche.',
         dash_start_checkin:'Heutigen Check-in starten →',
         dash_sample_data:'Mit Beispieldaten erkunden',
         dash_feat_mood:'Stimmungstrends & Prognosen',
@@ -331,6 +435,8 @@
         checkin_sleep_segments:'Schlafphasen',
         checkin_activities:'Aktivitäten', checkin_tags:'Tags', checkin_photos:'Fotos',
         activities_label:'Aktivitäten', tags_label:'Tags',
+        activities_placeholder:'z. B. Sport, Lesen, Arbeit (kommagetrennt)',
+        tags_placeholder:'Tag hinzufügen…',
         checkin_suggested_tags:'Vorgeschlagene Tags', checkin_tap_to_add:'Tippen zum Hinzufügen',
         checkin_daily_reflection:'Tagesreflexion',
         checkin_reflection_desc:'Halte fest, wie der Tag war, was wichtig war und was du bemerkt hast.',
@@ -364,6 +470,84 @@
         journal_saved_placeholder:'Dein Tagebucheintrag für heute wurde bereits gespeichert.',
         one_journal_per_day:'Pro Tag kann nur ein Tagebucheintrag erstellt werden.',
         add_photo:'\ud83d\udcf7 Foto hinzufügen',
+        journal_ph:'Was war heute bedeutsam? Was hat deine Stimmung beeinflusst? Wofür bist du dankbar?',
+        checkin_save_hint:'Gespeichert, wenn du unten auf Eintrag speichern klickst oder \u2318S drückst.',
+        journal_write_placeholder:'Schreibe etwas über deinen Tag…',
+        photos_label:'Fotos',
+        words_count:'{n} Wörter',
+        recent_entries:'Neueste Einträge',
+        tap_to_open:'Zum Öffnen tippen',
+        no_journal_saved:'Kein Tagebuchtext gespeichert',
+        entry_edit_btn:'Bearbeiten',
+        entry_delete_btn:'Löschen',
+        mood_label_short:'Stimmung',
+        energy_label_short:'Energie',
+        sleep_label_short:'Schlaf',
+        hrs_short:'h',
+        entry_photo_count:'{n} Foto',
+        entry_photos_count:'{n} Fotos',
+        no_entries_tagged:'Noch keine Einträge mit \u201e{tag}\u201c.',
+        no_journal_entries_yet:'Noch keine Tagebucheinträge.',
+        start_first_checkin:'Ersten Check-in starten \u2192',
+        report_subtitle:'Wöchentliche, monatliche und jährliche Zusammenfassungen deiner Daten.',
+        report_weekly:'Wöchentlich',
+        report_monthly:'Monatlich',
+        report_year_in_review:'Jahresrückblick',
+        report_summary:'Zusammenfassung',
+        report_export_btn:'Export',
+        report_days_tracked:'Tage erfasst: {n} von {total}',
+        report_avg_mood:'Durchschnittliche Stimmung: {n}',
+        report_avg_sleep:'Durchschnittlicher Schlaf: {n} Std.',
+        report_avg_energy:'Durchschnittliche Energie: {n}',
+        report_year_in_numbers:'Dein {year} in Zahlen',
+        report_total_days_tracked:'Tage insgesamt erfasst: {n}',
+        report_current_streak:'Aktueller Streak: {n} Tage',
+        report_last_7_days:'Letzte 7 Tage',
+        report_this_month:'Dieser Monat',
+        report_entries:'Einträge: {n}',
+        radar_last_7_days:'Letzte 7 Tage',
+        radar_monthly:'Monatlich',
+        radar_mood_patterns:'Stimmungsmuster — Letzte 7 Tage',
+        radar_weekly_balance:'Wochenbalance (Letzte 7 Tage)',
+        radar_balance_desc:'Balance deiner Stimmung über die Wochentage. Wechsle zu Monat für eine Monatsübersicht.',
+        radar_select_month:'Monat wählen',
+        radar_no_entries:'Keine Einträge in diesem Zeitraum.',
+        radar_month_overview:'{month} Stimmungsüberblick',
+        day_sun:'So', day_mon:'Mo', day_tue:'Di', day_wed:'Mi', day_thu:'Do', day_fri:'Fr', day_sat:'Sa',
+        journal_select_date_hint:'Wähle im Tages-Check-in ein Datum, um zu schreiben.',
+        journal_title_prefix:'Tagebuch — ',
+        s_passcode_lock:'Passwortschutz',
+        s_encrypt_entries:'Einträge verschlüsseln (optional)',
+        s_private_mode:'Privatmodus (Tagebuchvorschau in Listen ausblenden)',
+        s_data_retention:'Aufbewahrungsdauer',
+        s_keep_forever:'Dauerhaft behalten',
+        s_retention_1year:'1 Jahr',
+        s_retention_6months:'6 Monate',
+        s_retention_90days:'90 Tage',
+        s_retention_30days:'30 Tage',
+        s_load_sample_data:'90 Tage Beispieldaten laden',
+        s_load_sample_desc:'Fügt Demo-Daten hinzu. Mit „Alle Daten löschen“ wieder entfernen.',
+        import_choose_file:'Datei wählen',
+        import_preview_btn:'Importvorschau',
+        backup_title:'Sicherungen',
+        backups_title:'Sicherungen',
+        backup_restore_btn:'Wiederherstellen',
+        backup_empty_msg:'Noch keine Sicherungen gespeichert. Lade ein Backup herunter, um es hier zu speichern.',
+        backup_restore_confirm:'Dieses Backup wiederherstellen? Aktuelle Daten werden ersetzt.',
+        backup_restore_failed:'Wiederherstellung fehlgeschlagen',
+        toast_backup_restored:'Backup wiederhergestellt',
+        restore_label:'Aus einem früheren Backup wiederherstellen',
+        download_backup_now:'Jetzt Backup herunterladen',
+        backup_desc:'Ein JSON-Backup wird automatisch alle 24 Stunden erstellt. Die letzten 7 werden im Browser gespeichert.',
+        last_backup_label:'Letztes Backup',
+        backups_eyebrow:'Automatisch gespeichert',
+        import_eyebrow:'Migrieren',
+        import_title:'Daten importieren',
+        import_desc:'Aus Aura Mood JSON/CSV oder Daylio-/Bearable-Exporten importieren. Vorschau vor dem Import.',
+        summary_eyebrow:'Zusammenfassung',
+        report_year_title:'Jahresrückblick',
+        export_btn_label:'Export',
+        export_report_pdf:'Bericht als PDF exportieren',
         page_mood_subtitle:'Muster und Trends in deinem emotionalen Wohlbefinden.',
         page_sleep_subtitle:'Qualität und Konsistenz deiner Erholung.',
         page_energy_subtitle:'Rhythmus und Ausdauer über Tage.',
@@ -412,6 +596,18 @@
         s_show_mood:'Stimmungsdiagramm anzeigen', s_show_sleep:'Schlafdiagramm anzeigen', s_show_energy:'Energiediagramm anzeigen',
         s_custom_metrics:'Eigene Metriken',
         s_custom_metrics_desc:'Füge eigene Metriken hinzu (z. B. Angst, Schmerz, Produktivität).',
+        add_metric:'Metrik hinzufügen',
+        add_metric_placeholder:'z. B. Angst',
+        scale_1_10:'Skala 1–10',
+        add_btn:'Hinzufügen',
+        no_custom_metrics_yet:'Noch keine eigenen Metriken. Füge oben eine hinzu.',
+        data_manager:'Daten-Manager',
+        data_manager_desc:'Beliebigen gespeicherten Tag ansehen und direkt den passenden Editor öffnen.',
+        saved_day:'Gespeicherter Tag',
+        choose_saved_day:'Gespeicherten Tag wählen',
+        no_saved_data_day:'Keine gespeicherten Daten für diesen Tag.',
+        data_manager_select_date_copy:'Wähle ein Datum, um vorhandene Daten zu sehen und den passenden Editor zu öffnen.',
+        delete_entire_entry_for_day:'Kompletten Eintrag für diesen Tag löschen',
         s_privacy:'Daten & Datenschutz',
         s_privacy_desc:'Alle Daten werden lokal auf deinem Gerät gespeichert.',
         s_delete_all:'Alle Daten löschen',
@@ -557,6 +753,34 @@
         report_week:'Semaine', report_month:'Mois', report_year:'Année',
         report_export_pdf:'Exporter le rapport en PDF',
         report_best_day:'Meilleur jour', report_challenging:'Jour difficile (humeur la plus basse)',
+        report_subtitle:'Résumés hebdomadaires, mensuels et annuels de vos données.',
+        report_weekly:'Hebdomadaire', report_monthly:'Mensuel', report_year_in_review:'Bilan de l\'année',
+        report_summary:'Résumé', report_export_btn:'Exporter',
+        report_days_tracked:'Jours enregistrés : {n} sur {total}', report_avg_mood:'Humeur moyenne : {n}',
+        report_avg_sleep:'Sommeil moyen : {n} h', report_avg_energy:'Énergie moyenne : {n}',
+        report_last_7_days:'7 derniers jours', report_this_month:'Ce mois-ci', report_entries:'Entrées : {n}',
+        radar_last_7_days:'7 derniers jours', radar_monthly:'Mensuel',
+        radar_mood_patterns:'Patterns d\'humeur — 7 derniers jours',
+        radar_weekly_balance:'Balance hebdo (7 derniers jours)',
+        radar_balance_desc:'Équilibre de votre humeur selon les jours de la semaine. Passez en mensuel pour un aperçu du mois.',
+        radar_select_month:'Choisir le mois', radar_no_entries:'Aucune entrée sur cette période.',
+        radar_month_overview:'{month} Aperçu humeur',
+        day_sun:'Dim', day_mon:'Lun', day_tue:'Mar', day_wed:'Mer', day_thu:'Jeu', day_fri:'Ven', day_sat:'Sam',
+        journal_select_date_hint:'Choisissez une date dans le Bilan du jour pour écrire.',
+        journal_title_prefix:'Journal — ',
+        journal_write_placeholder:'Écrivez quelque chose sur votre journée…',
+        words_count:'{n} mot | {n} mots', photos_label:'Photos', recent_entries:'Entrées récentes',
+        tap_to_open:'Appuyer pour ouvrir', no_journal_saved:'Aucun texte de journal enregistré',
+        entry_edit_btn:'Modifier', entry_delete_btn:'Supprimer', mood_label_short:'Humeur', energy_label_short:'Énergie', sleep_label_short:'Sommeil', hrs_short:'h',
+        add_metric:'Ajouter une métrique', add_metric_placeholder:'ex. Anxiété', scale_1_10:'Échelle 1–10',
+        add_btn:'Ajouter', no_custom_metrics_yet:'Aucune métrique personnalisée. Ajoutez-en une ci-dessus.',
+        data_manager:'Gestionnaire de données',
+        data_manager_desc:'Consultez n\'importe quel jour enregistré et ouvrez directement l\'éditeur.',
+        saved_day:'Jour enregistré', choose_saved_day:'Choisir un jour enregistré',
+        no_saved_data_day:'Aucune donnée enregistrée pour ce jour',
+        data_manager_select_date_copy:'Choisissez une date pour voir les données et ouvrir l\'éditeur.',
+        delete_entire_entry_for_day:'Supprimer toute l\'entrée pour ce jour',
+        export_png_btn:'Exporter PNG',
         settings:'Paramètres',
         s_appearance:'Apparence', s_appearance_desc:'Thème et préférences d\'affichage.',
         s_theme:'Thème', s_dark_mode:'Mode sombre',
@@ -1284,6 +1508,9 @@
             var key = el.getAttribute('data-i18n');
             var val = row[key] != null ? row[key] : S.en[key];
             if (val == null) return;
+            /* App name "Aura Mood" must never be translated */
+            if ((key === 'welcome_title' || key === 'dash_welcome_title') && (typeof val !== 'string' || val.indexOf('Aura Mood') === -1))
+                val = S.en.dash_welcome_title;
             if (el.getAttribute('data-i18n-placeholder')) { el.placeholder = val; return; }
             /* Safe first-text-node replacement — preserves icons, check-marks etc */
             var replaced = false;
@@ -1370,6 +1597,17 @@
         applyRTL();
         annotateAll();
         applyI18n(window.auraLocale || 'en');
+        /* Refresh JS-built content (dashboard narrative, entry list, etc.) in new language */
+        if (typeof window.updateDashboard === 'function') window.updateDashboard();
+        if (typeof window.renderEntryList === 'function') window.renderEntryList();
+        if (typeof window.renderReportWeekly === 'function') window.renderReportWeekly();
+        if (typeof window.renderReportMonthly === 'function') window.renderReportMonthly();
+        if (typeof window.renderReportYear === 'function') window.renderReportYear();
+        if (typeof window.updateJournalWordCount === 'function') window.updateJournalWordCount();
+        if (typeof window.updateJournalMeta === 'function') window.updateJournalMeta();
+        if (typeof window.updateRadarTitle === 'function') window.updateRadarTitle();
+        var radarCtx = document.getElementById('radarChartContextLabel');
+        if (radarCtx && typeof window.renderRadarChart === 'function') window.renderRadarChart();
     }
 
     /* ════════════════════════════════════════════════════════════════════
@@ -1379,8 +1617,15 @@
         patchShowEntryModal();
         patchShowToast();
 
-        /* Run once immediately */
-        runI18n();
+        /* Use saved locale from localStorage immediately so first paint is in correct language */
+        var saved;
+        try { saved = localStorage.getItem('aura_locale'); } catch (e) {}
+        if (saved && saved !== '_custom') {
+            window.auraLocale = String(saved).split('-')[0];
+            runI18n(window.auraLocale);
+        } else {
+            runI18n();
+        }
 
         /* Wrap savePreference — ONE time, guarded */
         var origSave = window.savePreference;
@@ -1393,8 +1638,7 @@
                         var cEl = document.getElementById('prefLocaleCustom');
                         loc = cEl ? (cEl.value.trim() || 'en') : 'en';
                     }
-                    /* Run after ALL existing timers (max 450 ms) */
-                    setTimeout(function () { runI18n(loc); }, 700);
+                    runI18n(loc);
                 }
                 return r;
             };
@@ -1406,7 +1650,7 @@
         if (typeof origNav === 'function' && !origNav._masterI18n) {
             window.navigate = function (page) {
                 var r = origNav.apply(this, arguments);
-                setTimeout(runI18n, 600);
+                setTimeout(runI18n, 0);
                 return r;
             };
             window.navigate._masterI18n = true;
@@ -1414,13 +1658,13 @@
     }
 
     /* ════════════════════════════════════════════════════════════════════
-       §10  BOOT
+       §10  BOOT — run early so language applies quickly
     ════════════════════════════════════════════════════════════════════ */
     if (document.readyState !== 'loading' && window.navigate) {
-        setTimeout(wire, 700);
+        setTimeout(wire, 100);
     } else {
         document.addEventListener('DOMContentLoaded', function () {
-            setTimeout(wire, 800);
+            setTimeout(wire, 150);
         });
     }
 
