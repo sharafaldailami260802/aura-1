@@ -18,6 +18,7 @@
    ═══════════════════════════════════════════════════════════════════════ */
 (function () {
     'use strict';
+    if (window._auraI18nMaster) return; // i18n.js is authoritative
 
     /* ─── helpers ────────────────────────────────────────────────────── */
     function onReady(fn) {

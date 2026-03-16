@@ -15,6 +15,7 @@
    ═══════════════════════════════════════════════════════════════════════ */
 (function () {
     'use strict';
+    if (window._auraI18nMaster) return; // i18n.js is authoritative
 
     /* ─────────────────────────────────────────────────────────────────
        §1.  Complete dynamic-string translation table

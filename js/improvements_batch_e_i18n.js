@@ -14,6 +14,7 @@
    ═══════════════════════════════════════════════════════════════════════ */
 (function () {
     'use strict';
+    if (window._auraI18nMaster) return; // i18n.js is authoritative
 
     function onReady(fn) {
         if (document.readyState !== 'loading' && window.navigate) { setTimeout(fn, 600); return; }

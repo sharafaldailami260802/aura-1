@@ -722,11 +722,11 @@
             
             <!-- Analytics Pages -->
             <div id="mood" class="page">
-                <h1>Mood Trends</h1>
-                <p class="page-subtitle">Track your mood trajectory over time.</p>
+                <h1 data-i18n="nav_mood_trends">Mood Trends</h1>
+                <p class="page-subtitle" data-i18n="page_mood_subtitle">Track your mood trajectory over time.</p>
                 <div class="card analytics-chart-card">
                     <header class="analytics-chart-card-header">
-                        <p class="analytics-chart-eyebrow">Trend &amp; trajectory</p>
+                        <p class="analytics-chart-eyebrow" data-i18n="mood_chart_eyebrow">Trend &amp; trajectory</p>
                         <p class="analytics-chart-desc">Your mood over time.</p>
                     </header>
                     <div class="comparison-chart-wrap mood-trends-chart-wrap">
@@ -734,7 +734,7 @@
                     </div>
                 </div>
                 <div class="card analytics-insights-card" style="margin-top: var(--space-lg);">
-                    <h3>Insights</h3>
+                    <h3 data-i18n="nav_insights">Insights</h3>
                     <div id="analyticsInsightsContent">
                         <p class="insight-empty">Insights will appear once enough data has been collected.</p>
                     </div>
@@ -742,11 +742,11 @@
             </div>
             
             <div id="sleep" class="page">
-                <h1>Sleep Analysis</h1>
-                <p class="page-subtitle">Recovery and consistency over time.</p>
+                <h1 data-i18n="nav_sleep">Sleep Analysis</h1>
+                <p class="page-subtitle" data-i18n="page_sleep_subtitle">Recovery and consistency over time.</p>
                 <div class="card analytics-chart-card">
                     <header class="analytics-chart-card-header">
-                        <p class="analytics-chart-eyebrow">Recovery &amp; consistency</p>
+                        <p class="analytics-chart-eyebrow" data-i18n="sleep_chart_eyebrow">Recovery &amp; consistency</p>
                         <p class="analytics-chart-desc">Sleep duration and consistency.</p>
                     </header>
                     <div class="comparison-chart-wrap analytics-chart-wrap">
@@ -824,7 +824,7 @@
                     <div class="corr-footer">
                         <p id="r2SleepMood" class="chart-r2" style="display:none;"></p>
                         <p id="r2ActivityEnergy" class="chart-r2" style="display:none;"></p>
-                        <button type="button" class="chart-export-btn" onclick="exportChartPNG('correlationsChart')">↓ Export PNG</button>
+                        <button type="button" class="chart-export-btn" data-i18n="export_png_btn" onclick="exportChartPNG('correlationsChart')">↓ Export PNG</button>
                     </div>
                 </div>
 
@@ -832,10 +832,10 @@
                 <div class="card corr-matrix-card">
                     <div class="corr-matrix-header">
                         <div>
-                            <p class="corr-matrix-eyebrow">Relationship strength</p>
-                            <h3 class="corr-matrix-title">Correlation overview (R²)</h3>
+                            <p class="corr-matrix-eyebrow" data-i18n="corr_matrix_eyebrow">Relationship strength</p>
+                            <h3 class="corr-matrix-title" data-i18n="corr_matrix_title">Correlation overview (R²)</h3>
                         </div>
-                        <p class="corr-matrix-hint">Higher R² = stronger connection between the two metrics.</p>
+                        <p class="corr-matrix-hint" data-i18n="corr_matrix_hint">Higher R² = stronger connection between the two metrics.</p>
                     </div>
                     <div id="correlationMatrix" class="correlation-matrix"></div>
                 </div>
@@ -843,8 +843,8 @@
             
             <div id="predictions" class="page">
                 <header class="page-hero forecast-hero">
-                    <h1>Mood Forecast</h1>
-                    <p class="page-hero-subtitle">A projection based on your recent pattern — a guide, not a guarantee.</p>
+                    <h1 data-i18n="nav_forecast">Mood Forecast</h1>
+                    <p class="page-hero-subtitle" data-i18n="page_forecast_subtitle">A projection based on your recent pattern — a guide, not a guarantee.</p>
                 </header>
 
                 <!-- Summary stat chips: populated by renderPredictions() -->
@@ -858,9 +858,9 @@
                         </div>
                         <div class="prediction-band-legend">
                             <span class="prediction-band-swatch"></span>
-                            <span>Shaded band = expected range based on your recent variability</span>
+                            <span data-i18n="forecast_band_legend">Shaded band = expected range based on your recent variability</span>
                         </div>
-                        <button type="button" class="btn chart-export-btn" onclick="exportChartPNG('predictionChart')">Export PNG</button>
+                        <button type="button" class="btn chart-export-btn" data-i18n="export_png_btn" onclick="exportChartPNG('predictionChart')">Export PNG</button>
                     </div>
                 </section>
 
@@ -872,13 +872,13 @@
 
                     <!-- Primary interpretation: trend + volatility + sleep signal -->
                     <div id="predictionInterpretation" class="card card--support prediction-interpretation" style="display:none;">
-                        <h3 class="card--support-heading">What the forecast shows</h3>
+                        <h3 class="card--support-heading" data-i18n="forecast_what_shows">What the forecast shows</h3>
                         <p id="predictionInterpretationText"></p>
                     </div>
 
                     <!-- Richer pattern analysis: day-of-week, sleep signal, streak context -->
                     <div id="predictionPatternsCard" class="card card--support prediction-interpretation forecast-patterns-card" style="display:none;">
-                        <h3 class="card--support-heading">Patterns behind the forecast</h3>
+                        <h3 class="card--support-heading" data-i18n="forecast_patterns_behind">Patterns behind the forecast</h3>
                         <p id="predictionPatterns"></p>
                     </div>
 
@@ -912,7 +912,7 @@
                         <div id="radarChartWrap" class="chart-container pattern-chart-wrap">
                             <canvas id="radarChart"></canvas>
                         </div>
-                        <button type="button" class="btn chart-export-btn" onclick="exportChartPNG('radarChart')">Export PNG</button>
+                        <button type="button" class="btn chart-export-btn" data-i18n="export_png_btn" onclick="exportChartPNG('radarChart')">Export PNG</button>
                     </div>
                 </section>
 
@@ -929,7 +929,7 @@
                             <canvas id="distributionChart"></canvas>
                         </div>
                         <p id="distributionChartSummary" class="distribution-chart-summary" style="margin: var(--space-md) 0 0 0; font-size: 0.9rem; color: var(--text-muted);"></p>
-                        <button type="button" class="btn chart-export-btn" onclick="exportChartPNG('distributionChart')">Export PNG</button>
+                        <button type="button" class="btn chart-export-btn" data-i18n="export_png_btn" onclick="exportChartPNG('distributionChart')">Export PNG</button>
                     </div>
                     </div>
                 <div class="card card--secondary patterns-sleep-card" style="margin-top: var(--space-lg);">
@@ -1619,5 +1619,6 @@
     <script src="js/improvements_i18n_runtime.js"></script>
     <script src="js/improvements_locale_complete_fix.js"></script>
     <script src="js/i18n.js"></script>
+    <script src="js/i18n_sweep.js"></script>
 </body>
 </html>

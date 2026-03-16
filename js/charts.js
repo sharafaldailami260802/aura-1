@@ -288,7 +288,9 @@ window.computeMoodVelocity = function computeMoodVelocity(entries) {
         if (prev != null && curr != null && typeof prev === 'number' && typeof curr === 'number' && !isNaN(prev) && !isNaN(curr)) {
             velocities.push(curr - prev);
             var _vp = dates[i].split('-');
-            var _VM = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+            var _VM = (typeof window.getLocalizedMonths === 'function')
+                ? window.getLocalizedMonths('short')
+                : ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
             labels.push(_VM[parseInt(_vp[1], 10) - 1] + ' ' + parseInt(_vp[2], 10));
         }
     }

@@ -5131,7 +5131,9 @@ function renderYearOverYear() {
     if (years.length >= 2) { y1.value = years[0]; y2.value = years[1]; }
     var year1 = parseInt(y1.value, 10) || years[0];
     var year2 = parseInt(y2.value, 10) || years[1];
-    var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    var months = (typeof window.getLocalizedMonths === 'function')
+        ? window.getLocalizedMonths('short')
+        : ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
     function avgForYearMonth(y, m) {
         var list = [];
         Object.keys(entries).forEach(function(date) {

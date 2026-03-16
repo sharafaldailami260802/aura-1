@@ -21,6 +21,7 @@
    ═══════════════════════════════════════════════════════════════════════ */
 (function () {
     'use strict';
+    window._auraI18nMaster = true;
 
     /* ═══════════════════════════════════════════════════════════════════
        §1  MASTER TRANSLATION TABLE
@@ -156,6 +157,28 @@
         report_week:'Week', report_month:'Month', report_year:'Year',
         report_export_pdf:'Export report as PDF',
         report_best_day:'Best day', report_challenging:'Challenging day (lowest mood)',
+
+        /* Correlations page */
+        corr_matrix_eyebrow: 'Relationship strength',
+        corr_matrix_title:   'Correlation overview (R²)',
+        corr_matrix_hint:    'Higher R² = stronger connection between the two metrics.',
+
+        /* Forecast page */
+        page_forecast_subtitle:   'A projection based on your recent pattern — a guide, not a guarantee.',
+        forecast_what_shows:      'What the forecast shows',
+        forecast_patterns_behind: 'Patterns behind the forecast',
+        forecast_band_legend:     'Shaded band = expected range based on your recent variability',
+
+        /* Analytics page card headers */
+        mood_chart_eyebrow: 'Trend & trajectory',
+        mood_chart_desc:    'Your mood over time.',
+        sleep_chart_eyebrow:'Recovery & consistency',
+        sleep_chart_desc:   'Sleep duration and consistency.',
+        page_mood_subtitle: 'Track your mood trajectory over time.',
+        page_sleep_subtitle:'Recovery and consistency over time.',
+
+        /* Shared */
+        export_png_btn: '↓ Export PNG',
 
         /* Settings */
         settings:'Settings',
@@ -362,6 +385,21 @@
         report_week:'Woche', report_month:'Monat', report_year:'Jahr',
         report_export_pdf:'Bericht als PDF exportieren',
         report_best_day:'Bester Tag', report_challenging:'Schwieriger Tag (niedrigste Stimmung)',
+        /* Correlations & forecast */
+        corr_matrix_eyebrow:'Beziehungsstärke',
+        corr_matrix_title:'Korrelationsübersicht (R²)',
+        corr_matrix_hint:'Höheres R² = stärkere Verbindung zwischen den Metriken.',
+        page_forecast_subtitle:'Eine Prognose basierend auf deinem letzten Muster — ein Leitfaden, keine Garantie.',
+        forecast_what_shows:'Was die Prognose zeigt',
+        forecast_patterns_behind:'Muster hinter der Prognose',
+        forecast_band_legend:'Schattiertes Band = erwarteter Bereich basierend auf deiner Variabilität',
+        mood_chart_eyebrow:'Trend & Verlauf',
+        mood_chart_desc:'Deine Stimmung im Zeitverlauf.',
+        sleep_chart_eyebrow:'Erholung & Konsistenz',
+        sleep_chart_desc:'Schlafdauer und Regelmäßigkeit.',
+        page_mood_subtitle:'Verfolge deinen Stimmungsverlauf über die Zeit.',
+        page_sleep_subtitle:'Erholung und Konsistenz über die Zeit.',
+        export_png_btn:'↓ PNG exportieren',
         settings:'Einstellungen',
         s_appearance:'Aussehen', s_appearance_desc:'Design und Anzeigeeinstellungen.',
         s_theme:'Design', s_dark_mode:'Dunkelmodus',
