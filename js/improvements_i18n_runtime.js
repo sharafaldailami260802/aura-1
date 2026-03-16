@@ -970,5 +970,222 @@
         }
     }, 600);
 
-    console.log('[Aura i18n Runtime] All JS-generated strings patched — insights, charts, narrative, daily summary, toasts.');
+    /* ─────────────────────────────────────────────────────────────────
+       §6.  Patch buildSleepInsights + buildEnergyInsights in improvements.js
+            These are separate from app.js's insight engine and generate
+            their own fully-hardcoded English strips on Sleep/Energy pages.
+    ───────────────────────────────────────────────────────────────── */
+
+    /* Add sleep/energy strip translations to the master table */
+    var SE = {
+        en: {
+            sleep_avg_low:      'Your average sleep is {n} hours \u2014 below the recommended 7\u20139h.',
+            sleep_avg_low_sub:  'Even small improvements tend to lift mood the following day.',
+            sleep_avg_ok:       'Your average sleep is {n} hours \u2014 within a healthy range.',
+            sleep_avg_ok_sub:   'Consistency matters more than duration; try to keep your bedtime within a 30-minute window.',
+            sleep_trend_up:     'Sleep improved by {n}h this week vs your average.',
+            sleep_trend_up_sub: 'Keep it up \u2014 sustained rest builds resilience.',
+            sleep_trend_dn:     'Sleep dropped by {n}h this week vs your average.',
+            sleep_trend_dn_sub: 'Check for late screens or stress cutting your sleep short.',
+            sleep_sweet:        '7\u20138.5h nights are your sweet spot: mood averages {avg} \u2014 {diff} above your overall average.',
+            sleep_sweet_sub:    'Based on {n} nights in that range.',
+            energy_mood_high:   'Your energy and mood track closely together ({strength} correlation).',
+            energy_mood_low:    'Interesting: your energy and mood don\u2019t always align \u2014 worth exploring why.',
+            energy_mood_sub:    'Logged across {n} days with both metrics.',
+            energy_avg_high:    'Your energy averages {n}/10 \u2014 a solid baseline.',
+            energy_avg_mid:     'Your energy averages {n}/10 \u2014 moderate and manageable.',
+            energy_avg_low:     'Your energy averages {n}/10 \u2014 lower than optimal.',
+            energy_avg_sub_low: 'Activity, sleep quality, and hydration are often the biggest levers.',
+            energy_avg_sub_ok:  'Keep tracking to see what days feel most energised.',
+            energy_trend_up:    'Energy trending up this week (+{n} vs average).',
+            energy_trend_dn:    'Energy dipped this week ({n} vs average).',
+            energy_trend_up_sub:'Whatever you\u2019re doing \u2014 keep it up.',
+            energy_trend_dn_sub:'Watch for sleep deficits or increased stress.',
+            energy_sleep_link:  'More sleep tends to come with higher energy for you.',
+            energy_sleep_link_sub: 'On nights with more sleep, your energy the next day averages {n} points higher.',
+            energy_sleep_nolink:'Your energy doesn\u2019t closely track your sleep duration.',
+            energy_sleep_nolink_sub: 'Other factors \u2014 activity, stress, or timing \u2014 may matter more for you.',
+            strength_high: 'high',
+            strength_moderate: 'moderate',
+        },
+        de: {
+            sleep_avg_low:      'Dein durchschnittlicher Schlaf betr\u00e4gt {n} Stunden \u2014 unter den empfohlenen 7\u20139h.',
+            sleep_avg_low_sub:  'Schon kleine Verbesserungen heben die Stimmung am n\u00e4chsten Tag.',
+            sleep_avg_ok:       'Dein durchschnittlicher Schlaf betr\u00e4gt {n} Stunden \u2014 ein gesunder Bereich.',
+            sleep_avg_ok_sub:   'Regelm\u00e4\u00dfigkeit z\u00e4hlt mehr als Dauer; versuche, deine Schlafenszeit um 30 Minuten konstant zu halten.',
+            sleep_trend_up:     'Schlaf diese Woche um {n} Std. verbessert \u2014 \u00fcber deinem Durchschnitt.',
+            sleep_trend_up_sub: 'Weiter so \u2014 regelm\u00e4\u00dfiger Schlaf st\u00e4rkt die Belastbarkeit.',
+            sleep_trend_dn:     'Schlaf diese Woche um {n} Std. gesunken \u2014 unter deinem Durchschnitt.',
+            sleep_trend_dn_sub: 'Pr\u00fcfe, ob sp\u00e4te Bildschirmzeit oder Stress deinen Schlaf verk\u00fcrzen.',
+            sleep_sweet:        '7\u20138,5h-N\u00e4chte sind dein optimaler Bereich: Stimmung im Schnitt {avg} \u2014 {diff} \u00fcber deinem Gesamtdurchschnitt.',
+            sleep_sweet_sub:    'Basierend auf {n} N\u00e4chten in diesem Bereich.',
+            energy_mood_high:   'Deine Energie und Stimmung entwickeln sich \u00e4hnlich ({strength} Korrelation).',
+            energy_mood_low:    'Interessant: Energie und Stimmung stimmen bei dir nicht immer \u00fcberein \u2014 es lohnt sich nachzuforschen.',
+            energy_mood_sub:    '\u00dcber {n} Tage mit beiden Metriken erfasst.',
+            energy_avg_high:    'Deine Energie liegt im Schnitt bei {n}/10 \u2014 eine solide Basis.',
+            energy_avg_mid:     'Deine Energie liegt im Schnitt bei {n}/10 \u2014 moderat und handhabbar.',
+            energy_avg_low:     'Deine Energie liegt im Schnitt bei {n}/10 \u2014 niedriger als optimal.',
+            energy_avg_sub_low: 'Aktivit\u00e4t, Schlafqualit\u00e4t und Hydration sind oft die gr\u00f6\u00dften Stellschrauben.',
+            energy_avg_sub_ok:  'Behalte das Tracken bei, um deine energiereichsten Tage zu erkennen.',
+            energy_trend_up:    'Energie diese Woche steigend (+{n} vs. Durchschnitt).',
+            energy_trend_dn:    'Energie diese Woche gesunken ({n} vs. Durchschnitt).',
+            energy_trend_up_sub:'Was auch immer du gerade machst \u2014 mach weiter so.',
+            energy_trend_dn_sub:'Achte auf Schlafdefizite oder erh\u00f6hten Stress.',
+            energy_sleep_link:  'Mehr Schlaf geht bei dir oft mit mehr Energie einher.',
+            energy_sleep_link_sub: 'An Tagen nach mehr Schlaf liegt deine Energie im Schnitt {n} Punkte h\u00f6her.',
+            energy_sleep_nolink:'Deine Energie folgt nicht eng deiner Schlafdauer.',
+            energy_sleep_nolink_sub: 'Andere Faktoren \u2014 Aktivit\u00e4t, Stress oder Timing \u2014 k\u00f6nnten f\u00fcr dich wichtiger sein.',
+            strength_high: 'stark',
+            strength_moderate: 'moderat',
+        },
+        fr: {
+            sleep_avg_low:      'Ton sommeil moyen est de {n} heures \u2014 en dessous des 7\u20139h recommand\u00e9es.',
+            sleep_avg_low_sub:  'M\u00eame de petites am\u00e9liorations tendent \u00e0 booster l\u2019humeur le lendemain.',
+            sleep_avg_ok:       'Ton sommeil moyen est de {n} heures \u2014 dans une plage saine.',
+            sleep_avg_ok_sub:   'La r\u00e9gularit\u00e9 compte plus que la dur\u00e9e ; essaie de te coucher \u00e0 \u00b130 minutes pr\u00e8s.',
+            sleep_trend_up:     'Sommeil am\u00e9lior\u00e9 de {n}h cette semaine vs ta moyenne.',
+            sleep_trend_up_sub: 'Continue \u2014 un repos r\u00e9gulier renforce la r\u00e9silience.',
+            sleep_trend_dn:     'Sommeil r\u00e9duit de {n}h cette semaine vs ta moyenne.',
+            sleep_trend_dn_sub: 'V\u00e9rifie si les \u00e9crans tardifs ou le stress r\u00e9duisent ton sommeil.',
+            sleep_sweet:        'Les nuits de 7\u20138,5h sont ton id\u00e9al\u00a0: humeur de {avg} en moyenne \u2014 {diff} au-dessus de ta moyenne globale.',
+            sleep_sweet_sub:    'Bas\u00e9 sur {n} nuits dans cette plage.',
+            energy_mood_high:   'Ton \u00e9nergie et ton humeur \u00e9voluent de concert ({strength} corr\u00e9lation).',
+            energy_mood_low:    'Curieux\u00a0: ton \u00e9nergie et ton humeur ne s\u2019alignent pas toujours \u2014 vaut la peine d\u2019explorer.',
+            energy_mood_sub:    'Observ\u00e9 sur {n} jours avec les deux m\u00e9triques.',
+            energy_avg_high:    'Ton \u00e9nergie est en moyenne de {n}/10 \u2014 une bonne base.',
+            energy_avg_mid:     'Ton \u00e9nergie est en moyenne de {n}/10 \u2014 mod\u00e9r\u00e9e et g\u00e9rable.',
+            energy_avg_low:     'Ton \u00e9nergie est en moyenne de {n}/10 \u2014 en dessous de l\u2019optimal.',
+            energy_avg_sub_low: 'L\u2019activit\u00e9, la qualit\u00e9 du sommeil et l\u2019hydratation sont souvent les leviers cl\u00e9s.',
+            energy_avg_sub_ok:  'Continue \u00e0 tracker pour voir quels jours tu te sens le plus \u00e9nergis\u00e9.',
+            energy_trend_up:    '\u00c9nergie en hausse cette semaine (+{n} vs moyenne).',
+            energy_trend_dn:    '\u00c9nergie en baisse cette semaine ({n} vs moyenne).',
+            energy_trend_up_sub:'Quoi que tu fasses \u2014 continue.',
+            energy_trend_dn_sub:'Surveille les d\u00e9ficits de sommeil ou le stress accru.',
+            energy_sleep_link:  'Plus de sommeil tend \u00e0 aller de pair avec plus d\u2019\u00e9nergie chez toi.',
+            energy_sleep_link_sub: 'Apr\u00e8s les nuits avec plus de sommeil, ton \u00e9nergie est en moyenne {n} points plus haute.',
+            energy_sleep_nolink:'Ton \u00e9nergie ne suit pas \u00e9troitement ta dur\u00e9e de sommeil.',
+            energy_sleep_nolink_sub: 'D\u2019autres facteurs \u2014 activit\u00e9, stress, timing \u2014 comptent peut-\u00eatre plus pour toi.',
+            strength_high: '\u00e9lev\u00e9e',
+            strength_moderate: 'mod\u00e9r\u00e9e',
+        },
+        es: {
+            sleep_avg_low: 'Tu sue\u00f1o promedio es de {n} horas \u2014 por debajo de las 7\u20139h recomendadas.', sleep_avg_low_sub: 'Incluso peque\u00f1as mejoras tienden a elevar el \u00e1nimo al d\u00eda siguiente.', sleep_avg_ok: 'Tu sue\u00f1o promedio es de {n} horas \u2014 dentro de un rango saludable.', sleep_avg_ok_sub: 'La consistencia importa m\u00e1s que la duraci\u00f3n; intenta acostarte a \u00b130 minutos.', sleep_trend_up: 'Sue\u00f1o mejorado {n}h esta semana vs tu promedio.', sleep_trend_up_sub: 'Sigue as\u00ed \u2014 el descanso sostenido genera resiliencia.', sleep_trend_dn: 'Sue\u00f1o reducido {n}h esta semana vs tu promedio.', sleep_trend_dn_sub: 'Comprueba si las pantallas nocturnas o el estr\u00e9s acortan tu sue\u00f1o.', sleep_sweet: 'Las noches de 7\u20138,5h son tu punto dulce: \u00e1nimo promedio {avg} \u2014 {diff} sobre tu media global.', sleep_sweet_sub: 'Basado en {n} noches en ese rango.', energy_mood_high: 'Tu energ\u00eda y tu \u00e1nimo evolucionan juntos ({strength} correlaci\u00f3n).', energy_mood_low: 'Curioso: energ\u00eda y \u00e1nimo no siempre se alinean \u2014 vale la pena explorar por qu\u00e9.', energy_mood_sub: 'Observado en {n} d\u00edas con ambas m\u00e9tricas.', energy_avg_high: 'Tu energ\u00eda promedia {n}/10 \u2014 una base s\u00f3lida.', energy_avg_mid: 'Tu energ\u00eda promedia {n}/10 \u2014 moderada y manejable.', energy_avg_low: 'Tu energ\u00eda promedia {n}/10 \u2014 menor de lo \u00f3ptimo.', energy_avg_sub_low: 'Actividad, calidad del sue\u00f1o e hidrataci\u00f3n suelen ser las palancas clave.', energy_avg_sub_ok: 'Sigue rastreando para ver qu\u00e9 d\u00edas te sientes m\u00e1s energ\u00e9tico.', energy_trend_up: 'Energ\u00eda en alza esta semana (+{n} vs promedio).', energy_trend_dn: 'Energ\u00eda baj\u00f3 esta semana ({n} vs promedio).', energy_trend_up_sub: 'Sea lo que sea que est\u00e1s haciendo \u2014 contin\u00faa.', energy_trend_dn_sub: 'Vigila los d\u00e9ficits de sue\u00f1o o el estr\u00e9s elevado.', energy_sleep_link: 'M\u00e1s sue\u00f1o suele ir acompa\u00f1ado de m\u00e1s energ\u00eda para ti.', energy_sleep_link_sub: 'Despu\u00e9s de noches con m\u00e1s sue\u00f1o, tu energ\u00eda promedia {n} puntos m\u00e1s alta.', energy_sleep_nolink: 'Tu energ\u00eda no sigue de cerca tu duraci\u00f3n de sue\u00f1o.', energy_sleep_nolink_sub: 'Otros factores \u2014 actividad, estr\u00e9s o timing \u2014 pueden importar m\u00e1s para ti.', strength_high: 'alta', strength_moderate: 'moderada',
+        },
+        ar: {
+            sleep_avg_low: '\u0645\u062a\u0648\u0633\u0637 \u0646\u0648\u0645\u0643 {n} \u0633\u0627\u0639\u0627\u062a \u2014 \u062f\u0648\u0646 \u0627\u0644\u0645\u0648\u0635\u0649 7\u20139 \u0633\u0627\u0639\u0627\u062a.', sleep_avg_low_sub: '\u062d\u062a\u0649 \u062a\u062d\u0633\u064a\u0646\u0627\u062a \u0635\u063a\u064a\u0631\u0629 \u062a\u0631\u0641\u0639 \u0627\u0644\u0645\u0632\u0627\u062c \u0641\u064a \u0627\u0644\u064a\u0648\u0645 \u0627\u0644\u062a\u0627\u0644\u064a.', sleep_avg_ok: '\u0645\u062a\u0648\u0633\u0637 \u0646\u0648\u0645\u0643 {n} \u0633\u0627\u0639\u0627\u062a \u2014 \u0636\u0645\u0646 \u0646\u0637\u0627\u0642 \u0635\u062d\u064a.', sleep_avg_ok_sub: '\u0627\u0644\u0627\u0646\u062a\u0638\u0627\u0645 \u0623\u0647\u0645 \u0645\u0646 \u0627\u0644\u0645\u062f\u0629\u061b \u062d\u0627\u0648\u0644 \u0627\u0644\u0646\u0648\u0645 \u0641\u064a \u0648\u0642\u062a \u0645\u062a\u0642\u0627\u0631\u0628 \u062f\u0627\u0626\u0645\u064b\u0627.', sleep_trend_up: '\u062a\u062d\u0633\u064f\u0651\u0646 \u0627\u0644\u0646\u0648\u0645 {n} \u0633\u0627\u0639\u0629 \u0647\u0630\u0627 \u0627\u0644\u0623\u0633\u0628\u0648\u0639.', sleep_trend_up_sub: '\u0648\u0627\u0635\u0644 \u2014 \u0627\u0644\u0631\u0627\u062d\u0629 \u0627\u0644\u0645\u0646\u062a\u0638\u0645\u0629 \u062a\u0628\u0646\u064a \u0627\u0644\u0645\u0631\u0648\u0646\u0629.', sleep_trend_dn: '\u0627\u0646\u062e\u0641\u0636 \u0627\u0644\u0646\u0648\u0645 {n} \u0633\u0627\u0639\u0629 \u0647\u0630\u0627 \u0627\u0644\u0623\u0633\u0628\u0648\u0639.', sleep_trend_dn_sub: '\u062a\u062d\u0642\u0642 \u0645\u0645\u0627 \u0625\u0630\u0627 \u0643\u0627\u0646\u062a \u0627\u0644\u0634\u0627\u0634\u0627\u062a \u0627\u0644\u0645\u062a\u0623\u062e\u0631\u0629 \u0623\u0648 \u0627\u0644\u062a\u0648\u062a\u0631 \u064a\u0642\u0644\u0635\u0627\u0646 \u0646\u0648\u0645\u0643.', sleep_sweet: '\u0644\u064a\u0627\u0644\u064a 7\u20138\u00d45 \u0633\u0627\u0639\u0627\u062a \u0647\u064a \u0627\u0644\u0646\u0637\u0627\u0642 \u0627\u0644\u0645\u062b\u0627\u0644\u064a: \u0645\u0632\u0627\u062c {avg} \u2014 \u0628\u0641\u0627\u0631\u0642 {diff} \u0641\u0648\u0642 \u0645\u062a\u0648\u0633\u0637\u0643 \u0627\u0644\u0639\u0627\u0645.', sleep_sweet_sub: '\u0628\u0646\u0627\u0621\u064b \u0639\u0644\u0649 {n} \u0644\u064a\u0644\u0629 \u0641\u064a \u0647\u0630\u0627 \u0627\u0644\u0646\u0637\u0627\u0642.', energy_mood_high: '\u0637\u0627\u0642\u062a\u0643 \u0648\u0645\u0632\u0627\u062c\u0643 \u064a\u062a\u0637\u0648\u0631\u0627\u0646 \u0628\u0627\u0646\u0633\u062c\u0627\u0645 ({strength}).', energy_mood_low: '\u0645\u062b\u064a\u0631 \u0644\u0644\u0627\u0647\u062a\u0645\u0627\u0645: \u0637\u0627\u0642\u062a\u0643 \u0648\u0645\u0632\u0627\u062c\u0643 \u0644\u0627 \u064a\u062a\u0648\u0627\u0641\u0642\u0627\u0646 \u062f\u0627\u0626\u0645\u064b\u0627.', energy_mood_sub: '\u0644\u0648\u062d\u0638 \u0639\u0628\u0631 {n} \u0623\u064a\u0627\u0645.', energy_avg_high: '\u0637\u0627\u0642\u062a\u0643 \u0641\u064a \u0627\u0644\u0645\u062a\u0648\u0633\u0637 {n}/10 \u2014 \u0642\u0627\u0639\u062f\u0629 \u0642\u0648\u064a\u0629.', energy_avg_mid: '\u0637\u0627\u0642\u062a\u0643 \u0641\u064a \u0627\u0644\u0645\u062a\u0648\u0633\u0637 {n}/10 \u2014 \u0645\u0639\u062a\u062f\u0644\u0629.', energy_avg_low: '\u0637\u0627\u0642\u062a\u0643 \u0641\u064a \u0627\u0644\u0645\u062a\u0648\u0633\u0637 {n}/10 \u2014 \u0623\u0642\u0644 \u0645\u0646 \u0627\u0644\u0645\u062b\u0627\u0644\u064a.', energy_avg_sub_low: '\u0627\u0644\u0646\u0634\u0627\u0637\u060c \u062c\u0648\u062f\u0629 \u0627\u0644\u0646\u0648\u0645\u060c \u0648\u0627\u0644\u062a\u0631\u0637\u064a\u0628 \u0647\u064a \u0627\u0644\u0639\u0648\u0627\u0645\u0644 \u0627\u0644\u0623\u0643\u062b\u0631 \u062a\u0623\u062b\u064a\u0631\u064b\u0627.', energy_avg_sub_ok: '\u0648\u0627\u0635\u0644 \u0627\u0644\u062a\u0633\u062c\u064a\u0644 \u0644\u0645\u0639\u0631\u0641\u0629 \u0623\u0643\u062b\u0631 \u0623\u064a\u0627\u0645\u0643 \u0637\u0627\u0642\u0629\u064b.', energy_trend_up: '\u0627\u0644\u0637\u0627\u0642\u0629 \u0641\u064a \u0627\u0631\u062a\u0641\u0627\u0639 \u0647\u0630\u0627 \u0627\u0644\u0623\u0633\u0628\u0648\u0639 (+{n} \u0645\u0642\u0627\u0628\u0644 \u0627\u0644\u0645\u062a\u0648\u0633\u0637).', energy_trend_dn: '\u0627\u0644\u0637\u0627\u0642\u0629 \u0627\u0646\u062e\u0641\u0636\u062a \u0647\u0630\u0627 \u0627\u0644\u0623\u0633\u0628\u0648\u0639 ({n} \u0645\u0642\u0627\u0628\u0644 \u0627\u0644\u0645\u062a\u0648\u0633\u0637).', energy_trend_up_sub: '\u0645\u0647\u0645\u0627 \u0643\u0646\u062a \u062a\u0641\u0639\u0644 \u2014 \u0648\u0627\u0635\u0644.', energy_trend_dn_sub: '\u0627\u0646\u062a\u0628\u0647 \u0644\u0639\u062c\u0632 \u0627\u0644\u0646\u0648\u0645 \u0623\u0648 \u0627\u0644\u062a\u0648\u062a\u0631 \u0627\u0644\u0645\u062a\u0632\u0627\u064a\u062f.', energy_sleep_link: '\u0645\u0632\u064a\u062f \u0645\u0646 \u0627\u0644\u0646\u0648\u0645 \u064a\u0635\u0627\u062d\u0628\u0647 \u0639\u0627\u062f\u0629\u064b \u0645\u0632\u064a\u062f \u0645\u0646 \u0627\u0644\u0637\u0627\u0642\u0629 \u0644\u062f\u064a\u0643.', energy_sleep_link_sub: '\u0628\u0639\u062f \u0644\u064a\u0627\u0644\u064a \u0646\u0648\u0645 \u0623\u0637\u0648\u0644\u060c \u062a\u0643\u0648\u0646 \u0637\u0627\u0642\u062a\u0643 \u0623\u0639\u0644\u0649 \u0628\u0645\u062a\u0648\u0633\u0637 {n} \u0646\u0642\u0627\u0637.', energy_sleep_nolink: '\u0637\u0627\u0642\u062a\u0643 \u0644\u0627 \u062a\u062a\u0628\u0639 \u0645\u062f\u0629 \u0646\u0648\u0645\u0643 \u0639\u0646 \u0643\u062b\u0628.', energy_sleep_nolink_sub: '\u0639\u0648\u0627\u0645\u0644 \u0623\u062e\u0631\u0649 \u0642\u062f \u062a\u0643\u0648\u0646 \u0623\u0643\u062b\u0631 \u062a\u0623\u062b\u064a\u0631\u064b\u0627 \u0628\u0627\u0644\u0646\u0633\u0628\u0629 \u0644\u0643.', strength_high: '\u0639\u0627\u0644\u064a', strength_moderate: '\u0645\u062a\u0648\u0633\u0637',
+        },
+    };
+
+    /* Auto-fill missing SE keys from English */
+    ['de','fr','es','it','pt','nl','pl','ru','tr','ja','zh','hi','ar'].forEach(function (l) {
+        if (!SE[l]) SE[l] = {};
+        Object.keys(SE.en).forEach(function (k) { if (SE[l][k] == null) SE[l][k] = SE.en[k]; });
+    });
+
+    function se(key, vars) {
+        var l = loc();
+        var row = SE[l] || SE.en;
+        var val = (row[key] != null) ? row[key] : (SE.en[key] || key);
+        if (!vars) return val;
+        return val.replace(/\{(\w+)\}/g, function (_, k) { return vars[k] != null ? vars[k] : ''; });
+    }
+
+    onReady(function () {
+
+        /* ── Replace buildSleepInsights ──────────────────────────── */
+        if (typeof window.buildSleepInsights === 'function' && !window.buildSleepInsights._i18nPatched) {
+            window.buildSleepInsights = function (entries) {
+                var dates = Object.keys(entries).sort();
+                if (dates.length < 7) return null;
+                var sleepNums = [];
+                dates.forEach(function (d) {
+                    var e = entries[d];
+                    var s = e && (e.sleepTotal != null ? e.sleepTotal : e.sleep);
+                    if (typeof s === 'number' && !isNaN(s) && s > 0) sleepNums.push(s);
+                });
+                if (sleepNums.length < 5) return null;
+                var safeAvg = function (arr) { return arr.length ? arr.reduce(function (a, b) { return a + b; }, 0) / arr.length : null; };
+                var allAvg    = safeAvg(sleepNums);
+                var recentAvg = safeAvg(sleepNums.slice(-7));
+                var trend     = recentAvg - allAvg;
+                var insights  = [];
+                if (allAvg < 6.5) {
+                    insights.push({ icon: '\u26a0\ufe0f', text: se('sleep_avg_low', { n: allAvg.toFixed(1) }), sub: se('sleep_avg_low_sub') });
+                } else {
+                    insights.push({ icon: '\u2728', text: se('sleep_avg_ok', { n: allAvg.toFixed(1) }), sub: se('sleep_avg_ok_sub') });
+                }
+                if (Math.abs(trend) > 0.4) {
+                    insights.push({
+                        icon: trend > 0 ? '\ud83d\udcc8' : '\ud83d\udcc9',
+                        text: trend > 0 ? se('sleep_trend_up', { n: trend.toFixed(1) }) : se('sleep_trend_dn', { n: Math.abs(trend).toFixed(1) }),
+                        sub:  trend > 0 ? se('sleep_trend_up_sub') : se('sleep_trend_dn_sub')
+                    });
+                }
+                var withMood = dates.filter(function (d) { var e = entries[d]; var s = e && (e.sleepTotal != null ? e.sleepTotal : e.sleep); return typeof s === 'number' && !isNaN(s) && typeof e.mood === 'number' && !isNaN(e.mood); });
+                var sweetSpot = withMood.filter(function (d) { var s = entries[d].sleepTotal != null ? entries[d].sleepTotal : entries[d].sleep; return s >= 7 && s <= 8.5; });
+                if (sweetSpot.length >= 3) {
+                    var ssAvgMood  = safeAvg(sweetSpot.map(function (d) { return entries[d].mood; }));
+                    var allAvgMood = safeAvg(withMood.map(function (d) { return entries[d].mood; }));
+                    if (ssAvgMood && allAvgMood && (ssAvgMood - allAvgMood) > 0.15) {
+                        insights.push({ icon: '\ud83c\udfaf', text: se('sleep_sweet', { avg: ssAvgMood.toFixed(1), diff: (ssAvgMood - allAvgMood).toFixed(1) }), sub: se('sleep_sweet_sub', { n: sweetSpot.length }) });
+                    }
+                }
+                return insights.slice(0, 3);
+            };
+            window.buildSleepInsights._i18nPatched = true;
+        }
+
+        /* ── Replace buildEnergyInsights ─────────────────────────── */
+        if (typeof window.buildEnergyInsights === 'function' && !window.buildEnergyInsights._i18nPatched) {
+            window.buildEnergyInsights = function (entries) {
+                var dates = Object.keys(entries).sort();
+                if (dates.length < 7) return null;
+                var energyDates = dates.filter(function (d) { return entries[d] && typeof entries[d].energy === 'number' && !isNaN(entries[d].energy); });
+                if (energyDates.length < 5) return null;
+                var safeAvg = function (arr) { return arr.length ? arr.reduce(function (a, b) { return a + b; }, 0) / arr.length : null; };
+                var energies  = energyDates.map(function (d) { return entries[d].energy; });
+                var allAvg    = safeAvg(energies);
+                var recentAvg = safeAvg(energies.slice(-7));
+                var trend     = recentAvg - allAvg;
+                var insights  = [];
+                var paired = energyDates.filter(function (d) { return typeof entries[d].mood === 'number' && !isNaN(entries[d].mood); });
+                if (paired.length >= 7) {
+                    var xA = paired.map(function (d) { return entries[d].energy; });
+                    var yA = paired.map(function (d) { return entries[d].mood; });
+                    var n = xA.length, sx = 0, sy = 0, sxy = 0, sx2 = 0;
+                    for (var i = 0; i < n; i++) { sx += xA[i]; sy += yA[i]; sxy += xA[i] * yA[i]; sx2 += xA[i] * xA[i]; }
+                    var slope = (n * sx2 - sx * sx) ? (n * sxy - sx * sy) / (n * sx2 - sx * sx) : 0;
+                    if (Math.abs(slope) > 0.25) {
+                        var strength = Math.abs(slope) > 0.6 ? se('strength_high') : se('strength_moderate');
+                        insights.push({ icon: '\u26a1', text: slope > 0 ? se('energy_mood_high', { strength: strength }) : se('energy_mood_low'), sub: se('energy_mood_sub', { n: n }) });
+                    }
+                }
+                var avgText = allAvg >= 7 ? se('energy_avg_high', { n: allAvg.toFixed(1) }) : allAvg >= 5 ? se('energy_avg_mid', { n: allAvg.toFixed(1) }) : se('energy_avg_low', { n: allAvg.toFixed(1) });
+                var avgSub  = allAvg < 5 ? se('energy_avg_sub_low') : se('energy_avg_sub_ok');
+                insights.push({ icon: allAvg >= 6.5 ? '\u26a1' : '\ud83d\udd0b', text: avgText, sub: avgSub });
+                if (Math.abs(trend) > 0.4) {
+                    insights.push({ icon: trend > 0 ? '\ud83d\udcc8' : '\ud83d\udcc9', text: trend > 0 ? se('energy_trend_up', { n: trend.toFixed(1) }) : se('energy_trend_dn', { n: trend.toFixed(1) }), sub: trend < 0 ? se('energy_trend_dn_sub') : se('energy_trend_up_sub') });
+                }
+                var sleepNums2 = [], energyNums2 = [];
+                dates.forEach(function (d) { var e = entries[d]; var s = e && (e.sleepTotal != null ? e.sleepTotal : e.sleep); var en = e && e.energy; if (typeof s === 'number' && !isNaN(s) && typeof en === 'number' && !isNaN(en)) { sleepNums2.push(s); energyNums2.push(en); } });
+                if (sleepNums2.length >= 7) {
+                    var paired2 = sleepNums2.map(function (s, i) { return { x: s, y: energyNums2[i] }; });
+                    var sorted2 = paired2.slice().sort(function (a, b) { return a.x - b.x; });
+                    var half = Math.floor(sorted2.length / 2);
+                    var lowE  = safeAvg(sorted2.slice(0, half).map(function (p) { return p.y; }));
+                    var highE = safeAvg(sorted2.slice(Math.ceil(sorted2.length / 2)).map(function (p) { return p.y; }));
+                    if (lowE != null && highE != null) {
+                        var diff2 = highE - lowE;
+                        if (diff2 > 0.8)       insights.push({ icon: '\ud83d\udd17', text: se('energy_sleep_link'), sub: se('energy_sleep_link_sub', { n: diff2.toFixed(1) }) });
+                        else if (diff2 < -0.8) insights.push({ icon: '\ud83e\udd14', text: se('energy_sleep_nolink'), sub: se('energy_sleep_nolink_sub') });
+                    }
+                }
+                return insights.slice(0, 3);
+            };
+            window.buildEnergyInsights._i18nPatched = true;
+        }
+
+    }, 700);
+
+    console.log('[Aura i18n Runtime] All JS-generated strings patched — insights, charts, narrative, daily summary, toasts, sleep/energy strips.');
 })();
