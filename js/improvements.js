@@ -126,6 +126,10 @@
     }
 
     function buildSleepInsights(entries) {
+        var _t = typeof window.t === 'function' ? window.t : function(k, v) {
+            if (!v) return k;
+            return String(k).replace(/\{(\w+)\}/g, function(_, x) { return v[x] != null ? v[x] : ''; });
+        };
         var dates = Object.keys(entries).sort();
         if (dates.length < 7) return null;
 
@@ -142,23 +146,20 @@
         var trend     = recentAvg - allAvg;
         var insights  = [];
 
-        // Baseline
         if (allAvg < 6.5) {
-            insights.push({ icon: '⚠️', text: 'Your average sleep is ' + allAvg.toFixed(1) + ' hours — below the recommended 7–9h.', sub: 'Even small improvements tend to lift mood the following day.' });
+            insights.push({ icon: '⚠️', text: _t('sleep_insight_below_avg', { n: allAvg.toFixed(1) }), sub: _t('sleep_insight_below_sub') });
         } else {
-            insights.push({ icon: '✨', text: 'Your average sleep is ' + allAvg.toFixed(1) + ' hours — within a healthy range.', sub: 'Consistency matters more than duration; try to keep your bedtime within a 30-minute window.' });
+            insights.push({ icon: '✨', text: _t('sleep_insight_healthy', { n: allAvg.toFixed(1) }), sub: _t('sleep_insight_healthy_sub') });
         }
 
-        // Trend
         if (Math.abs(trend) > 0.4) {
             insights.push({
                 icon: trend > 0 ? '📈' : '📉',
-                text: trend > 0 ? 'Sleep improved by ' + trend.toFixed(1) + 'h this week vs your average.' : 'Sleep dropped by ' + Math.abs(trend).toFixed(1) + 'h this week vs your average.',
-                sub:  trend > 0 ? 'Keep it up — sustained rest builds resilience.' : 'Check for late screens or stress cutting your sleep short.'
+                text: trend > 0 ? _t('sleep_insight_trend_up', { n: trend.toFixed(1) }) : _t('sleep_insight_trend_down', { n: Math.abs(trend).toFixed(1) }),
+                sub:  trend > 0 ? _t('sleep_insight_trend_up_sub') : _t('sleep_insight_trend_down_sub')
             });
         }
 
-        // Sweet spot
         var withMood = dates.filter(function (d) {
             var e = entries[d];
             var s = e && (e.sleepTotal != null ? e.sleepTotal : e.sleep);
@@ -172,7 +173,10 @@
             var ssAvgMood  = safeAvg(sweetSpot.map(function (d) { return entries[d].mood; }));
             var allAvgMood = safeAvg(withMood.map(function (d) { return entries[d].mood; }));
             if (ssAvgMood && allAvgMood && (ssAvgMood - allAvgMood) > 0.15) {
-                insights.push({ icon: '🎯', text: '7–8.5h nights are your sweet spot: mood averages ' + ssAvgMood.toFixed(1) + ' — ' + (ssAvgMood - allAvgMood).toFixed(1) + ' above your overall average.', sub: 'Based on ' + sweetSpot.length + ' nights in that range.' });
+                insights.push({ icon: '🎯',
+                    text: _t('sleep_insight_sweet_spot', { mood: ssAvgMood.toFixed(1), diff: (ssAvgMood - allAvgMood).toFixed(1) }),
+                    sub:  _t('sleep_insight_sweet_spot_context', { n: sweetSpot.length })
+                });
             }
         }
 
@@ -180,6 +184,10 @@
     }
 
     function buildEnergyInsights(entries) {
+        var _t = typeof window.t === 'function' ? window.t : function(k, v) {
+            if (!v) return k;
+            return String(k).replace(/\{(\w+)\}/g, function(_, x) { return v[x] != null ? v[x] : ''; });
+        };
         var dates = Object.keys(entries).sort();
         if (dates.length < 7) return null;
 
@@ -192,7 +200,6 @@
         var trend     = recentAvg - allAvg;
         var insights  = [];
 
-        // Energy–mood link
         var paired = energyDates.filter(function (d) { return typeof entries[d].mood === 'number' && !isNaN(entries[d].mood); });
         if (paired.length >= 7) {
             var xA = paired.map(function (d) { return entries[d].energy; });
@@ -202,19 +209,28 @@
             for (var i = 0; i < n; i++) { sx += xA[i]; sy += yA[i]; sxy += xA[i] * yA[i]; sx2 += xA[i] * xA[i]; }
             var slope = (n * sx2 - sx * sx) ? (n * sxy - sx * sy) / (n * sx2 - sx * sx) : 0;
             if (Math.abs(slope) > 0.25) {
-                insights.push({ icon: '⚡', text: slope > 0 ? 'Your energy and mood track closely together (' + (Math.abs(slope) > 0.6 ? 'high' : 'moderate') + ' correlation).' : 'Interesting: your energy and mood don\'t always align — worth exploring why.', sub: 'Logged across ' + n + ' days with both metrics.' });
+                var strength = Math.abs(slope) > 0.6 ? 'high' : 'moderate';
+                insights.push({ icon: '⚡',
+                    text: slope > 0 ? _t('energy_insight_corr_high', { strength: strength }) : _t('energy_insight_corr_low'),
+                    sub: _t('energy_insight_corr_context', { n: n })
+                });
             }
         }
 
-        // Baseline
-        insights.push({ icon: allAvg >= 6.5 ? '⚡' : '🔋', text: 'Your energy averages ' + allAvg.toFixed(1) + '/10' + (allAvg >= 7 ? ' — a solid baseline.' : allAvg >= 5 ? ' — moderate and manageable.' : ' — lower than optimal.'), sub: allAvg < 5 ? 'Activity, sleep quality, and hydration are often the biggest levers.' : 'Keep tracking to see what days feel most energised.' });
+        var avgTextKey = allAvg >= 7 ? 'energy_insight_avg_solid' : allAvg >= 5 ? 'energy_insight_avg_moderate' : 'energy_insight_avg_low';
+        var avgSubKey  = allAvg < 5 ? 'energy_insight_avg_sub_low' : 'energy_insight_avg_sub_ok';
+        insights.push({ icon: allAvg >= 6.5 ? '⚡' : '🔋',
+            text: _t(avgTextKey, { n: allAvg.toFixed(1) }),
+            sub:  _t(avgSubKey)
+        });
 
-        // Trend
         if (Math.abs(trend) > 0.4) {
-            insights.push({ icon: trend > 0 ? '📈' : '📉', text: trend > 0 ? 'Energy trending up this week (+' + trend.toFixed(1) + ' vs average).' : 'Energy dipped this week (' + trend.toFixed(1) + ' vs average).', sub: trend < 0 ? 'Watch for sleep deficits or increased stress.' : 'Whatever you\'re doing — keep it up.' });
+            insights.push({ icon: trend > 0 ? '📈' : '📉',
+                text: trend > 0 ? _t('energy_insight_trend_up', { n: '+' + trend.toFixed(1) }) : _t('energy_insight_trend_down', { n: trend.toFixed(1) }),
+                sub:  trend < 0 ? _t('energy_insight_trend_down_sub') : _t('energy_insight_trend_up_sub')
+            });
         }
 
-        // Energy–sleep correlation hint
         var sleepNums = [], energyNums = [];
         dates.forEach(function (d) {
             var e = entries[d];
@@ -226,16 +242,22 @@
             }
         });
         if (sleepNums.length >= 7) {
-            var paired = sleepNums.map(function (s, i) { return { x: s, y: energyNums[i] }; });
-            var sorted = paired.slice().sort(function (a, b) { return a.x - b.x; });
+            var pairedSE = sleepNums.map(function (s, i) { return { x: s, y: energyNums[i] }; });
+            var sorted = pairedSE.slice().sort(function (a, b) { return a.x - b.x; });
             var lowEnergy = safeAvg(sorted.slice(0, Math.floor(sorted.length / 2)).map(function (p) { return p.y; }));
             var highEnergy = safeAvg(sorted.slice(Math.ceil(sorted.length / 2)).map(function (p) { return p.y; }));
             if (lowEnergy != null && highEnergy != null) {
                 var diff = highEnergy - lowEnergy;
                 if (diff > 0.8) {
-                    insights.push({ icon: '🔗', text: 'More sleep tends to come with higher energy for you.', sub: 'On nights with more sleep, your energy the next day averages ' + diff.toFixed(1) + ' points higher.' });
+                    insights.push({ icon: '🔗',
+                        text: _t('energy_insight_sleep_link'),
+                        sub:  _t('energy_insight_sleep_link_sub', { n: diff.toFixed(1) })
+                    });
                 } else if (diff < -0.8) {
-                    insights.push({ icon: '🤔', text: 'Your energy doesn\'t closely track your sleep duration.', sub: 'Other factors — activity, stress, or timing — may matter more for you.' });
+                    insights.push({ icon: '🤔',
+                        text: _t('energy_insight_sleep_no_link'),
+                        sub:  _t('energy_insight_sleep_no_link_sub')
+                    });
                 }
             }
         }
@@ -265,9 +287,10 @@
         if (old) old.remove();
         if (!insights || !insights.length) return;
 
+        var _t = typeof window.t === 'function' ? window.t : function(k) { return k; };
         var strip = document.createElement('div');
         strip.className = 'page-analytics-insights';
-        strip.innerHTML = '<h4>What your data shows</h4>' +
+        strip.innerHTML = '<h4>' + _t('insights_what_data_shows') + '</h4>' +
             insights.map(function (ins) {
                 return '<div class="page-analytics-insight-row">' +
                     '<span class="page-analytics-insight-icon">' + ins.icon + '</span>' +

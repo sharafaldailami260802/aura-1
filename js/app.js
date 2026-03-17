@@ -4551,22 +4551,31 @@ function renderCharts() {
         return _CM[parseInt(parts[1], 10) - 1] + ' ' + parseInt(parts[2], 10);
     });
 
-    var _xLabel = 'Last ' + chartDays + ' days';
-    createChart('moodChart',     'Mood',   mood,  shortDates, colors.chart1, { yMin: 1, yMax: 10, yStep: 1, yTitle: 'Mood (1–10)',    xTitle: _xLabel, integerTicks: true  });
-    createChart('sleepChart',    'Sleep',  sleep, shortDates, colors.chart2, { yMin: 0, yMax: 12, yStep: 1, yTitle: 'Sleep (hrs)',     xTitle: _xLabel, integerTicks: false });
-    createChart('energyChart',   'Energy', energy,shortDates, colors.chart3, { yMin: 1, yMax: 10, yStep: 1, yTitle: 'Energy (1–10)',   xTitle: _xLabel, integerTicks: true  });
+    var _tr = typeof window.t === 'function' ? window.t : function(k, v) {
+        if (!v) return k; return String(k).replace(/\{(\w+)\}/g, function(_, x) { return v[x] != null ? v[x] : ''; });
+    };
+    var _xLabel = _tr('x_last_n', { n: chartDays });
+    var _dsMood   = _tr('ds_mood');
+    var _dsSleep  = _tr('ds_sleep');
+    var _dsEnergy = _tr('ds_energy');
+    var _yMood    = _tr('y_mood');
+    var _ySleep   = _tr('y_sleep');
+    var _yEnergy  = _tr('y_energy');
+    createChart('moodChart',     _dsMood,   mood,  shortDates, colors.chart1, { yMin: 1, yMax: 10, yStep: 1, yTitle: _yMood,   xTitle: _xLabel, integerTicks: true  });
+    createChart('sleepChart',    _dsSleep,  sleep, shortDates, colors.chart2, { yMin: 0, yMax: 12, yStep: 1, yTitle: _ySleep,  xTitle: _xLabel, integerTicks: false });
+    createChart('energyChart',   _dsEnergy, energy,shortDates, colors.chart3, { yMin: 1, yMax: 10, yStep: 1, yTitle: _yEnergy, xTitle: _xLabel, integerTicks: true  });
 
-    createChart('moodChartFull', 'Mood',   mood,  shortDates, colors.chart1, { yMin: 1, yMax: 10, yStep: 1, yTitle: 'Mood (1–10)',    xTitle: _xLabel, integerTicks: true  });
-    createChart('sleepChartFull','Sleep',  sleep, shortDates, colors.chart2, { yMin: 0, yMax: 12, yStep: 1, yTitle: 'Sleep (hrs)',     xTitle: _xLabel, integerTicks: false });
-    createChart('energyChartFull','Energy',energy,shortDates, colors.chart3, { yMin: 1, yMax: 10, yStep: 1, yTitle: 'Energy (1–10)',   xTitle: _xLabel, integerTicks: true  });
+    createChart('moodChartFull', _dsMood,   mood,  shortDates, colors.chart1, { yMin: 1, yMax: 10, yStep: 1, yTitle: _yMood,   xTitle: _xLabel, integerTicks: true  });
+    createChart('sleepChartFull',_dsSleep,  sleep, shortDates, colors.chart2, { yMin: 0, yMax: 12, yStep: 1, yTitle: _ySleep,  xTitle: _xLabel, integerTicks: false });
+    createChart('energyChartFull',_dsEnergy,energy,shortDates, colors.chart3, { yMin: 1, yMax: 10, yStep: 1, yTitle: _yEnergy, xTitle: _xLabel, integerTicks: true  });
 
     // Render annotation bars on the full analytics charts
     if (typeof buildChartAnnotations === 'function' && typeof renderChartAnnotationBar === 'function') {
         requestAnimationFrame(function() {
             var charts = [
-                { id: 'moodChartFull',   data: mood,   label: 'Mood'   },
-                { id: 'sleepChartFull',  data: sleep,  label: 'Sleep'  },
-                { id: 'energyChartFull', data: energy, label: 'Energy' }
+                { id: 'moodChartFull',   data: mood,   label: _dsMood   },
+                { id: 'sleepChartFull',  data: sleep,  label: _dsSleep  },
+                { id: 'energyChartFull', data: energy, label: _dsEnergy }
             ];
             charts.forEach(function(c) {
                 var canvas = document.getElementById(c.id);
@@ -5083,7 +5092,8 @@ function renderMoodVelocity() {
     var last14 = Object.keys(entries).filter(function(d) { return d >= fromStr && d <= today; }).sort();
     var mood14 = last14.map(function(d) { return entries[d].mood; }).filter(function(m) { return typeof m === 'number' && !isNaN(m); });
     if (mood14.length < 5) {
-        panelEl.innerHTML = '<p class="stability-score-empty">Track at least 5 days in a row to see your stability score.</p>';
+        var _stabTMin = typeof window.t === 'function' ? window.t : function(k) { return k; };
+        panelEl.innerHTML = '<p class="stability-score-empty">' + _stabTMin('stab_min_data') + '</p>';
         return;
     }
     var sum = mood14.reduce(function(a, b) { return a + b; }, 0);
@@ -5095,37 +5105,40 @@ function renderMoodVelocity() {
     var pillClass = '';
     var barColor = '';
     var message = '';
+    var _stabT = typeof window.t === 'function' ? window.t : function(k, v) {
+        if (!v) return k; return String(k).replace(/\{(\w+)\}/g, function(_, x) { return v[x] != null ? v[x] : ''; });
+    };
     if (score >= 80) {
-        labelText = 'Stable';
+        labelText = _stabT('stab_stable');
         pillClass = 'stable';
         barColor = colors.heatGood;
-        message = 'Your mood has been consistent over the last 14 days.';
+        message = _stabT('stab_msg_stable');
     } else if (score >= 50) {
-        labelText = 'Moderate';
+        labelText = _stabT('stab_moderate');
         pillClass = 'moderate';
         barColor = colors.heatMid;
-        message = 'Some fluctuation in the last 14 days — within a normal range.';
+        message = _stabT('stab_msg_mod');
     } else if (score >= 20) {
-        labelText = 'Volatile';
+        labelText = _stabT('stab_volatile');
         pillClass = 'volatile';
         barColor = colors.heatBad;
-        message = 'Notable mood swings in the last 14 days. Sleep patterns may be a factor.';
+        message = _stabT('stab_msg_vol');
     } else {
-        labelText = 'High volatility';
+        labelText = _stabT('stab_high_vol');
         pillClass = 'high-volatility';
         barColor = colors.heatBad;
-        message = 'Significant mood volatility detected over the last 14 days.';
+        message = _stabT('stab_msg_high');
     }
     panelEl.innerHTML =
         '<div class="stability-score-block">' +
-        '<p class="stability-eyebrow" id="stabilityEyebrow">14-day stability</p>' +
+        '<p class="stability-eyebrow" id="stabilityEyebrow">' + _stabT('stab_eyebrow') + '</p>' +
         '<div class="stability-score-primary">' +
         '<span class="stability-score-value">' + score + '</span>' +
         '<span class="stability-pill ' + pillClass + '">' + labelText + '</span>' +
         '</div>' +
         '<div class="stability-score-bar-wrap"><div class="stability-score-bar-fill" style="width:' + score + '%;background:' + barColor + ';"></div></div>' +
         '<p class="stability-score-explanation">' + message + '</p>' +
-        '<p class="stability-score-meta">Based on ' + mood14.length + ' entries over the last 14 days.</p>' +
+        '<p class="stability-score-meta">' + _stabT('stab_based_on', { n: mood14.length }) + '</p>' +
         '</div>';
 }
 

@@ -19,35 +19,49 @@
         }
     }
 
-    /* ─── Unit suffix map ─────────────────────────────────────────────────── */
+    /* ─── Unit suffix map — resolved at lookup time via window.t() ───────── */
+    function getChartUnit(label) {
+        if (!label) return '';
+        var t = typeof window.t === 'function' ? window.t : function(k) { return k; };
+        var map = {};
+        map[t('ds_mood')]    = '/ 10';
+        map[t('ds_energy')]  = '/ 10';
+        map[t('ds_sleep')]   = t('hrs_short') || 'hrs';
+        map['Mood Change']   = 'pts';
+        map['Frequency']     = '';
+        map[t('ds_avg_mood')]= '/ 10';
+        map[t('ds_forecast')]= '/ 10';
+        /* English fallbacks for when t() is not yet available */
+        map['Mood']     = '/ 10';
+        map['Energy']   = '/ 10';
+        map['Sleep']    = t('hrs_short') || 'hrs';
+        map['Average mood'] = '/ 10';
+        map['Forecast'] = '/ 10';
+        map['Sleep vs Mood']      = '';
+        map['Activity vs Energy'] = '';
+        return map[label] || '';
+    }
+    /* Legacy object kept for backward compat (auraChartUnits reference) */
     var CHART_UNITS = {
-        'Mood':        '/ 10',
-        'Energy':      '/ 10',
-        'Sleep':       'hrs',
-        'Mood Change': 'pts',
-        'Frequency':   '',
-        'Average mood': '/ 10',
-        'Forecast':    '/ 10',
-        'Sleep vs Mood':      '',
-        'Activity vs Energy': ''
+        'Mood':'/ 10','Energy':'/ 10','Sleep':'hrs','Mood Change':'pts',
+        'Frequency':'','Average mood':'/ 10','Forecast':'/ 10',
+        'Sleep vs Mood':'','Activity vs Energy':''
     };
 
     /* ─── Date label → readable title ────────────────────────────────────── */
     function prettifyChartDate(raw) {
         if (!raw || typeof raw !== 'string') return raw;
-        /* "M/D" or "M/D/YYYY" short date from createChart */
         var parts = raw.split('/');
         if (parts.length >= 2) {
             var month = parseInt(parts[0], 10);
             var day   = parseInt(parts[1], 10);
             if (!isNaN(month) && !isNaN(day) && month >= 1 && month <= 12 && day >= 1 && day <= 31) {
-                var MONTHS = ['January','February','March','April','May',
-                              'June','July','August','September','October',
-                              'November','December'];
+                var MONTHS = (typeof window.getLocalizedMonths === 'function')
+                    ? window.getLocalizedMonths('long')
+                    : ['January','February','March','April','May','June','July','August','September','October','November','December'];
                 return MONTHS[month - 1] + ' ' + day;
             }
         }
-        /* Already a full date string or bar label (Mon, Jan…) */
         return raw;
     }
 
@@ -55,7 +69,7 @@
     function formatChartValue(value, datasetLabel) {
         if (value == null || value === '' || isNaN(Number(value))) return '—';
         var n    = Number(value);
-        var unit = CHART_UNITS[datasetLabel] || '';
+        var unit = getChartUnit(datasetLabel);
         var formatted;
         if (Number.isInteger(n)) {
             formatted = String(n);
@@ -189,21 +203,24 @@
                             var formatted = formatChartValue(value, label);
                             if (!label) return '  ' + formatted;
 
-                            // Add contextual suffix based on value
+                            var _t = typeof window.t === 'function' ? window.t : function(k) { return k; };
+                            var _moodLabel = _t('ds_mood');
+                            var _energyLabel = _t('ds_energy');
+                            var _sleepLabel = _t('ds_sleep');
                             var suffix = '';
-                            if (label === 'Mood' || label === 'Energy') {
+                            if (label === _moodLabel || label === 'Mood' || label === _energyLabel || label === 'Energy') {
                                 var n = Number(value);
                                 if (!isNaN(n)) {
-                                    if (n >= 8) suffix = ' \u2014 great';
-                                    else if (n >= 6) suffix = ' \u2014 good';
-                                    else if (n <= 3) suffix = ' \u2014 tough day';
+                                    if (n >= 8) suffix = ' \u2014 ' + _t('chart_tooltip_great');
+                                    else if (n >= 6) suffix = ' \u2014 ' + _t('chart_tooltip_good');
+                                    else if (n <= 3) suffix = ' \u2014 ' + _t('chart_tooltip_tough');
                                 }
                             }
-                            if (label === 'Sleep') {
+                            if (label === _sleepLabel || label === 'Sleep') {
                                 var h = Number(value);
                                 if (!isNaN(h)) {
-                                    if (h >= 8) suffix = ' \u2014 well rested';
-                                    else if (h < 6) suffix = ' \u2014 short night';
+                                    if (h >= 8) suffix = ' \u2014 ' + _t('chart_tooltip_well_rested');
+                                    else if (h < 6) suffix = ' \u2014 ' + _t('chart_tooltip_short_night');
                                 }
                             }
                             return '  ' + label + '  \xb7  ' + formatted + suffix;
@@ -327,6 +344,10 @@ window.buildChartAnnotations = function buildChartAnnotations(data, metricLabel)
     var valid = data.filter(function(v) { return v != null && !isNaN(Number(v)); }).map(Number);
     if (valid.length < 3) return [];
 
+    var _t = typeof window.t === 'function' ? window.t : function(k, v) {
+        if (!v) return k;
+        return String(k).replace(/\{(\w+)\}/g, function(_, x) { return v[x] != null ? v[x] : ''; });
+    };
     var chips = [];
     var avg = valid.reduce(function(a, b) { return a + b; }, 0) / valid.length;
     var last = valid[valid.length - 1];
@@ -336,30 +357,27 @@ window.buildChartAnnotations = function buildChartAnnotations(data, metricLabel)
     var secondAvg = secondHalf.reduce(function(a, b) { return a + b; }, 0) / secondHalf.length;
     var trend = secondAvg - firstAvg;
 
-    // Average chip
-    chips.push({ text: 'Avg ' + avg.toFixed(1), sentiment: 'neutral' });
+    chips.push({ text: _t('chip_avg', { n: avg.toFixed(1) }), sentiment: 'neutral' });
 
-    // Trend chip
     if (Math.abs(trend) >= 0.3) {
-        var direction = trend > 0 ? '\u2197 Up' : '\u2198 Down';
         var sign = trend > 0 ? '+' : '';
         chips.push({
-            text: direction + ' ' + sign + trend.toFixed(1) + ' vs earlier',
+            text: trend > 0
+                ? _t('chip_up', { n: sign + trend.toFixed(1) })
+                : _t('chip_down', { n: trend.toFixed(1) }),
             sentiment: trend > 0 ? 'positive' : 'negative'
         });
     }
 
-    // Latest vs average
     var latestDiff = last - avg;
     if (Math.abs(latestDiff) >= 0.4) {
-        var vsAvgText = (latestDiff > 0 ? '+' : '') + latestDiff.toFixed(1) + ' vs avg';
-        chips.push({ text: 'Latest: ' + vsAvgText, sentiment: latestDiff > 0 ? 'positive' : 'negative' });
+        var delta = (latestDiff > 0 ? '+' : '') + latestDiff.toFixed(1);
+        chips.push({ text: _t('chip_latest', { delta: delta }), sentiment: latestDiff > 0 ? 'positive' : 'negative' });
     }
 
-    // Range chip
     var min = Math.min.apply(null, valid);
     var max = Math.max.apply(null, valid);
-    chips.push({ text: 'Range ' + min.toFixed(1) + '\u2013' + max.toFixed(1), sentiment: 'neutral' });
+    chips.push({ text: _t('chip_range', { min: min.toFixed(1), max: max.toFixed(1) }), sentiment: 'neutral' });
 
     return chips.slice(0, 4);
 };

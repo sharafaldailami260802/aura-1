@@ -374,12 +374,170 @@
         dow_need_more_data:'Add at least 2 weeks of entries to see your weekly patterns.',
         dow_peak_dip:'Your mood tends to peak on {day1}s and dip on {day2}s.',
         dow_no_data_label:'No data', dow_average_label:'average', dow_dataset_label:'Average mood',
+        /* aliases used by deep-patch / charts.js */
+        dow_need_more:'Add at least 2 weeks of entries to see your weekly patterns.',
+        dow_no_data:'No data', dow_average:'average',
 
         /* Toasts */
         toast_lang:'Language updated \u2713',
         toast_date_fmt:'Date format updated \u2713',
         toast_time_fmt:'Time format updated \u2713',
         toast_saved:'Saved \u2713',
+        toast_journal_deleted:'Journal deleted',
+        toast_entry_deleted:'Entry deleted',
+        toast_shared:'Shared content added to journal',
+
+        /* Chart axes + dataset labels */
+        x_last_n:'Last {n} days',
+        y_mood:'Mood (1\u201310)',
+        y_sleep:'Sleep (hrs)',
+        y_energy:'Energy (1\u201310)',
+        y_velocity:'Mood change (day-over-day)',
+        ds_mood:'Mood', ds_sleep:'Sleep', ds_energy:'Energy',
+        ds_avg_mood:'Average mood', ds_forecast:'Forecast',
+        ds_lower:'Lower', ds_upper:'Upper', ds_trend:'Trend',
+
+        /* Annotation chips */
+        chip_avg:'Avg {n}',
+        chip_up:'\u2197 Up {n} vs earlier',
+        chip_down:'\u2198 Down {n} vs earlier',
+        need_3:'Need 3+ entries',
+
+        /* Velocity chart tooltip */
+        vel_improved:'Mood improved by {n} point{s}',
+        vel_dipped:'Mood dipped by {n} point{s}',
+        vel_no_change:'No change',
+
+        /* Velocity page */
+        vel_eyebrow:'MOOD TRAJECTORY',
+        vel_heading:'Day-to-day change',
+        vel_subtitle:'Bars above zero mean mood is improving; bars below mean it\u2019s dipping.',
+
+        /* Stability panel */
+        stab_eyebrow:'14-DAY STABILITY',
+        stab_stable:'Stable', stab_moderate:'Moderate', stab_volatile:'Volatile', stab_high_vol:'High volatility',
+        stab_msg_stable:'Your mood has been consistent over the last 14 days.',
+        stab_msg_mod:'Some fluctuation in the last 14 days \u2014 within a normal range.',
+        stab_msg_vol:'Notable mood swings in the last 14 days. Sleep patterns may be a factor.',
+        stab_msg_high:'Significant mood volatility detected over the last 14 days.',
+        stab_min_data:'Track at least 5 days in a row to see your stability score.',
+        stab_based_on:'Based on {n} entries over the last 14 days.',
+
+        /* Forecast chips */
+        fc_days:'Days of data', fc_avg:'Recent avg', fc_7day:'7-day forecast', fc_variability:'Variability',
+        fc_add_7:'Add at least 7 days of data to see predictions.',
+        fc_keep_tracking:'Keep tracking to discover patterns and triggers.',
+
+        /* Forecast interpretation */
+        fc_trend_up_strong:'Your mood has been on a steady upward trajectory.',
+        fc_trend_up_gentle:'There\u2019s a gentle upward drift in your recent mood.',
+        fc_trend_dn_strong:'Your mood has been gradually trending downward lately.',
+        fc_trend_dn_gentle:'There\u2019s a slight downward drift over recent weeks.',
+        fc_trend_steady:'Your mood has been holding fairly steady.',
+        fc_stab_low:'Your day-to-day variability is low, so the forecast band is narrow.',
+        fc_stab_mid:'Some day-to-day variability means the actual range could vary.',
+        fc_stab_high:'Your mood has been quite variable, so treat this forecast as a rough guide.',
+        fc_sleep_up:' Recent sleep is above your average, which nudges the forecast up.',
+        fc_sleep_dn:' Recent sleep is below your average, which pulls the forecast down slightly.',
+        fc_pat_up:'Your mood has been climbing gradually \u2014 a positive sign.',
+        fc_pat_dn:'There\u2019s a gentle downward drift lately. Worth checking in on sleep and activity patterns.',
+        fc_pat_stable:'Your mood has been stable \u2014 consistent tracking is helping you see this clearly.',
+        fc_low_var:'Low day-to-day variability suggests good equilibrium.',
+        fc_high_var:'Higher variability in your recent data means the forecast range is wider than usual.',
+        fc_sleep_good:'Your recent sleep is better than your average \u2014 this is factored into the upward nudge.',
+        fc_sleep_bad:'Your recent sleep is a bit below your average \u2014 this slightly lowers the near-term forecast.',
+        fc_best_day:'{day}s tend to be your strongest day \u2014 this is built into the day-specific forecast.',
+        fc_based_on:'This forecast is based on your last {n} logged days. The more you track, the sharper it gets.',
+
+        /* Insight badges */
+        kicker_default:'INSIGHT',
+        kicker_activity:'ACTIVITY INSIGHT', kicker_activity_p:'ACTIVITY',
+        kicker_sleep:'SLEEP INSIGHT', kicker_stability:'STABILITY', kicker_tags:'TAGS',
+        strength_strong:'STRONG PATTERN', strength_moderate:'MODERATE PATTERN', strength_emerging:'EMERGING SIGNAL',
+        insight_entry:'entry', insight_entries:'entries',
+        insight_observed:'Observed across {n} {entries}.',
+
+        /* Insight card keys from engine */
+        insight_title_energy_alignment:'Energy Alignment',
+        insight_desc_energy_alignment:'Your high-energy days (7+) average a mood of {highMood} vs {lowMood} on low-energy days. Energy and mood track together closely in your data.',
+        insight_context_energy:'Based on {highN} high-energy entries and {lowN} low-energy entries.',
+        insight_title_mood_variable:'Your mood has been more variable lately',
+        insight_desc_mood_variable:'Your mood swung by an average of {stdDev} points day-to-day this past week \u2014 higher than your usual pattern. Sleep consistency is often the hidden driver of this.',
+        insight_nudge_volatility:'Sleep and activity levels often drive short-term volatility.',
+        insight_context_last_days:'Based on the last {n} days.',
+        insight_tag_lift:'\u201c{tag}\u201d days tend to lift you',
+        insight_tag_weigh:'\u201c{tag}\u201d days weigh on you',
+        insight_desc_tag_lift:'On days tagged \u201c{tag}\u201d your mood averages {diff} points above your baseline. It\u2019s a reliable signal.',
+        insight_desc_tag_weigh:'\u201c{tag}\u201d days drag your average down by about {diff} points. Worth paying attention to what those days have in common.',
+        insight_nudge_tag_weigh:'Worth noticing what \u201c{tag}\u201d days have in common.',
+        insight_context_tag_seen:'Seen in {n} tagged entries.',
+
+        /* Insight section meta */
+        sec_sleep_heading:'Sleep Insights', sec_sleep_title:'Sleep Insights',
+        sec_sleep_desc:'Patterns between sleep and mood.',
+        sec_act_heading:'Activity Insights', sec_act_title:'Activity Insights',
+        sec_act_desc:'Activities and energy patterns that connect with mood.',
+        sec_stab_heading:'Mood Stability', sec_stab_title:'Mood Stability',
+        sec_stab_desc:'Signals around recent volatility, stability, and day-to-day mood change.',
+        sec_tags_heading:'Tag Insights', sec_tags_title:'Tag Insights',
+        sec_tags_desc:'Recurring tags that appear associated with shifts in mood.',
+        insight_collecting:'Insights will appear once enough data has been collected.',
+        insight_empty:'More insights will appear as you record additional entries. Track mood, sleep, and activities to uncover patterns.',
+
+        /* Energy section */
+        energy_section:'RHYTHM & STAMINA', energy_subtitle:'Daily energy levels.',
+
+        /* Entry list empty state */
+        entry_list_empty:'No journal entries yet.',
+        entry_list_start:'Start your first check-in \u2192',
+        entry_edit:'Edit', entry_delete:'Delete',
+        no_journal:'No journal text saved',
+        recent:'RECENT ENTRIES', tap_open:'Tap to open',
+
+        /* Chart empty states */
+        chart_empty_mood_msg:'Your mood trend will appear here once you have logged a few days.',
+        chart_empty_sleep_msg:'Sleep patterns emerge once you start tracking daily.',
+        chart_empty_energy_msg:'Energy data gives this chart life \u2014 log your first check-in.',
+        chart_empty_velocity_msg:'Track at least two consecutive days to see day-over-day change.',
+        chart_empty_default:'Add entries to see this chart.',
+        chart_empty_mood_cta:'Log your first mood',
+        chart_empty_sleep_cta:'Add sleep data',
+        chart_empty_energy_cta:'Track your energy',
+        chart_empty_velocity_cta:'Track 2+ days of mood',
+
+        /* Chart tooltip suffixes */
+        chart_tooltip_great:'great', chart_tooltip_good:'good', chart_tooltip_tough:'tough day',
+        chart_tooltip_well_rested:'well rested', chart_tooltip_short_night:'short night',
+
+        /* Sleep insight strip keys */
+        sleep_insight_below_avg:'Your average sleep is {n} hours \u2014 below the recommended 7\u20139h.',
+        sleep_insight_below_sub:'Even small improvements tend to lift mood the following day.',
+        sleep_insight_healthy:'Your average sleep is {n} hours \u2014 within a healthy range.',
+        sleep_insight_healthy_sub:'Consistency matters more than duration; try to keep your bedtime within a 30-minute window.',
+        sleep_insight_trend_up:'Sleep improved by {n}h this week vs your average.',
+        sleep_insight_trend_up_sub:'Keep it up \u2014 sustained rest builds resilience.',
+        sleep_insight_trend_down:'Sleep dropped by {n}h this week vs your average.',
+        sleep_insight_trend_down_sub:'Check for late screens or stress cutting your sleep short.',
+        sleep_insight_sweet_spot:'7\u20138.5h nights are your sweet spot: mood averages {mood} \u2014 {diff} above your overall average.',
+        sleep_insight_sweet_spot_context:'Based on {n} nights in that range.',
+
+        /* Energy insight strip keys */
+        energy_insight_corr_high:'Your energy and mood track closely together ({strength} correlation).',
+        energy_insight_corr_low:'Interesting: your energy and mood don\u2019t always align \u2014 worth exploring why.',
+        energy_insight_corr_context:'Logged across {n} days with both metrics.',
+        energy_insight_avg_solid:'Your energy averages {n}/10 \u2014 a solid baseline.',
+        energy_insight_avg_moderate:'Your energy averages {n}/10 \u2014 moderate and manageable.',
+        energy_insight_avg_low:'Your energy averages {n}/10 \u2014 lower than optimal.',
+        energy_insight_avg_sub_low:'Activity, sleep quality, and hydration are often the biggest levers.',
+        energy_insight_avg_sub_ok:'Keep tracking to see what days feel most energised.',
+        energy_insight_trend_up:'Energy trending up this week (+{n} vs average).',
+        energy_insight_trend_up_sub:'Whatever you\u2019re doing \u2014 keep it up.',
+        energy_insight_trend_down:'Energy dipped this week ({n} vs average).',
+        energy_insight_trend_down_sub:'Watch for sleep deficits or increased stress.',
+        energy_insight_sleep_link:'More sleep tends to come with higher energy for you.',
+        energy_insight_sleep_link_sub:'On nights with more sleep, your energy the next day averages {n} points higher.',
+        energy_insight_sleep_no_link:'Your energy doesn\u2019t closely track your sleep duration.',
+        energy_insight_sleep_no_link_sub:'Other factors \u2014 activity, stress, or timing \u2014 may matter more for you.',
     };
 
     /* ──────────────────────────── GERMAN ──────────────────────────── */
@@ -644,9 +802,91 @@
         insight_stability_heading:'Stimmungsstabilität', insight_tags_heading:'Tag-Einblicke',
         toast_lang:'Sprache aktualisiert \u2713', toast_date_fmt:'Datumsformat aktualisiert \u2713',
         toast_time_fmt:'Zeitformat aktualisiert \u2713', toast_saved:'Gespeichert \u2713',
+        toast_journal_deleted:'Tagebuch gelöscht', toast_entry_deleted:'Eintrag gelöscht',
+        toast_shared:'Geteilte Inhalte zum Tagebuch hinzugefügt',
         dow_need_more_data:'Füge mindestens 2 Wochen Einträge hinzu, um wöchentliche Muster zu sehen.',
+        dow_need_more:'Füge mindestens 2 Wochen Einträge hinzu, um wöchentliche Muster zu sehen.',
         dow_peak_dip:'Deine Stimmung erreicht tendenziell am {day1} ihren Höhepunkt und sinkt am {day2}.',
-        dow_no_data_label:'Keine Daten', dow_average_label:'Durchschnitt', dow_dataset_label:'Durchschnittliche Stimmung',
+        dow_no_data_label:'Keine Daten', dow_no_data:'Keine Daten',
+        dow_average_label:'Durchschnitt', dow_average:'Durchschnitt', dow_dataset_label:'Durchschnittliche Stimmung',
+        x_last_n:'Letzte {n} Tage', y_mood:'Stimmung (1\u201310)', y_sleep:'Schlaf (Std.)', y_energy:'Energie (1\u201310)', y_velocity:'Stimmungsveränderung (täglich)',
+        ds_mood:'Stimmung', ds_sleep:'Schlaf', ds_energy:'Energie', ds_avg_mood:'Durchschnittliche Stimmung', ds_forecast:'Prognose', ds_lower:'Unteres Band', ds_upper:'Oberes Band', ds_trend:'Trend',
+        chip_avg:'Ø {n}', chip_up:'\u2197 +{n} vs früher', chip_down:'\u2198 {n} vs früher', need_3:'Mindestens 3 Einträge',
+        vel_improved:'Stimmung um {n} Punkt{s} gestiegen', vel_dipped:'Stimmung um {n} Punkt{s} gesunken', vel_no_change:'Keine Veränderung',
+        vel_eyebrow:'STIMMUNGSVERLAUF', vel_heading:'Tägliche Veränderung', vel_subtitle:'Balken über null = Verbesserung; darunter = Rückgang.',
+        stab_eyebrow:'14-TAGE-STABILITÄT', stab_stable:'Stabil', stab_moderate:'Moderat', stab_volatile:'Volatil', stab_high_vol:'Sehr volatil',
+        stab_msg_stable:'Deine Stimmung war in den letzten 14 Tagen konsistent.', stab_msg_mod:'Leichte Schwankungen in den letzten 14 Tagen — im Normalbereich.', stab_msg_vol:'Merkliche Stimmungsschwankungen in den letzten 14 Tagen.', stab_msg_high:'Erhebliche Stimmungsvolatilität in den letzten 14 Tagen festgestellt.', stab_min_data:'Erfasse mindestens 5 Tage in Folge, um deinen Stabilitätswert zu sehen.', stab_based_on:'Basierend auf {n} Einträgen der letzten 14 Tage.',
+        fc_days:'Datentage', fc_avg:'Aktueller Ø', fc_7day:'7-Tage-Prognose', fc_variability:'Variabilität',
+        fc_add_7:'Füge mindestens 7 Tage Daten hinzu, um Vorhersagen zu sehen.',
+        fc_keep_tracking:'Bleib beim Erfassen, um Muster und Auslöser zu entdecken.',
+        fc_trend_up_strong:'Deine Stimmung befindet sich auf einem stetigen Aufwärtstrend.', fc_trend_up_gentle:'Es gibt einen leichten Aufwärtsdrift in deiner letzten Stimmung.', fc_trend_dn_strong:'Deine Stimmung zeigt zuletzt einen langsamen Abwärtstrend.', fc_trend_dn_gentle:'Es gibt einen leichten Abwärtsdrift über die letzten Wochen.', fc_trend_steady:'Deine Stimmung war zuletzt recht stabil.',
+        fc_stab_low:'Deine tägliche Variabilität ist gering, daher ist das Prognoseband schmal.', fc_stab_mid:'Einige tägliche Schwankungen bedeuten, dass der tatsächliche Bereich variieren kann.', fc_stab_high:'Deine Stimmung war sehr variabel — betrachte diese Prognose als grobe Richtlinie.',
+        fc_sleep_up:' Dein letzter Schlaf liegt über deinem Durchschnitt, was die Prognose nach oben schiebt.', fc_sleep_dn:' Dein letzter Schlaf liegt unter deinem Durchschnitt, was die Prognose leicht nach unten zieht.',
+        fc_pat_up:'Deine Stimmung steigt langsam — ein positives Zeichen.', fc_pat_dn:'Es gibt einen leichten Abwärtsdrift. Es lohnt sich, Schlaf- und Aktivitätsmuster zu überprüfen.', fc_pat_stable:'Deine Stimmung war stabil — konsequentes Erfassen hilft dir, das zu erkennen.',
+        fc_low_var:'Geringe tägliche Variabilität deutet auf gutes Gleichgewicht hin.', fc_high_var:'Höhere Variabilität bedeutet, dass das Prognoseband breiter als üblich ist.',
+        fc_sleep_good:'Dein letzter Schlaf ist besser als dein Durchschnitt — das fließt in die Aufwärtskorrektur ein.', fc_sleep_bad:'Dein letzter Schlaf ist etwas unter deinem Durchschnitt — das senkt die kurzfristige Prognose leicht.',
+        fc_best_day:'{day}e sind tendenziell dein stärkster Tag — das ist in der tagespezifischen Prognose berücksichtigt.', fc_based_on:'Diese Prognose basiert auf deinen letzten {n} erfassten Tagen. Je mehr du erfasst, desto schärfer wird sie.',
+        kicker_default:'EINBLICK', kicker_activity:'AKTIVITÄTS-EINBLICK', kicker_activity_p:'AKTIVITÄT', kicker_sleep:'SCHLAF-EINBLICK', kicker_stability:'STABILITÄT', kicker_tags:'TAGS',
+        strength_strong:'STARKES MUSTER', strength_moderate:'MODERATES MUSTER', strength_emerging:'AUFKOMMENDES MUSTER',
+        insight_entry:'Eintrag', insight_entries:'Einträge', insight_observed:'Beobachtet in {n} {entries}.',
+        insight_title_energy_alignment:'Energie-Stimmungs-Einklang',
+        insight_desc_energy_alignment:'An Tagen mit hoher Energie (7+) liegt deine Stimmung im Schnitt bei {highMood} vs {lowMood} an energiearmen Tagen.',
+        insight_context_energy:'Basierend auf {highN} Einträgen mit hoher und {lowN} mit niedriger Energie.',
+        insight_title_mood_variable:'Deine Stimmung war zuletzt wechselhafter',
+        insight_desc_mood_variable:'Deine Stimmung schwankte diese Woche im Schnitt um {stdDev} Punkte von Tag zu Tag — mehr als sonst.',
+        insight_nudge_volatility:'Schlaf und Aktivität beeinflussen oft die kurzfristige Volatilität.',
+        insight_context_last_days:'Basierend auf den letzten {n} Tagen.',
+        insight_tag_lift:'\u201e{tag}\u201c-Tage heben dich tendenziell',
+        insight_tag_weigh:'\u201e{tag}\u201c-Tage belasten dich',
+        insight_desc_tag_lift:'An Tagen mit Tag \u201e{tag}\u201c liegt deine Stimmung im Schnitt {diff} Punkte über deinem Basiswert.',
+        insight_desc_tag_weigh:'\u201e{tag}\u201c-Tage ziehen deinen Schnitt um etwa {diff} Punkte nach unten.',
+        insight_nudge_tag_weigh:'Achte darauf, was \u201e{tag}\u201c-Tage gemeinsam haben.',
+        insight_context_tag_seen:'In {n} getaggten Einträgen.',
+        sec_sleep_heading:'Schlaf-Einblicke', sec_sleep_title:'Schlaf-Einblicke', sec_sleep_desc:'Muster zwischen Schlaf und Stimmung.',
+        sec_act_heading:'Aktivitäts-Einblicke', sec_act_title:'Aktivitäts-Einblicke', sec_act_desc:'Aktivitäten und Energiemuster, die mit der Stimmung zusammenhängen.',
+        sec_stab_heading:'Stimmungsstabilität', sec_stab_title:'Stimmungsstabilität', sec_stab_desc:'Signale zu Volatilität, Stabilität und täglichen Stimmungsänderungen.',
+        sec_tags_heading:'Tag-Einblicke', sec_tags_title:'Tag-Einblicke', sec_tags_desc:'Wiederkehrende Tags, die mit Stimmungsänderungen verbunden sind.',
+        insight_collecting:'Sobald genügend Daten vorhanden sind, werden hier Einblicke angezeigt.',
+        insight_empty:'Weitere Einblicke erscheinen, wenn du mehr Einträge mit Stimmung, Schlaf und Aktivitäten erfasst.',
+        energy_section:'RHYTHMUS & AUSDAUER', energy_subtitle:'Tägliche Energieniveaus.',
+        entry_list_empty:'Noch keine Tagebucheinträge.', entry_list_start:'Starte deinen ersten Check-in \u2192',
+        entry_edit:'Bearbeiten', entry_delete:'Löschen',
+        no_journal:'Kein Tagebuchtext gespeichert', recent:'LETZTE EINTRÄGE', tap_open:'Tippen zum Öffnen',
+        chart_empty_mood_msg:'Dein Stimmungsverlauf erscheint hier, sobald du einige Tage erfasst hast.',
+        chart_empty_sleep_msg:'Schlafmuster werden sichtbar, sobald du täglich protokollierst.',
+        chart_empty_energy_msg:'Energiedaten erwecken dieses Diagramm zum Leben — erfasse deinen ersten Check-in.',
+        chart_empty_velocity_msg:'Erfasse mindestens zwei aufeinanderfolgende Tage, um die Tagesveränderung zu sehen.',
+        chart_empty_default:'Füge Einträge hinzu, um dieses Diagramm zu sehen.',
+        chart_empty_mood_cta:'Ersten Stimmungswert erfassen', chart_empty_sleep_cta:'Schlafdaten hinzufügen',
+        chart_empty_energy_cta:'Energie erfassen', chart_empty_velocity_cta:'Mindestens 2 Tage erfassen',
+        chart_tooltip_great:'sehr gut', chart_tooltip_good:'gut', chart_tooltip_tough:'schwieriger Tag',
+        chart_tooltip_well_rested:'gut ausgeschlafen', chart_tooltip_short_night:'kurze Nacht',
+        sleep_insight_below_avg:'Dein Durchschnittsschlaf beträgt {n} Stunden — unter den empfohlenen 7–9 Stunden.',
+        sleep_insight_below_sub:'Schon kleine Verbesserungen heben die Stimmung am nächsten Tag.',
+        sleep_insight_healthy:'Dein Durchschnittsschlaf beträgt {n} Stunden — im gesunden Bereich.',
+        sleep_insight_healthy_sub:'Regelmäßigkeit zählt mehr als Dauer; versuche, deine Schlafenszeit auf ±30 Minuten zu halten.',
+        sleep_insight_trend_up:'Schlaf verbesserte sich diese Woche um {n} Stunden gegenüber deinem Durchschnitt.',
+        sleep_insight_trend_up_sub:'Weiter so — nachhaltiger Schlaf stärkt die Resilienz.',
+        sleep_insight_trend_down:'Schlaf sank diese Woche um {n} Stunden gegenüber deinem Durchschnitt.',
+        sleep_insight_trend_down_sub:'Prüfe spätes Bildschirmschauen oder Stress, die deinen Schlaf verkürzen.',
+        sleep_insight_sweet_spot:'7–8,5-Stunden-Nächte sind dein Sweet Spot: Stimmung durchschnittlich {mood} — {diff} über deinem Gesamtdurchschnitt.',
+        sleep_insight_sweet_spot_context:'Basierend auf {n} Nächten in diesem Bereich.',
+        energy_insight_corr_high:'Deine Energie und Stimmung gehen eng zusammen ({strength} Korrelation).',
+        energy_insight_corr_low:'Interessant: Deine Energie und Stimmung stimmen nicht immer überein — es lohnt sich zu erkunden, warum.',
+        energy_insight_corr_context:'Erfasst über {n} Tage mit beiden Metriken.',
+        energy_insight_avg_solid:'Deine Energie liegt durchschnittlich bei {n}/10 — eine solide Basis.',
+        energy_insight_avg_moderate:'Deine Energie liegt durchschnittlich bei {n}/10 — moderat und handhabbar.',
+        energy_insight_avg_low:'Deine Energie liegt durchschnittlich bei {n}/10 — unter dem Optimum.',
+        energy_insight_avg_sub_low:'Aktivität, Schlafqualität und Flüssigkeitszufuhr sind oft die größten Stellhebel.',
+        energy_insight_avg_sub_ok:'Erfasse weiter, um zu sehen, welche Tage sich am energiegeladensten anfühlen.',
+        energy_insight_trend_up:'Energie steigt diese Woche (+{n} vs Durchschnitt).',
+        energy_insight_trend_up_sub:'Was auch immer du tust — mach weiter so.',
+        energy_insight_trend_down:'Energie sank diese Woche ({n} vs Durchschnitt).',
+        energy_insight_trend_down_sub:'Achte auf Schlafdefizite oder erhöhten Stress.',
+        energy_insight_sleep_link:'Mehr Schlaf geht bei dir tendenziell mit mehr Energie einher.',
+        energy_insight_sleep_link_sub:'An Nächten mit mehr Schlaf liegt deine Energie am nächsten Tag durchschnittlich {n} Punkte höher.',
+        energy_insight_sleep_no_link:'Deine Energie hängt nicht eng mit deiner Schlafdauer zusammen.',
+        energy_insight_sleep_no_link_sub:'Andere Faktoren — Aktivität, Stress oder Timing — könnten für dich wichtiger sein.',
     };
 
     /* ──────────────────────────── FRENCH ──────────────────────────── */
@@ -829,9 +1069,91 @@
         insight_stability_heading:'Stabilité émotionnelle', insight_tags_heading:'Étiquettes',
         toast_lang:'Langue mise à jour \u2713', toast_date_fmt:'Format de date mis à jour \u2713',
         toast_time_fmt:'Format de l\'heure mis à jour \u2713', toast_saved:'Enregistré \u2713',
+        toast_journal_deleted:'Journal supprimé', toast_entry_deleted:'Entrée supprimée',
+        toast_shared:'Contenu partagé ajouté au journal',
         dow_need_more_data:'Ajoutez au moins 2 semaines d\'entrées pour voir vos patterns hebdomadaires.',
+        dow_need_more:'Ajoutez au moins 2 semaines d\'entrées pour voir vos patterns hebdomadaires.',
         dow_peak_dip:'Votre humeur tend à culminer le {day1} et à baisser le {day2}.',
-        dow_no_data_label:'Aucune donnée', dow_average_label:'moyenne', dow_dataset_label:'Humeur moyenne',
+        dow_no_data_label:'Aucune donnée', dow_no_data:'Aucune donnée',
+        dow_average_label:'moyenne', dow_average:'moyenne', dow_dataset_label:'Humeur moyenne',
+        x_last_n:'{n} derniers jours', y_mood:'Humeur (1\u201310)', y_sleep:'Sommeil (h)', y_energy:'Énergie (1\u201310)', y_velocity:'Variation d\'humeur (quotidienne)',
+        ds_mood:'Humeur', ds_sleep:'Sommeil', ds_energy:'Énergie', ds_avg_mood:'Humeur moyenne', ds_forecast:'Prévisions', ds_lower:'Bande basse', ds_upper:'Bande haute', ds_trend:'Tendance',
+        chip_avg:'Moy. {n}', chip_up:'\u2197 +{n} vs avant', chip_down:'\u2198 {n} vs avant', need_3:'3+ entrées requises',
+        vel_improved:'Humeur améliorée de {n} point{s}', vel_dipped:'Humeur en baisse de {n} point{s}', vel_no_change:'Aucun changement',
+        vel_eyebrow:'TRAJECTOIRE', vel_heading:'Variation quotidienne', vel_subtitle:'Barres au-dessus de zéro = amélioration ; en dessous = baisse.',
+        stab_eyebrow:'STABILITÉ 14 JOURS', stab_stable:'Stable', stab_moderate:'Modéré', stab_volatile:'Volatile', stab_high_vol:'Très volatile',
+        stab_msg_stable:'Votre humeur a été constante ces 14 derniers jours.', stab_msg_mod:'Quelques fluctuations ces 14 derniers jours — dans la normale.', stab_msg_vol:'Variations d\'humeur notables ces 14 derniers jours.', stab_msg_high:'Volatilité émotionnelle significative détectée sur 14 jours.', stab_min_data:'Suivez au moins 5 jours consécutifs pour voir votre score.', stab_based_on:'Basé sur {n} entrées des 14 derniers jours.',
+        fc_days:'Jours de données', fc_avg:'Moy. récente', fc_7day:'Prévisions 7 jours', fc_variability:'Variabilité',
+        fc_add_7:'Ajoutez au moins 7 jours de données pour voir les prévisions.',
+        fc_keep_tracking:'Continuez à enregistrer pour découvrir des patterns.',
+        fc_trend_up_strong:'Votre humeur est sur une trajectoire ascendante régulière.', fc_trend_up_gentle:'Il y a une légère tendance à la hausse.', fc_trend_dn_strong:'Votre humeur tend progressivement à la baisse.', fc_trend_dn_gentle:'Il y a une légère dérive à la baisse.', fc_trend_steady:'Votre humeur est assez stable.',
+        fc_stab_low:'Faible variabilité, donc bande de prévisions étroite.', fc_stab_mid:'Quelques variations signifient que la plage réelle peut varier.', fc_stab_high:'Votre humeur est très variable — traitez ces prévisions comme indicatif.',
+        fc_sleep_up:' Votre sommeil récent est au-dessus de la moyenne, ce qui pousse la prévision à la hausse.', fc_sleep_dn:' Votre sommeil récent est en dessous de la moyenne, ce qui tire légèrement la prévision à la baisse.',
+        fc_pat_up:'Votre humeur monte progressivement — signe positif.', fc_pat_dn:'Légère dérive à la baisse. Vérifiez vos habitudes de sommeil et d\'activité.', fc_pat_stable:'Votre humeur est stable — le suivi régulier vous aide à le voir clairement.',
+        fc_low_var:'Faible variabilité quotidienne suggère un bon équilibre.', fc_high_var:'Variabilité plus élevée signifie une plage de prévision plus large.',
+        fc_sleep_good:'Votre sommeil récent est meilleur que votre moyenne — pris en compte dans la hausse.', fc_sleep_bad:'Votre sommeil récent est un peu sous la moyenne — cela abaisse légèrement la prévision.',
+        fc_best_day:'Les {day}s sont tendanciellement votre meilleur jour.', fc_based_on:'Prévision basée sur vos {n} derniers jours enregistrés.',
+        kicker_default:'INSIGHT', kicker_activity:'INSIGHT ACTIVITÉ', kicker_activity_p:'ACTIVITÉ', kicker_sleep:'INSIGHT SOMMEIL', kicker_stability:'STABILITÉ', kicker_tags:'ÉTIQUETTES',
+        strength_strong:'PATTERN FORT', strength_moderate:'PATTERN MODÉRÉ', strength_emerging:'SIGNAL ÉMERGENT',
+        insight_entry:'entrée', insight_entries:'entrées', insight_observed:'Observé sur {n} {entries}.',
+        insight_title_energy_alignment:'Alignement énergie-humeur',
+        insight_desc_energy_alignment:'Les jours à haute énergie (7+) ont une humeur moyenne de {highMood} vs {lowMood} les jours à faible énergie.',
+        insight_context_energy:'Basé sur {highN} entrées à haute énergie et {lowN} à faible énergie.',
+        insight_title_mood_variable:'Votre humeur a été plus variable récemment',
+        insight_desc_mood_variable:'Votre humeur a varié en moyenne de {stdDev} points au jour le jour cette semaine — plus que d\'habitude.',
+        insight_nudge_volatility:'Le sommeil et l\'activité alimentent souvent la volatilité à court terme.',
+        insight_context_last_days:'Basé sur les {n} derniers jours.',
+        insight_tag_lift:'Les jours \u00ab\u00a0{tag}\u00a0\u00bb vous font du bien',
+        insight_tag_weigh:'Les jours \u00ab\u00a0{tag}\u00a0\u00bb vous pèsent',
+        insight_desc_tag_lift:'Les jours tagués \u00ab\u00a0{tag}\u00a0\u00bb ont une humeur moyenne {diff} points au-dessus de votre baseline.',
+        insight_desc_tag_weigh:'Les jours \u00ab\u00a0{tag}\u00a0\u00bb tirent votre moyenne d\'environ {diff} points.',
+        insight_nudge_tag_weigh:'Remarquez ce que les jours \u00ab\u00a0{tag}\u00a0\u00bb ont en commun.',
+        insight_context_tag_seen:'Vu dans {n} entrées taguées.',
+        sec_sleep_heading:'Sommeil', sec_sleep_title:'Sommeil', sec_sleep_desc:'Patterns entre sommeil et humeur.',
+        sec_act_heading:'Activité', sec_act_title:'Activité', sec_act_desc:'Activités et énergie liées à l\'humeur.',
+        sec_stab_heading:'Stabilité émotionnelle', sec_stab_title:'Stabilité émotionnelle', sec_stab_desc:'Signaux de volatilité et de stabilité.',
+        sec_tags_heading:'Étiquettes', sec_tags_title:'Étiquettes', sec_tags_desc:'Tags récurrents associés à des changements d\'humeur.',
+        insight_collecting:'Les insights apparaîtront une fois que suffisamment de données seront collectées.',
+        insight_empty:'Plus d\'insights apparaîtront au fil de vos entrées. Enregistrez humeur, sommeil et activités.',
+        energy_section:'RYTHME & ENDURANCE', energy_subtitle:'Niveaux d\'énergie quotidiens.',
+        entry_list_empty:'Aucune entrée de journal pour l\'instant.', entry_list_start:'Commencez votre premier bilan \u2192',
+        entry_edit:'Modifier', entry_delete:'Supprimer',
+        no_journal:'Aucun texte de journal sauvegardé', recent:'ENTRÉES RÉCENTES', tap_open:'Appuyez pour ouvrir',
+        chart_empty_mood_msg:'Votre tendance d\'humeur apparaîtra ici après quelques jours.',
+        chart_empty_sleep_msg:'Les patterns de sommeil émergent une fois que vous commencez à suivre quotidiennement.',
+        chart_empty_energy_msg:'Les données d\'énergie donnent vie à ce graphique.',
+        chart_empty_velocity_msg:'Suivez au moins deux jours consécutifs pour voir l\'évolution.',
+        chart_empty_default:'Ajoutez des entrées pour voir ce graphique.',
+        chart_empty_mood_cta:'Enregistrer votre première humeur', chart_empty_sleep_cta:'Ajouter des données de sommeil',
+        chart_empty_energy_cta:'Suivre votre énergie', chart_empty_velocity_cta:'Suivre 2+ jours',
+        chart_tooltip_great:'excellent', chart_tooltip_good:'bien', chart_tooltip_tough:'journée difficile',
+        chart_tooltip_well_rested:'bien reposé', chart_tooltip_short_night:'nuit courte',
+        sleep_insight_below_avg:'Votre sommeil moyen est de {n} heures — en dessous des 7 à 9 h recommandées.',
+        sleep_insight_below_sub:'Même de petites améliorations tendent à améliorer l\'humeur le lendemain.',
+        sleep_insight_healthy:'Votre sommeil moyen est de {n} heures — dans une plage saine.',
+        sleep_insight_healthy_sub:'La régularité compte plus que la durée.',
+        sleep_insight_trend_up:'Le sommeil s\'est amélioré de {n}h cette semaine vs votre moyenne.',
+        sleep_insight_trend_up_sub:'Continuez ainsi — un repos soutenu renforce la résilience.',
+        sleep_insight_trend_down:'Le sommeil a baissé de {n}h cette semaine vs votre moyenne.',
+        sleep_insight_trend_down_sub:'Vérifiez les écrans tardifs ou le stress.',
+        sleep_insight_sweet_spot:'Les nuits de 7 à 8,5h sont votre sweet spot : humeur moyenne {mood} — {diff} au-dessus de votre moyenne globale.',
+        sleep_insight_sweet_spot_context:'Basé sur {n} nuits dans cette plage.',
+        energy_insight_corr_high:'Votre énergie et votre humeur évoluent ensemble ({strength} corrélation).',
+        energy_insight_corr_low:'Intéressant : votre énergie et votre humeur ne s\'alignent pas toujours.',
+        energy_insight_corr_context:'Enregistré sur {n} jours avec les deux métriques.',
+        energy_insight_avg_solid:'Votre énergie moyenne est de {n}/10 — une bonne base.',
+        energy_insight_avg_moderate:'Votre énergie moyenne est de {n}/10 — modérée et gérable.',
+        energy_insight_avg_low:'Votre énergie moyenne est de {n}/10 — en dessous de l\'optimal.',
+        energy_insight_avg_sub_low:'L\'activité, la qualité du sommeil et l\'hydratation sont souvent les principaux leviers.',
+        energy_insight_avg_sub_ok:'Continuez à suivre pour voir quels jours vous semblent les plus énergiques.',
+        energy_insight_trend_up:'Énergie en hausse cette semaine (+{n} vs moyenne).',
+        energy_insight_trend_up_sub:'Quoi que vous fassiez — continuez.',
+        energy_insight_trend_down:'Énergie en baisse cette semaine ({n} vs moyenne).',
+        energy_insight_trend_down_sub:'Surveillez les déficits de sommeil ou le stress accru.',
+        energy_insight_sleep_link:'Plus de sommeil tend à être associé à plus d\'énergie pour vous.',
+        energy_insight_sleep_link_sub:'Les nuits avec plus de sommeil, votre énergie le lendemain est en moyenne {n} points plus élevée.',
+        energy_insight_sleep_no_link:'Votre énergie ne suit pas étroitement votre durée de sommeil.',
+        energy_insight_sleep_no_link_sub:'D\'autres facteurs — activité, stress ou timing — peuvent compter davantage.',
     };
 
     /* ──────────────────────────── SPANISH ─────────────────────────── */
@@ -1252,6 +1574,29 @@
     window.AURA_STRINGS = S;
 
     /* ════════════════════════════════════════════════════════════════════
+       §2a  GLOBAL window.t — primary translation entry point
+            window.__dpT and window.auraTr are backward-compat aliases
+    ════════════════════════════════════════════════════════════════════ */
+    function _tGlobal(key, vars) {
+        var l = String(window.auraLocale || 'en').split('-')[0];
+        var row = S[l] || S.en;
+        var val = (row && row[key] != null) ? row[key] : (S.en[key] != null ? S.en[key] : key);
+        if (!vars) return val;
+        return String(val).replace(/\{(\w+)\}/g, function (_, k) {
+            return vars[k] != null ? String(vars[k]) : '';
+        });
+    }
+    window.t = _tGlobal;
+    window.__dpT = _tGlobal;
+    window.auraTr = _tGlobal;
+    window.AURA_I18N = {
+        strings: S,
+        t: _tGlobal,
+        setLocale: function (locale) { runI18n(locale); },
+        applyDOM: function () { applyI18n(window.auraLocale || 'en'); }
+    };
+
+    /* ════════════════════════════════════════════════════════════════════
        §3  HELPERS
     ════════════════════════════════════════════════════════════════════ */
     var RTL_LOCALES = { ar:1, he:1, fa:1, ur:1 };
@@ -1608,6 +1953,7 @@
         if (typeof window.updateRadarTitle === 'function') window.updateRadarTitle();
         var radarCtx = document.getElementById('radarChartContextLabel');
         if (radarCtx && typeof window.renderRadarChart === 'function') window.renderRadarChart();
+        if (typeof window.renderCharts === 'function') window.renderCharts();
     }
 
     /* ════════════════════════════════════════════════════════════════════

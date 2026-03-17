@@ -6,26 +6,18 @@
 (function () {
     'use strict';
 
-    /* ─── tiny helpers ──────────────────────────────────────────────── */
-    function l() { return String(window.auraLocale || 'en').split('-')[0]; }
-
+    /* ─── delegate to unified window.t (set by i18n.js which loads before us) ── */
     function T(key, vars) {
-        var locale = l();
+        if (typeof window.t === 'function') return window.t(key, vars);
+        /* fallback: check DP table directly */
+        var locale = String(window.auraLocale || 'en').split('-')[0];
         var row = DP[locale] || DP.en;
-        var val;
-        if (row && row[key] != null) {
-            val = row[key];
-        } else if (window.AURA_STRINGS && window.AURA_STRINGS[locale] && window.AURA_STRINGS[locale][key] != null) {
-            val = window.AURA_STRINGS[locale][key];
-        } else if (DP.en && DP.en[key] != null) {
-            val = DP.en[key];
-        } else {
-            val = key;
-        }
+        var val = (row && row[key] != null) ? row[key] : ((DP.en && DP.en[key] != null) ? DP.en[key] : key);
         if (!vars) return val;
         return val.replace(/\{(\w+)\}/g, function (_, k) { return vars[k] != null ? vars[k] : ''; });
     }
-    window.__dpT = T;
+    /* Don't overwrite window.t — it's already set by i18n.js */
+    if (!window.__dpT) window.__dpT = T;
 
     function onReady(fn) {
         /* Run early so patched buildDashboardNarrative etc. are in place before runI18n (700ms) */
