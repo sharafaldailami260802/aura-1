@@ -481,7 +481,8 @@
         var hint = document.createElement('p');
         hint.className = 'aura-month-hint';
         hint.style.cssText = 'font-size:.85rem;color:var(--text-muted);margin:0 0 var(--space-md);line-height:1.5;';
-        hint.textContent = 'Click any day to view or edit that entry. Colour indicates mood — green = high, amber = mid, terracotta = low.';
+        var _tHint = typeof window.t === 'function' ? window.t : function(k) { return k; };
+        hint.textContent = _tHint('calendar_month_hint');
         var grid = container.querySelector('.month-grid');
         if (grid) container.insertBefore(hint, grid);
     });
@@ -753,35 +754,39 @@
     ───────────────────────────────────────────────────────────────── */
     var corrChartInst = null;
 
-    var PAIR_CONFIG = {
-        'sleep-mood': {
-            xKey:   function(e) { return e.sleepTotal != null ? e.sleepTotal : e.sleep; },
-            yKey:   function(e) { return e.mood; },
-            xLabel: 'Sleep (hours)', yLabel: 'Mood (1–10)',
-            xMin: 0, xMax: 12, yMin: 1, yMax: 10,
-            label:  'Sleep vs Mood',
-            desc:   'How your sleep duration relates to next-day mood.',
-            color:  '--chart-1'
-        },
-        'sleep-energy': {
-            xKey:   function(e) { return e.sleepTotal != null ? e.sleepTotal : e.sleep; },
-            yKey:   function(e) { return e.energy; },
-            xLabel: 'Sleep (hours)', yLabel: 'Energy (1–10)',
-            xMin: 0, xMax: 12, yMin: 1, yMax: 10,
-            label:  'Sleep vs Energy',
-            desc:   'How much sleep affects your energy levels.',
-            color:  '--accent-secondary'
-        },
-        'mood-energy': {
-            xKey:   function(e) { return e.mood; },
-            yKey:   function(e) { return e.energy; },
-            xLabel: 'Mood (1–10)', yLabel: 'Energy (1–10)',
-            xMin: 1, xMax: 10, yMin: 1, yMax: 10,
-            label:  'Mood vs Energy',
-            desc:   'The relationship between how you feel emotionally and your physical energy.',
-            color:  '--chart-3'
-        }
-    };
+    function getPairConfig() {
+        var _tPC = typeof window.t === 'function' ? window.t : function(k) { return k; };
+        return {
+            'sleep-mood': {
+                xKey:   function(e) { return e.sleepTotal != null ? e.sleepTotal : e.sleep; },
+                yKey:   function(e) { return e.mood; },
+                xLabel: _tPC('y_sleep'), yLabel: _tPC('y_mood'),
+                xMin: 0, xMax: 12, yMin: 1, yMax: 10,
+                label:  _tPC('corr_label_sleep_mood'),
+                desc:   _tPC('corr_desc_sleep_mood'),
+                color:  '--chart-1'
+            },
+            'sleep-energy': {
+                xKey:   function(e) { return e.sleepTotal != null ? e.sleepTotal : e.sleep; },
+                yKey:   function(e) { return e.energy; },
+                xLabel: _tPC('y_sleep'), yLabel: _tPC('y_energy'),
+                xMin: 0, xMax: 12, yMin: 1, yMax: 10,
+                label:  _tPC('corr_label_sleep_energy'),
+                desc:   _tPC('corr_desc_sleep_energy'),
+                color:  '--accent-secondary'
+            },
+            'mood-energy': {
+                xKey:   function(e) { return e.mood; },
+                yKey:   function(e) { return e.energy; },
+                xLabel: _tPC('y_mood'), yLabel: _tPC('y_energy'),
+                xMin: 1, xMax: 10, yMin: 1, yMax: 10,
+                label:  _tPC('corr_label_mood_energy'),
+                desc:   _tPC('corr_desc_mood_energy'),
+                color:  '--chart-3'
+            }
+        };
+    }
+    var PAIR_CONFIG = getPairConfig();
 
     function computeR2(xs, ys) {
         if (!xs || !ys || xs.length < 3) return null;
@@ -810,8 +815,10 @@
     function renderCorrPair(pairKey, emap) {
         var canvas = document.getElementById('correlationsChart');
         if (!canvas) return;
+        PAIR_CONFIG = getPairConfig();
         var cfg = PAIR_CONFIG[pairKey];
         if (!cfg) return;
+        var _tCRP = typeof window.t === 'function' ? window.t : function(k) { return k; };
 
         var dates = Object.keys(emap).sort();
         var xs = [], ys = [];
@@ -826,7 +833,7 @@
         var r2 = computeR2(xs, ys);
         var badge = document.getElementById('corrR2Badge');
         if (badge) {
-            badge.textContent = r2 != null ? 'R² = ' + (r2*100).toFixed(1) + '%' : (xs.length < 3 ? 'Need 3+ entries' : '');
+            badge.textContent = r2 != null ? _tCRP('r2_badge', { n: (r2*100).toFixed(1) }) : (xs.length < 3 ? _tCRP('corr_need_entries') : '');
         }
         var descEl = document.getElementById('corrPairDesc');
         if (descEl) descEl.textContent = cfg.desc;
@@ -847,7 +854,7 @@
             type: 'scatter'
         }];
         if (reg) datasets.push({
-            label: 'Trend',
+            label: _tCRP('corr_trend_label'),
             data: reg,
             type: 'line',
             borderColor: isDark ? 'rgba(255,255,255,0.45)' : 'rgba(0,0,0,0.28)',
@@ -1100,7 +1107,7 @@
                                 return sign + v.toFixed(1);
                             }
                         },
-                        title: { display: true, text: 'Deviation from average', font: { size: 10, weight: '600' }, color: tickColor }
+                        title: { display: true, text: (typeof window.t === 'function' ? window.t : function(k){return k;})('corr_deviation_label'), font: { size: 10, weight: '600' }, color: tickColor }
                     }
                 }
             },
@@ -1668,11 +1675,11 @@
                     }
                     applyAllTranslations(loc);
                     if (window.quillEditor) {
-                        var placeholder = T_FULL[loc.split('-')[0]] && T_FULL[loc.split('-')[0]]['journal']
-                            ? 'Write something about your ' + (loc.startsWith('de') ? 'Tag' : 'day') + '…'
-                            : 'Write something about your day…';
                         var qlBlank = document.querySelector('.ql-editor.ql-blank');
-                        if (qlBlank) qlBlank.setAttribute('data-placeholder', placeholder);
+                        if (qlBlank) {
+                            var _tJPH = typeof window.t === 'function' ? window.t : function(k) { return k; };
+                            qlBlank.setAttribute('data-placeholder', _tJPH('journal_ph'));
+                        }
                     }
                     if (typeof window.renderCalendarCurrentView === 'function') window.renderCalendarCurrentView();
                     if (typeof window.renderHeatmap === 'function') window.renderHeatmap();
@@ -1887,8 +1894,8 @@
                     }, 60);
                 }
             });
-            /* Clean label */
-            editBtn.textContent = 'Edit Entry';
+            var _tEB = typeof window.t === 'function' ? window.t : function(k) { return k; };
+            editBtn.textContent = _tEB('edit_entry_btn');
         }
 
         if (journalBtn) {
@@ -1906,7 +1913,8 @@
                     }, 60);
                 }
             });
-            journalBtn.textContent = 'Journal';
+            var _tJB = typeof window.t === 'function' ? window.t : function(k) { return k; };
+            journalBtn.textContent = _tJB('nav_journal');
         }
 
         closeBtns.forEach(function (btn) {
@@ -1914,7 +1922,8 @@
                 e.stopPropagation();
                 if (typeof window.closeEntryModal === 'function') window.closeEntryModal();
             };
-            if (btn.classList.contains('btn-neutral')) btn.textContent = 'Close';
+            var _tCB = typeof window.t === 'function' ? window.t : function(k) { return k; };
+            if (btn.classList.contains('btn-neutral')) btn.textContent = _tCB('close');
         });
     }
 

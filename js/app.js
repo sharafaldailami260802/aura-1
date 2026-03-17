@@ -227,10 +227,11 @@ function summarizeDailySummaryList(items, fallbackPrefix) {
     return (fallbackPrefix || '') + list.slice(0, 2).join(', ') + ', and ' + list[2];
 }
 function buildDailySummaryData(dateStr) {
+    var _tDS = typeof window.t === 'function' ? window.t : function(k) { return k; };
     var entry = dateStr && entries[dateStr] ? normalizeDailyRecord(entries[dateStr], dateStr) : null;
     if (!entry) {
         return {
-            text: 'Not enough data to generate a summary yet.',
+            text: _tDS('daily_sum_empty'),
             sentenceCount: 0,
             isEmpty: true
         };
@@ -249,7 +250,7 @@ function buildDailySummaryData(dateStr) {
     var hasContent = hasMood || hasEnergy || hasSleep || hasTags || hasActivities || hasJournal || hasPhotos;
     if (!hasContent) {
         dailySummaryCache[cacheKey] = {
-            text: 'Not enough data to generate a summary yet.',
+            text: _tDS('daily_sum_empty'),
             sentenceCount: 0,
             isEmpty: true
         };
@@ -257,7 +258,7 @@ function buildDailySummaryData(dateStr) {
     }
     if (!hasMood && !hasEnergy && !hasSleep && !hasTags && !hasActivities && (hasJournal || hasPhotos)) {
         dailySummaryCache[cacheKey] = {
-            text: hasJournal ? 'You recorded a journal entry today. No mood data was logged.' : 'You saved photos for this day, with no mood data logged.',
+            text: hasJournal ? _tDS('daily_sum_journal_only') : _tDS('daily_sum_photos_only'),
             sentenceCount: 2,
             isEmpty: false
         };
@@ -265,7 +266,7 @@ function buildDailySummaryData(dateStr) {
     }
     if (hasMood && !hasEnergy && !hasSleep && !hasTags && !hasActivities && !hasJournal && !hasPhotos) {
         dailySummaryCache[cacheKey] = {
-            text: 'Mood was recorded today without additional metrics.',
+            text: _tDS('daily_sum_mood_only'),
             sentenceCount: 1,
             isEmpty: false
         };
@@ -279,27 +280,27 @@ function buildDailySummaryData(dateStr) {
             var moodDiff = moodAverage == null ? 0 : Number(entry.mood) - moodAverage;
             if (moodAverage != null && moodDiff > 0.75) {
                 moodSentence = getDailySummaryVariant(dateStr, 'mood-high', [
-                    'Your mood was slightly higher than your recent average.',
-                    'Mood sat a bit above your recent average today.',
-                    'You logged a somewhat higher mood than usual today.'
+                    _tDS('daily_sum_mood_high_1'),
+                    _tDS('daily_sum_mood_high_2'),
+                    _tDS('daily_sum_mood_high_3')
                 ]);
             } else if (moodAverage != null && moodDiff < -0.75) {
                 moodSentence = getDailySummaryVariant(dateStr, 'mood-low', [
-                    'Your mood came in a little lower than your recent average.',
-                    'Mood landed slightly below your recent average today.',
-                    'You logged a somewhat lower mood than usual today.'
+                    _tDS('daily_sum_mood_low_1'),
+                    _tDS('daily_sum_mood_low_2'),
+                    _tDS('daily_sum_mood_low_3')
                 ]);
             } else if (moodAverage != null) {
                 moodSentence = getDailySummaryVariant(dateStr, 'mood-stable', [
-                    'Your mood stayed close to your recent average today.',
-                    'Mood remained fairly steady compared with recent days.',
-                    'Your mood held near its recent baseline today.'
+                    _tDS('daily_sum_mood_stable_1'),
+                    _tDS('daily_sum_mood_stable_2'),
+                    _tDS('daily_sum_mood_stable_3')
                 ]);
             } else {
                 moodSentence = getDailySummaryVariant(dateStr, 'mood-recorded', [
-                    'Mood was recorded for today.',
-                    'You logged your mood for the day.',
-                    'Today includes a mood check-in.'
+                    _tDS('daily_sum_mood_recorded_1'),
+                    _tDS('daily_sum_mood_recorded_2'),
+                    _tDS('daily_sum_mood_recorded_3')
                 ]);
             }
         }
@@ -308,29 +309,29 @@ function buildDailySummaryData(dateStr) {
             var energyClause = '';
             if (energyDiff > 1.25) {
                 energyClause = getDailySummaryVariant(dateStr, 'energy-high', [
-                    'energy levels were higher than mood',
-                    'energy ran a bit ahead of mood',
-                    'energy came in stronger than mood'
+                    _tDS('daily_sum_energy_high_1'),
+                    _tDS('daily_sum_energy_high_2'),
+                    _tDS('daily_sum_energy_high_3')
                 ]);
             } else if (energyDiff < -1.25) {
                 energyClause = getDailySummaryVariant(dateStr, 'energy-low', [
-                    'energy levels were lower than mood',
-                    'energy trailed behind mood',
-                    'energy came in a bit below mood'
+                    _tDS('daily_sum_energy_low_1'),
+                    _tDS('daily_sum_energy_low_2'),
+                    _tDS('daily_sum_energy_low_3')
                 ]);
             } else {
                 energyClause = getDailySummaryVariant(dateStr, 'energy-aligned', [
-                    'energy levels were aligned with mood',
-                    'energy stayed in step with mood',
-                    'energy tracked closely with mood'
+                    _tDS('daily_sum_energy_aligned_1'),
+                    _tDS('daily_sum_energy_aligned_2'),
+                    _tDS('daily_sum_energy_aligned_3')
                 ]);
             }
-            moodSentence = moodSentence ? moodSentence.replace(/\.$/, '') + ', and ' + energyClause + '.' : 'Energy was recorded today.';
+            moodSentence = moodSentence ? moodSentence.replace(/\.$/, '') + ', ' + _tDS('daily_sum_and') + ' ' + energyClause + '.' : _tDS('daily_sum_energy_fallback');
         } else if (hasEnergy && !hasMood) {
             moodSentence = getDailySummaryVariant(dateStr, 'energy-only', [
-                'Energy was recorded today without a matching mood entry.',
-                'You logged energy today, without a mood reading alongside it.',
-                'Energy was tracked today even though mood was not recorded.'
+                _tDS('daily_sum_energy_only_1'),
+                _tDS('daily_sum_energy_only_2'),
+                _tDS('daily_sum_energy_only_3')
             ]);
         }
         if (moodSentence) sentences.push(moodSentence);
@@ -341,62 +342,62 @@ function buildDailySummaryData(dateStr) {
         var sleepSentence = '';
         if (sleepAverage != null && sleepDiff > 0.75) {
             sleepSentence = getDailySummaryVariant(dateStr, 'sleep-high', [
-                'Sleep duration was slightly above your typical range.',
-                'You slept a bit longer than usual.',
-                'Sleep duration came in a little above your recent average.'
+                _tDS('daily_sum_sleep_high_1'),
+                _tDS('daily_sum_sleep_high_2'),
+                _tDS('daily_sum_sleep_high_3')
             ]);
         } else if (sleepAverage != null && sleepDiff < -0.75) {
             sleepSentence = getDailySummaryVariant(dateStr, 'sleep-low', [
-                'Sleep duration was slightly below your typical range.',
-                'You slept a bit less than usual.',
-                'Sleep duration came in a little below your recent average.'
+                _tDS('daily_sum_sleep_low_1'),
+                _tDS('daily_sum_sleep_low_2'),
+                _tDS('daily_sum_sleep_low_3')
             ]);
         } else if (sleepAverage != null) {
             sleepSentence = getDailySummaryVariant(dateStr, 'sleep-steady', [
-                'Sleep duration was close to your typical range.',
-                'Sleep duration stayed near your recent average.',
-                'Your sleep duration was within your usual range.'
+                _tDS('daily_sum_sleep_steady_1'),
+                _tDS('daily_sum_sleep_steady_2'),
+                _tDS('daily_sum_sleep_steady_3')
             ]);
         } else {
             sleepSentence = getDailySummaryVariant(dateStr, 'sleep-recorded', [
-                'Sleep was recorded for the day.',
-                'You logged sleep for this date.',
-                'Sleep data was captured for today.'
+                _tDS('daily_sum_sleep_recorded_1'),
+                _tDS('daily_sum_sleep_recorded_2'),
+                _tDS('daily_sum_sleep_recorded_3')
             ]);
         }
         var segmentCount = entry.sleepSegmentCount != null ? entry.sleepSegmentCount : (entry.sleepSegments || []).length;
         if (segmentCount > 1) {
-            sleepSentence = sleepSentence.replace(/\.$/, '') + ', and it was split into multiple segments.';
+            sleepSentence = sleepSentence.replace(/\.$/, '') + _tDS('daily_sum_sleep_multi_seg');
         }
         sentences.push(sleepSentence);
     }
     if (hasTags || hasActivities || hasJournal) {
         var detailSentence = '';
         if (hasTags && hasActivities) {
-            detailSentence = 'Today included activities like "' + summarizeDailySummaryList(entry.activities.slice(0, 3)) + '" and tags such as "' + summarizeDailySummaryList(entry.tags.slice(0, 3)) + '".';
+            detailSentence = _tDS('daily_sum_tags_and_activities', { acts: summarizeDailySummaryList(entry.activities.slice(0, 3)), tags: summarizeDailySummaryList(entry.tags.slice(0, 3)) });
         } else if (hasTags) {
-            detailSentence = 'Today included tags such as "' + summarizeDailySummaryList(entry.tags.slice(0, 3)) + '".';
+            detailSentence = _tDS('daily_sum_tags_only', { tags: summarizeDailySummaryList(entry.tags.slice(0, 3)) });
         } else if (hasActivities) {
-            detailSentence = 'Today included activities like "' + summarizeDailySummaryList(entry.activities.slice(0, 3)) + '".';
+            detailSentence = _tDS('daily_sum_activities_only', { acts: summarizeDailySummaryList(entry.activities.slice(0, 3)) });
         }
         if (detailSentence) sentences.push(detailSentence);
     }
     if (hasJournal) {
         sentences.push(getDailySummaryVariant(dateStr, 'journal-reflection', [
-            'You also recorded a journal reflection today. Reviewing these notes over time may reveal useful patterns.',
-            'You wrote a journal entry for this day. These reflections can help spot patterns over time.',
-            'A journal reflection was saved today. Revisiting it later may reveal useful insights.'
+            _tDS('daily_sum_journal_1'),
+            _tDS('daily_sum_journal_2'),
+            _tDS('daily_sum_journal_3')
         ]));
     } else if (sentences.length > 0) {
         sentences.push(getDailySummaryVariant(dateStr, 'journal-prompt', [
-            'Consider writing a short reflection in the journal to capture today.',
-            'You might add a journal note below to capture how today felt.',
-            'Writing a quick reflection in the journal could help you remember this day.'
+            _tDS('daily_sum_journal_prompt_1'),
+            _tDS('daily_sum_journal_prompt_2'),
+            _tDS('daily_sum_journal_prompt_3')
         ]));
     }
     sentences = sentences.filter(Boolean).slice(0, 4);
     var result = {
-        text: sentences.length ? sentences.join(' ') : 'Not enough data to generate a summary yet.',
+        text: sentences.length ? sentences.join(' ') : _tDS('daily_sum_empty'),
         sentenceCount: sentences.length,
         isEmpty: !sentences.length
     };
@@ -413,7 +414,8 @@ function renderEntryDailySummary(dateStr) {
         return;
     }
     var summary = buildDailySummaryData(dateStr);
-    textEl.textContent = summary && summary.text ? summary.text : 'Not enough data to generate a summary yet.';
+    var _tRDS = typeof window.t === 'function' ? window.t : function(k) { return k; };
+    textEl.textContent = summary && summary.text ? summary.text : _tRDS('daily_sum_empty');
     card.hidden = false;
     card.classList.add('summary-visible');
 }
@@ -2145,18 +2147,19 @@ function refreshSleepSegmentCardUI(card) {
     var statusEl = card.querySelector('.sleep-segment-status');
     var result = evaluateSleepSegmentCard(card);
     card.classList.remove('sleep-segment-card--draft', 'sleep-segment-card--invalid', 'sleep-segment-card--complete');
+    var _tSS = typeof window.t === 'function' ? window.t : function(k) { return k; };
     if (result.state === 'empty' || result.state === 'incomplete') {
         card.classList.add('sleep-segment-card--draft');
         if (durationEl) durationEl.textContent = '';
-        if (statusEl) statusEl.textContent = 'Enter start and end time';
+        if (statusEl) statusEl.textContent = _tSS('sleep_seg_enter_times');
     } else if (result.state === 'invalid') {
         card.classList.add('sleep-segment-card--invalid');
         if (durationEl) durationEl.textContent = '';
-        if (statusEl) statusEl.textContent = 'Check times';
+        if (statusEl) statusEl.textContent = _tSS('sleep_seg_check_times');
     } else {
         card.classList.add('sleep-segment-card--complete');
         if (durationEl) durationEl.textContent = result.durationMinutes != null ? formatSegmentDurationMinutes(result.durationMinutes) : '';
-        if (statusEl) statusEl.textContent = 'Segment complete';
+        if (statusEl) statusEl.textContent = _tSS('sleep_seg_complete');
     }
 }
 function bindDynamicAuraTimeInput(input) {
@@ -2198,23 +2201,25 @@ function updateSleepSegmentSummary() {
         summaryEl.textContent = '';
         return;
     }
+    var _tSSS = typeof window.t === 'function' ? window.t : function(k) { return k; };
     if (result.count === 0) {
-        summaryEl.textContent = 'Add start and end times to complete each segment.';
+        summaryEl.textContent = _tSSS('sleep_seg_add_times_hint');
         return;
     }
     if (result.count === 1) {
-        summaryEl.textContent = 'Total sleep: ' + result.totalHours + 'h (1 segment)';
+        summaryEl.textContent = _tSSS('sleep_seg_total_1', { h: result.totalHours });
         return;
     }
-    summaryEl.textContent = 'Total sleep: ' + result.totalHours + 'h across ' + result.count + ' segments.';
+    summaryEl.textContent = _tSSS('sleep_seg_total_n', { h: result.totalHours, n: result.count });
 }
 function updateAddSleepSegmentButton() {
     var btn = document.getElementById('addSleepSegmentBtn');
     var container = document.getElementById('sleepSegmentsList');
     if (!btn || !container) return;
     var count = container.querySelectorAll('.sleep-segment-card').length;
+    var _tASS = typeof window.t === 'function' ? window.t : function(k) { return k; };
     btn.disabled = count >= 3;
-    btn.textContent = count > 0 ? '+ Add Another Segment' : '+ Add Sleep Segment';
+    btn.textContent = count > 0 ? _tASS('add_another_segment') : _tASS('add_sleep_segment_btn');
 }
 function bindSleepSegmentInputs(card) {
     if (!card) return;
@@ -3176,13 +3181,14 @@ function updateDashboard() {
     if (milestoneEl) {
         var nextM = streak >= 100 ? 100 : streak >= 50 ? 100 : streak >= 30 ? 50 : streak >= 14 ? 30 : streak >= 7 ? 14 : 7;
         var daysLeft = nextM - streak;
-        if (streak >= 100) milestoneEl.textContent = '🏆 Century streak!';
-        else if (streak >= 50) milestoneEl.textContent = '⭐ ' + daysLeft + ' days to 100';
-        else if (streak >= 30) milestoneEl.textContent = '🎯 ' + daysLeft + ' days to 50';
-        else if (streak >= 14) milestoneEl.textContent = '🔥 ' + daysLeft + ' days to 30';
-        else if (streak >= 7) milestoneEl.textContent = '✨ ' + daysLeft + ' days to 14';
-        else if (streak > 0) milestoneEl.textContent = daysLeft + ' days to first milestone';
-        else milestoneEl.textContent = 'Start tracking to build a streak';
+        var _tSM = typeof window.t === 'function' ? window.t : function(k) { return k; };
+        if (streak >= 100) milestoneEl.textContent = _tSM('streak_century');
+        else if (streak >= 50) milestoneEl.textContent = _tSM('streak_days_to_100', { n: daysLeft });
+        else if (streak >= 30) milestoneEl.textContent = _tSM('streak_days_to_50', { n: daysLeft });
+        else if (streak >= 14) milestoneEl.textContent = _tSM('streak_days_to_30', { n: daysLeft });
+        else if (streak >= 7) milestoneEl.textContent = _tSM('streak_days_to_14', { n: daysLeft });
+        else if (streak > 0) milestoneEl.textContent = _tSM('streak_days_to_first', { n: daysLeft });
+        else milestoneEl.textContent = _tSM('streak_start');
     }
     if (typeof renderMoodVelocity === 'function') renderMoodVelocity();
 }
@@ -3959,7 +3965,8 @@ function renderCalendarList() {
         if (meta.hasJournal) pills += '<span class="calendar-record-pill">Journal</span>';
         if (meta.photoCount > 0) pills += '<span class="calendar-record-pill">' + meta.photoCount + ' photo' + (meta.photoCount === 1 ? '' : 's') + '</span>';
         if (meta.tagCount > 0) pills += '<span class="calendar-record-pill">' + meta.tagCount + ' tag' + (meta.tagCount === 1 ? '' : 's') + '</span>';
-        return '<li class="calendar-record-card" onclick="showEntryModal(\'' + safeDate + '\')"><div class="calendar-record-main"><span class="calendar-record-date">' + escapeHtml(displayDate) + '</span><span class="calendar-record-summary">' + escapeHtml(summaryText) + '</span></div><div class="calendar-record-pills">' + pills + '</div><div class="calendar-record-actions"><button type="button" class="calendar-record-action" onclick="event.stopPropagation(); navigateTo(\'entry\', \'' + safeDate + '\');">Edit Check-In</button><button type="button" class="calendar-record-action btn-secondary" onclick="event.stopPropagation(); navigateTo(\'journal\', \'' + safeDate + '\');">Edit Journal</button></div></li>';
+        var _tCL = typeof window.t === 'function' ? window.t : function(k) { return k; };
+        return '<li class="calendar-record-card" onclick="showEntryModal(\'' + safeDate + '\')"><div class="calendar-record-main"><span class="calendar-record-date">' + escapeHtml(displayDate) + '</span><span class="calendar-record-summary">' + escapeHtml(summaryText) + '</span></div><div class="calendar-record-pills">' + pills + '</div><div class="calendar-record-actions"><button type="button" class="calendar-record-action" onclick="event.stopPropagation(); navigateTo(\'entry\', \'' + safeDate + '\');">' + escapeHtml(_tCL('edit_checkin_btn')) + '</button><button type="button" class="calendar-record-action btn-secondary" onclick="event.stopPropagation(); navigateTo(\'journal\', \'' + safeDate + '\');">' + escapeHtml(_tCL('edit_journal_btn')) + '</button></div></li>';
     }).join('') || '<li class="calendar-record-card" style="color: var(--text-muted); cursor: default; padding: var(--space-md);">No entries yet.</li>';
 }
 
@@ -4545,7 +4552,9 @@ function renderCharts() {
     });
     const energy = dates.map(d => (entries[d] && entries[d].energy != null) ? entries[d].energy : null);
     
-    var _CM = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    var _CM = (typeof window.getLocalizedMonths === 'function')
+        ? window.getLocalizedMonths('short')
+        : ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
     const shortDates = dates.map(d => {
         const parts = d.split('-');
         return _CM[parseInt(parts[1], 10) - 1] + ' ' + parseInt(parts[2], 10);
@@ -4599,6 +4608,7 @@ function renderCorrelations() {
     try {
         if (typeof entries === 'undefined' || entries === null || typeof entries !== 'object') return;
         if (typeof Chart === 'undefined') return;
+        var _tCorr = typeof window.t === 'function' ? window.t : function(k) { return k; };
         var colors = getThemeColors();
         var chartDays = (typeof window.auraChartDays === 'number' && window.auraChartDays > 0) ? window.auraChartDays : 30;
         var dates = Object.keys(entries).sort().slice(-chartDays);
@@ -4655,10 +4665,10 @@ function renderCorrelations() {
                             title: function(items) {
                                 if (!items.length) return '';
                                 var pt = items[0].raw;
-                                return typeof pt.x === 'number' && typeof pt.y === 'number' ? pt.x.toFixed(1) + ' h sleep · Mood ' + pt.y : 'Sleep vs Mood';
+                                return typeof pt.x === 'number' && typeof pt.y === 'number' ? _tCorr('corr_sleep_title', { h: pt.x.toFixed(1), mood: pt.y }) : _tCorr('corr_sleep_label');
                             },
                             label: function(ctx) {
-                                if (ctx.raw && typeof ctx.raw.x === 'number' && typeof ctx.raw.y === 'number') return 'Sleep ' + ctx.raw.x.toFixed(1) + ' h, Mood ' + ctx.raw.y;
+                                if (ctx.raw && typeof ctx.raw.x === 'number' && typeof ctx.raw.y === 'number') return _tCorr('corr_sleep_tooltip', { h: ctx.raw.x.toFixed(1), mood: ctx.raw.y });
                                 return ctx.dataset.label || '';
                             }
                         }
@@ -4669,14 +4679,14 @@ function renderCorrelations() {
                         type: 'linear',
                         min: 0,
                         max: 12,
-                        title: { display: true, text: 'Sleep (hours)', font: { size: 12, weight: '500' } },
+                        title: { display: true, text: _tCorr('y_sleep'), font: { size: 12, weight: '500' } },
                         grid: { display: false },
                         ticks: { maxTicksLimit: 7, font: { size: 11 }, padding: 8 }
                     },
                     y: {
                         min: 1,
                         max: 10,
-                        title: { display: true, text: 'Mood (1–10)', font: { size: 12, weight: '500' } },
+                        title: { display: true, text: _tCorr('y_mood'), font: { size: 12, weight: '500' } },
                         grid: { color: colors.grid || 'rgba(0,0,0,0.06)' },
                         ticks: { maxTicksLimit: 6, font: { size: 11 }, padding: 8 }
                     }
@@ -4730,10 +4740,10 @@ function renderCorrelations() {
                             title: function(items) {
                                 if (!items.length) return '';
                                 var pt = items[0].raw;
-                                return typeof pt.x === 'number' && typeof pt.y === 'number' ? pt.x + ' activities · Energy ' + pt.y : 'Activity vs Energy';
+                                return typeof pt.x === 'number' && typeof pt.y === 'number' ? _tCorr('corr_act_title', { count: pt.x, energy: pt.y }) : _tCorr('corr_act_label');
                             },
                             label: function(ctx) {
-                                if (ctx.raw && typeof ctx.raw.x === 'number' && typeof ctx.raw.y === 'number') return 'Activities ' + ctx.raw.x + ', Energy ' + ctx.raw.y;
+                                if (ctx.raw && typeof ctx.raw.x === 'number' && typeof ctx.raw.y === 'number') return _tCorr('corr_act_tooltip', { count: ctx.raw.x, energy: ctx.raw.y });
                                 return ctx.dataset.label || '';
                             }
                         }
@@ -4744,14 +4754,14 @@ function renderCorrelations() {
                         type: 'linear',
                         min: 0,
                         max: 8,
-                        title: { display: true, text: 'Activities', font: { size: 12, weight: '500' } },
+                        title: { display: true, text: _tCorr('activities_label'), font: { size: 12, weight: '500' } },
                         grid: { display: false },
                         ticks: { maxTicksLimit: 5, font: { size: 11 }, padding: 8 }
                     },
                     y: {
                         min: 1,
                         max: 10,
-                        title: { display: true, text: 'Energy (1–10)', font: { size: 12, weight: '500' } },
+                        title: { display: true, text: _tCorr('y_energy'), font: { size: 12, weight: '500' } },
                         grid: { color: colors.grid || 'rgba(0,0,0,0.06)' },
                         ticks: { maxTicksLimit: 6, font: { size: 11 }, padding: 8 }
                     }
@@ -4888,6 +4898,7 @@ function renderMoodVelocity() {
         console.warn('[debug] renderMoodVelocity: entries not ready');
         return;
     }
+    var _tVel = typeof window.t === 'function' ? window.t : function(k) { return k; };
     var velocityCanvas = document.getElementById('circadianChart');
     var panelEl = document.getElementById('stabilityScorePanel');
     console.log('[debug] renderMoodVelocity: canvas found=', !!velocityCanvas, 'canvas size=', velocityCanvas ? (velocityCanvas.offsetWidth + 'x' + velocityCanvas.offsetHeight) : 'n/a', 'panelEl found=', !!panelEl);
@@ -5037,7 +5048,7 @@ function renderMoodVelocity() {
                         min: -5,
                         max: 5,
                         border: { display: false },
-                        title: { display: true, text: 'Mood change (day-over-day)', font: { size: 12, weight: '500' }, color: colors.textPrimary || colors.text },
+                        title: { display: true, text: _tVel('y_velocity'), font: { size: 12, weight: '500' }, color: colors.textPrimary || colors.text },
                         grid: { color: colors.grid || 'rgba(0,0,0,0.06)', drawTicks: true },
                         ticks: { font: { size: 11 }, color: colors.text, padding: 8, stepSize: 1, maxTicksLimit: 6 }
                     },
@@ -5148,6 +5159,7 @@ function renderSeasonal() {
     const colors = getThemeColors();
     const existingSea = Chart.getChart(seasonalCtx);
     if (existingSea) existingSea.destroy();
+    var _tSea = typeof window.t === 'function' ? window.t : function(k) { return k; };
 
     const monthlyData = {};
     Object.keys(entries).forEach(function(date) {
@@ -5159,7 +5171,9 @@ function renderSeasonal() {
         monthlyData[month].push(mood);
     });
 
-    var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    var months = (typeof window.getLocalizedMonths === 'function')
+        ? window.getLocalizedMonths('short')
+        : ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
     var avgByMonth = months.map(function(m, i) {
         var data = monthlyData[i];
         return data && data.length ? data.reduce(function(a, b) { return a + b; }, 0) / data.length : 0;
@@ -5170,14 +5184,14 @@ function renderSeasonal() {
         data: {
             labels: months,
             datasets: [{
-                label: 'Average Mood by Month',
+                label: _tSea('seasonal_avg_label'),
                 data: avgByMonth,
                 backgroundColor: colors.chart1,
                 borderRadius: 8,
                 borderSkipped: false
             }]
         },
-        options: getChartConfig({ yMin: 1, yMax: 10, yStep: 1, yTitle: 'Mood (1–10)' })
+        options: getChartConfig({ yMin: 1, yMax: 10, yStep: 1, yTitle: _tSea('y_mood') })
     });
     requestAnimationFrame(function() { if (chart && chart.resize) chart.resize(); });
 }
@@ -5196,6 +5210,7 @@ function renderYearOverYear() {
     var y2 = document.getElementById('yoyYear2');
     var canvas = document.getElementById('yoyChart');
     if (!y1 || !y2 || !canvas) return;
+    var _tYoy = typeof window.t === 'function' ? window.t : function(k) { return k; };
     var years = getEntryYears();
     if (years.length === 0) years = [new Date().getFullYear(), new Date().getFullYear() - 1];
     y1.innerHTML = years.map(function(y) { return '<option value="' + y + '">' + y + '</option>'; }).join('');
@@ -5228,7 +5243,7 @@ function renderYearOverYear() {
                 { label: String(year2), data: data2, backgroundColor: colors.chart2, borderRadius: 8, borderSkipped: false }
             ]
         },
-        options: getChartConfig({ yMin: 1, yMax: 10, yStep: 1, yTitle: 'Mood (1–10)' })
+        options: getChartConfig({ yMin: 1, yMax: 10, yStep: 1, yTitle: _tYoy('y_mood') })
     });
 }
 
@@ -5461,7 +5476,8 @@ function getInsightRecords() {
     });
 }
 function getInsightSignature() {
-    return Object.keys(entries).sort().map(function(date) {
+    var localePart = String(window.auraLocale || 'en');
+    return localePart + '||' + Object.keys(entries).sort().map(function(date) {
         var record = entries[date] || {};
         return [
             date,
@@ -5482,24 +5498,27 @@ function getInsightStrength(score) {
     return { label: 'Weak pattern', width: 38 };
 }
 function buildInsightCardHtml(insight) {
+    var _t = typeof window.t === 'function' ? window.t : function (k) { return k; };
     var strengthMap = {
-        strong:   { label: 'Strong pattern',   width: 100, class: 'insight-strength-strong'   },
-        moderate: { label: 'Moderate pattern', width: 62,  class: 'insight-strength-moderate' },
-        emerging: { label: 'Emerging signal',  width: 32,  class: 'insight-strength-emerging' }
+        strong:   { label: _t('strength_strong'),   width: 100, class: 'insight-strength-strong'   },
+        moderate: { label: _t('strength_moderate'), width: 62,  class: 'insight-strength-moderate' },
+        emerging: { label: _t('strength_emerging'), width: 32,  class: 'insight-strength-emerging' }
     };
     var s = strengthMap[insight.strength || 'emerging'];
-
-    var nudgeHtml = insight.nudge
-        ? '<p class="insight-nudge">' + escapeHtml(insight.nudge) + '</p>'
-        : '';
+    var titleStr  = insight.titleKey  ? _t(insight.titleKey,  insight.titleVars  || {}) : insight.title;
+    var descStr   = insight.descKey   ? _t(insight.descKey,   insight.descVars   || {}) : insight.description;
+    var ctxStr    = insight.contextKey? _t(insight.contextKey,insight.contextVars|| {}) : insight.context;
+    var nudgeStr  = insight.nudgeKey  ? _t(insight.nudgeKey,  insight.nudgeVars  || {}) : insight.nudge;
+    var nudgeHtml = nudgeStr ? '<p class="insight-nudge">' + escapeHtml(nudgeStr) + '</p>' : '';
+    var kicker    = insight.kicker || _t('kicker_default');
 
     return '<div class="card insight-detail-card">' +
         '<div class="insight-detail-header">' +
             '<div class="insight-detail-title-wrap">' +
                 '<span class="insight-icon-badge" data-section="' + escapeHtml(insight.section) + '" aria-hidden="true">' + escapeHtml(insight.icon || '\u2022') + '</span>' +
                 '<div>' +
-                    '<span class="insight-detail-kicker">' + escapeHtml(insight.kicker || 'Insight') + '</span>' +
-                    '<h4 class="insight-detail-title">' + escapeHtml(insight.title) + '</h4>' +
+                    '<span class="insight-detail-kicker">' + escapeHtml(kicker) + '</span>' +
+                    '<h4 class="insight-detail-title">' + escapeHtml(titleStr) + '</h4>' +
                 '</div>' +
             '</div>' +
             '<div class="insight-strength">' +
@@ -5507,23 +5526,35 @@ function buildInsightCardHtml(insight) {
                 '<div class="insight-strength-bar"><div class="insight-strength-fill" style="width:' + s.width + '%;"></div></div>' +
             '</div>' +
         '</div>' +
-        '<p class="insight-detail-text">' + escapeHtml(insight.description) + '</p>' +
+        '<p class="insight-detail-text">' + escapeHtml(descStr) + '</p>' +
         nudgeHtml +
-        '<p class="insight-detail-context">' + escapeHtml(insight.context) + '</p>' +
+        '<p class="insight-detail-context">' + escapeHtml(ctxStr) + '</p>' +
     '</div>';
 }
+function getInsightSectionMeta(key) {
+    var _t = typeof window.t === 'function' ? window.t : function (k) { return k; };
+    var map = {
+        sleep:     { heading: _t('sec_sleep_heading'), title: _t('sec_sleep_title'), description: _t('sec_sleep_desc'),  icon: '☾' },
+        activity:  { heading: _t('sec_act_heading'),   title: _t('sec_act_title'),   description: _t('sec_act_desc'),    icon: '◌' },
+        stability: { heading: _t('sec_stab_heading'),  title: _t('sec_stab_title'),  description: _t('sec_stab_desc'),   icon: '◔' },
+        tags:      { heading: _t('sec_tags_heading'),  title: _t('sec_tags_title'),  description: _t('sec_tags_desc'),   icon: '#'  }
+    };
+    return map[key] || INSIGHT_SECTION_META[key] || { heading: key, title: key, description: '' };
+}
 function buildInsightsOverviewHtml(result) {
+    var _t = typeof window.t === 'function' ? window.t : function (k) { return k; };
     if (!result || !result.overview || !result.overview.length) {
-        return '<p class="insight-empty">' + escapeHtml((result && result.message) || 'More insights will appear as you record additional entries. Track mood, sleep, and activities to uncover patterns.') + '</p>';
+        return '<p class="insight-empty">' + escapeHtml((result && result.message) || _t('insight_empty')) + '</p>';
     }
     return '<div class="insights-summary-grid">' + result.overview.map(buildInsightCardHtml).join('') + '</div>';
 }
 function buildInsightsDashboardHtml(result) {
+    var _t = typeof window.t === 'function' ? window.t : function (k) { return k; };
     if (!result || !result.sections || !result.sections.length) {
-        return '<p class="insight-empty">' + escapeHtml((result && result.message) || 'More insights will appear as you record additional entries. Track mood, sleep, and activities to uncover patterns.') + '</p>';
+        return '<p class="insight-empty">' + escapeHtml((result && result.message) || _t('insight_empty')) + '</p>';
     }
     return result.sections.map(function(section) {
-        var meta = INSIGHT_SECTION_META[section.key] || { heading: section.title, title: section.title, description: '' };
+        var meta = getInsightSectionMeta(section.key);
         return '<section class="insights-section">' +
             '<div>' +
                 '<p class="insights-section-heading">' + escapeHtml(meta.heading) + '</p>' +
@@ -5542,20 +5573,22 @@ function renderInsightsResult(result) {
     var overviewTextEl = document.getElementById('insightsOverviewText');
     if (analyticsEl) analyticsEl.innerHTML = analyticsHtml;
     if (dashboardEl) dashboardEl.innerHTML = dashboardHtml;
-    if (overviewTextEl) overviewTextEl.textContent = (result && result.summary) || 'More insights will appear as you record additional entries. Track mood, sleep, and activities to uncover patterns.';
+    var _tIR = typeof window.t === 'function' ? window.t : function (k) { return k; };
+    if (overviewTextEl) overviewTextEl.textContent = (result && result.summary) || _tIR('insight_empty');
 }
 function createInsightCandidate(section, title, description, supportCount, score, options) {
     options = options || {};
-    var entryWord = supportCount === 1 ? 'entry' : 'entries';
+    var _tIC = typeof window.t === 'function' ? window.t : function (k) { return k; };
+    var entryWord = supportCount === 1 ? _tIC('insight_entry') : _tIC('insight_entries');
     var out = {
         section: section,
         title: title,
         description: description,
         supportCount: supportCount,
         score: score,
-        kicker: options.kicker || 'Insight',
+        kicker: options.kicker || _tIC('kicker_default'),
         icon: options.icon || ((INSIGHT_SECTION_META[section] && INSIGHT_SECTION_META[section].icon) || '•'),
-        context: options.context || ('Observed across ' + supportCount + ' ' + entryWord + '.'),
+        context: options.context || _tIC('insight_observed', { n: supportCount, entries: entryWord }),
         nudge: options.nudge || '',
         strength: score >= 5 ? 'strong' : score >= 3 ? 'moderate' : 'emerging'
     };
@@ -5567,12 +5600,13 @@ function createInsightCandidate(section, title, description, supportCount, score
 }
 var correlationInsightsEngine = {
     analyze: function(records) {
+        var _t = typeof window.t === 'function' ? window.t : function(k) { return k; };
         if (!records || records.length < MIN_INSIGHT_RECORDS) {
             return {
                 overview: [],
                 sections: [],
-                summary: 'More insights will appear as you record additional entries. Track mood, sleep, and activities to uncover patterns.',
-                message: 'Insights will appear once enough data has been collected.'
+                summary: _t('insight_collecting'),
+                message: _t('insight_empty')
             };
         }
         var candidates = [];
@@ -5603,20 +5637,27 @@ var correlationInsightsEngine = {
             var bestBucket = bucketRows.slice().sort(function(a, b) { return b.avg - a.avg; })[0];
             var bestBucketDiff = bestBucket.avg - overallMood;
             if (bestBucketDiff >= 0.15) {
+                var _sweetN = records.filter(function(record) {
+                    var sleepValue = typeof record.sleepTotal === 'number' && !isNaN(record.sleepTotal) ? record.sleepTotal : record.sleep;
+                    return typeof sleepValue === 'number' && !isNaN(sleepValue);
+                }).length;
+                var _sweetDelta = (bestBucket.avg != null && overallMood != null ? ((bestBucket.avg - overallMood) > 0 ? '+' : '') + (bestBucket.avg - overallMood).toFixed(1) : '');
                 candidates.push(createInsightCandidate(
                     'sleep',
                     'Your sweet spot for sleep',
-                    'On nights you get ' + bestBucket.label + ' of sleep, your mood the next day averages ' + (bestBucket.avg != null && overallMood != null ? ((bestBucket.avg - overallMood) > 0 ? '+' : '') + (bestBucket.avg - overallMood).toFixed(1) + ' above your usual baseline.' : 'higher than your usual baseline.'),
-                    records.filter(function(record) {
-                        var sleepValue = typeof record.sleepTotal === 'number' && !isNaN(record.sleepTotal) ? record.sleepTotal : record.sleep;
-                        return typeof sleepValue === 'number' && !isNaN(sleepValue);
-                    }).length,
+                    'On nights you get ' + bestBucket.label + ' of sleep, your mood averages ' + _sweetDelta + ' above your baseline.',
+                    _sweetN,
                     bestBucketDiff * Math.sqrt(bestBucket.records.length),
                     {
-                        kicker: 'Sleep',
+                        kicker: _t('kicker_sleep'),
                         icon: '\u263d',
-                        nudge: 'When life allows, protecting that ' + bestBucket.label + ' window is one of the highest-leverage things you can do for your mood.',
-                        context: 'Based on ' + bestBucket.records.length + ' nights in that range.'
+                        titleKey: 'insight_sleep_sweet_spot_title',
+                        descKey: 'insight_sleep_sweet_spot_desc',
+                        descVars: { label: bestBucket.label, delta: _sweetDelta },
+                        nudgeKey: 'insight_sleep_sweet_spot_nudge',
+                        nudgeVars: { label: bestBucket.label },
+                        contextKey: 'insight_sleep_context',
+                        contextVars: { n: bestBucket.records.length }
                     }
                 ));
             }
@@ -5636,15 +5677,19 @@ var correlationInsightsEngine = {
                     'sleep',
                     fragmentedDiff < 0 ? 'Interrupted sleep affects your day' : 'You handle split sleep well',
                     fragmentedDiff < 0
-                        ? 'Nights with interrupted sleep are followed by a mood dip of about ' + Math.abs(fragmentedDiff).toFixed(1) + ' points on average. The data suggests continuity matters more than total hours.'
-                        : 'Interestingly, split sleep nights don\'t seem to drag your mood down much.',
+                        ? 'Nights with interrupted sleep are followed by a mood dip of about ' + Math.abs(fragmentedDiff).toFixed(1) + ' points on average.'
+                        : 'Split sleep nights don\'t seem to drag your mood down much.',
                     fragmented.length + consolidated.length,
                     Math.abs(fragmentedDiff) * Math.sqrt(fragmented.length + consolidated.length),
                     {
-                        kicker: 'Sleep',
+                        kicker: _t('kicker_sleep'),
                         icon: '\u263d',
-                        nudge: fragmentedDiff < 0 ? 'Protecting sleep continuity may help stabilise your mood.' : '',
-                        context: 'Compared ' + fragmented.length + ' fragmented and ' + consolidated.length + ' consolidated nights.'
+                        titleKey: fragmentedDiff < 0 ? 'insight_sleep_fragmented_title_neg' : 'insight_sleep_fragmented_title_pos',
+                        descKey: fragmentedDiff < 0 ? 'insight_sleep_fragmented_desc_neg' : 'insight_sleep_fragmented_desc_pos',
+                        descVars: { n: Math.abs(fragmentedDiff).toFixed(1) },
+                        nudgeKey: fragmentedDiff < 0 ? 'insight_sleep_fragmented_nudge' : null,
+                        contextKey: 'insight_sleep_fragmented_context',
+                        contextVars: { n1: fragmented.length, n2: consolidated.length }
                     }
                 ));
             }
@@ -5671,8 +5716,11 @@ var correlationInsightsEngine = {
                     earlyBedRecords.length + lateBedRecords.length,
                     Math.abs(bedtimeDiff) * Math.sqrt(earlyBedRecords.length + lateBedRecords.length),
                     {
-                        kicker: 'Sleep Insight',
-                        context: 'Based on bedtime patterns observed across ' + (earlyBedRecords.length + lateBedRecords.length) + ' entries.'
+                        kicker: _t('kicker_sleep'),
+                        titleKey: 'insight_sleep_bedtime_title',
+                        descKey: bedtimeDiff > 0 ? 'insight_sleep_bedtime_desc_early' : 'insight_sleep_bedtime_desc_late',
+                        contextKey: 'insight_sleep_bedtime_context',
+                        contextVars: { n: earlyBedRecords.length + lateBedRecords.length }
                     }
                 ));
             }
@@ -5739,15 +5787,20 @@ var correlationInsightsEngine = {
                 'activity',
                 diff > 0 ? stat.label + ' days are better days' : stat.label + ' correlates with lower mood',
                 diff > 0
-                    ? 'Your ' + stat.label + ' days average a mood of ' + avgWith.toFixed(1) + ' \u2014 that\'s ' + (avgWith - overallMood).toFixed(1) + ' above your overall average of ' + overallMood.toFixed(1) + '.'
+                    ? 'Your ' + stat.label + ' days average a mood of ' + avgWith.toFixed(1) + ' — that\'s ' + (avgWith - overallMood).toFixed(1) + ' above your overall average of ' + overallMood.toFixed(1) + '.'
                     : 'Days with ' + stat.label + ' in your log often show a slightly lower mood.',
                 stat.records.length,
                 Math.abs(diff) * Math.sqrt(stat.records.length),
                 {
-                    kicker: 'Activity',
+                    kicker: _t('kicker_activity'),
                     icon: '\u25cb',
-                    nudge: diff > 0 ? 'Keep prioritising it.' : '',
-                    context: 'Logged ' + stat.label + ' on ' + stat.records.length + ' ' + (stat.records.length === 1 ? 'day' : 'days') + '.'
+                    titleKey: diff > 0 ? 'insight_act_better_title' : 'insight_act_lower_title',
+                    titleVars: { act: stat.label },
+                    descKey: diff > 0 ? 'insight_act_better_desc' : 'insight_act_lower_desc',
+                    descVars: { act: stat.label, avg: avgWith.toFixed(1), delta: (avgWith - overallMood).toFixed(1), overall: overallMood.toFixed(1) },
+                    nudgeKey: diff > 0 ? 'insight_act_better_nudge' : null,
+                    contextKey: 'insight_act_context',
+                    contextVars: { act: stat.label, n: stat.records.length, days: stat.records.length === 1 ? _t('insight_day') : _t('insight_days') }
                 }
             ));
         });
@@ -5803,14 +5856,18 @@ var correlationInsightsEngine = {
                     candidates.push(createInsightCandidate(
                         'stability',
                         'You\'ve been emotionally consistent',
-                        'Day-to-day variance of just ' + recentStdDev.toFixed(1) + ' points this week \u2014 your most consistent stretch recently. Whatever rhythm you\'re in right now, it\'s working.',
+                        'Day-to-day variance of just ' + recentStdDev.toFixed(1) + ' points this week — your most consistent stretch recently.',
                         recentRecords.length,
                         (1.4 - recentStdDev) * Math.sqrt(recentRecords.length),
                         {
-                            kicker: 'Stability',
+                            kicker: _t('kicker_stability'),
                             icon: '\u25d4',
-                            nudge: 'Whatever you\'re doing, it\'s working.',
-                            context: 'Based on the last ' + recentRecords.length + ' days.'
+                            titleKey: 'insight_stab_consistent_title',
+                            descKey: 'insight_stab_consistent_desc',
+                            descVars: { n: recentStdDev.toFixed(1) },
+                            nudgeKey: 'insight_stab_consistent_nudge',
+                            contextKey: 'insight_context_last_days',
+                            contextVars: { n: recentRecords.length }
                         }
                     ));
                 }
@@ -5839,7 +5896,7 @@ var correlationInsightsEngine = {
             totalShown += sectionInsights.length;
             sections.push({
                 key: sectionKey,
-                title: INSIGHT_SECTION_META[sectionKey] ? INSIGHT_SECTION_META[sectionKey].title : sectionKey,
+                title: typeof getInsightSectionMeta === 'function' ? getInsightSectionMeta(sectionKey).title : (INSIGHT_SECTION_META[sectionKey] ? INSIGHT_SECTION_META[sectionKey].title : sectionKey),
                 insights: sectionInsights
             });
         });
@@ -5852,14 +5909,14 @@ var correlationInsightsEngine = {
             return {
                 overview: [],
                 sections: [],
-                summary: 'More insights will appear as you record additional entries. Track mood, sleep, and activities to uncover patterns.',
-                message: 'No strong patterns stand out yet. Keep tracking to uncover clearer relationships.'
+                summary: _t('insight_collecting'),
+                message: _t('insight_no_patterns')
             };
         }
         return {
             overview: overview,
             sections: sections,
-            summary: 'Here\'s what your data says so far. The more consistently you log, the sharper and more personal these patterns become.',
+            summary: _t('insight_summary'),
             message: ''
         };
     }
@@ -5888,9 +5945,10 @@ function renderPredictions() {
     }).slice(-60);
     var noteEl = document.getElementById('predictionNote');
     var patternsEl = document.getElementById('predictionPatterns');
+    var _tPredN = typeof window.t === 'function' ? window.t : function(k) { return k; };
     if (dates.length < 7) {
-        if (noteEl) noteEl.textContent = 'Add at least 7 days of data to see predictions.';
-        if (patternsEl) patternsEl.textContent = 'Keep tracking to discover patterns and triggers.';
+        if (noteEl) noteEl.textContent = _tPredN('pred_min_data');
+        if (patternsEl) patternsEl.textContent = _tPredN('pred_keep_tracking');
         return;
     }
     var mood = dates.map(function(d) { return entries[d].mood; });
@@ -5982,16 +6040,18 @@ function renderPredictions() {
         if (existing) existing.destroy();
         var colors = getThemeColors();
         var bandFill = (colors.chart2 && colors.chart2.indexOf('#') === 0 && colors.chart2.length === 7) ? colors.chart2 + '18' : 'rgba(107,114,128,0.12)';
-        var baseOpts = getChartConfig({ yMin: 1, yMax: 10, yStep: 1, yTitle: 'Mood (1–10)' });
+        var _tPred = typeof window.t === 'function' ? window.t : function(k) { return k; };
+        var baseOpts = getChartConfig({ yMin: 1, yMax: 10, yStep: 1, yTitle: _tPred('y_mood') });
         baseOpts.plugins = baseOpts.plugins || {};
         baseOpts.plugins.tooltip = baseOpts.plugins.tooltip || {};
         baseOpts.plugins.tooltip.callbacks = Object.assign({}, baseOpts.plugins.tooltip.callbacks, {
             label: function(ctx) {
-                if (ctx.datasetIndex === 0) return 'Forecast: ' + Number(ctx.raw).toFixed(1);
+                var _tTip = typeof window.t === 'function' ? window.t : function(k) { return k; };
+                if (ctx.datasetIndex === 0) return _tTip('pred_tooltip_forecast', { val: Number(ctx.raw).toFixed(1) });
                 if (ctx.datasetIndex === 1) {
                     var lo = ctx.chart.data.datasets[1].data[ctx.dataIndex];
                     var hi = ctx.chart.data.datasets[2].data[ctx.dataIndex];
-                    return 'Expected range: ' + Number(lo).toFixed(1) + ' – ' + Number(hi).toFixed(1);
+                    return _tTip('pred_tooltip_range', { lo: Number(lo).toFixed(1), hi: Number(hi).toFixed(1) });
                 }
                 return null;
             }
@@ -6004,9 +6064,9 @@ function renderPredictions() {
             data: {
                 labels: labels,
                 datasets: [
-                    { label: 'Forecast', data: next7, borderColor: colors.chart1 || colors.textPrimary, backgroundColor: 'transparent', fill: false, tension: 0.35, borderWidth: 2.5, pointRadius: 2, pointHoverRadius: 6, pointBackgroundColor: colors.chart1 || colors.textPrimary, pointBorderColor: colors.surface || colors.chart1, pointBorderWidth: 1 },
-                    { label: 'Lower', data: lower, borderColor: 'transparent', fill: '+1', backgroundColor: bandFill, tension: 0.35, borderWidth: 0, pointRadius: 0, pointHoverRadius: 0 },
-                    { label: 'Upper', data: upper, borderColor: 'transparent', fill: false, tension: 0.35, borderWidth: 0, pointRadius: 0, pointHoverRadius: 0 }
+                    { label: _tPred('pred_label_forecast'), data: next7, borderColor: colors.chart1 || colors.textPrimary, backgroundColor: 'transparent', fill: false, tension: 0.35, borderWidth: 2.5, pointRadius: 2, pointHoverRadius: 6, pointBackgroundColor: colors.chart1 || colors.textPrimary, pointBorderColor: colors.surface || colors.chart1, pointBorderWidth: 1 },
+                    { label: _tPred('pred_label_lower'), data: lower, borderColor: 'transparent', fill: '+1', backgroundColor: bandFill, tension: 0.35, borderWidth: 0, pointRadius: 0, pointHoverRadius: 0 },
+                    { label: _tPred('pred_label_upper'), data: upper, borderColor: 'transparent', fill: false, tension: 0.35, borderWidth: 0, pointRadius: 0, pointHoverRadius: 0 }
                 ]
             },
             options: baseOpts
@@ -6019,11 +6079,12 @@ function renderPredictions() {
     if (summaryRow && n >= 7) {
         var avgMood = mood.reduce(function(a,b){return a+b;},0) / n;
         var nextAvg = next7.reduce(function(a,b){return a+b;},0) / 7;
+        var _tfc = typeof window.t === 'function' ? window.t : function (k) { return k; };
         var chips = [
-            { label: 'Days of data', value: String(n) },
-            { label: 'Recent avg', value: avgMood.toFixed(1) },
-            { label: '7-day forecast', value: nextAvg.toFixed(1) },
-            { label: 'Variability', value: '\xb1' + std.toFixed(1) }
+            { label: _tfc('fc_days'), value: String(n) },
+            { label: _tfc('fc_avg'), value: avgMood.toFixed(1) },
+            { label: _tfc('fc_7day'), value: nextAvg.toFixed(1) },
+            { label: _tfc('fc_variability'), value: '\xb1' + std.toFixed(1) }
         ];
         summaryRow.innerHTML = chips.map(function(c) {
             return '<div class="prediction-stat-chip"><span class="prediction-stat-label">' + escapeHtml(c.label) + '</span><span class="prediction-stat-value">' + escapeHtml(c.value) + '</span></div>';
@@ -6035,18 +6096,18 @@ function renderPredictions() {
     var interpTextEl = document.getElementById('predictionInterpretationText');
     if (interpEl && interpTextEl && n >= 7) {
         var trendDesc = '';
-        if (slope > 0.04) trendDesc = 'Your mood has been on a steady upward trajectory.';
-        else if (slope > 0.01) trendDesc = 'There\u2019s a gentle upward drift in your recent mood.';
-        else if (slope < -0.04) trendDesc = 'Your mood has been gradually trending downward lately.';
-        else if (slope < -0.01) trendDesc = 'There\u2019s a slight downward drift over recent weeks.';
-        else trendDesc = 'Your mood has been holding fairly steady.';
+        if (slope > 0.04) trendDesc = _tPredN('pred_trend_strong_up');
+        else if (slope > 0.01) trendDesc = _tPredN('pred_trend_gentle_up');
+        else if (slope < -0.04) trendDesc = _tPredN('pred_trend_strong_down');
+        else if (slope < -0.01) trendDesc = _tPredN('pred_trend_gentle_down');
+        else trendDesc = _tPredN('pred_trend_steady');
 
-        var stabilityDesc = std < 1 ? 'Your day-to-day variability is low, so the forecast band is narrow.' :
-                             std < 2 ? 'Some day-to-day variability means the actual range could vary.' :
-                                       'Your mood has been quite variable, so treat this forecast as a rough guide.';
+        var stabilityDesc = std < 1 ? _tPredN('pred_stability_low') :
+                             std < 2 ? _tPredN('pred_stability_mid') :
+                                       _tPredN('pred_stability_high');
 
         var sleepNote = Math.abs(sleepSignal) > 0.1
-            ? (sleepSignal > 0 ? ' Recent sleep is above your average, which nudges the forecast up.' : ' Recent sleep is below your average, which pulls the forecast down slightly.')
+            ? (sleepSignal > 0 ? ' ' + _tPredN('pred_sleep_nudge_up') : ' ' + _tPredN('pred_sleep_nudge_down'))
             : '';
         interpTextEl.textContent = trendDesc + ' ' + stabilityDesc + sleepNote;
         interpEl.style.display = '';
@@ -6054,26 +6115,24 @@ function renderPredictions() {
 
     // Pattern text (richer)
     var patternText = [];
-    if (slope > 0.02) patternText.push('Your mood has been climbing gradually \u2014 a positive sign.');
-    else if (slope < -0.02) patternText.push('There\u2019s a gentle downward drift lately. Worth checking in on sleep and activity patterns.');
-    else patternText.push('Your mood has been stable \u2014 consistent tracking is helping you see this clearly.');
+    if (slope > 0.02) patternText.push(_tPredN('pred_pattern_up'));
+    else if (slope < -0.02) patternText.push(_tPredN('pred_pattern_down'));
+    else patternText.push(_tPredN('pred_pattern_stable'));
 
-    if (std < 1) patternText.push('Low day-to-day variability suggests good equilibrium.');
-    else if (std > 2) patternText.push('Higher variability in your recent data means the forecast range is wider than usual.');
+    if (std < 1) patternText.push(_tPredN('pred_variability_low'));
+    else if (std > 2) patternText.push(_tPredN('pred_variability_high'));
 
     if (Math.abs(sleepSignal) > 0.1) {
-        patternText.push(sleepSignal > 0
-            ? 'Your recent sleep is better than your average \u2014 this is factored into the upward nudge.'
-            : 'Your recent sleep is a bit below your average \u2014 this slightly lowers the near-term forecast.');
+        patternText.push(sleepSignal > 0 ? _tPredN('pred_sleep_signal_up') : _tPredN('pred_sleep_signal_down'));
     }
     var strongDowDays = dowAdj.map(function(v, i) { return { v: v, i: i }; }).filter(function(x) { return Math.abs(x.v) > 0.3; });
     if (strongDowDays.length > 0) {
-        var dayNames = ['Sundays', 'Mondays', 'Tuesdays', 'Wednesdays', 'Thursdays', 'Fridays', 'Saturdays'];
+        var _fullDays = typeof window.getLocalizedDaysFull === 'function' ? window.getLocalizedDaysFull() : ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
         var best = strongDowDays.slice().sort(function(a, b) { return b.v - a.v; })[0];
-        patternText.push(dayNames[best.i] + ' tend to be your strongest day \u2014 this is built into the day-specific forecast.');
+        patternText.push(_tPredN('pred_best_dow', { day: _fullDays[best.i] }));
     }
 
-    patternText.push('This forecast is based on your last ' + n + ' logged days. The more you track, the sharper it gets.');
+    patternText.push(_tPredN('pred_footer', { n: n }));
 
     if (patternsEl) patternsEl.innerHTML = patternText.join(' ');
     } catch (e) {
@@ -6354,6 +6413,7 @@ function renderRadarChart() {
 function renderDistributionChart() {
     var ctx = document.getElementById('distributionChart');
     if (!ctx) return;
+    var _tDist = typeof window.t === 'function' ? window.t : function(k) { return k; };
     var moods = Object.keys(entries).map(function(d) { return entries[d].mood; }).filter(function(m) { return typeof m === 'number' && !isNaN(m); });
     if (moods.length === 0) {
         var parent = ctx.parentElement;
@@ -6368,7 +6428,7 @@ function renderDistributionChart() {
                 msg.style.color = 'var(--text-muted)';
                 msg.style.fontSize = '0.9rem';
                 msg.style.marginTop = 'var(--space-sm)';
-                msg.textContent = 'No mood data yet. Add entries to see your mood distribution.';
+                msg.textContent = _tDist('chart_empty_mood_msg');
                 parent.appendChild(msg);
             }
         }
@@ -6393,7 +6453,7 @@ function renderDistributionChart() {
         data: {
             labels: chartLabels,
             datasets: [{
-                label: 'Frequency',
+                label: _tDist('dist_y_label'),
                 data: moodBuckets,
                 backgroundColor: barColor,
                 hoverBackgroundColor: hoverAlpha,
@@ -6414,14 +6474,14 @@ function renderDistributionChart() {
                             label: function(context) {
                                 var count = context.raw;
                                 var moodLevel = context.label;
-                                return 'Mood ' + moodLevel + ': ' + count + ' entr' + (count !== 1 ? 'ies' : 'y') + '.';
+                                return _tDist('dist_tooltip', { mood: moodLevel, count: count + (count !== 1 ? '' : '') });
                             }
                         }
                     }
                 },
                 scales: {
                     x: {
-                        title: { display: true, text: 'Mood level', font: { size: 11, weight: '600' }, color: colors.textPrimary || colors.text },
+                        title: { display: true, text: _tDist('dist_x_label'), font: { size: 11, weight: '600' }, color: colors.textPrimary || colors.text },
                         grid: { display: false },
                         border: { display: false },
                         ticks: { font: { size: 11 }, color: colors.text, padding: 8, autoSkip: false, maxTicksLimit: 10 },
@@ -6430,7 +6490,7 @@ function renderDistributionChart() {
                     },
                     y: {
                         min: 0,
-                        title: { display: true, text: 'Frequency', font: { size: 11, weight: '600' }, color: colors.textPrimary || colors.text },
+                        title: { display: true, text: _tDist('dist_y_label'), font: { size: 11, weight: '600' }, color: colors.textPrimary || colors.text },
                         grid: { color: gridColor },
                         border: { display: false },
                         ticks: { font: { size: 11 }, color: colors.text, padding: 8, stepSize: 1 }
@@ -6448,7 +6508,8 @@ function renderDistributionChart() {
     }
     var daysAt8Plus = (moodBuckets[7] || 0) + (moodBuckets[8] || 0) + (moodBuckets[9] || 0);
     var summaryEl = document.getElementById('distributionChartSummary');
-    if (summaryEl) summaryEl.textContent = 'You most frequently feel a ' + modeMood + ' — and you\'ve had ' + daysAt8Plus + ' day' + (daysAt8Plus !== 1 ? 's' : '') + ' at an 8 or above.';
+    var _tDistSum = typeof window.t === 'function' ? window.t : function(k) { return k; };
+    if (summaryEl) summaryEl.textContent = _tDistSum('dist_summary', { mood: modeMood, n: daysAt8Plus });
 }
 
 var sleepTimelineRangeDays = 30;
@@ -6577,7 +6638,8 @@ function renderSleepTimeline() {
     }
     var rows = getSleepTimelineRecords(sleepTimelineRangeDays);
     if (!rows.length) {
-        el.innerHTML = '<p class="sleep-timeline-empty">No sleep data yet.<br>Add sleep segments in the Daily Check-In to see patterns.</p>';
+        var _tSTL = typeof window.t === 'function' ? window.t : function(k) { return k; };
+        el.innerHTML = '<p class="sleep-timeline-empty">' + escapeHtml(_tSTL('sleep_timeline_empty')) + '</p>';
         hideSleepTimelineTooltip();
         return;
     }
@@ -6660,8 +6722,13 @@ function renderDayOfWeekChart() {
     var insightEl = document.getElementById('dowChartInsight');
     var card = canvas ? canvas.closest('.card') : null;
     if (!canvas || !card) return;
-    var dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-    var fullNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+    var _tDow = typeof window.t === 'function' ? window.t : function(k) { return k; };
+    var dayNames = (typeof window.getLocalizedDays === 'function')
+        ? window.getLocalizedDays('short')
+        : ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    var fullNames = (typeof window.getLocalizedDaysFull === 'function')
+        ? window.getLocalizedDaysFull()
+        : ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
     var buckets = [[], [], [], [], [], [], []];
     var allDates = Object.keys(entries);
     allDates.forEach(function(d) {
@@ -6682,7 +6749,7 @@ function renderDayOfWeekChart() {
             noDataMsg = document.createElement('p');
             noDataMsg.className = 'dow-no-data-msg';
             noDataMsg.style.cssText = 'color: var(--text-muted); font-size: 0.9rem; padding: var(--space-md) 0;';
-            noDataMsg.textContent = 'Add at least 2 weeks of entries to see your weekly patterns.';
+            noDataMsg.textContent = _tDow('dow_need_more');
             canvas.parentNode.insertBefore(noDataMsg, canvas);
         }
         var existingChart = Chart.getChart(canvas);
@@ -6703,15 +6770,15 @@ function renderDayOfWeekChart() {
     });
     var existing = Chart.getChart(canvas);
     if (existing) existing.destroy();
-    var baseOpts = getChartConfig({ yMin: 1, yMax: 10, yStep: 1, yTitle: 'Mood (1–10)' });
+    var baseOpts = getChartConfig({ yMin: 1, yMax: 10, yStep: 1, yTitle: _tDow('y_mood') });
     baseOpts.plugins = baseOpts.plugins || {};
     baseOpts.plugins.tooltip = baseOpts.plugins.tooltip || {};
     baseOpts.plugins.tooltip.callbacks = Object.assign({}, baseOpts.plugins.tooltip.callbacks, {
         label: function(ctx) {
             var v = ctx.raw;
             var day = fullNames[ctx.dataIndex] || dayNames[ctx.dataIndex];
-            if (v == null) return day + ': No data';
-            return day + ': ' + v.toFixed(1) + ' average';
+            if (v == null) return day + ': ' + _tDow('dow_no_data');
+            return day + ': ' + v.toFixed(1) + ' ' + _tDow('dow_average');
         }
     });
     baseOpts.scales = baseOpts.scales || {};
@@ -6724,7 +6791,7 @@ function renderDayOfWeekChart() {
         data: {
             labels: dayNames,
             datasets: [{
-                label: 'Average mood',
+                label: _tDow('dow_avg_mood'),
                 data: avgs,
                 backgroundColor: barColors,
                 hoverBackgroundColor: barColors.map(function(c) {
@@ -6745,8 +6812,9 @@ function renderDayOfWeekChart() {
         if (v > best) { best = v; bestIdx = i; }
         if (v < worst) { worst = v; worstIdx = i; }
     });
+    var _tDowI = typeof window.t === 'function' ? window.t : function(k) { return k; };
     if (insightEl && bestIdx >= 0 && worstIdx >= 0 && bestIdx !== worstIdx) {
-        insightEl.textContent = 'Your mood tends to peak on ' + fullNames[bestIdx] + 's and dip on ' + fullNames[worstIdx] + 's.';
+        insightEl.textContent = _tDowI('dow_insight', { best: fullNames[bestIdx], worst: fullNames[worstIdx] });
     } else if (insightEl) {
         insightEl.textContent = '';
     }
@@ -6830,17 +6898,20 @@ function renderTimeHeatmap() {
             cell.appendChild(labelSpan);
             var avgSpan = document.createElement('span');
             avgSpan.className = 'time-avg';
+            var _tTH = typeof window.t === 'function' ? window.t : function(k) { return k; };
             if (b.average != null) {
-                avgSpan.textContent = 'Avg ' + b.average.toFixed(1);
+                avgSpan.textContent = _tTH('time_avg') + ' ' + b.average.toFixed(1);
                 cell.style.backgroundColor = makeCellColor(b.average);
                 cell.style.opacity = '1';
             } else {
-                avgSpan.textContent = 'No data';
+                avgSpan.textContent = _tTH('no_data');
                 cell.style.backgroundColor = 'var(--bg)';
                 cell.style.opacity = '0.4';
             }
             cell.appendChild(avgSpan);
-            var tooltipLines = label + ' · ' + meta.label + '\nAverage Mood: ' + (b.average != null ? b.average.toFixed(1) : '—') + '\nEntries: ' + b.count;
+            var _tAvgLabel = _tTH('time_heatmap_avg_mood');
+            var _tEntriesLabel = _tTH('time_heatmap_entries');
+            var tooltipLines = label + ' · ' + meta.label + '\n' + _tAvgLabel + ': ' + (b.average != null ? b.average.toFixed(1) : '—') + '\n' + _tEntriesLabel + ': ' + b.count;
             cell.setAttribute('data-time-tooltip', tooltipLines);
             cell.setAttribute('title', tooltipLines.replace(/\n/g, ' · '));
             cells.appendChild(cell);
@@ -6848,8 +6919,9 @@ function renderTimeHeatmap() {
         row.appendChild(cells);
         return row;
     }
-    if (hasWake) el.appendChild(renderRow('Wake time', wakeBuckets));
-    if (hasSleep) el.appendChild(renderRow('Bedtime', sleepBuckets));
+    var _tTHRow = typeof window.t === 'function' ? window.t : function(k) { return k; };
+    if (hasWake) el.appendChild(renderRow(_tTHRow('time_wake'), wakeBuckets));
+    if (hasSleep) el.appendChild(renderRow(_tTHRow('time_bedtime'), sleepBuckets));
     var tipEl = document.getElementById('timeHeatmapTooltip');
     if (!tipEl) {
         tipEl = document.createElement('div');
@@ -8369,8 +8441,8 @@ async function savePreference(key, value) {
         var loc = (v && v !== '_custom') ? v : 'en';
         window.auraLocale = loc;
         try { localStorage.setItem('aura_locale', loc); } catch (e) {}
-        if (typeof window.runI18n === 'function') window.runI18n(loc);
-        else if (typeof applyTranslations === 'function') applyTranslations();
+        /* i18n.js wrapper already calls runI18n synchronously — do not call again here */
+        if (typeof window.runI18n !== 'function' && typeof applyTranslations === 'function') applyTranslations();
         if (typeof refreshPreferenceDrivenUi === 'function') refreshPreferenceDrivenUi();
         if (typeof renderCalendarCurrentView === 'function') renderCalendarCurrentView();
         if (typeof renderMonthGrid === 'function') renderMonthGrid();

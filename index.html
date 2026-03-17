@@ -321,7 +321,7 @@
                                 </div>
                                 <div class="entry-section-content" style="max-height: none;">
                                     <div class="form-group" style="margin-bottom: 0;">
-                                        <label>Date</label>
+                                        <label data-i18n="date_label">Date</label>
                                         <input type="text" id="date" class="aura-date-input" placeholder="YYYY-MM-DD" aria-label="Date">
                                     </div>
                                 </div>
@@ -420,12 +420,12 @@
                                 <div class="entry-section-content" id="entrySectionActivitiesTagsContent">
                                     <div class="form-group">
                                         <label data-i18n="activities_label">Activities</label>
-                                        <input type="text" id="activities" class="form-input" data-i18n="activities_placeholder" data-i18n-placeholder="true" placeholder="e.g. exercise, reading, work (comma-separated)">
+                                        <input type="text" id="activities" class="form-input" data-i18n="act_ph" data-i18n-placeholder="true" placeholder="e.g. exercise, reading, work (comma-separated)">
                                     </div>
                                     <div class="form-group">
                                         <label data-i18n="tags_label">Tags</label>
-                                        <input type="text" id="tags" class="form-input" data-i18n="tags_placeholder" data-i18n-placeholder="true" placeholder="Add a tag…" autocomplete="off">
-                                        <p class="tag-suggestions-label" id="tagSuggestionsLabel">Suggested tags <span class="tag-suggestions-hint">Tap to add</span></p>
+                                        <input type="text" id="tags" class="form-input" data-i18n="tag_ph" data-i18n-placeholder="true" placeholder="Add a tag…" autocomplete="off">
+                                        <p class="tag-suggestions-label" id="tagSuggestionsLabel"><span data-i18n="suggested_tags">Suggested tags</span> <span class="tag-suggestions-hint" data-i18n="tap_to_add">Tap to add</span></p>
                                         <div id="tagSuggestions" class="tag-suggestions"></div>
                                     </div>
                                 </div>
@@ -686,8 +686,8 @@
                         <!-- Tag cloud -->
                         <div class="card journal-sidebar-card tag-cloud-section">
                             <div class="journal-sidebar-card-header">
-                                <h3>Tags</h3>
-                                <p>Tap to filter</p>
+                                <h3 data-i18n="tags_label">Tags</h3>
+                                <p data-i18n="tap_to_filter">Tap to filter</p>
                             </div>
                             <div id="tagCloud" class="tag-cloud"></div>
                         </div>
@@ -923,7 +923,7 @@
                 <section class="patterns-secondary" aria-label="Additional patterns">
                     <div class="dashboard-grid">
                     <div class="card card--secondary">
-                        <h3>Mood Distribution</h3>
+                        <h3 data-i18n="nav_distribution">Mood Distribution</h3>
                         <p class="patterns-card-desc">Where your ratings cluster over time.</p>
                         <div class="chart-container pattern-chart-wrap">
                             <canvas id="distributionChart"></canvas>
@@ -1044,11 +1044,11 @@
                     <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: var(--space-lg); line-height: 1.6;">View mood, sleep, and energy for any date range.</p>
                     <div class="comparison-controls">
                         <div class="form-group">
-                            <label for="customRangeFrom">From</label>
+                            <label for="customRangeFrom" data-i18n="from_label">From</label>
                             <input type="text" id="customRangeFrom" class="aura-date-input" placeholder="YYYY-MM-DD" aria-label="Start date">
                         </div>
                         <div class="form-group">
-                            <label for="customRangeTo">To</label>
+                            <label for="customRangeTo" data-i18n="to_label">To</label>
                             <input type="text" id="customRangeTo" class="aura-date-input" placeholder="YYYY-MM-DD" aria-label="End date">
                         </div>
                         <button type="button" class="btn" onclick="renderCustomRangeChart()">Apply range</button>
@@ -1503,11 +1503,11 @@
             <p id="deleteAllModalDesc">This permanently deletes all entries, journal, backups, and settings. This cannot be undone.</p>
             <p id="deleteAllModalError" class="modal-error"></p>
             <div id="deleteAllPasscodeWrap">
-                <label style="display:block; margin-bottom: 4px; font-size: 0.9rem; color: var(--text-muted);">Enter passcode to confirm</label>
+                <label style="display:block; margin-bottom: 4px; font-size: 0.9rem; color: var(--text-muted);" data-i18n="passcode_enter_label">Enter passcode to confirm</label>
                 <input type="password" id="deleteAllPassword" class="modal-input" placeholder="Passcode" autocomplete="off">
             </div>
             <div id="deleteAllTypeWrap" style="display: none;">
-                <label style="display:block; margin-bottom: 4px; font-size: 0.9rem; color: var(--text-muted);">Type DELETE to confirm</label>
+                <label style="display:block; margin-bottom: 4px; font-size: 0.9rem; color: var(--text-muted);" data-i18n="passcode_type_delete">Type DELETE to confirm</label>
                 <input type="text" id="deleteAllTypeConfirm" class="modal-input" placeholder="Type DELETE" autocomplete="off">
             </div>
             <div class="modal-actions">
@@ -1551,7 +1551,7 @@
     <!-- Passcode lock screen -->
     <div id="passcodeLockScreen" class="passcode-lock-overlay" aria-hidden="true" style="display: none;">
         <div class="passcode-lock-card">
-            <h3>Enter passcode</h3>
+            <h3 data-i18n="passcode_enter_heading">Enter passcode</h3>
             <input type="password" id="passcodeUnlockInput" class="modal-input" placeholder="Passcode" autocomplete="off" aria-label="Passcode">
             <button type="button" class="btn" onclick="unlockWithPasscode()">Unlock</button>
         </div>
@@ -1560,11 +1560,11 @@
     <!-- Set passcode modal (when enabling passcode lock) -->
     <div id="setPasscodeModal" class="modal-overlay" role="dialog" aria-modal="true">
         <div class="modal">
-            <h3>Set passcode</h3>
-            <p style="color: var(--text-muted); margin-bottom: var(--space-md);">Enter a 4–8 digit passcode to lock the app.</p>
-            <label style="display:block; margin-bottom: 4px; font-size: 0.9rem;">New passcode</label>
+            <h3 data-i18n="passcode_set_heading">Set passcode</h3>
+            <p style="color: var(--text-muted); margin-bottom: var(--space-md);" data-i18n="passcode_set_desc">Enter a 4–8 digit passcode to lock the app.</p>
+            <label style="display:block; margin-bottom: 4px; font-size: 0.9rem;" data-i18n="passcode_new_label">New passcode</label>
             <input type="password" id="setPasscodeNew" class="modal-input" placeholder="Passcode" autocomplete="off" maxlength="8" inputmode="numeric" pattern="[0-9]*">
-            <label style="display:block; margin-bottom: 4px; font-size: 0.9rem; margin-top: var(--space-sm);">Confirm passcode</label>
+            <label style="display:block; margin-bottom: 4px; font-size: 0.9rem; margin-top: var(--space-sm);" data-i18n="passcode_confirm_lbl">Confirm passcode</label>
             <input type="password" id="setPasscodeConfirm" class="modal-input" placeholder="Confirm" autocomplete="off" maxlength="8" inputmode="numeric" pattern="[0-9]*">
             <p id="setPasscodeError" class="modal-error" style="margin-top: var(--space-sm);"></p>
             <div class="modal-actions" style="margin-top: var(--space-md);">
@@ -1613,5 +1613,6 @@
     <script src="js/improvements.js"></script>
     <script src="js/i18n.js"></script>
     <script src="js/i18n_deep_patch.js"></script>
+    <script>if (typeof window.runI18n === 'function') window.runI18n();</script>
 </body>
 </html>

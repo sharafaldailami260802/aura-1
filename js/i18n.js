@@ -538,6 +538,221 @@
         energy_insight_sleep_link_sub:'On nights with more sleep, your energy the next day averages {n} points higher.',
         energy_insight_sleep_no_link:'Your energy doesn\u2019t closely track your sleep duration.',
         energy_insight_sleep_no_link_sub:'Other factors \u2014 activity, stress, or timing \u2014 may matter more for you.',
+
+        /* Insight engine prose — sleep */
+        insight_sleep_sweet_spot_title:'Your sleep sweet spot',
+        insight_sleep_sweet_spot_desc:'Nights with {label} of sleep correlate with a mood {delta} above your baseline.',
+        insight_sleep_sweet_spot_nudge:'When life allows, protecting that {label} window is one of the highest-leverage things you can do for your mood.',
+        insight_sleep_context:'Based on {n} nights in that range.',
+        insight_sleep_fragmented_title_neg:'Interrupted sleep affects your day',
+        insight_sleep_fragmented_title_pos:'You handle split sleep well',
+        insight_sleep_fragmented_desc_neg:'Nights with interrupted sleep are followed by a mood dip of about {n} points on average. Continuity matters more than total hours.',
+        insight_sleep_fragmented_desc_pos:'Split sleep nights don\u2019t seem to drag your mood down much.',
+        insight_sleep_fragmented_nudge:'Protecting sleep continuity may help stabilise your mood.',
+        insight_sleep_fragmented_context:'Compared {n1} fragmented and {n2} consolidated nights.',
+        insight_sleep_bedtime_title:'Bedtime Timing',
+        insight_sleep_bedtime_desc_early:'Earlier bedtimes tend to be associated with higher mood in your data.',
+        insight_sleep_bedtime_desc_late:'Later bedtimes appear linked to slightly higher mood in your recent data.',
+        insight_sleep_bedtime_context:'Based on bedtime patterns across {n} entries.',
+
+        /* Insight engine prose — activity */
+        insight_act_better_title:'{act} days are better days',
+        insight_act_lower_title:'{act} correlates with lower mood',
+        insight_act_better_desc:'Your {act} days average a mood of {avg} \u2014 that\u2019s {delta} above your overall average of {overall}.',
+        insight_act_lower_desc:'Days with {act} in your log often show a slightly lower mood.',
+        insight_act_better_nudge:'Keep prioritising it.',
+        insight_act_context:'Logged {act} on {n} {days}.',
+        insight_day:'day',
+        insight_days:'days',
+
+        /* Insight engine prose — stability */
+        insight_stab_consistent_title:'You\u2019ve been emotionally consistent',
+        insight_stab_consistent_desc:'Day-to-day variance of just {n} points this week \u2014 your most consistent stretch recently.',
+        insight_stab_consistent_nudge:'Whatever you\u2019re doing, it\u2019s working.',
+        insight_context_last_days:'Based on the last {n} days.',
+
+        /* Insight engine — summary & empty states */
+        insight_summary:'Here\u2019s what your data shows so far.',
+        insight_no_patterns:'No strong patterns stand out yet. Keep tracking to uncover clearer relationships.',
+
+        /* Distribution chart */
+        dist_x_label:'Mood level',
+        dist_y_label:'Frequency',
+        dist_tooltip:'Mood {mood}: {count} entries.',
+
+        /* Correlations chart */
+        y_sleep:'Sleep (hours)',
+        y_energy:'Energy (1\u201310)',
+        activities_label:'Activities',
+        corr_sleep_label:'Sleep vs Mood',
+        corr_sleep_title:'{h} h sleep \u00b7 Mood {mood}',
+        corr_sleep_tooltip:'Sleep {h} h, Mood {mood}',
+        corr_act_label:'Activity vs Energy',
+        corr_act_title:'{count} activities \u00b7 Energy {energy}',
+        corr_act_tooltip:'Activities {count}, Energy {energy}',
+
+        /* Day-of-week chart */
+        dow_need_more:'Add at least 2 weeks of entries to see your weekly patterns.',
+        dow_no_data:'No data',
+        dow_average:'average',
+        dow_avg_mood:'Average mood',
+
+        /* Seasonal chart */
+        seasonal_avg_label:'Average Mood by Month',
+
+        /* Kicker — stability */
+        kicker_stability_insight:'STABILITY INSIGHT',
+
+        /* Daily summary — narrative card */
+        daily_sum_empty:'Not enough data to generate a summary yet.',
+        daily_sum_journal_only:'You recorded a journal entry today. No mood data was logged.',
+        daily_sum_photos_only:'You saved photos for this day, with no mood data logged.',
+        daily_sum_mood_only:'Mood was recorded today without additional metrics.',
+        daily_sum_and:'and',
+        daily_sum_energy_fallback:'Energy was recorded today.',
+        daily_sum_mood_high_1:'Your mood was slightly higher than your recent average.',
+        daily_sum_mood_high_2:'Mood sat a bit above your recent average today.',
+        daily_sum_mood_high_3:'You logged a somewhat higher mood than usual today.',
+        daily_sum_mood_low_1:'Your mood came in a little lower than your recent average.',
+        daily_sum_mood_low_2:'Mood landed slightly below your recent average today.',
+        daily_sum_mood_low_3:'You logged a somewhat lower mood than usual today.',
+        daily_sum_mood_stable_1:'Your mood stayed close to your recent average today.',
+        daily_sum_mood_stable_2:'Mood remained fairly steady compared with recent days.',
+        daily_sum_mood_stable_3:'Your mood held near its recent baseline today.',
+        daily_sum_mood_recorded_1:'Mood was recorded for today.',
+        daily_sum_mood_recorded_2:'You logged your mood for the day.',
+        daily_sum_mood_recorded_3:'Today includes a mood check-in.',
+        daily_sum_energy_high_1:'energy levels were higher than mood',
+        daily_sum_energy_high_2:'energy ran a bit ahead of mood',
+        daily_sum_energy_high_3:'energy came in stronger than mood',
+        daily_sum_energy_low_1:'energy levels were lower than mood',
+        daily_sum_energy_low_2:'energy trailed behind mood',
+        daily_sum_energy_low_3:'energy came in a bit below mood',
+        daily_sum_energy_aligned_1:'energy levels were aligned with mood',
+        daily_sum_energy_aligned_2:'energy stayed in step with mood',
+        daily_sum_energy_aligned_3:'energy tracked closely with mood',
+        daily_sum_energy_only_1:'Energy was recorded today without a matching mood entry.',
+        daily_sum_energy_only_2:'You logged energy today, without a mood reading alongside it.',
+        daily_sum_energy_only_3:'Energy was tracked today even though mood was not recorded.',
+        daily_sum_sleep_high_1:'Sleep duration was slightly above your typical range.',
+        daily_sum_sleep_high_2:'You slept a bit longer than usual.',
+        daily_sum_sleep_high_3:'Sleep duration came in a little above your recent average.',
+        daily_sum_sleep_low_1:'Sleep duration was slightly below your typical range.',
+        daily_sum_sleep_low_2:'You slept a bit less than usual.',
+        daily_sum_sleep_low_3:'Sleep duration came in a little below your recent average.',
+        daily_sum_sleep_steady_1:'Sleep duration was close to your typical range.',
+        daily_sum_sleep_steady_2:'Sleep duration stayed near your recent average.',
+        daily_sum_sleep_steady_3:'Your sleep duration was within your usual range.',
+        daily_sum_sleep_recorded_1:'Sleep was recorded for the day.',
+        daily_sum_sleep_recorded_2:'You logged sleep for this date.',
+        daily_sum_sleep_recorded_3:'Sleep data was captured for today.',
+        daily_sum_sleep_multi_seg:', and it was split into multiple segments.',
+        daily_sum_tags_and_activities:'Today included activities like \u201c{acts}\u201d and tags such as \u201c{tags}\u201d.',
+        daily_sum_tags_only:'Today included tags such as \u201c{tags}\u201d.',
+        daily_sum_activities_only:'Today included activities like \u201c{acts}\u201d.',
+        daily_sum_journal_1:'You also recorded a journal reflection today. Reviewing these notes over time may reveal useful patterns.',
+        daily_sum_journal_2:'You wrote a journal entry for this day. These reflections can help spot patterns over time.',
+        daily_sum_journal_3:'A journal reflection was saved today. Revisiting it later may reveal useful insights.',
+        daily_sum_journal_prompt_1:'Consider writing a short reflection in the journal to capture today.',
+        daily_sum_journal_prompt_2:'You might add a journal note below to capture how today felt.',
+        daily_sum_journal_prompt_3:'Writing a quick reflection in the journal could help you remember this day.',
+
+        /* Forecast / predictions */
+        pred_min_data:'Add at least 7 days of data to see predictions.',
+        pred_keep_tracking:'Keep tracking to discover patterns and triggers.',
+        pred_trend_strong_up:'Your mood has been on a steady upward trajectory.',
+        pred_trend_gentle_up:'There\u2019s a gentle upward drift in your recent mood.',
+        pred_trend_strong_down:'Your mood has been gradually trending downward lately.',
+        pred_trend_gentle_down:'There\u2019s a slight downward drift over recent weeks.',
+        pred_trend_steady:'Your mood has been holding fairly steady.',
+        pred_stability_low:'Your day-to-day variability is low, so the forecast band is narrow.',
+        pred_stability_mid:'Some day-to-day variability means the actual range could vary.',
+        pred_stability_high:'Your mood has been quite variable, so treat this forecast as a rough guide.',
+        pred_sleep_nudge_up:'Recent sleep is above your average, which nudges the forecast up.',
+        pred_sleep_nudge_down:'Recent sleep is below your average, which pulls the forecast down slightly.',
+        pred_pattern_up:'Your mood has been climbing gradually \u2014 a positive sign.',
+        pred_pattern_down:'There\u2019s a gentle downward drift lately. Worth checking in on sleep and activity patterns.',
+        pred_pattern_stable:'Your mood has been stable \u2014 consistent tracking is helping you see this clearly.',
+        pred_variability_low:'Low day-to-day variability suggests good equilibrium.',
+        pred_variability_high:'Higher variability in your recent data means the forecast range is wider than usual.',
+        pred_sleep_signal_up:'Your recent sleep is better than your average \u2014 this is factored into the upward nudge.',
+        pred_sleep_signal_down:'Your recent sleep is a bit below your average \u2014 this slightly lowers the near-term forecast.',
+        pred_best_dow:'{day} tend to be your strongest day \u2014 this is built into the day-specific forecast.',
+        pred_footer:'This forecast is based on your last {n} logged days. The more you track, the sharper it gets.',
+        pred_label_forecast:'Forecast',
+        pred_label_lower:'Lower',
+        pred_label_upper:'Upper',
+        pred_tooltip_forecast:'Forecast: {val}',
+        pred_tooltip_range:'Expected range: {lo} \u2013 {hi}',
+
+        /* Sleep segment UI */
+        sleep_seg_enter_times:'Enter start and end time',
+        sleep_seg_check_times:'Check times',
+        sleep_seg_complete:'Segment complete',
+        sleep_seg_add_times_hint:'Add start and end times to complete each segment.',
+        sleep_seg_total_1:'Total sleep: {h}h (1 segment)',
+        sleep_seg_total_n:'Total sleep: {h}h across {n} segments.',
+        add_another_segment:'+ Add Another Segment',
+        add_sleep_segment_btn:'+ Add Sleep Segment',
+        sleep_timeline_empty:'No sleep data yet. Add sleep segments in the Daily Check-In to see patterns.',
+
+        /* Streak milestones */
+        streak_century:'\ud83c\udfc6 Century streak!',
+        streak_days_to_100:'\u2b50 {n} days to 100',
+        streak_days_to_50:'\ud83c\udfaf {n} days to 50',
+        streak_days_to_30:'\ud83d\udd25 {n} days to 30',
+        streak_days_to_14:'\u2728 {n} days to 14',
+        streak_days_to_first:'{n} days to first milestone',
+        streak_start:'Start tracking to build a streak',
+
+        /* Time heatmap */
+        time_avg:'Avg',
+        time_wake:'Wake time',
+        time_bedtime:'Bedtime',
+        time_heatmap_avg_mood:'Average Mood',
+        time_heatmap_entries:'Entries',
+
+        /* Distribution summary */
+        dist_summary:'You most frequently feel a {mood} \u2014 and you\u2019ve had {n} day(s) at an 8 or above.',
+
+        /* Day-of-week insight */
+        dow_insight:'Your mood tends to peak on {best}s and dip on {worst}s.',
+
+        /* Calendar list */
+        edit_checkin_btn:'Edit Check-In',
+        edit_journal_btn:'Edit Journal',
+
+        /* Correlations (improvements.js) */
+        corr_label_sleep_mood:'Sleep vs Mood',
+        corr_label_sleep_energy:'Sleep vs Energy',
+        corr_label_mood_energy:'Mood vs Energy',
+        corr_desc_sleep_mood:'How your sleep duration relates to next-day mood.',
+        corr_desc_sleep_energy:'How much sleep affects your energy levels.',
+        corr_desc_mood_energy:'The relationship between how you feel emotionally and your physical energy.',
+        corr_trend_label:'Trend',
+        corr_need_entries:'Need 3+ entries',
+        corr_deviation_label:'Deviation from average',
+        r2_badge:'R\u00b2 = {n}%',
+
+        /* Calendar hint */
+        calendar_month_hint:'Click any day to view or edit that entry. Colour indicates mood \u2014 green = high, amber = mid, terracotta = low.',
+
+        /* Entry modal buttons */
+        edit_entry_btn:'Edit Entry',
+        close:'Close',
+
+        /* HTML static */
+        date_label:'Date',
+        suggested_tags:'Suggested tags',
+        tap_to_add:'Tap to add',
+        tap_to_filter:'Tap to filter',
+        passcode_enter_label:'Enter passcode to confirm',
+        passcode_type_delete:'Type DELETE to confirm',
+        passcode_enter_heading:'Enter passcode',
+        passcode_set_heading:'Set passcode',
+        passcode_set_desc:'Enter a 4\u20138 digit passcode to lock the app.',
+        passcode_new_label:'New passcode',
+        passcode_confirm_lbl:'Confirm passcode',
     };
 
     /* ──────────────────────────── GERMAN ──────────────────────────── */
@@ -887,6 +1102,220 @@
         energy_insight_sleep_link_sub:'An Nächten mit mehr Schlaf liegt deine Energie am nächsten Tag durchschnittlich {n} Punkte höher.',
         energy_insight_sleep_no_link:'Deine Energie hängt nicht eng mit deiner Schlafdauer zusammen.',
         energy_insight_sleep_no_link_sub:'Andere Faktoren — Aktivität, Stress oder Timing — könnten für dich wichtiger sein.',
+
+        /* Insight engine prose — sleep */
+        insight_sleep_sweet_spot_title:'Dein Schlaf-Sweetspot',
+        insight_sleep_sweet_spot_desc:'Nächte mit {label} Schlaf korrelieren mit einer Stimmung {delta} über deinem Durchschnitt.',
+        insight_sleep_sweet_spot_nudge:'Wenn es möglich ist, das {label}-Fenster zu schützen, ist das einer der wirksamsten Hebel für deine Stimmung.',
+        insight_sleep_context:'Basierend auf {n} Nächten in diesem Bereich.',
+        insight_sleep_fragmented_title_neg:'Unterbrochener Schlaf beeinflusst deinen Tag',
+        insight_sleep_fragmented_title_pos:'Du kommst gut mit geteiltem Schlaf zurecht',
+        insight_sleep_fragmented_desc_neg:'Nächte mit unterbrochenem Schlaf folgen im Durchschnitt ein Stimmungseinbruch von etwa {n} Punkten. Kontinuität zählt mehr als Gesamtstunden.',
+        insight_sleep_fragmented_desc_pos:'Nächte mit geteiltem Schlaf ziehen deine Stimmung kaum nach unten.',
+        insight_sleep_fragmented_nudge:'Schlafkontinuität zu schützen kann deine Stimmung stabilisieren.',
+        insight_sleep_fragmented_context:'{n1} unterbrochene und {n2} durchgehende Nächte verglichen.',
+        insight_sleep_bedtime_title:'Einschlafzeit',
+        insight_sleep_bedtime_desc_early:'Früheres Zubettgehen ist in deinen Daten mit besserer Stimmung verbunden.',
+        insight_sleep_bedtime_desc_late:'Späteres Zubettgehen scheint in deinen letzten Daten mit etwas besserer Stimmung verbunden zu sein.',
+        insight_sleep_bedtime_context:'Basierend auf Schlafzeitmustern aus {n} Einträgen.',
+
+        /* Insight engine prose — activity */
+        insight_act_better_title:'{act}-Tage sind bessere Tage',
+        insight_act_lower_title:'{act} korreliert mit niedrigerer Stimmung',
+        insight_act_better_desc:'Deine {act}-Tage haben eine durchschnittliche Stimmung von {avg} \u2014 das sind {delta} \u00fcber deinem Gesamtdurchschnitt von {overall}.',
+        insight_act_lower_desc:'Tage mit {act} in deinem Tagebuch zeigen oft eine etwas niedrigere Stimmung.',
+        insight_act_better_nudge:'Halte daran fest.',
+        insight_act_context:'{act} an {n} {days} eingetragen.',
+        insight_day:'Tag',
+        insight_days:'Tagen',
+
+        /* Insight engine prose — stability */
+        insight_stab_consistent_title:'Du warst emotional konsistent',
+        insight_stab_consistent_desc:'Tägliche Schwankung von nur {n} Punkten diese Woche \u2014 deine bisher konstanteste Phase.',
+        insight_stab_consistent_nudge:'Was auch immer du gerade machst \u2014 es funktioniert.',
+        insight_context_last_days:'Basierend auf den letzten {n} Tagen.',
+
+        /* Insight engine — summary & empty states */
+        insight_summary:'Hier ist, was deine Daten bisher zeigen.',
+        insight_no_patterns:'Noch keine starken Muster erkennbar. Weiter tracken, um klarere Zusammenhänge zu entdecken.',
+
+        /* Distribution chart */
+        dist_x_label:'Stimmungsniveau',
+        dist_y_label:'Häufigkeit',
+        dist_tooltip:'Stimmung {mood}: {count} Einträge.',
+
+        /* Correlations chart */
+        y_sleep:'Schlaf (Stunden)',
+        y_energy:'Energie (1\u201310)',
+        activities_label:'Aktivitäten',
+        corr_sleep_label:'Schlaf vs. Stimmung',
+        corr_sleep_title:'{h} h Schlaf \u00b7 Stimmung {mood}',
+        corr_sleep_tooltip:'Schlaf {h} h, Stimmung {mood}',
+        corr_act_label:'Aktivität vs. Energie',
+        corr_act_title:'{count} Aktivitäten \u00b7 Energie {energy}',
+        corr_act_tooltip:'Aktivitäten {count}, Energie {energy}',
+
+        /* Day-of-week chart */
+        dow_need_more:'Füge mindestens 2 Wochen Einträge hinzu, um deine Wochenmuster zu sehen.',
+        dow_no_data:'Keine Daten',
+        dow_average:'Durchschnitt',
+        dow_avg_mood:'Durchschnittliche Stimmung',
+
+        /* Seasonal chart */
+        seasonal_avg_label:'Durchschnittliche Stimmung nach Monat',
+
+        kicker_stability_insight:'STABILITÄTS-EINBLICK',
+
+        /* Daily summary */
+        daily_sum_empty:'Nicht genug Daten für eine Zusammenfassung.',
+        daily_sum_journal_only:'Du hast heute einen Tagebucheintrag verfasst. Keine Stimmungsdaten erfasst.',
+        daily_sum_photos_only:'Du hast Fotos für diesen Tag gespeichert, ohne Stimmungsdaten.',
+        daily_sum_mood_only:'Heute wurde nur die Stimmung erfasst, ohne weitere Metriken.',
+        daily_sum_and:'und',
+        daily_sum_energy_fallback:'Energie wurde heute erfasst.',
+        daily_sum_mood_high_1:'Deine Stimmung lag heute etwas über deinem letzten Durchschnitt.',
+        daily_sum_mood_high_2:'Stimmung heute ein wenig über dem Durchschnitt der letzten Tage.',
+        daily_sum_mood_high_3:'Du hast heute eine etwas bessere Stimmung als üblich notiert.',
+        daily_sum_mood_low_1:'Deine Stimmung lag heute etwas unter deinem letzten Durchschnitt.',
+        daily_sum_mood_low_2:'Stimmung heute leicht unter dem Durchschnitt der letzten Tage.',
+        daily_sum_mood_low_3:'Du hast heute eine etwas niedrigere Stimmung als üblich notiert.',
+        daily_sum_mood_stable_1:'Deine Stimmung blieb heute nah an deinem letzten Durchschnitt.',
+        daily_sum_mood_stable_2:'Stimmung im Vergleich zu den letzten Tagen recht stabil.',
+        daily_sum_mood_stable_3:'Deine Stimmung hielt sich heute in der Nähe des bisherigen Wertes.',
+        daily_sum_mood_recorded_1:'Stimmung wurde heute erfasst.',
+        daily_sum_mood_recorded_2:'Du hast deine Stimmung für den Tag eingetragen.',
+        daily_sum_mood_recorded_3:'Heute enthält einen Stimmungs-Check-in.',
+        daily_sum_energy_high_1:'Energieniveau war höher als die Stimmung',
+        daily_sum_energy_high_2:'Energie lag etwas über der Stimmung',
+        daily_sum_energy_high_3:'Energie kam stärker als die Stimmung',
+        daily_sum_energy_low_1:'Energieniveau war niedriger als die Stimmung',
+        daily_sum_energy_low_2:'Energie blieb hinter der Stimmung zurück',
+        daily_sum_energy_low_3:'Energie lag etwas unter der Stimmung',
+        daily_sum_energy_aligned_1:'Energieniveau und Stimmung waren im Einklang',
+        daily_sum_energy_aligned_2:'Energie blieb im Schritt mit der Stimmung',
+        daily_sum_energy_aligned_3:'Energie und Stimmung entwickelten sich ähnlich',
+        daily_sum_energy_only_1:'Energie wurde heute ohne passenden Stimmungseintrag erfasst.',
+        daily_sum_energy_only_2:'Du hast heute Energie eingetragen, aber keine Stimmung.',
+        daily_sum_energy_only_3:'Energie wurde heute verfolgt, obwohl keine Stimmung erfasst wurde.',
+        daily_sum_sleep_high_1:'Schlafdauer lag etwas über deinem üblichen Bereich.',
+        daily_sum_sleep_high_2:'Du hast heute etwas länger geschlafen als gewöhnlich.',
+        daily_sum_sleep_high_3:'Schlafdauer war etwas höher als dein letzter Durchschnitt.',
+        daily_sum_sleep_low_1:'Schlafdauer lag etwas unter deinem üblichen Bereich.',
+        daily_sum_sleep_low_2:'Du hast heute etwas weniger geschlafen als gewöhnlich.',
+        daily_sum_sleep_low_3:'Schlafdauer war etwas geringer als dein letzter Durchschnitt.',
+        daily_sum_sleep_steady_1:'Schlafdauer entsprach deinem üblichen Bereich.',
+        daily_sum_sleep_steady_2:'Schlafdauer blieb nahe deinem letzten Durchschnitt.',
+        daily_sum_sleep_steady_3:'Deine Schlafdauer lag im gewohnten Rahmen.',
+        daily_sum_sleep_recorded_1:'Schlaf wurde heute erfasst.',
+        daily_sum_sleep_recorded_2:'Du hast den Schlaf für diesen Tag eingetragen.',
+        daily_sum_sleep_recorded_3:'Schlafdaten wurden heute gespeichert.',
+        daily_sum_sleep_multi_seg:', und er war in mehrere Segmente aufgeteilt.',
+        daily_sum_tags_and_activities:'Heute mit Aktivitäten wie \u201e{acts}\u201c und Tags wie \u201e{tags}\u201c.',
+        daily_sum_tags_only:'Heute mit Tags wie \u201e{tags}\u201c.',
+        daily_sum_activities_only:'Heute mit Aktivitäten wie \u201e{acts}\u201c.',
+        daily_sum_journal_1:'Du hast heute auch einen Tagebucheintrag verfasst. Das Lesen dieser Notizen über die Zeit kann nützliche Muster aufzeigen.',
+        daily_sum_journal_2:'Du hast für diesen Tag einen Tagebucheintrag gemacht. Diese Reflexionen können helfen, Muster zu erkennen.',
+        daily_sum_journal_3:'Heute wurde eine Reflexion gespeichert. Das spätere Lesen könnte wertvolle Erkenntnisse bringen.',
+        daily_sum_journal_prompt_1:'Erwäge, eine kurze Reflexion im Tagebuch zu schreiben.',
+        daily_sum_journal_prompt_2:'Du könntest eine Notiz hinzufügen, um festzuhalten, wie sich der Tag angefühlt hat.',
+        daily_sum_journal_prompt_3:'Eine kurze Reflexion im Tagebuch könnte dir helfen, diesen Tag in Erinnerung zu behalten.',
+
+        /* Forecast */
+        pred_min_data:'Füge mindestens 7 Tage Daten hinzu, um Vorhersagen zu sehen.',
+        pred_keep_tracking:'Verfolge weiter, um Muster und Auslöser zu entdecken.',
+        pred_trend_strong_up:'Deine Stimmung befindet sich auf einem stabilen Aufwärtstrend.',
+        pred_trend_gentle_up:'Es gibt eine leichte Aufwärtstendenz in deiner letzten Stimmung.',
+        pred_trend_strong_down:'Deine Stimmung hat sich zuletzt schrittweise verschlechtert.',
+        pred_trend_gentle_down:'Es gibt eine leichte Abwärtstendenz in den letzten Wochen.',
+        pred_trend_steady:'Deine Stimmung ist recht stabil geblieben.',
+        pred_stability_low:'Deine tägliche Schwankung ist gering, das Prognoseband ist schmal.',
+        pred_stability_mid:'Etwas tägliche Schwankung bedeutet, der tatsächliche Bereich kann abweichen.',
+        pred_stability_high:'Deine Stimmung war recht variabel — betrachte diese Prognose als grobe Orientierung.',
+        pred_sleep_nudge_up:'Dein letzter Schlaf liegt über deinem Durchschnitt, was die Prognose leicht anhebt.',
+        pred_sleep_nudge_down:'Dein letzter Schlaf liegt unter deinem Durchschnitt, was die Prognose leicht senkt.',
+        pred_pattern_up:'Deine Stimmung ist allmählich gestiegen \u2014 ein positives Zeichen.',
+        pred_pattern_down:'Es gibt eine leichte Abwärtstendenz. Es lohnt sich, Schlaf- und Aktivitätsmuster zu prüfen.',
+        pred_pattern_stable:'Deine Stimmung war stabil \u2014 konsequentes Tracking macht das sichtbar.',
+        pred_variability_low:'Geringe tägliche Schwankung deutet auf gutes Gleichgewicht hin.',
+        pred_variability_high:'Höhere Variabilität bedeutet, dass das Prognoseband breiter als üblich ist.',
+        pred_sleep_signal_up:'Dein letzter Schlaf ist besser als dein Durchschnitt \u2014 das fließt in den Aufwärtstrend ein.',
+        pred_sleep_signal_down:'Dein letzter Schlaf liegt etwas unter deinem Durchschnitt \u2014 das senkt die kurzfristige Prognose leicht.',
+        pred_best_dow:'{day} sind tendenziell deine stärksten Tage \u2014 das ist in der tagespezifischen Prognose berücksichtigt.',
+        pred_footer:'Diese Prognose basiert auf deinen letzten {n} erfassten Tagen. Je mehr du trackst, desto schärfer wird sie.',
+        pred_label_forecast:'Prognose',
+        pred_label_lower:'Unteres Band',
+        pred_label_upper:'Oberes Band',
+        pred_tooltip_forecast:'Prognose: {val}',
+        pred_tooltip_range:'Erwarteter Bereich: {lo} \u2013 {hi}',
+
+        /* Sleep segment UI */
+        sleep_seg_enter_times:'Start- und Endzeit eingeben',
+        sleep_seg_check_times:'Zeiten prüfen',
+        sleep_seg_complete:'Segment vollständig',
+        sleep_seg_add_times_hint:'Start- und Endzeiten hinzufügen, um jedes Segment abzuschließen.',
+        sleep_seg_total_1:'Gesamtschlaf: {h}h (1 Segment)',
+        sleep_seg_total_n:'Gesamtschlaf: {h}h über {n} Segmente.',
+        add_another_segment:'+ Weiteres Segment hinzufügen',
+        add_sleep_segment_btn:'+ Schlafsegment hinzufügen',
+        sleep_timeline_empty:'Noch keine Schlafdaten. Füge Schlafsegmente im Tages-Check-in hinzu.',
+
+        /* Streak milestones */
+        streak_century:'\ud83c\udfc6 Jahrhundert-Streak!',
+        streak_days_to_100:'\u2b50 Noch {n} Tage bis 100',
+        streak_days_to_50:'\ud83c\udfaf Noch {n} Tage bis 50',
+        streak_days_to_30:'\ud83d\udd25 Noch {n} Tage bis 30',
+        streak_days_to_14:'\u2728 Noch {n} Tage bis 14',
+        streak_days_to_first:'Noch {n} Tage bis zum ersten Meilenstein',
+        streak_start:'Fang an zu tracken und baue eine Streak auf',
+
+        /* Time heatmap */
+        time_avg:'Ø',
+        time_wake:'Aufwachzeit',
+        time_bedtime:'Schlafenszeit',
+        time_heatmap_avg_mood:'Durchschn. Stimmung',
+        time_heatmap_entries:'Einträge',
+
+        /* Distribution summary */
+        dist_summary:'Du fühlst dich am häufigsten mit einer {mood} \u2014 und hattest {n} Tag(e) mit einer 8 oder mehr.',
+
+        /* DoW insight */
+        dow_insight:'Deine Stimmung neigt dazu, {best}s zu steigen und {worst}s zu sinken.',
+
+        /* Calendar list */
+        edit_checkin_btn:'Check-in bearbeiten',
+        edit_journal_btn:'Tagebuch bearbeiten',
+
+        /* Correlations */
+        corr_label_sleep_mood:'Schlaf vs. Stimmung',
+        corr_label_sleep_energy:'Schlaf vs. Energie',
+        corr_label_mood_energy:'Stimmung vs. Energie',
+        corr_desc_sleep_mood:'Wie sich deine Schlafdauer auf die Stimmung am nächsten Tag auswirkt.',
+        corr_desc_sleep_energy:'Wie viel Schlaf dein Energieniveau beeinflusst.',
+        corr_desc_mood_energy:'Die Beziehung zwischen emotionalem Befinden und körperlicher Energie.',
+        corr_trend_label:'Trend',
+        corr_need_entries:'Mindestens 3 Einträge erforderlich',
+        corr_deviation_label:'Abweichung vom Durchschnitt',
+        r2_badge:'R\u00b2 = {n}%',
+
+        /* Calendar hint */
+        calendar_month_hint:'Klicke auf einen Tag, um den Eintrag anzusehen oder zu bearbeiten. Farbe zeigt Stimmung \u2014 grün = hoch, amber = mittel, terrakotta = niedrig.',
+
+        /* Entry modal buttons */
+        edit_entry_btn:'Eintrag bearbeiten',
+        close:'Schließen',
+
+        /* HTML static */
+        date_label:'Datum',
+        suggested_tags:'Vorgeschlagene Tags',
+        tap_to_add:'Tippen zum Hinzufügen',
+        tap_to_filter:'Tippen zum Filtern',
+        passcode_enter_label:'Passcode zum Bestätigen eingeben',
+        passcode_type_delete:'Tippe DELETE zur Bestätigung',
+        passcode_enter_heading:'Passcode eingeben',
+        passcode_set_heading:'Passcode festlegen',
+        passcode_set_desc:'Gib einen 4\u20138-stelligen Passcode ein, um die App zu sperren.',
+        passcode_new_label:'Neuer Passcode',
+        passcode_confirm_lbl:'Passcode bestätigen',
     };
 
     /* ──────────────────────────── FRENCH ──────────────────────────── */
@@ -1154,6 +1583,220 @@
         energy_insight_sleep_link_sub:'Les nuits avec plus de sommeil, votre énergie le lendemain est en moyenne {n} points plus élevée.',
         energy_insight_sleep_no_link:'Votre énergie ne suit pas étroitement votre durée de sommeil.',
         energy_insight_sleep_no_link_sub:'D\'autres facteurs — activité, stress ou timing — peuvent compter davantage.',
+
+        /* Insight engine prose — sleep */
+        insight_sleep_sweet_spot_title:'Votre zone de sommeil idéale',
+        insight_sleep_sweet_spot_desc:'Les nuits avec {label} de sommeil sont corrélées à une humeur {delta} au-dessus de votre ligne de base.',
+        insight_sleep_sweet_spot_nudge:'Quand c\'est possible, protéger cette fenêtre de {label} est l\'un des leviers les plus efficaces pour votre humeur.',
+        insight_sleep_context:'Basé sur {n} nuits dans cette plage.',
+        insight_sleep_fragmented_title_neg:'Le sommeil fragmenté affecte votre journée',
+        insight_sleep_fragmented_title_pos:'Vous gérez bien le sommeil fractionné',
+        insight_sleep_fragmented_desc_neg:'Les nuits avec un sommeil interrompu sont suivies d\'une baisse d\'humeur d\'environ {n} points en moyenne. La continuité compte plus que la durée totale.',
+        insight_sleep_fragmented_desc_pos:'Les nuits de sommeil fractionné ne semblent pas trop affecter votre humeur.',
+        insight_sleep_fragmented_nudge:'Protéger la continuité du sommeil peut aider à stabiliser votre humeur.',
+        insight_sleep_fragmented_context:'{n1} nuits fragmentées et {n2} nuits consolidées comparées.',
+        insight_sleep_bedtime_title:'Heure de coucher',
+        insight_sleep_bedtime_desc_early:'Se coucher plus tôt est associé à une meilleure humeur dans vos données.',
+        insight_sleep_bedtime_desc_late:'Se coucher plus tard semble lié à une humeur légèrement meilleure dans vos données récentes.',
+        insight_sleep_bedtime_context:'Basé sur les habitudes de coucher observées sur {n} entrées.',
+
+        /* Insight engine prose — activity */
+        insight_act_better_title:'Les jours {act} sont de meilleurs jours',
+        insight_act_lower_title:'{act} est corrélé à une humeur plus basse',
+        insight_act_better_desc:'Vos jours {act} ont une humeur moyenne de {avg} \u2014 soit {delta} au-dessus de votre moyenne générale de {overall}.',
+        insight_act_lower_desc:'Les jours avec {act} dans votre journal montrent souvent une humeur légèrement plus basse.',
+        insight_act_better_nudge:'Continuez à le prioriser.',
+        insight_act_context:'{act} noté sur {n} {days}.',
+        insight_day:'jour',
+        insight_days:'jours',
+
+        /* Insight engine prose — stability */
+        insight_stab_consistent_title:'Vous avez été émotionnellement constant',
+        insight_stab_consistent_desc:'Variation quotidienne de seulement {n} points cette semaine \u2014 votre période la plus constante récemment.',
+        insight_stab_consistent_nudge:'Quoi que vous fassiez, ça marche.',
+        insight_context_last_days:'Basé sur les {n} derniers jours.',
+
+        /* Insight engine — summary & empty states */
+        insight_summary:'Voici ce que vos données montrent jusqu\'à présent.',
+        insight_no_patterns:'Aucun modèle fort ne se dégage encore. Continuez à enregistrer pour découvrir des relations plus claires.',
+
+        /* Distribution chart */
+        dist_x_label:'Niveau d\'humeur',
+        dist_y_label:'Fréquence',
+        dist_tooltip:'Humeur {mood} : {count} entrée(s)',
+
+        /* Correlations chart */
+        y_sleep:'Sommeil (heures)',
+        y_energy:'Énergie (1\u201310)',
+        activities_label:'Activités',
+        corr_sleep_label:'Sommeil vs Humeur',
+        corr_sleep_title:'{h} h sommeil \u00b7 Humeur {mood}',
+        corr_sleep_tooltip:'Sommeil {h} h, Humeur {mood}',
+        corr_act_label:'Activité vs Énergie',
+        corr_act_title:'{count} activités \u00b7 Énergie {energy}',
+        corr_act_tooltip:'Activités {count}, Énergie {energy}',
+
+        /* Day-of-week chart */
+        dow_need_more:'Ajoutez au moins 2 semaines d\'entrées pour voir vos habitudes hebdomadaires.',
+        dow_no_data:'Pas de données',
+        dow_average:'moyenne',
+        dow_avg_mood:'Humeur moyenne',
+
+        /* Seasonal chart */
+        seasonal_avg_label:'Humeur moyenne par mois',
+
+        kicker_stability_insight:'INSIGHT STABILITÉ',
+
+        /* Daily summary */
+        daily_sum_empty:'Pas assez de données pour générer un résumé.',
+        daily_sum_journal_only:'Tu as rédigé une entrée de journal aujourd\u2019hui. Aucune donnée d\u2019humeur enregistrée.',
+        daily_sum_photos_only:'Tu as sauvegardé des photos pour ce jour, sans données d\u2019humeur.',
+        daily_sum_mood_only:'Seule l\u2019humeur a été enregistrée aujourd\u2019hui, sans autres métriques.',
+        daily_sum_and:'et',
+        daily_sum_energy_fallback:'L\u2019énergie a été enregistrée aujourd\u2019hui.',
+        daily_sum_mood_high_1:'Ton humeur était légèrement supérieure à ta moyenne récente.',
+        daily_sum_mood_high_2:'L\u2019humeur était un peu au-dessus de ta moyenne de ces derniers jours.',
+        daily_sum_mood_high_3:'Tu as noté une humeur un peu meilleure que d\u2019habitude aujourd\u2019hui.',
+        daily_sum_mood_low_1:'Ton humeur était légèrement inférieure à ta moyenne récente.',
+        daily_sum_mood_low_2:'L\u2019humeur était légèrement en dessous de ta moyenne de ces derniers jours.',
+        daily_sum_mood_low_3:'Tu as noté une humeur un peu plus basse que d\u2019habitude aujourd\u2019hui.',
+        daily_sum_mood_stable_1:'Ton humeur est restée proche de ta moyenne récente.',
+        daily_sum_mood_stable_2:'L\u2019humeur est restée assez stable par rapport aux derniers jours.',
+        daily_sum_mood_stable_3:'Ton humeur s\u2019est maintenue près de son niveau de référence.',
+        daily_sum_mood_recorded_1:'L\u2019humeur a été enregistrée pour aujourd\u2019hui.',
+        daily_sum_mood_recorded_2:'Tu as noté ton humeur pour la journée.',
+        daily_sum_mood_recorded_3:'Aujourd\u2019hui comprend un check-in d\u2019humeur.',
+        daily_sum_energy_high_1:'le niveau d\u2019énergie était supérieur à l\u2019humeur',
+        daily_sum_energy_high_2:'l\u2019énergie était un peu plus haute que l\u2019humeur',
+        daily_sum_energy_high_3:'l\u2019énergie était plus forte que l\u2019humeur',
+        daily_sum_energy_low_1:'le niveau d\u2019énergie était inférieur à l\u2019humeur',
+        daily_sum_energy_low_2:'l\u2019énergie était en retrait par rapport à l\u2019humeur',
+        daily_sum_energy_low_3:'l\u2019énergie était un peu en dessous de l\u2019humeur',
+        daily_sum_energy_aligned_1:'le niveau d\u2019énergie était aligné avec l\u2019humeur',
+        daily_sum_energy_aligned_2:'l\u2019énergie est restée en phase avec l\u2019humeur',
+        daily_sum_energy_aligned_3:'l\u2019énergie a suivi l\u2019humeur de près',
+        daily_sum_energy_only_1:'L\u2019énergie a été enregistrée sans entrée d\u2019humeur correspondante.',
+        daily_sum_energy_only_2:'Tu as noté ton énergie sans mesure d\u2019humeur.',
+        daily_sum_energy_only_3:'L\u2019énergie a été suivie même si l\u2019humeur n\u2019a pas été enregistrée.',
+        daily_sum_sleep_high_1:'La durée de sommeil était légèrement au-dessus de ta plage habituelle.',
+        daily_sum_sleep_high_2:'Tu as dormi un peu plus que d\u2019habitude.',
+        daily_sum_sleep_high_3:'La durée de sommeil était légèrement supérieure à ta moyenne récente.',
+        daily_sum_sleep_low_1:'La durée de sommeil était légèrement en dessous de ta plage habituelle.',
+        daily_sum_sleep_low_2:'Tu as dormi un peu moins que d\u2019habitude.',
+        daily_sum_sleep_low_3:'La durée de sommeil était légèrement inférieure à ta moyenne récente.',
+        daily_sum_sleep_steady_1:'La durée de sommeil était proche de ta plage habituelle.',
+        daily_sum_sleep_steady_2:'La durée de sommeil est restée proche de ta moyenne récente.',
+        daily_sum_sleep_steady_3:'Ta durée de sommeil se situait dans ta plage habituelle.',
+        daily_sum_sleep_recorded_1:'Le sommeil a été enregistré pour la journée.',
+        daily_sum_sleep_recorded_2:'Tu as noté ton sommeil pour cette date.',
+        daily_sum_sleep_recorded_3:'Les données de sommeil ont été enregistrées pour aujourd\u2019hui.',
+        daily_sum_sleep_multi_seg:', et il était réparti en plusieurs segments.',
+        daily_sum_tags_and_activities:'Aujourd\u2019hui avec des activités comme \u00ab\u00a0{acts}\u00a0\u00bb et des tags comme \u00ab\u00a0{tags}\u00a0\u00bb.',
+        daily_sum_tags_only:'Aujourd\u2019hui avec des tags comme \u00ab\u00a0{tags}\u00a0\u00bb.',
+        daily_sum_activities_only:'Aujourd\u2019hui avec des activités comme \u00ab\u00a0{acts}\u00a0\u00bb.',
+        daily_sum_journal_1:'Tu as aussi rédigé une réflexion dans le journal aujourd\u2019hui. Les relire peut révéler des schémas utiles.',
+        daily_sum_journal_2:'Tu as écrit une entrée de journal pour ce jour. Ces réflexions aident à repérer les tendances.',
+        daily_sum_journal_3:'Une réflexion dans le journal a été sauvegardée. La relire plus tard peut apporter des insights.',
+        daily_sum_journal_prompt_1:'Pense à écrire une courte réflexion dans le journal pour capturer cette journée.',
+        daily_sum_journal_prompt_2:'Tu pourrais ajouter une note dans le journal pour décrire ce que tu as ressenti.',
+        daily_sum_journal_prompt_3:'Une courte réflexion dans le journal pourrait t\u2019aider à te souvenir de cette journée.',
+
+        /* Forecast */
+        pred_min_data:'Ajoute au moins 7 jours de données pour voir des prédictions.',
+        pred_keep_tracking:'Continue de suivre pour découvrir des schémas et des déclencheurs.',
+        pred_trend_strong_up:'Ton humeur est sur une trajectoire ascendante régulière.',
+        pred_trend_gentle_up:'Il y a une légère tendance à la hausse dans ton humeur récente.',
+        pred_trend_strong_down:'Ton humeur est en baisse progressive ces derniers temps.',
+        pred_trend_gentle_down:'Il y a une légère tendance à la baisse sur les dernières semaines.',
+        pred_trend_steady:'Ton humeur est restée assez stable.',
+        pred_stability_low:'Ta variabilité quotidienne est faible, la bande de prévision est étroite.',
+        pred_stability_mid:'Une certaine variabilité quotidienne signifie que la plage réelle peut varier.',
+        pred_stability_high:'Ton humeur a été assez variable, considère cette prévision comme indicative.',
+        pred_sleep_nudge_up:'Ton sommeil récent est au-dessus de ta moyenne, ce qui tire la prévision vers le haut.',
+        pred_sleep_nudge_down:'Ton sommeil récent est en dessous de ta moyenne, ce qui tire légèrement la prévision vers le bas.',
+        pred_pattern_up:'Ton humeur monte progressivement \u2014 un signe positif.',
+        pred_pattern_down:'Il y a une légère tendance à la baisse. Vaut la peine de vérifier les habitudes de sommeil et d\u2019activité.',
+        pred_pattern_stable:'Ton humeur est stable \u2014 le suivi régulier te permet de le voir clairement.',
+        pred_variability_low:'Une faible variabilité quotidienne suggère un bon équilibre.',
+        pred_variability_high:'Une variabilité plus élevée signifie que la plage de prévision est plus large que d\u2019habitude.',
+        pred_sleep_signal_up:'Ton sommeil récent est meilleur que ta moyenne \u2014 c\u2019est intégré dans la tendance haussière.',
+        pred_sleep_signal_down:'Ton sommeil récent est légèrement en dessous de ta moyenne \u2014 cela baisse légèrement la prévision.',
+        pred_best_dow:'{day} tend à être ton meilleur jour \u2014 c\u2019est intégré dans la prévision par jour.',
+        pred_footer:'Cette prévision est basée sur tes {n} derniers jours. Plus tu suis, plus elle s\u2019affine.',
+        pred_label_forecast:'Prévision',
+        pred_label_lower:'Borne inférieure',
+        pred_label_upper:'Borne supérieure',
+        pred_tooltip_forecast:'Prévision\u00a0: {val}',
+        pred_tooltip_range:'Plage attendue\u00a0: {lo} \u2013 {hi}',
+
+        /* Sleep segment UI */
+        sleep_seg_enter_times:'Entrer l\u2019heure de début et de fin',
+        sleep_seg_check_times:'Vérifier les heures',
+        sleep_seg_complete:'Segment complet',
+        sleep_seg_add_times_hint:'Ajoute début et fin pour compléter chaque segment.',
+        sleep_seg_total_1:'Sommeil total\u00a0: {h}h (1 segment)',
+        sleep_seg_total_n:'Sommeil total\u00a0: {h}h sur {n} segments.',
+        add_another_segment:'+ Ajouter un autre segment',
+        add_sleep_segment_btn:'+ Ajouter un segment de sommeil',
+        sleep_timeline_empty:'Pas encore de données de sommeil. Ajoute des segments dans le check-in quotidien.',
+
+        /* Streak milestones */
+        streak_century:'\ud83c\udfc6 Centième jour de suite\u00a0!',
+        streak_days_to_100:'\u2b50 {n} jours avant 100',
+        streak_days_to_50:'\ud83c\udfaf {n} jours avant 50',
+        streak_days_to_30:'\ud83d\udd25 {n} jours avant 30',
+        streak_days_to_14:'\u2728 {n} jours avant 14',
+        streak_days_to_first:'{n} jours avant le premier jalon',
+        streak_start:'Commence le suivi pour bâtir une série',
+
+        /* Time heatmap */
+        time_avg:'Moy.',
+        time_wake:'Heure de réveil',
+        time_bedtime:'Heure de coucher',
+        time_heatmap_avg_mood:'Humeur moyenne',
+        time_heatmap_entries:'Entrées',
+
+        /* Distribution summary */
+        dist_summary:'Tu te sens le plus souvent à {mood} \u2014 et tu as eu {n} jour(s) à 8 ou plus.',
+
+        /* DoW insight */
+        dow_insight:'Ton humeur tend à culminer le {best} et à baisser le {worst}.',
+
+        /* Calendar list */
+        edit_checkin_btn:'Modifier le check-in',
+        edit_journal_btn:'Modifier le journal',
+
+        /* Correlations */
+        corr_label_sleep_mood:'Sommeil vs Humeur',
+        corr_label_sleep_energy:'Sommeil vs Énergie',
+        corr_label_mood_energy:'Humeur vs Énergie',
+        corr_desc_sleep_mood:'Comment ta durée de sommeil est liée à l\u2019humeur du lendemain.',
+        corr_desc_sleep_energy:'Dans quelle mesure le sommeil influence ton niveau d\u2019énergie.',
+        corr_desc_mood_energy:'La relation entre ton état émotionnel et ton énergie physique.',
+        corr_trend_label:'Tendance',
+        corr_need_entries:'3 entrées minimum requises',
+        corr_deviation_label:'Écart par rapport à la moyenne',
+        r2_badge:'R\u00b2 = {n}\u00a0%',
+
+        /* Calendar hint */
+        calendar_month_hint:'Clique sur un jour pour voir ou modifier cette entrée. La couleur indique l\u2019humeur \u2014 vert = élevée, ambre = moyenne, terra = basse.',
+
+        /* Entry modal buttons */
+        edit_entry_btn:'Modifier l\u2019entrée',
+        close:'Fermer',
+
+        /* HTML static */
+        date_label:'Date',
+        suggested_tags:'Tags suggérés',
+        tap_to_add:'Appuyer pour ajouter',
+        tap_to_filter:'Appuyer pour filtrer',
+        passcode_enter_label:'Entrer le code pour confirmer',
+        passcode_type_delete:'Tape SUPPRIMER pour confirmer',
+        passcode_enter_heading:'Entrer le code',
+        passcode_set_heading:'Définir le code',
+        passcode_set_desc:'Entre un code de 4 à 8 chiffres pour verrouiller l\u2019app.',
+        passcode_new_label:'Nouveau code',
+        passcode_confirm_lbl:'Confirmer le code',
     };
 
     /* ──────────────────────────── SPANISH ─────────────────────────── */
@@ -1310,6 +1953,236 @@
         dow_need_more_data:'Añade al menos 2 semanas de entradas para ver tus patrones semanales.',
         dow_peak_dip:'Tu ánimo tiende a alcanzar su punto álgido el {day1} y a caer el {day2}.',
         dow_no_data_label:'Sin datos', dow_average_label:'promedio', dow_dataset_label:'Ánimo promedio',
+
+        /* Daily summary */
+        daily_sum_empty:'No hay suficientes datos para generar un resumen.',
+        daily_sum_journal_only:'Hoy has escrito una entrada en el diario. No se registraron datos de ánimo.',
+        daily_sum_photos_only:'Has guardado fotos para este día, sin datos de ánimo.',
+        daily_sum_mood_only:'Solo se registró el ánimo hoy, sin otras métricas.',
+        daily_sum_and:'y',
+        daily_sum_energy_fallback:'La energía fue registrada hoy.',
+        daily_sum_mood_high_1:'Tu ánimo estuvo un poco por encima de tu promedio reciente.',
+        daily_sum_mood_high_2:'El ánimo estuvo ligeramente por encima del promedio de los últimos días.',
+        daily_sum_mood_high_3:'Has registrado un ánimo algo mejor de lo habitual hoy.',
+        daily_sum_mood_low_1:'Tu ánimo estuvo un poco por debajo de tu promedio reciente.',
+        daily_sum_mood_low_2:'El ánimo estuvo ligeramente por debajo del promedio de los últimos días.',
+        daily_sum_mood_low_3:'Has registrado un ánimo algo más bajo de lo habitual hoy.',
+        daily_sum_mood_stable_1:'Tu ánimo se mantuvo cerca de tu promedio reciente hoy.',
+        daily_sum_mood_stable_2:'El ánimo se mantuvo bastante estable en comparación con días recientes.',
+        daily_sum_mood_stable_3:'Tu ánimo se mantuvo cerca de su nivel de referencia reciente.',
+        daily_sum_mood_recorded_1:'El ánimo fue registrado hoy.',
+        daily_sum_mood_recorded_2:'Has registrado tu ánimo del día.',
+        daily_sum_mood_recorded_3:'Hoy incluye un check-in de ánimo.',
+        daily_sum_energy_high_1:'los niveles de energía estaban por encima del ánimo',
+        daily_sum_energy_high_2:'la energía estuvo un poco por delante del ánimo',
+        daily_sum_energy_high_3:'la energía fue más fuerte que el ánimo',
+        daily_sum_energy_low_1:'los niveles de energía estaban por debajo del ánimo',
+        daily_sum_energy_low_2:'la energía estuvo por detrás del ánimo',
+        daily_sum_energy_low_3:'la energía estuvo un poco por debajo del ánimo',
+        daily_sum_energy_aligned_1:'los niveles de energía estaban alineados con el ánimo',
+        daily_sum_energy_aligned_2:'la energía se mantuvo en sintonía con el ánimo',
+        daily_sum_energy_aligned_3:'la energía siguió de cerca al ánimo',
+        daily_sum_energy_only_1:'La energía fue registrada hoy sin una entrada de ánimo correspondiente.',
+        daily_sum_energy_only_2:'Has registrado energía hoy, sin lectura de ánimo.',
+        daily_sum_energy_only_3:'La energía fue rastreada hoy aunque el ánimo no fue registrado.',
+        daily_sum_sleep_high_1:'La duración del sueño estuvo ligeramente por encima de tu rango habitual.',
+        daily_sum_sleep_high_2:'Dormiste un poco más de lo habitual.',
+        daily_sum_sleep_high_3:'La duración del sueño fue un poco superior a tu promedio reciente.',
+        daily_sum_sleep_low_1:'La duración del sueño estuvo ligeramente por debajo de tu rango habitual.',
+        daily_sum_sleep_low_2:'Dormiste un poco menos de lo habitual.',
+        daily_sum_sleep_low_3:'La duración del sueño fue un poco inferior a tu promedio reciente.',
+        daily_sum_sleep_steady_1:'La duración del sueño estuvo cerca de tu rango habitual.',
+        daily_sum_sleep_steady_2:'La duración del sueño se mantuvo cerca de tu promedio reciente.',
+        daily_sum_sleep_steady_3:'Tu duración del sueño estuvo dentro de tu rango habitual.',
+        daily_sum_sleep_recorded_1:'El sueño fue registrado hoy.',
+        daily_sum_sleep_recorded_2:'Has registrado el sueño para esta fecha.',
+        daily_sum_sleep_recorded_3:'Los datos de sueño fueron capturados hoy.',
+        daily_sum_sleep_multi_seg:', y estuvo dividido en múltiples segmentos.',
+        daily_sum_tags_and_activities:'Hoy con actividades como \u201c{acts}\u201d y etiquetas como \u201c{tags}\u201d.',
+        daily_sum_tags_only:'Hoy con etiquetas como \u201c{tags}\u201d.',
+        daily_sum_activities_only:'Hoy con actividades como \u201c{acts}\u201d.',
+        daily_sum_journal_1:'También has escrito una reflexión en el diario hoy. Revisarlas con el tiempo puede revelar patrones útiles.',
+        daily_sum_journal_2:'Has escrito una entrada de diario para este día. Estas reflexiones ayudan a identificar tendencias.',
+        daily_sum_journal_3:'Se guardó una reflexión en el diario hoy. Volver a leerla puede aportar ideas valiosas.',
+        daily_sum_journal_prompt_1:'Considera escribir una breve reflexión en el diario para capturar este día.',
+        daily_sum_journal_prompt_2:'Podrías añadir una nota en el diario para recordar cómo te sentiste hoy.',
+        daily_sum_journal_prompt_3:'Una reflexión rápida en el diario podría ayudarte a recordar este día.',
+
+        /* Forecast */
+        pred_min_data:'Añade al menos 7 días de datos para ver predicciones.',
+        pred_keep_tracking:'Sigue registrando para descubrir patrones y desencadenantes.',
+        pred_trend_strong_up:'Tu ánimo ha estado en una trayectoria ascendente constante.',
+        pred_trend_gentle_up:'Hay una leve tendencia alcista en tu ánimo reciente.',
+        pred_trend_strong_down:'Tu ánimo ha ido bajando gradualmente últimamente.',
+        pred_trend_gentle_down:'Hay una leve tendencia bajista en las últimas semanas.',
+        pred_trend_steady:'Tu ánimo se ha mantenido bastante estable.',
+        pred_stability_low:'Tu variabilidad diaria es baja, la banda de pronóstico es estrecha.',
+        pred_stability_mid:'Algo de variabilidad diaria significa que el rango real podría variar.',
+        pred_stability_high:'Tu ánimo ha sido bastante variable, trata este pronóstico como una guía aproximada.',
+        pred_sleep_nudge_up:'Tu sueño reciente está por encima de tu promedio, lo que impulsa el pronóstico al alza.',
+        pred_sleep_nudge_down:'Tu sueño reciente está por debajo de tu promedio, lo que baja ligeramente el pronóstico.',
+        pred_pattern_up:'Tu ánimo ha ido subiendo gradualmente \u2014 una señal positiva.',
+        pred_pattern_down:'Hay una leve tendencia a la baja. Vale la pena revisar los patrones de sueño y actividad.',
+        pred_pattern_stable:'Tu ánimo ha sido estable \u2014 el seguimiento constante te ayuda a verlo claramente.',
+        pred_variability_low:'La baja variabilidad diaria sugiere un buen equilibrio.',
+        pred_variability_high:'Mayor variabilidad significa que la banda de pronóstico es más amplia de lo habitual.',
+        pred_sleep_signal_up:'Tu sueño reciente es mejor que tu promedio \u2014 esto está reflejado en el ajuste al alza.',
+        pred_sleep_signal_down:'Tu sueño reciente está algo por debajo de tu promedio \u2014 esto baja ligeramente el pronóstico.',
+        pred_best_dow:'{day} tiende a ser tu día más fuerte \u2014 está incorporado en el pronóstico por día.',
+        pred_footer:'Este pronóstico se basa en tus últimos {n} días registrados. Cuanto más registres, más preciso será.',
+        pred_label_forecast:'Pronóstico',
+        pred_label_lower:'Límite inferior',
+        pred_label_upper:'Límite superior',
+        pred_tooltip_forecast:'Pronóstico: {val}',
+        pred_tooltip_range:'Rango esperado: {lo} \u2013 {hi}',
+
+        /* Sleep segment UI */
+        sleep_seg_enter_times:'Introduce la hora de inicio y fin',
+        sleep_seg_check_times:'Revisar horas',
+        sleep_seg_complete:'Segmento completo',
+        sleep_seg_add_times_hint:'Añade inicio y fin para completar cada segmento.',
+        sleep_seg_total_1:'Sueño total: {h}h (1 segmento)',
+        sleep_seg_total_n:'Sueño total: {h}h en {n} segmentos.',
+        add_another_segment:'+ Añadir otro segmento',
+        add_sleep_segment_btn:'+ Añadir segmento de sueño',
+        sleep_timeline_empty:'Sin datos de sueño aún. Añade segmentos en el registro diario.',
+
+        /* Streak milestones */
+        streak_century:'\ud83c\udfc6 ¡Racha de 100 días!',
+        streak_days_to_100:'\u2b50 {n} días para 100',
+        streak_days_to_50:'\ud83c\udfaf {n} días para 50',
+        streak_days_to_30:'\ud83d\udd25 {n} días para 30',
+        streak_days_to_14:'\u2728 {n} días para 14',
+        streak_days_to_first:'{n} días para el primer hito',
+        streak_start:'Empieza a registrar para construir una racha',
+
+        /* Time heatmap */
+        time_avg:'Prom.',
+        time_wake:'Hora de despertar',
+        time_bedtime:'Hora de dormir',
+        time_heatmap_avg_mood:'Ánimo promedio',
+        time_heatmap_entries:'Entradas',
+
+        /* Distribution summary */
+        dist_summary:'Con mayor frecuencia te sientes con un {mood} \u2014 y has tenido {n} día(s) en 8 o más.',
+
+        /* DoW insight */
+        dow_insight:'Tu ánimo tiende a alcanzar su punto máximo el {best} y a bajar el {worst}.',
+
+        /* Calendar list */
+        edit_checkin_btn:'Editar registro',
+        edit_journal_btn:'Editar diario',
+
+        /* Correlations */
+        corr_label_sleep_mood:'Sueño vs Ánimo',
+        corr_label_sleep_energy:'Sueño vs Energía',
+        corr_label_mood_energy:'Ánimo vs Energía',
+        corr_desc_sleep_mood:'Cómo se relaciona la duración de tu sueño con el ánimo del día siguiente.',
+        corr_desc_sleep_energy:'Cuánto afecta el sueño a tus niveles de energía.',
+        corr_desc_mood_energy:'La relación entre cómo te sientes emocionalmente y tu energía física.',
+        corr_trend_label:'Tendencia',
+        corr_need_entries:'Se necesitan 3+ entradas',
+        corr_deviation_label:'Desviación del promedio',
+        r2_badge:'R\u00b2 = {n}%',
+
+        /* Calendar hint */
+        calendar_month_hint:'Haz clic en cualquier día para ver o editar esa entrada. El color indica el ánimo \u2014 verde = alto, ámbar = medio, terracota = bajo.',
+
+        /* Entry modal buttons */
+        edit_entry_btn:'Editar entrada',
+        close:'Cerrar',
+
+        /* HTML static */
+        date_label:'Fecha',
+        suggested_tags:'Etiquetas sugeridas',
+        tap_to_add:'Toca para añadir',
+        tap_to_filter:'Toca para filtrar',
+        passcode_enter_label:'Introduce el código para confirmar',
+        passcode_type_delete:'Escribe ELIMINAR para confirmar',
+        passcode_enter_heading:'Introduce el código',
+        passcode_set_heading:'Establecer código',
+        passcode_set_desc:'Introduce un código de 4 a 8 dígitos para bloquear la app.',
+        passcode_new_label:'Nuevo código',
+        passcode_confirm_lbl:'Confirmar código',
+
+        /* Charts — annotation chips */
+        chip_avg:'Prom. {n}',
+        chip_up:'\u2197 +{n} vs antes',
+        chip_down:'\u2198 {n} vs antes',
+        need_3:'3+ entradas requeridas',
+        no_data:'Sin datos',
+
+        /* Forecast stat chips */
+        fc_days:'Días de datos',
+        fc_avg:'Prom. reciente',
+        fc_7day:'Pronóstico 7 días',
+        fc_variability:'Variabilidad',
+
+        /* Entry modal metrics */
+        modal_metric_mood:'ÁNIMO',
+        modal_metric_energy:'ENERGÍA',
+        modal_metric_sleep:'SUEÑO',
+        modal_metric_activities:'ACTIVIDADES',
+        modal_metric_tags:'ETIQUETAS',
+        modal_metric_hrs:'hrs',
+
+        /* Velocity page */
+        vel_stat_days:'Días de datos',
+        vel_stat_stability:'Estabilidad 14 días',
+        vel_stab_very_low:'Muy variable',
+        vel_stab_low:'Variable',
+        vel_stab_moderate:'Moderado',
+        vel_stab_high:'Estable',
+        vel_stab_very_high:'Muy estable',
+
+        /* Insights */
+        insight_collecting:'Recopilando tus datos… Sigue registrando.',
+        insight_empty:'No hay patrones claros todavía. Sigue registrando.',
+        insight_no_patterns:'No hay patrones claros todavía.',
+        insight_summary:'Resumen de perspectivas',
+        insight_entry:'entrada',
+        insight_entries:'entradas',
+        insight_observed:'Observado en {n} {entries}.',
+        insight_day:'día',
+        insight_days:'días',
+
+        /* Insight kicker badges */
+        kicker_default:'PERSPECTIVA',
+        kicker_sleep:'PERSPECTIVA DEL SUEÑO',
+        kicker_activity:'PERSPECTIVA DE ACTIVIDAD',
+        kicker_stability:'PERSPECTIVA DE ESTABILIDAD',
+        kicker_tags:'PERSPECTIVA DE ETIQUETAS',
+        strength_strong:'PATRÓN FUERTE',
+        strength_moderate:'PATRÓN MODERADO',
+        strength_emerging:'PATRÓN EMERGENTE',
+
+        /* Data page */
+        data_recent_entries:'ENTRADAS RECIENTES',
+        data_tap_to_open:'Toca para abrir',
+        data_no_journal:'Sin texto de diario guardado',
+
+        /* Insight engine prose — sleep */
+        insight_sleep_sweet_spot_title:'Tu punto óptimo de sueño',
+        insight_sleep_sweet_spot_desc:'Las noches con {label} horas de sueño se correlacionan con un ánimo {delta} por encima de tu línea base.',
+        insight_sleep_sweet_spot_nudge:'Proteger esa ventana de {label} horas es uno de los factores más influyentes en tu ánimo.',
+        insight_sleep_context:'Basado en {n} noches en este rango.',
+        insight_sleep_fragmented_title_neg:'El sueño fragmentado afecta tu día',
+        insight_sleep_fragmented_title_pos:'Te adaptas bien al sueño dividido',
+        insight_sleep_fragmented_desc_neg:'Las noches de sueño fragmentado se siguen de una caída de ánimo de unos {n} puntos de media.',
+        insight_sleep_fragmented_desc_pos:'Las noches de sueño dividido apenas afectan tu ánimo negativamente.',
+        insight_sleep_bedtime_title_early:'Acostarte temprano beneficia tu ánimo',
+        insight_sleep_bedtime_title_late:'Acostarte tarde afecta tu ánimo',
+        insight_sleep_bedtime_desc_early:'Los días con hora de dormir temprana ({label}) se correlacionan con un ánimo {delta} más alto.',
+        insight_sleep_bedtime_desc_late:'Los días con hora de dormir tardía ({label}) se correlacionan con un ánimo {delta} más bajo.',
+        insight_act_better_title:'Los días de {act} son mejores días',
+        insight_act_better_desc:'Tus días de {act} tienen un ánimo promedio de {avg} — eso es {delta} sobre tu promedio general de {overall}.',
+        insight_act_better_nudge:'Sigue priorizándolo.',
+        insight_act_lower_title:'Los días de {act} son diferentes',
+        insight_act_lower_desc:'Tus días de {act} tienen un ánimo promedio de {avg} — eso es {delta} por debajo de tu promedio general de {overall}.',
+        insight_act_lower_nudge:'Patrón notado. ¿Es una actividad agotadora o electiva?',
+        insight_stab_consistent_title:'Tu ánimo es notablemente estable',
+        insight_stab_consistent_desc:'Tu desviación estándar en los últimos días es {n}, lo que te pone en el mejor 15% en cuanto a estabilidad.',
+        insight_stab_consistent_nudge:'Sigue con lo que estás haciendo — la constancia hace la diferencia.',
     };
 
     /* ──────────────────────────── ARABIC ──────────────────────────── */
@@ -1534,6 +2407,235 @@
         toast_date_fmt:'تم تحديث تنسيق التاريخ \u2713',
         toast_time_fmt:'تم تحديث تنسيق الوقت \u2713',
         toast_saved:'تم الحفظ \u2713',
+
+        /* Daily summary */
+        daily_sum_empty:'\u0644\u0627 \u062a\u0648\u062c\u062f \u0628\u064a\u0627\u0646\u0627\u062a \u0643\u0627\u0641\u064a\u0629 \u0644\u0625\u0646\u0634\u0627\u0621 \u0645\u0644\u062e\u0635.',
+        daily_sum_journal_only:'\u0633\u062c\u0644\u062a \u0645\u0630\u0643\u0631\u0629 \u064a\u0648\u0645\u064a\u0629 \u0627\u0644\u064a\u0648\u0645. \u0644\u0645 \u064a\u062a\u0645 \u062a\u0633\u062c\u064a\u0644 \u0628\u064a\u0627\u0646\u0627\u062a \u0627\u0644\u0645\u0632\u0627\u062c.',
+        daily_sum_photos_only:'\u062d\u0641\u0638\u062a \u0635\u0648\u0631\u064b\u0627 \u0644\u0647\u0630\u0627 \u0627\u0644\u064a\u0648\u0645 \u062f\u0648\u0646 \u062a\u0633\u062c\u064a\u0644 \u0628\u064a\u0627\u0646\u0627\u062a \u0627\u0644\u0645\u0632\u0627\u062c.',
+        daily_sum_mood_only:'\u062a\u0645 \u062a\u0633\u062c\u064a\u0644 \u0627\u0644\u0645\u0632\u0627\u062c \u0641\u0642\u0637 \u0627\u0644\u064a\u0648\u0645 \u062f\u0648\u0646 \u0645\u0642\u0627\u064a\u064a\u0633 \u0623\u062e\u0631\u0649.',
+        daily_sum_and:'\u0648',
+        daily_sum_energy_fallback:'\u062a\u0645 \u062a\u0633\u062c\u064a\u0644 \u0627\u0644\u0637\u0627\u0642\u0629 \u0627\u0644\u064a\u0648\u0645.',
+        daily_sum_mood_high_1:'\u0643\u0627\u0646 \u0645\u0632\u0627\u062c\u0643 \u0623\u0639\u0644\u0649 \u0642\u0644\u064a\u0644\u0627\u064b \u0645\u0646 \u0645\u062a\u0648\u0633\u0637\u0643 \u0627\u0644\u0623\u062e\u064a\u0631.',
+        daily_sum_mood_high_2:'\u0645\u0632\u0627\u062c\u0643 \u0643\u0627\u0646 \u0641\u0648\u0642 \u0645\u062a\u0648\u0633\u0637 \u0627\u0644\u0623\u064a\u0627\u0645 \u0627\u0644\u0623\u062e\u064a\u0631\u0629.',
+        daily_sum_mood_high_3:'\u0633\u062c\u0644\u062a \u0645\u0632\u0627\u062c\u064b\u0627 \u0623\u0641\u0636\u0644 \u0645\u0646 \u0627\u0644\u0645\u0639\u062a\u0627\u062f \u0627\u0644\u064a\u0648\u0645.',
+        daily_sum_mood_low_1:'\u0643\u0627\u0646 \u0645\u0632\u0627\u062c\u0643 \u0623\u062f\u0646\u0649 \u0642\u0644\u064a\u0644\u0627\u064b \u0645\u0646 \u0645\u062a\u0648\u0633\u0637\u0643 \u0627\u0644\u0623\u062e\u064a\u0631.',
+        daily_sum_mood_low_2:'\u0645\u0632\u0627\u062c\u0643 \u062f\u0648\u0646 \u0645\u062a\u0648\u0633\u0637 \u0627\u0644\u0623\u064a\u0627\u0645 \u0627\u0644\u0623\u062e\u064a\u0631\u0629.',
+        daily_sum_mood_low_3:'\u0633\u062c\u0644\u062a \u0645\u0632\u0627\u062c\u064b\u0627 \u0623\u0642\u0644 \u0645\u0646 \u0627\u0644\u0645\u0639\u062a\u0627\u062f \u0627\u0644\u064a\u0648\u0645.',
+        daily_sum_mood_stable_1:'\u0638\u0644 \u0645\u0632\u0627\u062c\u0643 \u0642\u0631\u064a\u0628\u064b\u0627 \u0645\u0646 \u0645\u062a\u0648\u0633\u0637\u0643 \u0627\u0644\u0623\u062e\u064a\u0631.',
+        daily_sum_mood_stable_2:'\u0627\u0633\u062a\u0642\u0631 \u0627\u0644\u0645\u0632\u0627\u062c \u0628\u0634\u0643\u0644 \u0645\u0639\u0642\u0648\u0644 \u0645\u0642\u0627\u0631\u0646\u0629\u064b \u0628\u0627\u0644\u0623\u064a\u0627\u0645 \u0627\u0644\u0623\u062e\u064a\u0631\u0629.',
+        daily_sum_mood_stable_3:'\u062d\u0627\u0641\u0638 \u0645\u0632\u0627\u062c\u0643 \u0639\u0644\u0649 \u0645\u0633\u062a\u0648\u0627\u0647 \u0627\u0644\u0645\u0639\u062a\u0627\u062f.',
+        daily_sum_mood_recorded_1:'\u062a\u0645 \u062a\u0633\u062c\u064a\u0644 \u0627\u0644\u0645\u0632\u0627\u062c \u0627\u0644\u064a\u0648\u0645.',
+        daily_sum_mood_recorded_2:'\u0633\u062c\u0644\u062a \u0645\u0632\u0627\u062c\u0643 \u0644\u0644\u064a\u0648\u0645.',
+        daily_sum_mood_recorded_3:'\u064a\u062a\u0636\u0645\u0646 \u0627\u0644\u064a\u0648\u0645 \u0625\u062f\u062e\u0627\u0644 \u0645\u0632\u0627\u062c.',
+        daily_sum_energy_high_1:'\u0643\u0627\u0646 \u0645\u0633\u062a\u0648\u0649 \u0627\u0644\u0637\u0627\u0642\u0629 \u0623\u0639\u0644\u0649 \u0645\u0646 \u0627\u0644\u0645\u0632\u0627\u062c',
+        daily_sum_energy_high_2:'\u062a\u0641\u0648\u0642\u062a \u0627\u0644\u0637\u0627\u0642\u0629 \u0639\u0644\u0649 \u0627\u0644\u0645\u0632\u0627\u062c',
+        daily_sum_energy_high_3:'\u062c\u0627\u0621\u062a \u0627\u0644\u0637\u0627\u0642\u0629 \u0623\u0642\u0648\u0649 \u0645\u0646 \u0627\u0644\u0645\u0632\u0627\u062c',
+        daily_sum_energy_low_1:'\u0643\u0627\u0646 \u0645\u0633\u062a\u0648\u0649 \u0627\u0644\u0637\u0627\u0642\u0629 \u0623\u0642\u0644 \u0645\u0646 \u0627\u0644\u0645\u0632\u0627\u062c',
+        daily_sum_energy_low_2:'\u062a\u062e\u0644\u0641\u062a \u0627\u0644\u0637\u0627\u0642\u0629 \u0639\u0646 \u0627\u0644\u0645\u0632\u0627\u062c',
+        daily_sum_energy_low_3:'\u062c\u0627\u0621\u062a \u0627\u0644\u0637\u0627\u0642\u0629 \u062f\u0648\u0646 \u0627\u0644\u0645\u0632\u0627\u062c',
+        daily_sum_energy_aligned_1:'\u062a\u0648\u0627\u0641\u0642\u062a \u0627\u0644\u0637\u0627\u0642\u0629 \u0645\u0639 \u0627\u0644\u0645\u0632\u0627\u062c',
+        daily_sum_energy_aligned_2:'\u0633\u0627\u064a\u0631\u062a \u0627\u0644\u0637\u0627\u0642\u0629 \u062c\u0646\u0628\u064b\u0627 \u0625\u0644\u0649 \u062c\u0646\u0628 \u0645\u0639 \u0627\u0644\u0645\u0632\u0627\u062c',
+        daily_sum_energy_aligned_3:'\u062a\u062a\u0628\u0639\u062a \u0627\u0644\u0637\u0627\u0642\u0629 \u0627\u0644\u0645\u0632\u0627\u062c \u0639\u0646 \u0643\u062b\u0628',
+        daily_sum_energy_only_1:'\u062a\u0645 \u062a\u0633\u062c\u064a\u0644 \u0627\u0644\u0637\u0627\u0642\u0629 \u062f\u0648\u0646 \u0645\u0632\u0627\u062c \u0645\u0642\u0627\u0628\u0644.',
+        daily_sum_energy_only_2:'\u0633\u062c\u0644\u062a \u0627\u0644\u0637\u0627\u0642\u0629 \u062f\u0648\u0646 \u0642\u0631\u0627\u0621\u0629 \u0645\u0632\u0627\u062c.',
+        daily_sum_energy_only_3:'\u062a\u0645 \u062a\u062a\u0628\u0639 \u0627\u0644\u0637\u0627\u0642\u0629 \u0631\u063a\u0645 \u0639\u062f\u0645 \u062a\u0633\u062c\u064a\u0644 \u0627\u0644\u0645\u0632\u0627\u062c.',
+        daily_sum_sleep_high_1:'\u0643\u0627\u0646\u062a \u0645\u062f\u0629 \u0627\u0644\u0646\u0648\u0645 \u0623\u0639\u0644\u0649 \u0645\u0646 \u0646\u0637\u0627\u0642\u0643 \u0627\u0644\u0645\u0639\u062a\u0627\u062f.',
+        daily_sum_sleep_high_2:'\u0646\u0645\u062a \u0623\u0637\u0648\u0644 \u0642\u0644\u064a\u0644\u0627\u064b \u0645\u0646 \u0627\u0644\u0645\u0639\u062a\u0627\u062f.',
+        daily_sum_sleep_high_3:'\u0643\u0627\u0646\u062a \u0645\u062f\u0629 \u0627\u0644\u0646\u0648\u0645 \u0623\u0639\u0644\u0649 \u0645\u0646 \u0645\u062a\u0648\u0633\u0637\u0643 \u0627\u0644\u0623\u062e\u064a\u0631.',
+        daily_sum_sleep_low_1:'\u0643\u0627\u0646\u062a \u0645\u062f\u0629 \u0627\u0644\u0646\u0648\u0645 \u0623\u0642\u0644 \u0645\u0646 \u0646\u0637\u0627\u0642\u0643 \u0627\u0644\u0645\u0639\u062a\u0627\u062f.',
+        daily_sum_sleep_low_2:'\u0646\u0645\u062a \u0623\u0642\u0644 \u0642\u0644\u064a\u0644\u0627\u064b \u0645\u0646 \u0627\u0644\u0645\u0639\u062a\u0627\u062f.',
+        daily_sum_sleep_low_3:'\u0643\u0627\u0646\u062a \u0645\u062f\u0629 \u0627\u0644\u0646\u0648\u0645 \u062f\u0648\u0646 \u0645\u062a\u0648\u0633\u0637\u0643 \u0627\u0644\u0623\u062e\u064a\u0631.',
+        daily_sum_sleep_steady_1:'\u0643\u0627\u0646\u062a \u0645\u062f\u0629 \u0627\u0644\u0646\u0648\u0645 \u0642\u0631\u064a\u0628\u0629 \u0645\u0646 \u0646\u0637\u0627\u0642\u0643 \u0627\u0644\u0645\u0639\u062a\u0627\u062f.',
+        daily_sum_sleep_steady_2:'\u0628\u0642\u064a\u062a \u0645\u062f\u0629 \u0627\u0644\u0646\u0648\u0645 \u0642\u0631\u064a\u0628\u0629 \u0645\u0646 \u0645\u062a\u0648\u0633\u0637\u0643 \u0627\u0644\u0623\u062e\u064a\u0631.',
+        daily_sum_sleep_steady_3:'\u0643\u0627\u0646\u062a \u0645\u062f\u0629 \u0646\u0648\u0645\u0643 \u0636\u0645\u0646 \u0646\u0637\u0627\u0642\u0643 \u0627\u0644\u0645\u0639\u062a\u0627\u062f.',
+        daily_sum_sleep_recorded_1:'\u062a\u0645 \u062a\u0633\u062c\u064a\u0644 \u0627\u0644\u0646\u0648\u0645 \u0644\u0644\u064a\u0648\u0645.',
+        daily_sum_sleep_recorded_2:'\u0633\u062c\u0644\u062a \u0627\u0644\u0646\u0648\u0645 \u0644\u0647\u0630\u0627 \u0627\u0644\u062a\u0627\u0631\u064a\u062e.',
+        daily_sum_sleep_recorded_3:'\u062a\u0645 \u062c\u0645\u0639 \u0628\u064a\u0627\u0646\u0627\u062a \u0627\u0644\u0646\u0648\u0645 \u0627\u0644\u064a\u0648\u0645.',
+        daily_sum_sleep_multi_seg:'\u060c \u0648\u0643\u0627\u0646 \u0645\u0642\u0633\u0645\u064b\u0627 \u0639\u0644\u0649 \u0639\u062f\u0629 \u0645\u0642\u0627\u0637\u0639.',
+        daily_sum_tags_and_activities:'\u0627\u0644\u064a\u0648\u0645 \u0645\u0639 \u0623\u0646\u0634\u0637\u0629 \u0645\u062b\u0644 \u201c{acts}\u201d \u0648\u0648\u0633\u0648\u0645 \u0645\u062b\u0644 \u201c{tags}\u201d.',
+        daily_sum_tags_only:'\u0627\u0644\u064a\u0648\u0645 \u0645\u0639 \u0648\u0633\u0648\u0645 \u0645\u062b\u0644 \u201c{tags}\u201d.',
+        daily_sum_activities_only:'\u0627\u0644\u064a\u0648\u0645 \u0645\u0639 \u0623\u0646\u0634\u0637\u0629 \u0645\u062b\u0644 \u201c{acts}\u201d.',
+        daily_sum_journal_1:'\u0633\u062c\u0644\u062a \u0623\u064a\u0636\u064b\u0627 \u062a\u0641\u0643\u064a\u0631\u064b\u0627 \u0641\u064a \u0627\u0644\u0645\u0630\u0643\u0631\u0629 \u0627\u0644\u064a\u0648\u0645. \u0642\u062f \u064a\u0643\u0634\u0641 \u0645\u0631\u0627\u062c\u0639\u062a\u0647\u0627 \u0623\u0646\u0645\u0627\u0637\u064b\u0627 \u0645\u0641\u064a\u062f\u0629.',
+        daily_sum_journal_2:'\u0643\u062a\u0628\u062a \u0645\u062f\u062e\u0644\u0627\u064b \u0641\u064a \u0627\u0644\u064a\u0648\u0645\u064a\u0627\u062a \u0644\u0647\u0630\u0627 \u0627\u0644\u064a\u0648\u0645. \u062a\u0633\u0627\u0639\u062f \u0647\u0630\u0647 \u0627\u0644\u062a\u0641\u0643\u064a\u0631\u0627\u062a \u0639\u0644\u0649 \u0627\u0643\u062a\u0634\u0627\u0641 \u0627\u0644\u0623\u0646\u0645\u0627\u0637.',
+        daily_sum_journal_3:'\u062a\u0645 \u062d\u0641\u0638 \u062a\u0641\u0643\u064a\u0631 \u0641\u064a \u0627\u0644\u0645\u0630\u0643\u0631\u0629 \u0627\u0644\u064a\u0648\u0645. \u0642\u062f \u064a\u0643\u0634\u0641 \u0627\u0644\u0639\u0648\u062f\u0629 \u0625\u0644\u064a\u0647 \u0631\u0624\u0649 \u0645\u0641\u064a\u062f\u0629.',
+        daily_sum_journal_prompt_1:'\u0641\u0643\u0651\u0631 \u0641\u064a \u0643\u062a\u0627\u0628\u0629 \u062a\u0641\u0643\u064a\u0631 \u0642\u0635\u064a\u0631 \u0641\u064a \u0627\u0644\u0645\u0630\u0643\u0631\u0629.',
+        daily_sum_journal_prompt_2:'\u064a\u0645\u0643\u0646\u0643 \u0625\u0636\u0627\u0641\u0629 \u0645\u0644\u0627\u062d\u0638\u0629 \u0644\u062a\u0633\u062c\u064a\u0644 \u0634\u0639\u0648\u0631\u0643 \u0627\u0644\u064a\u0648\u0645.',
+        daily_sum_journal_prompt_3:'\u062a\u0641\u0643\u064a\u0631 \u0633\u0631\u064a\u0639 \u0641\u064a \u0627\u0644\u0645\u0630\u0643\u0631\u0629 \u0633\u064a\u0633\u0627\u0639\u062f\u0643 \u0639\u0644\u0649 \u062a\u0630\u0643\u0631 \u0647\u0630\u0627 \u0627\u0644\u064a\u0648\u0645.',
+
+        /* Forecast */
+        pred_min_data:'\u0623\u0636\u0641 \u0633\u0628\u0639\u0629 \u0623\u064a\u0627\u0645 \u0639\u0644\u0649 \u0627\u0644\u0623\u0642\u0644 \u0644\u0631\u0624\u064a\u0629 \u0627\u0644\u062a\u0648\u0642\u0639\u0627\u062a.',
+        pred_keep_tracking:'\u0627\u0633\u062a\u0645\u0631 \u0641\u064a \u0627\u0644\u062a\u062a\u0628\u0639 \u0644\u0627\u0643\u062a\u0634\u0627\u0641 \u0627\u0644\u0623\u0646\u0645\u0627\u0637.',
+        pred_trend_strong_up:'\u0645\u0632\u0627\u062c\u0643 \u0641\u064a \u0645\u0633\u0627\u0631 \u062a\u0635\u0627\u0639\u062f\u064a \u062b\u0627\u0628\u062a.',
+        pred_trend_gentle_up:'\u062b\u0645\u0629 \u0627\u062a\u062c\u0627\u0647 \u062a\u0635\u0627\u0639\u062f\u064a \u062e\u0641\u064a\u0641 \u0641\u064a \u0645\u0632\u0627\u062c\u0643 \u0627\u0644\u0623\u062e\u064a\u0631.',
+        pred_trend_strong_down:'\u0645\u0632\u0627\u062c\u0643 \u0641\u064a \u0627\u0646\u062e\u0641\u0627\u0636 \u062a\u062f\u0631\u064a\u062c\u064a \u0645\u0624\u062e\u0631\u064b\u0627.',
+        pred_trend_gentle_down:'\u062b\u0645\u0629 \u0627\u062a\u062c\u0627\u0647 \u062a\u0646\u0627\u0632\u0644\u064a \u062e\u0641\u064a\u0641 \u062e\u0644\u0627\u0644 \u0627\u0644\u0623\u0633\u0627\u0628\u064a\u0639 \u0627\u0644\u0623\u062e\u064a\u0631\u0629.',
+        pred_trend_steady:'\u0638\u0644 \u0645\u0632\u0627\u062c\u0643 \u062b\u0627\u0628\u062a\u064b\u0627 \u0625\u0644\u0649 \u062d\u062f \u0645\u0627.',
+        pred_stability_low:'\u062a\u0630\u0628\u0630\u0628\u0643 \u0627\u0644\u064a\u0648\u0645\u064a \u0645\u0646\u062e\u0641\u0636 \u0648\u0646\u0637\u0627\u0642 \u0627\u0644\u062a\u0648\u0642\u0639 \u0636\u064a\u0642.',
+        pred_stability_mid:'\u0628\u0639\u0636 \u0627\u0644\u062a\u0630\u0628\u0630\u0628 \u064a\u0639\u0646\u064a \u0623\u0646 \u0627\u0644\u0646\u0637\u0627\u0642 \u0627\u0644\u0641\u0639\u0644\u064a \u0642\u062f \u064a\u062e\u062a\u0644\u0641.',
+        pred_stability_high:'\u0643\u0627\u0646 \u0645\u0632\u0627\u062c\u0643 \u0645\u062a\u0630\u0628\u0630\u0628\u064b\u0627 \u062c\u062f\u064b\u0627\u060c \u0639\u0627\u0645\u0644 \u0647\u0630\u0627 \u0627\u0644\u062a\u0648\u0642\u0639 \u0643\u062f\u0644\u064a\u0644 \u062a\u0642\u0631\u064a\u0628\u064a.',
+        pred_sleep_nudge_up:'\u0646\u0648\u0645\u0643 \u0627\u0644\u0623\u062e\u064a\u0631 \u0641\u0648\u0642 \u0645\u062a\u0648\u0633\u0637\u0643 \u0645\u0645\u0627 \u064a\u0631\u0641\u0639 \u0627\u0644\u062a\u0648\u0642\u0639 \u0642\u0644\u064a\u0644\u0627\u064b.',
+        pred_sleep_nudge_down:'\u0646\u0648\u0645\u0643 \u0627\u0644\u0623\u062e\u064a\u0631 \u062f\u0648\u0646 \u0645\u062a\u0648\u0633\u0637\u0643 \u0645\u0645\u0627 \u064a\u062e\u0641\u0636 \u0627\u0644\u062a\u0648\u0642\u0639 \u0642\u0644\u064a\u0644\u0627\u064b.',
+        pred_pattern_up:'\u0645\u0632\u0627\u062c\u0643 \u064a\u062a\u062d\u0633\u0646 \u062a\u062f\u0631\u064a\u062c\u064a\u064b\u0627 \u2014 \u0639\u0644\u0627\u0645\u0629 \u0625\u064a\u062c\u0627\u0628\u064a\u0629.',
+        pred_pattern_down:'\u062b\u0645\u0629 \u0627\u062a\u062c\u0627\u0647 \u062a\u0646\u0627\u0632\u0644\u064a \u062e\u0641\u064a\u0641. \u064a\u0633\u062a\u062d\u0642 \u0645\u0631\u0627\u062c\u0639\u0629 \u0646\u0645\u0637 \u0627\u0644\u0646\u0648\u0645 \u0648\u0627\u0644\u0646\u0634\u0627\u0637.',
+        pred_pattern_stable:'\u0645\u0632\u0627\u062c\u0643 \u0645\u0633\u062a\u0642\u0631 \u2014 \u0627\u0644\u062a\u062a\u0628\u0639 \u0627\u0644\u0645\u0646\u062a\u0638\u0645 \u064a\u062c\u0639\u0644 \u0647\u0630\u0627 \u0648\u0627\u0636\u062d\u064b\u0627.',
+        pred_variability_low:'\u0627\u0646\u062e\u0641\u0627\u0636 \u0627\u0644\u062a\u0630\u0628\u0630\u0628 \u064a\u062f\u0644 \u0639\u0644\u0649 \u062a\u0648\u0627\u0632\u0646 \u062c\u064a\u062f.',
+        pred_variability_high:'\u0627\u0644\u062a\u0630\u0628\u0630\u0628 \u0627\u0644\u0639\u0627\u0644\u064a \u064a\u0639\u0646\u064a \u0623\u0646 \u0646\u0637\u0627\u0642 \u0627\u0644\u062a\u0648\u0642\u0639 \u0623\u0648\u0633\u0639 \u0645\u0646 \u0627\u0644\u0645\u0639\u062a\u0627\u062f.',
+        pred_sleep_signal_up:'\u0646\u0648\u0645\u0643 \u0627\u0644\u0623\u062e\u064a\u0631 \u0623\u0641\u0636\u0644 \u0645\u0646 \u0645\u062a\u0648\u0633\u0637\u0643 \u2014 \u064a\u0624\u062e\u0630 \u0641\u064a \u0627\u0644\u062a\u0648\u0642\u0639 \u0627\u0644\u062a\u0635\u0627\u0639\u062f\u064a.',
+        pred_sleep_signal_down:'\u0646\u0648\u0645\u0643 \u0627\u0644\u0623\u062e\u064a\u0631 \u062f\u0648\u0646 \u0645\u062a\u0648\u0633\u0637\u0643 \u2014 \u064a\u062e\u0641\u0636 \u0627\u0644\u062a\u0648\u0642\u0639 \u0642\u0644\u064a\u0644\u0627\u064b.',
+        pred_best_dow:'\u062a\u0645\u064a\u0644 {day} \u0625\u0644\u0649 \u0623\u0646 \u062a\u0643\u0648\u0646 \u0623\u0642\u0648\u0649 \u0623\u064a\u0627\u0645\u0643 \u2014 \u0645\u062f\u0645\u062c \u0641\u064a \u0627\u0644\u062a\u0648\u0642\u0639.',
+        pred_footer:'\u064a\u0639\u062a\u0645\u062f \u0647\u0630\u0627 \u0627\u0644\u062a\u0648\u0642\u0639 \u0639\u0644\u0649 \u0622\u062e\u0631 {n} \u064a\u0648\u0645 \u0645\u0633\u062c\u0644. \u0643\u0644\u0645\u0627 \u062a\u062a\u0627\u0628\u0639\u062a \u0623\u0643\u062b\u0631 \u0632\u0627\u062f\u062a \u062f\u0642\u0629 \u0627\u0644\u062a\u0648\u0642\u0639.',
+        pred_label_forecast:'\u0627\u0644\u062a\u0648\u0642\u0639',
+        pred_label_lower:'\u0627\u0644\u062d\u062f \u0627\u0644\u0623\u062f\u0646\u0649',
+        pred_label_upper:'\u0627\u0644\u062d\u062f \u0627\u0644\u0623\u0639\u0644\u0649',
+        pred_tooltip_forecast:'\u0627\u0644\u062a\u0648\u0642\u0639: {val}',
+        pred_tooltip_range:'\u0627\u0644\u0646\u0637\u0627\u0642 \u0627\u0644\u0645\u062a\u0648\u0642\u0639: {lo} \u2013 {hi}',
+
+        /* Sleep segment UI */
+        sleep_seg_enter_times:'\u0623\u062f\u062e\u0644 \u0648\u0642\u062a \u0627\u0644\u0628\u062f\u0627\u064a\u0629 \u0648\u0627\u0644\u0646\u0647\u0627\u064a\u0629',
+        sleep_seg_check_times:'\u0631\u0627\u062c\u0639 \u0627\u0644\u0623\u0648\u0642\u0627\u062a',
+        sleep_seg_complete:'\u0627\u0644\u0645\u0642\u0637\u0639 \u0645\u0643\u062a\u0645\u0644',
+        sleep_seg_add_times_hint:'\u0623\u0636\u0641 \u0628\u062f\u0627\u064a\u0629 \u0648\u0646\u0647\u0627\u064a\u0629 \u0644\u0627\u0643\u062a\u0645\u0627\u0644 \u0643\u0644 \u0645\u0642\u0637\u0639.',
+        sleep_seg_total_1:'\u0625\u062c\u0645\u0627\u0644\u064a \u0627\u0644\u0646\u0648\u0645: {h} \u0633\u0627\u0639\u0629 (1 \u0645\u0642\u0637\u0639)',
+        sleep_seg_total_n:'\u0625\u062c\u0645\u0627\u0644\u064a \u0627\u0644\u0646\u0648\u0645: {h} \u0633\u0627\u0639\u0629 \u0639\u0628\u0631 {n} \u0645\u0642\u0627\u0637\u0639.',
+        add_another_segment:'+ \u0625\u0636\u0627\u0641\u0629 \u0645\u0642\u0637\u0639 \u0622\u062e\u0631',
+        add_sleep_segment_btn:'+ \u0625\u0636\u0627\u0641\u0629 \u0645\u0642\u0637\u0639 \u0646\u0648\u0645',
+        sleep_timeline_empty:'\u0644\u0627 \u062a\u0648\u062c\u062f \u0628\u064a\u0627\u0646\u0627\u062a \u0646\u0648\u0645 \u0628\u0639\u062f. \u0623\u0636\u0641 \u0645\u0642\u0627\u0637\u0639 \u0641\u064a \u062a\u0633\u062c\u064a\u0644 \u0627\u0644\u064a\u0648\u0645.',
+
+        /* Streak milestones */
+        streak_century:'\ud83c\udfc6 \u0633\u0644\u0633\u0644\u0629 \u0627\u0644\u0642\u0631\u0646!',
+        streak_days_to_100:'\u2b50 {n} \u064a\u0648\u0645\u064b\u0627 \u0644\u0644\u0648\u0635\u0648\u0644 \u0625\u0644\u0649 100',
+        streak_days_to_50:'\ud83c\udfaf {n} \u064a\u0648\u0645\u064b\u0627 \u0644\u0644\u0648\u0635\u0648\u0644 \u0625\u0644\u0649 50',
+        streak_days_to_30:'\ud83d\udd25 {n} \u064a\u0648\u0645\u064b\u0627 \u0644\u0644\u0648\u0635\u0648\u0644 \u0625\u0644\u0649 30',
+        streak_days_to_14:'\u2728 {n} \u064a\u0648\u0645\u064b\u0627 \u0644\u0644\u0648\u0635\u0648\u0644 \u0625\u0644\u0649 14',
+        streak_days_to_first:'{n} \u064a\u0648\u0645\u064b\u0627 \u0644\u0644\u0648\u0635\u0648\u0644 \u0625\u0644\u0649 \u0623\u0648\u0644 \u0645\u0639\u0644\u0645',
+        streak_start:'\u0627\u0628\u062f\u0623 \u0627\u0644\u062a\u062a\u0628\u0639 \u0644\u0628\u0646\u0627\u0621 \u0633\u0644\u0633\u0644\u0629',
+
+        /* Time heatmap */
+        time_avg:'\u0645\u062a\u0648\u0633\u0637',
+        time_wake:'\u0648\u0642\u062a \u0627\u0644\u0627\u0633\u062a\u064a\u0642\u0627\u0638',
+        time_bedtime:'\u0648\u0642\u062a \u0627\u0644\u0646\u0648\u0645',
+        time_heatmap_avg_mood:'\u0645\u062a\u0648\u0633\u0637 \u0627\u0644\u0645\u0632\u0627\u062c',
+        time_heatmap_entries:'\u0627\u0644\u0645\u062f\u062e\u0644\u0627\u062a',
+
+        /* Distribution summary */
+        dist_summary:'\u063a\u0627\u0644\u0628\u064b\u0627 \u0645\u0627 \u062a\u0634\u0639\u0631 \u0628\u0645\u0632\u0627\u062c {mood} \u2014 \u0648\u0643\u0627\u0646 \u0644\u062f\u064a\u0643 {n} \u064a\u0648\u0645\u064c \u0639\u0646\u062f 8 \u0623\u0648 \u0623\u0643\u062b\u0631.',
+
+        /* DoW insight */
+        dow_insight:'\u064a\u0645\u064a\u0644 \u0645\u0632\u0627\u062c\u0643 \u0625\u0644\u0649 \u0627\u0644\u0630\u0631\u0648\u0629 \u064a\u0648\u0645 {best} \u0648\u0627\u0644\u0627\u0646\u062e\u0641\u0627\u0636 \u064a\u0648\u0645 {worst}.',
+
+        /* Calendar list */
+        edit_checkin_btn:'\u062a\u0639\u062f\u064a\u0644 \u062a\u0633\u062c\u064a\u0644 \u0627\u0644\u0648\u0635\u0648\u0644',
+        edit_journal_btn:'\u062a\u0639\u062f\u064a\u0644 \u0627\u0644\u064a\u0648\u0645\u064a\u0627\u062a',
+
+        /* Correlations */
+        corr_label_sleep_mood:'\u0627\u0644\u0646\u0648\u0645 \u0645\u0642\u0627\u0628\u0644 \u0627\u0644\u0645\u0632\u0627\u062c',
+        corr_label_sleep_energy:'\u0627\u0644\u0646\u0648\u0645 \u0645\u0642\u0627\u0628\u0644 \u0627\u0644\u0637\u0627\u0642\u0629',
+        corr_label_mood_energy:'\u0627\u0644\u0645\u0632\u0627\u062c \u0645\u0642\u0627\u0628\u0644 \u0627\u0644\u0637\u0627\u0642\u0629',
+        corr_desc_sleep_mood:'\u0643\u064a\u0641 \u062a\u0631\u062a\u0628\u0637 \u0645\u062f\u0629 \u0646\u0648\u0645\u0643 \u0628\u0645\u0632\u0627\u062c \u0627\u0644\u064a\u0648\u0645 \u0627\u0644\u062a\u0627\u0644\u064a.',
+        corr_desc_sleep_energy:'\u0645\u0627\u0642\u062f\u0631 \u062a\u0623\u062b\u064a\u0631 \u0627\u0644\u0646\u0648\u0645 \u0639\u0644\u0649 \u0645\u0633\u062a\u0648\u064a\u0627\u062a \u0637\u0627\u0642\u062a\u0643.',
+        corr_desc_mood_energy:'\u0627\u0644\u0639\u0644\u0627\u0642\u0629 \u0628\u064a\u0646 \u0634\u0639\u0648\u0631\u0643 \u0627\u0644\u0639\u0627\u0637\u0641\u064a \u0648\u0637\u0627\u0642\u062a\u0643 \u0627\u0644\u062c\u0633\u062f\u064a\u0629.',
+        corr_trend_label:'\u0627\u062a\u062c\u0627\u0647',
+        corr_need_entries:'\u064a\u0644\u0632\u0645 3 \u0645\u062f\u062e\u0644\u0627\u062a \u0639\u0644\u0649 \u0627\u0644\u0623\u0642\u0644',
+        corr_deviation_label:'\u0627\u0644\u0627\u0646\u062d\u0631\u0627\u0641 \u0639\u0646 \u0627\u0644\u0645\u062a\u0648\u0633\u0637',
+        r2_badge:'R\u00b2 = {n}%',
+
+        /* Calendar hint */
+        calendar_month_hint:'\u0627\u0646\u0642\u0631 \u0639\u0644\u0649 \u0623\u064a \u064a\u0648\u0645 \u0644\u0639\u0631\u0636 \u0627\u0644\u0645\u062f\u062e\u0644 \u0623\u0648 \u062a\u0639\u062f\u064a\u0644\u0647. \u0627\u0644\u0644\u0648\u0646 \u064a\u062f\u0644 \u0639\u0644\u0649 \u0627\u0644\u0645\u0632\u0627\u062c \u2014 \u0623\u062e\u0636\u0631 = \u0645\u0631\u062a\u0641\u0639\u060c \u0639\u0646\u0628\u0631\u064a = \u0645\u062a\u0648\u0633\u0637\u060c \u062a\u0631\u0627\u0628\u064a = \u0645\u0646\u062e\u0641\u0636.',
+
+        /* Entry modal buttons */
+        edit_entry_btn:'\u062a\u0639\u062f\u064a\u0644 \u0627\u0644\u0645\u062f\u062e\u0644',
+
+        /* HTML static */
+        date_label:'\u0627\u0644\u062a\u0627\u0631\u064a\u062e',
+        suggested_tags:'\u0648\u0633\u0648\u0645 \u0645\u0642\u062a\u0631\u062d\u0629',
+        tap_to_add:'\u0627\u0636\u063a\u0637 \u0644\u0644\u0625\u0636\u0627\u0641\u0629',
+        tap_to_filter:'\u0627\u0636\u063a\u0637 \u0644\u0644\u062a\u0635\u0641\u064a\u0629',
+        passcode_enter_label:'\u0623\u062f\u062e\u0644 \u0631\u0645\u0632 \u0627\u0644\u0645\u0631\u0648\u0631 \u0644\u0644\u062a\u0623\u0643\u064a\u062f',
+        passcode_type_delete:'\u0627\u0643\u062a\u0628 \u062d\u0630\u0641 \u0644\u0644\u062a\u0623\u0643\u064a\u062f',
+        passcode_enter_heading:'\u0623\u062f\u062e\u0644 \u0631\u0645\u0632 \u0627\u0644\u0645\u0631\u0648\u0631',
+        passcode_set_heading:'\u062a\u0639\u064a\u064a\u0646 \u0631\u0645\u0632 \u0627\u0644\u0645\u0631\u0648\u0631',
+        passcode_set_desc:'\u0623\u062f\u062e\u0644 \u0631\u0645\u0632\u064b\u0627 \u0645\u0646 4 \u0625\u0644\u0649 8 \u0623\u0631\u0642\u0627\u0645 \u0644\u0642\u0641\u0644 \u0627\u0644\u062a\u0637\u0628\u064a\u0642.',
+        passcode_new_label:'\u0631\u0645\u0632 \u0645\u0631\u0648\u0631 \u062c\u062f\u064a\u062f',
+        passcode_confirm_lbl:'\u062a\u0623\u0643\u064a\u062f \u0631\u0645\u0632 \u0627\u0644\u0645\u0631\u0648\u0631',
+
+        /* Charts — annotation chips */
+        chip_avg:'\u0645\u062a\u0648\u0633\u0637 {n}',
+        chip_up:'\u2197 +{n} \u0645\u0642\u0627\u0628\u0644 \u0633\u0627\u0628\u0642\u0627\u064b',
+        chip_down:'\u2198 {n} \u0645\u0642\u0627\u0628\u0644 \u0633\u0627\u0628\u0642\u0627\u064b',
+        need_3:'\u062a\u062d\u062a\u0627\u062c \u0625\u0644\u0649 3+ \u0645\u062f\u062e\u0644\u0627\u062a',
+        no_data:'\u0644\u0627 \u062a\u0648\u062c\u062f \u0628\u064a\u0627\u0646\u0627\u062a',
+
+        /* Forecast stat chips */
+        fc_days:'\u0623\u064a\u0627\u0645 \u0627\u0644\u0628\u064a\u0627\u0646\u0627\u062a',
+        fc_avg:'\u0645\u062a\u0648\u0633\u0637 \u0623\u062e\u064a\u0631',
+        fc_7day:'\u062a\u0648\u0642\u0639 7 \u0623\u064a\u0627\u0645',
+        fc_variability:'\u0627\u0644\u062a\u0630\u0628\u0630\u0628',
+
+        /* Entry modal metrics */
+        modal_metric_mood:'\u0627\u0644\u0645\u0632\u0627\u062c',
+        modal_metric_energy:'\u0627\u0644\u0637\u0627\u0642\u0629',
+        modal_metric_sleep:'\u0627\u0644\u0646\u0648\u0645',
+        modal_metric_activities:'\u0627\u0644\u0623\u0646\u0634\u0637\u0629',
+        modal_metric_tags:'\u0627\u0644\u0648\u0633\u0648\u0645',
+        modal_metric_hrs:'\u0633\u0627\u0639\u0629',
+
+        /* Velocity page */
+        vel_stat_days:'\u0623\u064a\u0627\u0645 \u0627\u0644\u0628\u064a\u0627\u0646\u0627\u062a',
+        vel_stat_stability:'\u0627\u0633\u062a\u0642\u0631\u0627\u0631 14 \u064a\u0648\u0645\u0627\u064b',
+        vel_stab_very_low:'\u0645\u062a\u0630\u0628\u0630\u0628 \u062c\u062f\u0627\u064b',
+        vel_stab_low:'\u0645\u062a\u0630\u0628\u0630\u0628',
+        vel_stab_moderate:'\u0645\u0639\u062a\u062f\u0644',
+        vel_stab_high:'\u0645\u0633\u062a\u0642\u0631',
+        vel_stab_very_high:'\u0645\u0633\u062a\u0642\u0631 \u062c\u062f\u0627\u064b',
+
+        /* Insights */
+        insight_collecting:'\u062a\u062c\u0645\u064a\u0639 \u0628\u064a\u0627\u0646\u0627\u062a\u0643\u2026 \u0627\u0633\u062a\u0645\u0631 \u0641\u064a \u0627\u0644\u062a\u062a\u0628\u0639.',
+        insight_empty:'\u0644\u0627 \u062a\u0648\u062c\u062f \u0623\u0646\u0645\u0627\u0637 \u0648\u0627\u0636\u062d\u0629 \u0628\u0639\u062f. \u0627\u0633\u062a\u0645\u0631 \u0641\u064a \u0627\u0644\u062a\u0633\u062c\u064a\u0644.',
+        insight_no_patterns:'\u0644\u0627 \u062a\u0648\u062c\u062f \u0623\u0646\u0645\u0627\u0637 \u0648\u0627\u0636\u062d\u0629 \u0628\u0639\u062f.',
+        insight_summary:'\u0645\u0644\u062e\u0635 \u0627\u0644\u0631\u0624\u0649',
+        insight_entry:'\u0645\u062f\u062e\u0644',
+        insight_entries:'\u0645\u062f\u062e\u0644\u0627\u062a',
+        insight_observed:'\u0644\u0648\u062d\u0638 \u0639\u0628\u0631 {n} {entries}.',
+        insight_day:'\u064a\u0648\u0645',
+        insight_days:'\u0623\u064a\u0627\u0645',
+
+        /* Insight kicker badges */
+        kicker_default:'\u0631\u0624\u064a\u0629',
+        kicker_sleep:'\u0631\u0624\u064a\u0629 \u0627\u0644\u0646\u0648\u0645',
+        kicker_activity:'\u0631\u0624\u064a\u0629 \u0627\u0644\u0646\u0634\u0627\u0637',
+        kicker_stability:'\u0631\u0624\u064a\u0629 \u0627\u0644\u0627\u0633\u062a\u0642\u0631\u0627\u0631',
+        kicker_tags:'\u0631\u0624\u064a\u0629 \u0627\u0644\u0648\u0633\u0648\u0645',
+        strength_strong:'\u0646\u0645\u0637 \u0642\u0648\u064a',
+        strength_moderate:'\u0646\u0645\u0637 \u0645\u0639\u062a\u062f\u0644',
+        strength_emerging:'\u0646\u0645\u0637 \u0646\u0627\u0634\u0626',
+
+        /* Data page */
+        data_recent_entries:'\u0622\u062e\u0631 \u0627\u0644\u0645\u062f\u062e\u0644\u0627\u062a',
+        data_tap_to_open:'\u0627\u0636\u063a\u0637 \u0644\u0644\u0641\u062a\u062d',
+        data_no_journal:'\u0644\u0627 \u064a\u0648\u062c\u062f \u0646\u0635 \u064a\u0648\u0645\u064a\u0627\u062a \u0645\u062d\u0641\u0648\u0638',
+
+        /* Insight engine prose — sleep */
+        insight_sleep_sweet_spot_title:'\u0646\u0642\u0637\u0629 \u0627\u0644\u0646\u0648\u0645 \u0627\u0644\u0645\u062b\u0627\u0644\u064a\u0629',
+        insight_sleep_sweet_spot_desc:'\u0644\u064a\u0627\u0644\u064a {label} \u0633\u0627\u0639\u0627\u062a \u0646\u0648\u0645 \u062a\u0631\u062a\u0628\u0637 \u0628\u0645\u0632\u0627\u062c {delta} \u0641\u0648\u0642 \u0645\u062a\u0648\u0633\u0637\u0643.',
+        insight_sleep_sweet_spot_nudge:'\u062d\u0645\u0627\u064a\u0629 \u0646\u0627\u0641\u0630\u0629 {label} \u0633\u0627\u0639\u0629 \u0648\u0627\u062d\u062f \u0645\u0646 \u0623\u0643\u062b\u0631 \u0627\u0644\u0623\u0634\u064a\u0627\u0621 \u062a\u0623\u062b\u064a\u0631\u0627\u064b \u0639\u0644\u0649 \u0645\u0632\u0627\u062c\u0643.',
+        insight_sleep_context:'\u0628\u0646\u0627\u0621\u064b \u0639\u0644\u0649 {n} \u0644\u064a\u0644\u0629 \u0641\u064a \u0647\u0630\u0627 \u0627\u0644\u0646\u0637\u0627\u0642.',
+        insight_sleep_fragmented_title_neg:'\u0627\u0644\u0646\u0648\u0645 \u0627\u0644\u0645\u062a\u0642\u0637\u0639 \u064a\u0624\u062b\u0651\u0631 \u0639\u0644\u0649 \u064a\u0648\u0645\u0643',
+        insight_sleep_fragmented_title_pos:'\u062a\u062a\u0639\u0627\u0645\u0644 \u062c\u064a\u062f\u0627\u064b \u0645\u0639 \u0627\u0644\u0646\u0648\u0645 \u0627\u0644\u0645\u062c\u0632\u0651\u0623',
+        insight_sleep_fragmented_desc_neg:'\u0644\u064a\u0627\u0644\u064a \u0627\u0644\u0646\u0648\u0645 \u0627\u0644\u0645\u062a\u0642\u0637\u0639 \u062a\u0639\u0642\u0628\u0647\u0627 \u0627\u0646\u062e\u0641\u0627\u0636 \u0628\u0627\u0644\u0645\u0632\u0627\u062c \u0628\u0645\u0639\u062f\u0644 {n} \u0646\u0642\u0637\u0629 \u062a\u0642\u0631\u064a\u0628\u0627\u064b.',
+        insight_sleep_fragmented_desc_pos:'\u0644\u064a\u0627\u0644\u064a \u0627\u0644\u0646\u0648\u0645 \u0627\u0644\u0645\u062c\u0632\u0651\u0623 \u0644\u0627 \u062a\u0624\u062b\u0651\u0631 \u0639\u0644\u0649 \u0645\u0632\u0627\u062c\u0643 \u0628\u0634\u0643\u0644 \u0645\u0644\u062d\u0648\u0638.',
+        insight_sleep_bedtime_title_early:'\u0627\u0644\u0646\u0648\u0645 \u0627\u0644\u0645\u0628\u0643\u0651\u0631 \u064a\u062f\u0639\u0645 \u0645\u0632\u0627\u062c\u0643',
+        insight_sleep_bedtime_title_late:'\u0627\u0644\u0646\u0648\u0645 \u0627\u0644\u0645\u062a\u0623\u062e\u0651\u0631 \u064a\u0624\u062b\u0651\u0631 \u0639\u0644\u0649 \u0645\u0632\u0627\u062c\u0643',
+        insight_sleep_bedtime_desc_early:'\u0623\u064a\u0627\u0645 \u0627\u0644\u0646\u0648\u0645 \u0627\u0644\u0645\u0628\u0643\u0651\u0631 ({label}) \u062a\u0631\u062a\u0628\u0637 \u0628\u0645\u0632\u0627\u062c {delta} \u0623\u0639\u0644\u0649.',
+        insight_sleep_bedtime_desc_late:'\u0623\u064a\u0627\u0645 \u0627\u0644\u0646\u0648\u0645 \u0627\u0644\u0645\u062a\u0623\u062e\u0651\u0631 ({label}) \u062a\u0631\u062a\u0628\u0637 \u0628\u0645\u0632\u0627\u062c {delta} \u0623\u062f\u0646\u0649.',
+        insight_act_better_title:'\u0623\u064a\u0627\u0645 {act} \u0623\u0641\u0636\u0644',
+        insight_act_better_desc:'\u0623\u064a\u0627\u0645 {act} \u0644\u062f\u064a\u0643 \u0645\u062a\u0648\u0633\u0637 \u0645\u0632\u0627\u062c {avg} \u2014 \u0623\u064a {delta} \u0641\u0648\u0642 \u0645\u062a\u0648\u0633\u0637\u0643 \u0627\u0644\u0625\u062c\u0645\u0627\u0644\u064a {overall}.',
+        insight_act_better_nudge:'\u0627\u0633\u062a\u0645\u0631 \u0641\u064a \u0625\u0639\u0637\u0627\u0626\u0647\u0627 \u0627\u0644\u0623\u0648\u0644\u0648\u064a\u0629.',
+        insight_act_lower_title:'\u0623\u064a\u0627\u0645 {act} \u0645\u062e\u062a\u0644\u0641\u0629',
+        insight_act_lower_desc:'\u0623\u064a\u0627\u0645 {act} \u0644\u062f\u064a\u0643 \u0645\u062a\u0648\u0633\u0637 \u0645\u0632\u0627\u062c {avg} \u2014 \u0623\u064a {delta} \u062a\u062d\u062a \u0645\u062a\u0648\u0633\u0637\u0643 \u0627\u0644\u0625\u062c\u0645\u0627\u0644\u064a {overall}.',
+        insight_act_lower_nudge:'\u0627\u0644\u0646\u0645\u0637 \u0644\u0627\u062d\u0638. \u0647\u0644 \u0647\u0630\u0627 \u0646\u0634\u0627\u0637 \u0645\u062a\u0639\u0628 \u0623\u0645 \u0627\u062e\u062a\u064a\u0627\u0631\u064a\u0651?',
+        insight_stab_consistent_title:'\u0645\u0632\u0627\u062c\u0643 \u0645\u0633\u062a\u0642\u0631 \u0628\u0634\u0643\u0644 \u0645\u0644\u062d\u0648\u0638',
+        insight_stab_consistent_desc:'\u0627\u0646\u062d\u0631\u0627\u0641\u0643 \u0627\u0644\u0645\u0639\u064a\u0627\u0631\u064a \u062e\u0644\u0627\u0644 \u0627\u0644\u0623\u064a\u0627\u0645 \u0627\u0644\u0645\u0627\u0636\u064a\u0629 \u0647\u0648 {n}\u060c \u0645\u0645\u0627 \u064a\u062c\u0639\u0644\u0643 \u0636\u0645\u0646 \u0623\u0641\u0636\u0644 15% \u0645\u0646 \u062d\u064a\u062b \u0627\u0644\u0627\u0633\u062a\u0642\u0631\u0627\u0631.',
+        insight_stab_consistent_nudge:'\u0627\u0633\u062a\u0645\u0631 \u0641\u064a \u0645\u0627 \u062a\u0641\u0639\u0644\u0647 \u2014 \u062a\u0633\u062c\u064a\u0644 \u0645\u062a\u0633\u0642 \u064a\u0635\u0646\u0639 \u0627\u0644\u0641\u0627\u0631\u0642.',
     };
 
     /* ─── Other locales: abbreviated but complete for nav/settings/modals ─── */
@@ -1557,6 +2659,20 @@
     S.zh = { nav_tracking:'追踪', nav_analytics_label:'分析', nav_explore:'探索', nav_data_label:'数据', nav_overview:'概览', nav_checkin:'每日打卡', nav_checkin_short:'打卡', nav_calendar:'日历', nav_journal:'日记', nav_mood_trends:'情绪趋势', nav_sleep:'睡眠分析', nav_energy:'能量模式', nav_insights:'洞察', nav_correlations:'相关性', nav_velocity:'情绪速度', nav_forecast:'预测', nav_patterns:'我的模式', nav_seasonal:'季节节律', nav_reports:'报告', nav_export:'导出与备份', nav_menu:'菜单', nav_seasonal_short:'季节', good_morning:'早上好', good_afternoon:'下午好', good_evening:'晚上好', narrative_start:'开始记录第一次打卡，在这里看到模式的出现。', narrative_trend_up:'您的情绪本周有所改善。', narrative_trend_down:'您的情绪本周略有下降。', narrative_steady:'您的情绪本周保持稳定。', no_checkin_today:'今天还没有打卡。', streak_days:'连续{n}天 \u2014 继续坚持！', streak_day:'连续第{n}天。', daily_checkin:'每日打卡', checkin_subtitle:'记录您的情绪、睡眠和能量。', save_entry:'保存记录', daily_summary:'每日总结', low_mood:'情绪低落', neutral:'中性', good_mood:'情绪良好', today:'今天', calendar_title:'日历', calendar_subtitle:'按日、周、月浏览情绪历史。', calendar_year_heatmap:'年度热力图', cal_year_heatmap:'年度热力图', calendar_month_grid:'月度网格', cal_month_grid:'月度网格', calendar_week_timeline:'周时间轴', cal_week_timeline:'周时间轴', calendar_list_view:'列表', cal_list:'列表', year_in_mood_title:'年度情绪', cal_year_in_mood:'年度情绪', export_heatmap:'导出热力图', journal:'日记', journal_title:'日记', journal_page_subtitle:'自由书写 \u2014 这只属于您。', journal_eyebrow:'您的反思', journal_one_per_day_sub:'每天一条记录。', journal_unsaved:'未保存的更改', save_journal:'保存日记', edit_journal_entry:'编辑日记', journal_saved_placeholder:'今天的日记已保存。', one_journal_per_day:'每天只能创建一条日记。', add_photo:'\ud83d\udcf7 添加照片', page_mood_subtitle:'情绪健康的规律和趋势。', page_sleep_subtitle:'休息的质量和一致性。', page_energy_subtitle:'各天的节奏和耐力。', page_velocity_h1:'情绪速度与稳定性', page_velocity_subtitle:'查看情绪日复一日的变化。', page_corr_subtitle:'发现追踪指标之间的关系。', page_patterns_subtitle:'睡眠、活动和情绪模式。', page_seasonal_h1:'季节性与节律分析', page_seasonal_subtitle:'发现情绪、睡眠和能量的季节变化。', page_forecast_subtitle:'基于最新数据的预测趋势。', insights_eyebrow:'个人分析', insights_overview:'来自您数据的规律。', export_page_title:'导出与备份', export_page_subtitle:'您的数据属于您。', from_label:'开始', to_label:'结束', tags_optional:'标签（可选）', report_week:'周', report_month:'月', report_year:'年', report_export_pdf:'将报告导出为PDF', report_best_day:'最佳日', report_challenging:'情绪最低日', settings:'设置', s_appearance:'外观', s_appearance_desc:'主题和显示偏好。', s_theme:'主题', s_dark_mode:'暗色模式', s_sound:'成功音效', s_particles:'环境粒子', s_parallax:'视差滚动', s_preferences:'偏好设置', s_preferences_desc:'默认和显示选项。', s_language:'语言', s_date_format:'日期格式', s_time_format:'时间格式', s_chart_days:'图表默认天数', s_reduce_motion:'减少动画', s_notifications:'启用通知（浏览器）', s_dashboard_widgets:'仪表板小组件', s_show_mood:'显示情绪图表', s_show_sleep:'显示睡眠图表', s_show_energy:'显示能量图表', s_custom_metrics:'自定义指标', s_custom_metrics_desc:'添加您自己的可追踪指标。', s_privacy:'数据与隐私', s_privacy_desc:'所有数据本地存储在您的设备上。', s_delete_all:'删除所有数据', s_favourite_tags:'收藏标签', s_default_activities:'默认活动', modal_full_edit:'\u270f\ufe0f 完整编辑', modal_journal_btn:'\ud83d\udcd3 日记', modal_close:'关闭', modal_cancel:'取消', modal_delete:'删除', modal_confirm:'确认', delete_entry:'删除记录', delete_entry_q:'删除记录？', cannot_undo:'此操作无法撤销。', full_delete_day:'删除整天记录？', full_delete_desc:'情绪、能量、睡眠、活动和日记将被永久删除。', full_delete_btn:'删除记录', are_you_sure:'您确定吗？', enter_passcode:'输入密码以确认', type_delete_label:'输入删除以确认', delete_all_title:'删除所有数据', delete_all_desc:'永久删除所有记录、日记、备份和设置。', delete_all_confirm:'删除一切', no_entry_day:'这天没有记录。', click_edit_checkin:'点击编辑以添加。', delete_entire_entry:'\ud83d\uddd1 删除这天的全部记录', pwa_install_text:'安装Aura以快速访问和离线使用。', pwa_not_now:'暂不', pwa_install_btn:'安装', pwa_update_text:'新版本可用。', pwa_reload:'重新加载', chart_avg_mood_month:'按月平均情绪', chart_mood_axis:'情绪变化（逐日）', chart_mood_axis_short:'变化', chart_mood_improved:'情绪提升了{n}分', chart_mood_dipped:'情绪下降了{n}分', chart_mood_1_10:'情绪（1\u201310）', chip_latest:'最近: {delta} vs 均', chip_range:'区间 {min}\u2013{max}', insights_what_data_shows:'数据揭示的内容', insight_sleep_heading:'睡眠', insight_activity_heading:'活动', insight_stability_heading:'情绪稳定性', insight_tags_heading:'标签', toast_lang:'语言已更新 \u2713', toast_date_fmt:'日期格式已更新 \u2713', toast_time_fmt:'时间格式已更新 \u2713', toast_saved:'已保存 \u2713', dow_need_more_data:'至少添加2周的记录以查看每周模式。', dow_no_data_label:'无数据', dow_average_label:'平均', dow_dataset_label:'平均情绪' };
 
     S.hi = { nav_tracking:'ट्रैकिंग', nav_analytics_label:'विश्लेषण', nav_explore:'अन्वेषण', nav_data_label:'डेटा', nav_overview:'अवलोकन', nav_checkin:'दैनिक चेक-इन', nav_checkin_short:'चेक-इन', nav_calendar:'कैलेंडर', nav_journal:'डायरी', nav_mood_trends:'मूड ट्रेंड', nav_sleep:'नींद विश्लेषण', nav_energy:'ऊर्जा पैटर्न', nav_insights:'अंतर्दृष्टि', nav_correlations:'सहसंबंध', nav_velocity:'मूड वेलोसिटी', nav_forecast:'पूर्वानुमान', nav_patterns:'मेरे पैटर्न', nav_seasonal:'मौसमी लय', nav_reports:'रिपोर्ट', nav_export:'निर्यात और बैकअप', nav_menu:'मेनू', nav_seasonal_short:'मौसमी', good_morning:'सुप्रभात', good_afternoon:'नमस्ते', good_evening:'शुभ संध्या', narrative_start:'पैटर्न देखने के लिए पहला चेक-इन दर्ज करें।', narrative_trend_up:'इस सप्ताह आपका मूड बेहतर हुआ है।', narrative_trend_down:'इस सप्ताह आपका मूड थोड़ा कम रहा।', narrative_steady:'इस सप्ताह आपका मूड स्थिर रहा।', no_checkin_today:'आज अभी तक कोई चेक-इन नहीं।', streak_days:'{n} दिन की लकीर \u2014 जारी रखें!', streak_day:'आपकी लकीर का दिन {n}।', daily_checkin:'दैनिक चेक-इन', checkin_subtitle:'अपना मूड, नींद और ऊर्जा दर्ज करें।', save_entry:'प्रविष्टि सहेजें', daily_summary:'दैनिक सारांश', low_mood:'कम मनोदशा', neutral:'तटस्थ', good_mood:'अच्छी मनोदशा', today:'आज', calendar_title:'कैलेंडर', calendar_subtitle:'दिनों, हफ्तों और महीनों में मूड इतिहास देखें।', calendar_year_heatmap:'वार्षिक हीटमैप', cal_year_heatmap:'वार्षिक हीटमैप', calendar_month_grid:'मासिक ग्रिड', cal_month_grid:'मासिक ग्रिड', calendar_week_timeline:'साप्ताहिक टाइमलाइन', cal_week_timeline:'साप्ताहिक टाइमलाइन', calendar_list_view:'सूची', cal_list:'सूची', year_in_mood_title:'मूड का वर्ष', cal_year_in_mood:'मूड का वर्ष', export_heatmap:'हीटमैप निर्यात करें', journal:'डायरी', journal_title:'डायरी', journal_page_subtitle:'स्वतंत्र रूप से लिखें \u2014 यह सिर्फ आपके लिए है।', journal_eyebrow:'आपके विचार', journal_one_per_day_sub:'प्रतिदिन एक प्रविष्टि।', journal_unsaved:'सहेजे नहीं गए बदलाव', save_journal:'डायरी सहेजें', edit_journal_entry:'डायरी प्रविष्टि संपादित करें', journal_saved_placeholder:'आज की डायरी प्रविष्टि पहले से सहेजी गई है।', one_journal_per_day:'प्रति दिन केवल एक डायरी प्रविष्टि।', add_photo:'\ud83d\udcf7 फ़ोटो जोड़ें', page_mood_subtitle:'आपके भावनात्मक स्वास्थ्य के पैटर्न।', page_sleep_subtitle:'आपकी नींद की गुणवत्ता और निरंतरता।', page_energy_subtitle:'दिनों में लय और सहनशक्ति।', page_velocity_h1:'मूड वेलोसिटी और स्थिरता', page_velocity_subtitle:'देखें मूड दिन-प्रतिदिन कैसे बदलता है।', page_corr_subtitle:'ट्रैक की गई मेट्रिक्स के बीच संबंध खोजें।', page_patterns_subtitle:'नींद, गतिविधि और मूड के पैटर्न।', page_seasonal_h1:'मौसमी और लयबद्ध विश्लेषण', page_seasonal_subtitle:'मूड, नींद और ऊर्जा में मौसमी बदलाव जानें।', page_forecast_subtitle:'हाल के डेटा के आधार पर पूर्वानुमान रुझान।', insights_eyebrow:'व्यक्तिगत विश्लेषण', insights_overview:'आपके डेटा से पैटर्न।', export_page_title:'निर्यात और बैकअप', export_page_subtitle:'आपका डेटा आपका है।', from_label:'से', to_label:'तक', tags_optional:'टैग (वैकल्पिक)', report_week:'सप्ताह', report_month:'माह', report_year:'वर्ष', report_export_pdf:'रिपोर्ट PDF में निर्यात करें', report_best_day:'सबसे अच्छा दिन', report_challenging:'कठिन दिन', settings:'सेटिंग्स', s_appearance:'दिखावट', s_appearance_desc:'थीम और प्रदर्शन प्राथमिकताएं।', s_theme:'थीम', s_dark_mode:'डार्क मोड', s_sound:'सफलता ध्वनि', s_particles:'परिवेश कण', s_parallax:'पैरेलेक्स स्क्रॉलिंग', s_preferences:'प्राथमिकताएं', s_preferences_desc:'डिफ़ॉल्ट विकल्प।', s_language:'भाषा', s_date_format:'दिनांक प्रारूप', s_time_format:'समय प्रारूप', s_chart_days:'चार्ट डिफ़ॉल्ट दिन', s_reduce_motion:'गति कम करें', s_notifications:'सूचनाएं सक्षम करें (ब्राउज़र)', s_dashboard_widgets:'डैशबोर्ड विजेट', s_show_mood:'मूड चार्ट दिखाएं', s_show_sleep:'नींद चार्ट दिखाएं', s_show_energy:'ऊर्जा चार्ट दिखाएं', s_custom_metrics:'कस्टम मेट्रिक्स', s_custom_metrics_desc:'अपनी खुद की मेट्रिक्स जोड़ें।', s_privacy:'डेटा और गोपनीयता', s_privacy_desc:'सभी डेटा आपके डिवाइस पर स्थानीय रूप से संग्रहीत है।', s_delete_all:'सभी डेटा हटाएं', s_favourite_tags:'पसंदीदा टैग', s_default_activities:'डिफ़ॉल्ट गतिविधियां', modal_full_edit:'\u270f\ufe0f पूर्ण संपादन', modal_journal_btn:'\ud83d\udcd3 डायरी', modal_close:'बंद करें', modal_cancel:'रद्द करें', modal_delete:'हटाएं', modal_confirm:'पुष्टि करें', delete_entry:'प्रविष्टि हटाएं', delete_entry_q:'प्रविष्टि हटाएं?', cannot_undo:'यह क्रिया पूर्ववत नहीं की जा सकती।', full_delete_day:'पूरा दिन हटाएं?', full_delete_desc:'मूड, ऊर्जा, नींद, गतिविधियां और डायरी स्थायी रूप से हटाई जाएंगी।', full_delete_btn:'प्रविष्टि हटाएं', are_you_sure:'क्या आप सुनिश्चित हैं?', enter_passcode:'पुष्टि के लिए पासकोड दर्ज करें', type_delete_label:'पुष्टि के लिए DELETE टाइप करें', delete_all_title:'सभी डेटा हटाएं', delete_all_desc:'सभी प्रविष्टियां, डायरी, बैकअप और सेटिंग्स स्थायी रूप से हटाएं।', delete_all_confirm:'सब कुछ हटाएं', no_entry_day:'इस दिन के लिए कोई प्रविष्टि नहीं।', click_edit_checkin:'जोड़ने के लिए चेक-इन संपादित करें पर क्लिक करें।', delete_entire_entry:'\ud83d\uddd1 इस दिन की पूरी प्रविष्टि हटाएं', pwa_install_text:'Aura इंस्टॉल करें।', pwa_not_now:'अभी नहीं', pwa_install_btn:'इंस्टॉल करें', pwa_update_text:'नया संस्करण उपलब्ध है।', pwa_reload:'पुनः लोड करें', chart_avg_mood_month:'माह के अनुसार औसत मूड', chart_mood_axis:'मूड परिवर्तन', chart_mood_axis_short:'परि.', chart_mood_improved:'मूड {n} अंक बेहतर हुआ', chart_mood_dipped:'मूड {n} अंक कम हुआ', chart_mood_1_10:'मूड (1\u201310)', chip_latest:'हाल: {delta} बनाम औसत', chip_range:'दायरा {min}\u2013{max}', insights_what_data_shows:'आपके डेटा से पता चलता है', insight_sleep_heading:'नींद अंतर्दृष्टि', insight_activity_heading:'गतिविधि अंतर्दृष्टि', insight_stability_heading:'मूड स्थिरता', insight_tags_heading:'टैग अंतर्दृष्टि', toast_lang:'भाषा अपडेट हुई \u2713', toast_date_fmt:'दिनांक प्रारूप अपडेट हुआ \u2713', toast_time_fmt:'समय प्रारूप अपडेट हुआ \u2713', toast_saved:'सहेजा गया \u2713', dow_need_more_data:'साप्ताहिक पैटर्न देखने के लिए कम से कम 2 सप्ताह जोड़ें।', dow_no_data_label:'कोई डेटा नहीं', dow_average_label:'औसत', dow_dataset_label:'औसत मूड' };
+
+    /* ════════════════════════════════════════════════════════════════════
+       §2a  CRITICAL SUPPLEMENTARY KEYS — 9 MINIMAL LOCALES
+       Each block adds the most UI-visible missing keys per locale
+    ════════════════════════════════════════════════════════════════════ */
+    Object.assign(S.it, { chip_avg:'Med. {n}', chip_up:'\u2197 +{n} vs prima', chip_down:'\u2198 {n} vs prima', need_3:'3+ voci richieste', no_data:'Nessun dato', fc_days:'Giorni di dati', fc_avg:'Media recente', fc_7day:'Prev. 7 giorni', fc_variability:'Variabilità', modal_metric_mood:'UMORE', modal_metric_energy:'ENERGIA', modal_metric_sleep:'SONNO', modal_metric_activities:'ATTIVITÀ', modal_metric_tags:'TAG', modal_metric_hrs:'ore', vel_stat_days:'Giorni di dati', vel_stat_stability:'Stabilità 14 gg', vel_stab_very_low:'Molto variabile', vel_stab_low:'Variabile', vel_stab_moderate:'Moderato', vel_stab_high:'Stabile', vel_stab_very_high:'Molto stabile', insight_collecting:'Raccolta dati in corso… Continua.', insight_empty:'Nessun pattern ancora.', insight_no_patterns:'Nessun pattern ancora.', insight_summary:'Riepilogo insight', kicker_default:'INSIGHT', kicker_sleep:'INSIGHT SONNO', kicker_activity:'INSIGHT ATTIVITÀ', kicker_stability:'INSIGHT STABILITÀ', kicker_tags:'INSIGHT TAG', strength_strong:'PATTERN FORTE', strength_moderate:'PATTERN MODERATO', strength_emerging:'PATTERN EMERGENTE', data_recent_entries:'VOCI RECENTI', data_tap_to_open:'Tocca per aprire', data_no_journal:'Nessun testo diario salvato', no_checkin_yet:'Nessun check-in ancora.' });
+    Object.assign(S.pt, { chip_avg:'Méd. {n}', chip_up:'\u2197 +{n} vs antes', chip_down:'\u2198 {n} vs antes', need_3:'3+ entradas necessárias', no_data:'Sem dados', fc_days:'Dias de dados', fc_avg:'Média recente', fc_7day:'Prev. 7 dias', fc_variability:'Variabilidade', modal_metric_mood:'HUMOR', modal_metric_energy:'ENERGIA', modal_metric_sleep:'SONO', modal_metric_activities:'ATIVIDADES', modal_metric_tags:'ETIQUETAS', modal_metric_hrs:'hrs', vel_stat_days:'Dias de dados', vel_stat_stability:'Estabilidade 14 dias', vel_stab_very_low:'Muito variável', vel_stab_low:'Variável', vel_stab_moderate:'Moderado', vel_stab_high:'Estável', vel_stab_very_high:'Muito estável', insight_collecting:'Coletando dados… Continue.', insight_empty:'Nenhum padrão ainda.', insight_no_patterns:'Nenhum padrão ainda.', insight_summary:'Resumo de insights', kicker_default:'INSIGHT', kicker_sleep:'INSIGHT DE SONO', kicker_activity:'INSIGHT DE ATIVIDADE', kicker_stability:'INSIGHT DE ESTABILIDADE', kicker_tags:'INSIGHT DE ETIQUETAS', strength_strong:'PADRÃO FORTE', strength_moderate:'PADRÃO MODERADO', strength_emerging:'PADRÃO EMERGENTE', data_recent_entries:'ENTRADAS RECENTES', data_tap_to_open:'Toque para abrir', data_no_journal:'Sem texto de diário guardado' });
+    Object.assign(S.nl, { chip_avg:'Gem. {n}', chip_up:'\u2197 +{n} vs eerder', chip_down:'\u2198 {n} vs eerder', need_3:'3+ vermeldingen nodig', no_data:'Geen data', fc_days:'Dagen data', fc_avg:'Recente gem.', fc_7day:'7-daagse prognose', fc_variability:'Variabiliteit', modal_metric_mood:'STEMMING', modal_metric_energy:'ENERGIE', modal_metric_sleep:'SLAAP', modal_metric_activities:'ACTIVITEITEN', modal_metric_tags:'LABELS', modal_metric_hrs:'uur', vel_stat_days:'Dagen data', vel_stat_stability:'Stabiliteit 14 d', vel_stab_very_low:'Zeer variabel', vel_stab_low:'Variabel', vel_stab_moderate:'Gematigd', vel_stab_high:'Stabiel', vel_stab_very_high:'Zeer stabiel', insight_collecting:'Data verzamelen… Ga door.', insight_empty:'Nog geen patronen.', insight_no_patterns:'Nog geen patronen.', insight_summary:'Samenvatting inzichten', kicker_default:'INZICHT', kicker_sleep:'SLAAPINZICHT', kicker_activity:'ACTIVITEITINZICHT', kicker_stability:'STABILITEITINZICHT', kicker_tags:'LABELINZICHT', strength_strong:'STERK PATROON', strength_moderate:'MATIG PATROON', strength_emerging:'OPKOMEND PATROON', data_recent_entries:'RECENTE INVOER', data_tap_to_open:'Tik om te openen', data_no_journal:'Geen dagboektekst opgeslagen' });
+    Object.assign(S.pl, { chip_avg:'Śr. {n}', chip_up:'\u2197 +{n} vs wcześniej', chip_down:'\u2198 {n} vs wcześniej', need_3:'Wymagane 3+ wpisy', no_data:'Brak danych', fc_days:'Dni danych', fc_avg:'Ostatnia śr.', fc_7day:'Prognoza 7 dni', fc_variability:'Zmienność', modal_metric_mood:'NASTRÓJ', modal_metric_energy:'ENERGIA', modal_metric_sleep:'SEN', modal_metric_activities:'AKTYWNOŚCI', modal_metric_tags:'TAGI', modal_metric_hrs:'godz.', vel_stat_days:'Dni danych', vel_stat_stability:'Stabilność 14 dni', vel_stab_very_low:'Bardzo zmienny', vel_stab_low:'Zmienny', vel_stab_moderate:'Umiarkowany', vel_stab_high:'Stabilny', vel_stab_very_high:'Bardzo stabilny', insight_collecting:'Zbieranie danych… Kontynuuj.', insight_empty:'Brak wzorców.', insight_no_patterns:'Brak wzorców.', insight_summary:'Podsumowanie spostrzeżeń', kicker_default:'SPOSTRZEŻENIE', kicker_sleep:'SPOSTRZEŻENIE SNU', kicker_activity:'SPOSTRZEŻENIE AKTYWNOŚCI', kicker_stability:'SPOSTRZEŻENIE STABILNOŚCI', kicker_tags:'SPOSTRZEŻENIE TAGÓW', strength_strong:'SILNY WZORZEC', strength_moderate:'UMIARKOWANY WZORZEC', strength_emerging:'NOWY WZORZEC', data_recent_entries:'OSTATNIE WPISY', data_tap_to_open:'Dotknij, aby otworzyć', data_no_journal:'Brak zapisanego tekstu dziennika' });
+    Object.assign(S.ru, { chip_avg:'Ср. {n}', chip_up:'\u2197 +{n} vs ранее', chip_down:'\u2198 {n} vs ранее', need_3:'Нужно 3+ записи', no_data:'Нет данных', fc_days:'Дней данных', fc_avg:'Последн. ср.', fc_7day:'Прогноз 7 дней', fc_variability:'Вариативность', modal_metric_mood:'НАСТРОЕНИЕ', modal_metric_energy:'ЭНЕРГИЯ', modal_metric_sleep:'СОН', modal_metric_activities:'АКТИВНОСТИ', modal_metric_tags:'ТЕГИ', modal_metric_hrs:'ч', vel_stat_days:'Дней данных', vel_stat_stability:'Стабильность 14 дн.', vel_stab_very_low:'Очень изменчиво', vel_stab_low:'Изменчиво', vel_stab_moderate:'Умеренно', vel_stab_high:'Стабильно', vel_stab_very_high:'Очень стабильно', insight_collecting:'Сбор данных… Продолжайте.', insight_empty:'Паттернов пока нет.', insight_no_patterns:'Паттернов пока нет.', insight_summary:'Сводка инсайтов', kicker_default:'ИНСАЙТ', kicker_sleep:'ИНСАЙТ СНА', kicker_activity:'ИНСАЙТ АКТИВНОСТИ', kicker_stability:'ИНСАЙТ СТАБИЛЬНОСТИ', kicker_tags:'ИНСАЙТ ТЕГОВ', strength_strong:'СИЛЬНЫЙ ПАТТЕРН', strength_moderate:'УМЕРЕННЫЙ ПАТТЕРН', strength_emerging:'НОВЫЙ ПАТТЕРН', data_recent_entries:'ПОСЛЕДНИЕ ЗАПИСИ', data_tap_to_open:'Нажмите для открытия', data_no_journal:'Текст дневника не сохранён' });
+    Object.assign(S.tr, { chip_avg:'Ort. {n}', chip_up:'\u2197 +{n} vs öncesi', chip_down:'\u2198 {n} vs öncesi', need_3:'3+ giriş gerekli', no_data:'Veri yok', fc_days:'Veri günleri', fc_avg:'Son ort.', fc_7day:'7 günlük tahmin', fc_variability:'Değişkenlik', modal_metric_mood:'RUH HALİ', modal_metric_energy:'ENERJİ', modal_metric_sleep:'UYKU', modal_metric_activities:'AKTİVİTELER', modal_metric_tags:'ETİKETLER', modal_metric_hrs:'saat', vel_stat_days:'Veri günleri', vel_stat_stability:'14 günlük istikrar', vel_stab_very_low:'Çok değişken', vel_stab_low:'Değişken', vel_stab_moderate:'Orta', vel_stab_high:'İstikrarlı', vel_stab_very_high:'Çok istikrarlı', insight_collecting:'Veriler toplanıyor… Devam edin.', insight_empty:'Henüz desen yok.', insight_no_patterns:'Henüz desen yok.', insight_summary:'Öngörü özeti', kicker_default:'ÖNGÖRÜ', kicker_sleep:'UYKU ÖNGÖRÜSÜ', kicker_activity:'AKTİVİTE ÖNGÖRÜSÜ', kicker_stability:'STABİLİTE ÖNGÖRÜSÜ', kicker_tags:'ETİKET ÖNGÖRÜSÜ', strength_strong:'GÜÇLÜ DESEN', strength_moderate:'ORTA DESEN', strength_emerging:'YENİ DESEN', data_recent_entries:'SON GİRİŞLER', data_tap_to_open:'Açmak için dokunun', data_no_journal:'Günlük metni kaydedilmedi' });
+    Object.assign(S.ja, { chip_avg:'平均 {n}', chip_up:'\u2197 +{n} vs 以前', chip_down:'\u2198 {n} vs 以前', need_3:'3件以上のデータが必要', no_data:'データなし', fc_days:'データ日数', fc_avg:'直近平均', fc_7day:'7日間予測', fc_variability:'変動性', modal_metric_mood:'気分', modal_metric_energy:'エネルギー', modal_metric_sleep:'睡眠', modal_metric_activities:'活動', modal_metric_tags:'タグ', modal_metric_hrs:'時間', vel_stat_days:'データ日数', vel_stat_stability:'14日間安定性', vel_stab_very_low:'非常に不安定', vel_stab_low:'不安定', vel_stab_moderate:'普通', vel_stab_high:'安定', vel_stab_very_high:'非常に安定', insight_collecting:'データを収集中…継続してください。', insight_empty:'まだパターンがありません。', insight_no_patterns:'まだパターンがありません。', insight_summary:'インサイト概要', kicker_default:'インサイト', kicker_sleep:'睡眠インサイト', kicker_activity:'活動インサイト', kicker_stability:'安定性インサイト', kicker_tags:'タグインサイト', strength_strong:'強いパターン', strength_moderate:'中程度のパターン', strength_emerging:'新しいパターン', data_recent_entries:'最近のエントリー', data_tap_to_open:'タップして開く', data_no_journal:'日記テキストなし' });
+    Object.assign(S.zh, { chip_avg:'均 {n}', chip_up:'\u2197 +{n} vs 之前', chip_down:'\u2198 {n} vs 之前', need_3:'需要3+条记录', no_data:'无数据', fc_days:'数据天数', fc_avg:'近期平均', fc_7day:'7天预测', fc_variability:'波动性', modal_metric_mood:'情绪', modal_metric_energy:'能量', modal_metric_sleep:'睡眠', modal_metric_activities:'活动', modal_metric_tags:'标签', modal_metric_hrs:'小时', vel_stat_days:'数据天数', vel_stat_stability:'14天稳定性', vel_stab_very_low:'非常多变', vel_stab_low:'多变', vel_stab_moderate:'中等', vel_stab_high:'稳定', vel_stab_very_high:'非常稳定', insight_collecting:'正在收集数据…请继续。', insight_empty:'尚无明显规律。', insight_no_patterns:'尚无明显规律。', insight_summary:'洞察摘要', kicker_default:'洞察', kicker_sleep:'睡眠洞察', kicker_activity:'活动洞察', kicker_stability:'稳定性洞察', kicker_tags:'标签洞察', strength_strong:'强规律', strength_moderate:'中等规律', strength_emerging:'新兴规律', data_recent_entries:'近期记录', data_tap_to_open:'点击打开', data_no_journal:'无日记文本' });
+    Object.assign(S.hi, { chip_avg:'औसत {n}', chip_up:'\u2197 +{n} vs पहले', chip_down:'\u2198 {n} vs पहले', need_3:'3+ प्रविष्टियां आवश्यक', no_data:'कोई डेटा नहीं', fc_days:'डेटा दिन', fc_avg:'हाल का औसत', fc_7day:'7-दिन पूर्वानुमान', fc_variability:'परिवर्तनशीलता', modal_metric_mood:'मूड', modal_metric_energy:'ऊर्जा', modal_metric_sleep:'नींद', modal_metric_activities:'गतिविधियां', modal_metric_tags:'टैग', modal_metric_hrs:'घंटे', vel_stat_days:'डेटा दिन', vel_stat_stability:'14-दिन स्थिरता', vel_stab_very_low:'बहुत अस्थिर', vel_stab_low:'अस्थिर', vel_stab_moderate:'मध्यम', vel_stab_high:'स्थिर', vel_stab_very_high:'बहुत स्थिर', insight_collecting:'डेटा संग्रह हो रहा है… जारी रखें।', insight_empty:'अभी कोई पैटर्न नहीं।', insight_no_patterns:'अभी कोई पैटर्न नहीं।', insight_summary:'अंतर्दृष्टि सारांश', kicker_default:'अंतर्दृष्टि', kicker_sleep:'नींद अंतर्दृष्टि', kicker_activity:'गतिविधि अंतर्दृष्टि', kicker_stability:'स्थिरता अंतर्दृष्टि', kicker_tags:'टैग अंतर्दृष्टि', strength_strong:'मजबूत पैटर्न', strength_moderate:'मध्यम पैटर्न', strength_emerging:'उभरता पैटर्न', data_recent_entries:'हाल की प्रविष्टियां', data_tap_to_open:'खोलने के लिए टैप करें', data_no_journal:'कोई डायरी टेक्स्ट नहीं' });
 
     /* ════════════════════════════════════════════════════════════════════
        §2  AUTO-FILL MISSING KEYS FROM ENGLISH
@@ -1884,23 +3000,20 @@
         orig._i18nPatched = true;
         window.showEntryModal = function () {
             var r = orig.apply(this, arguments);
-            setTimeout(function () {
-                var l = currentLocale();
-                var row = S[l] || S.en;
-                var body = document.getElementById('entryModalBody');
-                if (!body) return;
-                /* Delete-entire-entry button */
+            /* Translate synchronously — showEntryModal builds innerHTML synchronously */
+            var l = currentLocale();
+            var row = S[l] || S.en;
+            var body = document.getElementById('entryModalBody');
+            if (body) {
                 body.querySelectorAll('.entry-modal-delete-btn').forEach(function (btn) {
                     if (row.delete_entire_entry) btn.textContent = row.delete_entire_entry;
                 });
-                /* Empty state text nodes */
                 body.querySelectorAll('div').forEach(function (div) {
                     if (div.children.length) return;
                     var tx = (div.textContent || '').trim();
                     if (tx === 'No entry for this day.' && row.no_entry_day) div.textContent = row.no_entry_day;
                     else if (tx === 'Click Edit Check-In to add one.' && row.click_edit_checkin) div.textContent = row.click_edit_checkin;
                 });
-                /* Field labels */
                 var FM = { 'Mood':'checkin_mood','Sleep':'checkin_sleep_duration','Energy':'checkin_energy','Activities':'checkin_activities','Tags':'checkin_tags','Journal':'journal','Photos':'checkin_photos' };
                 body.querySelectorAll('.em-field-label').forEach(function (el) {
                     var k = FM[(el.textContent || '').trim()];
@@ -1908,7 +3021,7 @@
                     var v = row[k] || S.en[k];
                     if (v && v !== k) el.textContent = v;
                 });
-            }, 150);
+            }
             return r;
         };
     }
@@ -1954,6 +3067,11 @@
         var radarCtx = document.getElementById('radarChartContextLabel');
         if (radarCtx && typeof window.renderRadarChart === 'function') window.renderRadarChart();
         if (typeof window.renderCharts === 'function') window.renderCharts();
+        /* Re-generate insights so prose re-renders in the new locale */
+        if (typeof window.generateInsights === 'function') window.generateInsights(true);
+        /* Quill editor replaces the textarea — update its data-placeholder directly */
+        var qlEditor = document.querySelector('.ql-editor');
+        if (qlEditor) qlEditor.setAttribute('data-placeholder', _tGlobal('journal_ph'));
     }
 
     /* ════════════════════════════════════════════════════════════════════
@@ -1996,7 +3114,13 @@
         if (typeof origNav === 'function' && !origNav._masterI18n) {
             window.navigate = function (page) {
                 var r = origNav.apply(this, arguments);
-                setTimeout(runI18n, 0);
+                /* Synchronous pass for all static DOM */
+                runI18n();
+                /* Second pass for chart pages (charts render async) */
+                var chartPages = ['analytics', 'velocity', 'forecast', 'patterns', 'seasonal'];
+                if (chartPages.indexOf(String(page)) >= 0) {
+                    setTimeout(runI18n, 0);
+                }
                 return r;
             };
             window.navigate._masterI18n = true;
@@ -2006,11 +3130,14 @@
     /* ════════════════════════════════════════════════════════════════════
        §10  BOOT — run early so language applies quickly
     ════════════════════════════════════════════════════════════════════ */
+    /* setTimeout(wire, 0) ensures deep_patch.js (which loads after this file) has
+       already run its synchronous IIFE and wired up all function wrappers before
+       wire() / runI18n() fires. Even 0ms delay puts this after the current call stack. */
     if (document.readyState !== 'loading' && window.navigate) {
-        setTimeout(wire, 100);
+        setTimeout(wire, 0);
     } else {
         document.addEventListener('DOMContentLoaded', function () {
-            setTimeout(wire, 150);
+            setTimeout(wire, 0);
         });
     }
 
