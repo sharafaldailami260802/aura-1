@@ -1,13 +1,10 @@
 /**
- * Aura Mood — Improvements JS (v2)
+ * Aura Mood — Improvements JS
  *
- * Fixed bugs from v1:
- *  - Velocity color patch now targets window.renderCircadian (correct exposed name)
- *  - Entries loaded via own Dexie connection (not broken closure ref)
- *  - Language translation uses safe text-node replacement (preserves child elements)
- *  - Theme toggle re-renders all active charts
- *  - Report tabs get inline-style enforcement for inactive state
- *  - Escape key closes entry modal
+ * UI and behaviour enhancements: velocity chart colours, calendar/data-manager
+ * fixes, modal button wiring, settings propagation (locale/date/time/theme),
+ * translation fallback table for data-i18n, escape key and backdrop behaviour.
+ * i18n.js is the single source of truth for translations when loaded.
  */
 (function () {
     'use strict';
@@ -58,8 +55,7 @@
 
     /* ═══════════════════════════════════════════════════════════════════
        1.  MOOD VELOCITY BAR COLOURS
-           app.js exposes:  window.renderCircadian = renderMoodVelocity
-           (NOT window.renderMoodVelocity — that was the bug in v1)
+           app.js exposes window.renderCircadian (not window.renderMoodVelocity).
        ═══════════════════════════════════════════════════════════════════ */
     onReady(function () {
         var orig = window.renderCircadian;
@@ -374,53 +370,6 @@
     });
 
     /* ═══════════════════════════════════════════════════════════════════
-       5.  LANGUAGE — safe per-text-node replacement that preserves child
-           elements, plus translated strings for all supported languages
-       ═══════════════════════════════════════════════════════════════════ */
-    var T = {
-        en: { save_entry:'Save Entry', calendar_title:'Calendar', calendar_subtitle:'Explore your mood history across days, weeks and months.', daily_checkin:'Daily Check-In', journal:'Journal', settings:'Settings', daily_summary:'Daily Summary', export_heatmap:'Export Heatmap', delete_entry:'Delete Entry', low_mood:'Low mood', neutral:'Neutral', good_mood:'Good mood', today:'Today', edit_journal_entry:'Edit journal entry', journal_saved_placeholder:'Your journal entry for today has already been saved.', one_journal_per_day:'Only one journal entry can be created per day.', add_photo:'📷 Add Photo' },
-        de: { save_entry:'Eintrag speichern', calendar_title:'Kalender', calendar_subtitle:'Entdecke deine Stimmungsverläufe nach Tagen, Wochen und Monaten.', daily_checkin:'Tages-Check-in', journal:'Tagebuch', settings:'Einstellungen', daily_summary:'Tageszusammenfassung', export_heatmap:'Heatmap exportieren', delete_entry:'Eintrag löschen', low_mood:'Niedrige Stimmung', neutral:'Neutral', good_mood:'Gute Stimmung', today:'Heute', edit_journal_entry:'Tagebucheintrag bearbeiten', journal_saved_placeholder:'Dein Tagebucheintrag wurde bereits gespeichert.', one_journal_per_day:'Pro Tag kann nur ein Tagebucheintrag erstellt werden.', add_photo:'📷 Foto hinzufügen' },
-        fr: { save_entry:'Enregistrer', calendar_title:'Calendrier', calendar_subtitle:'Explorez votre historique d\'humeur par jour, semaine et mois.', daily_checkin:'Bilan du jour', journal:'Journal', settings:'Paramètres', daily_summary:'Résumé du jour', export_heatmap:'Exporter la heatmap', delete_entry:'Supprimer l\'entrée', low_mood:'Humeur basse', neutral:'Neutre', good_mood:'Bonne humeur', today:'Aujourd\'hui', edit_journal_entry:'Modifier l\'entrée', journal_saved_placeholder:'Votre entrée a déjà été enregistrée.', one_journal_per_day:'Un seul entrée de journal par jour.', add_photo:'📷 Ajouter une photo' },
-        es: { save_entry:'Guardar entrada', calendar_title:'Calendario', calendar_subtitle:'Explora tu historial de ánimo por días, semanas y meses.', daily_checkin:'Registro diario', journal:'Diario', settings:'Ajustes', daily_summary:'Resumen del día', export_heatmap:'Exportar mapa de calor', delete_entry:'Eliminar entrada', low_mood:'Ánimo bajo', neutral:'Neutral', good_mood:'Buen ánimo', today:'Hoy', edit_journal_entry:'Editar entrada', journal_saved_placeholder:'Tu entrada ya ha sido guardada.', one_journal_per_day:'Solo se puede crear una entrada por día.', add_photo:'📷 Añadir foto' },
-        it: { save_entry:'Salva voce', calendar_title:'Calendario', calendar_subtitle:'Esplora la storia dell\'umore per giorni, settimane e mesi.', daily_checkin:'Check-in quotidiano', journal:'Diario', settings:'Impostazioni', daily_summary:'Riepilogo quotidiano', export_heatmap:'Esporta heatmap', delete_entry:'Elimina voce', low_mood:'Umore basso', neutral:'Neutro', good_mood:'Buon umore', today:'Oggi', edit_journal_entry:'Modifica voce', journal_saved_placeholder:'La voce è già stata salvata.', one_journal_per_day:'Una sola voce per giorno.', add_photo:'📷 Aggiungi foto' },
-        pt: { save_entry:'Guardar entrada', calendar_title:'Calendário', calendar_subtitle:'Explore o historial de humor por dias, semanas e meses.', daily_checkin:'Check-in diário', journal:'Diário', settings:'Definições', daily_summary:'Resumo diário', export_heatmap:'Exportar heatmap', delete_entry:'Eliminar entrada', low_mood:'Humor baixo', neutral:'Neutro', good_mood:'Bom humor', today:'Hoje', edit_journal_entry:'Editar entrada', journal_saved_placeholder:'A entrada já foi guardada.', one_journal_per_day:'Apenas uma entrada por dia.', add_photo:'📷 Adicionar foto' },
-        nl: { save_entry:'Invoer opslaan', calendar_title:'Kalender', calendar_subtitle:'Verken uw stemmingsgeschiedenis per dag, week en maand.', daily_checkin:'Dagelijkse check-in', journal:'Dagboek', settings:'Instellingen', daily_summary:'Dagelijks overzicht', export_heatmap:'Heatmap exporteren', delete_entry:'Verwijder invoer', low_mood:'Lage stemming', neutral:'Neutraal', good_mood:'Goede stemming', today:'Vandaag', edit_journal_entry:'Dagboek bewerken', journal_saved_placeholder:'De dagboekvermelding is al opgeslagen.', one_journal_per_day:'Eén dagboekvermelding per dag.', add_photo:'📷 Foto toevoegen' },
-        pl: { save_entry:'Zapisz wpis', calendar_title:'Kalendarz', calendar_subtitle:'Przeglądaj historię nastroju po dniach, tygodniach i miesiącach.', daily_checkin:'Codzienny check-in', journal:'Dziennik', settings:'Ustawienia', daily_summary:'Podsumowanie dnia', export_heatmap:'Eksportuj heatmapę', delete_entry:'Usuń wpis', low_mood:'Zły nastrój', neutral:'Neutralny', good_mood:'Dobry nastrój', today:'Dziś', edit_journal_entry:'Edytuj wpis', journal_saved_placeholder:'Wpis w dzienniku jest już zapisany.', one_journal_per_day:'Jeden wpis w dzienniku na dzień.', add_photo:'📷 Dodaj zdjęcie' },
-        ru: { save_entry:'Сохранить запись', calendar_title:'Календарь', calendar_subtitle:'Изучайте историю настроения за дни, недели и месяцы.', daily_checkin:'Ежедневный чек-ин', journal:'Дневник', settings:'Настройки', daily_summary:'Итог дня', export_heatmap:'Экспорт тепловой карты', delete_entry:'Удалить запись', low_mood:'Плохое настроение', neutral:'Нейтрально', good_mood:'Хорошее настроение', today:'Сегодня', edit_journal_entry:'Редактировать запись', journal_saved_placeholder:'Запись уже сохранена.', one_journal_per_day:'Одна запись в день.', add_photo:'📷 Добавить фото' },
-        tr: { save_entry:'Kaydı kaydet', calendar_title:'Takvim', calendar_subtitle:'Gün, hafta ve aylara göre ruh hali geçmişinizi keşfedin.', daily_checkin:'Günlük kontrol', journal:'Günlük', settings:'Ayarlar', daily_summary:'Günlük özet', export_heatmap:'Isı haritası dışa aktar', delete_entry:'Kaydı sil', low_mood:'Düşük ruh hali', neutral:'Nötr', good_mood:'İyi ruh hali', today:'Bugün', edit_journal_entry:'Günlük girişini düzenle', journal_saved_placeholder:'Günlük girişiniz zaten kaydedildi.', one_journal_per_day:'Günde yalnızca bir günlük girişi.', add_photo:'📷 Fotoğraf ekle' },
-        ja: { save_entry:'保存', calendar_title:'カレンダー', calendar_subtitle:'日、週、月ごとのムード履歴を確認する。', daily_checkin:'デイリーチェックイン', journal:'日記', settings:'設定', daily_summary:'1日のまとめ', export_heatmap:'ヒートマップを書き出す', delete_entry:'削除', low_mood:'低い気分', neutral:'普通', good_mood:'良い気分', today:'今日', edit_journal_entry:'日記を編集', journal_saved_placeholder:'今日の日記はすでに保存されています。', one_journal_per_day:'1日に作成できる日記は1件のみです。', add_photo:'📷 写真を追加' },
-        zh: { save_entry:'保存记录', calendar_title:'日历', calendar_subtitle:'按日、周、月浏览心情历史。', daily_checkin:'每日打卡', journal:'日记', settings:'设置', daily_summary:'每日总结', export_heatmap:'导出热力图', delete_entry:'删除记录', low_mood:'情绪低落', neutral:'中性', good_mood:'情绪良好', today:'今天', edit_journal_entry:'编辑日记', journal_saved_placeholder:'今天的日记已保存。', one_journal_per_day:'每天只能创建一条日记。', add_photo:'📷 添加照片' }
-    };
-
-    function applyTranslationsSafe(locale) {
-        var loc = String(locale || 'en').split('-')[0];
-        var t = T[loc] || T['en'];
-        document.querySelectorAll('[data-i18n]').forEach(function (el) {
-            var key = el.getAttribute('data-i18n');
-            var val = t[key];
-            if (val == null) return;
-            // Placeholder replacement
-            if (el.getAttribute('data-i18n-placeholder')) {
-                el.placeholder = val;
-                return;
-            }
-            // Find first text node and replace only that — preserves child elements like the ✓ check dot
-            var replaced = false;
-            for (var i = 0; i < el.childNodes.length; i++) {
-                if (el.childNodes[i].nodeType === 3 && el.childNodes[i].textContent.trim()) {
-                    el.childNodes[i].textContent = val + ' ';
-                    replaced = true;
-                    break;
-                }
-            }
-            // Fallback: no text nodes, no children — set textContent directly
-            if (!replaced && !el.children.length) {
-                el.textContent = val;
-            }
-        });
-    }
-
-    /* ═══════════════════════════════════════════════════════════════════
        6.  REPORT TABS — enforce inactive button appearance
            setReportTab toggles .btn / .btn-secondary but some base styles
            override with higher specificity; fix with inline style guards.
@@ -487,7 +436,7 @@
         };
     }
 
-    console.log('[Aura Improvements v2] Loaded — velocity, insights, i18n, dark-mode charts, report tabs, escape key all patched.');
+    console.log('[Aura Improvements] Loaded — velocity, insights, locale/theme propagation, report tabs, escape key patched.');
 })();
 
 /* ═══════════════════════════════════════════════════════════════════════
@@ -1184,9 +1133,9 @@
 
     /* ─────────────────────────────────────────────────────────────────────
        1. FIX: closePremiumConfirm not exposed to window
-          modals.html cancel button calls closePremiumConfirm() inline,
-          but app.js never puts it on window — so clicking Cancel on the
-          delete-field confirm modal does nothing. Patch it here.
+          The premium confirm modal cancel button (in index.html) calls
+          closePremiumConfirm() inline, but app.js never attaches it to
+          window — so clicking Cancel did nothing. Patch it here.
     ───────────────────────────────────────────────────────────────────── */
     onReady(function () {
         // Wait for app.js to finish its own window-expose block
@@ -1383,9 +1332,8 @@
 
     /* ─────────────────────────────────────────────────────────────────────
        6. UX: Backdrop click on premiumConfirmModal closes it.
-          (The div has onclick="if(event.target===this)closePremiumConfirm()"
-           but closePremiumConfirm wasn't on window — fixed by patch #1 above.
-           This is a belt-and-suspenders fallback.)
+          Inline onclick on the overlay calls closePremiumConfirm(); we ensure
+          that function is on window (see closePremiumConfirm patch above). This listener is a fallback.
     ───────────────────────────────────────────────────────────────────── */
     onReady(function () {
         var pcm = document.getElementById('premiumConfirmModal');
@@ -1441,7 +1389,7 @@
         document.addEventListener('DOMContentLoaded', function () { setTimeout(fn, 1000); });
     }
 
-    /* ── Full translation table (mirrors improvements.js v2 T object) ── */
+    /* ── Fallback translation table for data-i18n (i18n.js is authoritative when loaded) ── */
     var T_FULL = {
         en: { save_entry:'Save Entry', calendar_title:'Calendar', calendar_subtitle:'Explore your mood history across days, weeks and months.', daily_checkin:'Daily Check-In', journal:'Journal', settings:'Settings', daily_summary:'Daily Summary', export_heatmap:'Export Heatmap', delete_entry:'Delete Entry', low_mood:'Low mood', neutral:'Neutral', good_mood:'Good mood', today:'Today', edit_journal_entry:'Edit journal entry', journal_saved_placeholder:'Your journal entry for today has already been saved.', one_journal_per_day:'Only one journal entry can be created per day.', add_photo:'📷 Add Photo' },
         de: { save_entry:'Eintrag speichern', calendar_title:'Kalender', calendar_subtitle:'Entdecke deine Stimmungsverläufe nach Tagen, Wochen und Monaten.', daily_checkin:'Tages-Check-in', journal:'Tagebuch', settings:'Einstellungen', daily_summary:'Tageszusammenfassung', export_heatmap:'Heatmap exportieren', delete_entry:'Eintrag löschen', low_mood:'Niedrige Stimmung', neutral:'Neutral', good_mood:'Gute Stimmung', today:'Heute', edit_journal_entry:'Tagebucheintrag bearbeiten', journal_saved_placeholder:'Dein Tagebucheintrag wurde bereits gespeichert.', one_journal_per_day:'Pro Tag kann nur ein Tagebucheintrag erstellt werden.', add_photo:'📷 Foto hinzufügen' },
@@ -1503,6 +1451,10 @@
 
     /* Safe text-node replacement preserving child elements */
     function applyAllTranslations(locale) {
+        if (typeof window.runI18n === 'function') {
+            window.runI18n(locale);
+            return;
+        }
         var loc = String(locale || 'en').split('-')[0];
         var t = Object.assign({}, T_FULL[loc] || T_FULL['en'], T_EXTRA[loc] || T_EXTRA['en'] || {});
         document.querySelectorAll('[data-i18n]').forEach(function (el) {
@@ -1737,11 +1689,11 @@
         };
     });
 
-    console.log('[Aura Batch D] Settings propagation: locale, dateFormat, timeFormat, theme fully patched.');
+    console.log('[Aura] Settings propagation: locale, dateFormat, timeFormat, theme patched.');
 })();
 
 /* ═══════════════════════════════════════════════════════════════════════
-   BATCH D — Entry modal: stepper inputs + bullet-proof footer buttons
+   Entry modal: stepper inputs + bullet-proof footer buttons
    ═══════════════════════════════════════════════════════════════════════ */
 (function () {
     'use strict';

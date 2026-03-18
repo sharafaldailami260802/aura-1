@@ -2662,12 +2662,6 @@ body::before { animation: gradientShift 8s ease-in-out infinite; }
     transform: rotate(45deg);
     margin-bottom: 3px;
 }
-.backup-actions {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-sm);
-    margin-bottom: var(--space-lg);
-}
 .backup-reminder {
     display: none;
     padding: var(--space-sm) var(--space-md);
@@ -2686,42 +2680,6 @@ body::before { animation: gradientShift 8s ease-in-out infinite; }
     margin-bottom: var(--space-sm);
     text-transform: uppercase;
     letter-spacing: 0.5px;
-}
-.backup-list li {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: var(--space-sm) var(--space-md);
-    border-radius: var(--radius-md);
-    background: var(--bg);
-    margin-bottom: var(--space-xs);
-    font-size: 0.9rem;
-}
-.backup-list li:last-child { margin-bottom: 0; }
-.backup-list button { font-size: 0.9rem; min-height: 40px; }
-.import-file-wrap {
-    position: relative;
-    display: inline-flex;
-}
-.import-file-wrap input[type="file"] {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    opacity: 0;
-    cursor: pointer;
-    left: 0;
-    top: 0;
-    z-index: 1;
-}
-.import-file-wrap .btn { pointer-events: none; }
-.import-file-wrap:hover .btn { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 10%, transparent); }
-.import-result {
-    margin-top: var(--space-md);
-    padding: var(--space-sm) var(--space-md);
-    border-radius: var(--radius-md);
-    font-size: 0.9rem;
-    background: var(--bg);
-    border: 1px solid var(--border);
 }
 .privacy-options-block {
     padding: var(--space-lg);

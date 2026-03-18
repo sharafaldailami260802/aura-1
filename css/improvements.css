@@ -1457,12 +1457,6 @@ input[type="range"]:active::-webkit-slider-thumb {
     padding: 4px 0;
     gap: 6px 8px;
 }
-/* Remove old journal card styling that conflicts */
-#journal .card:first-child {
-    background: unset;
-    border-color: unset;
-}
-
 /* ── 5. Export & Backup: premium action rows ─────────────────────────── */
 #data .comparison-controls {
     background: color-mix(in srgb, var(--accent) 4%, var(--surface));
