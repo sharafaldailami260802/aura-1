@@ -8501,7 +8501,13 @@ function loadPreferencesIntoUI() {
             el = document.getElementById('prefWidgetSleep'); if (el) el.checked = layout.visible.sleep !== false;
             el = document.getElementById('prefWidgetEnergy'); if (el) el.checked = layout.visible.energy !== false;
         }
-        if (typeof applyTranslations === 'function') applyTranslations();
+        // Re-apply translations now that locale is confirmed from DB
+        var confirmedLocale = window.auraLocale || 'en';
+        if (typeof window.applyAllTranslations === 'function') {
+            window.applyAllTranslations(confirmedLocale);
+        } else if (typeof applyTranslations === 'function') {
+            applyTranslations();
+        }
     });
 }
 function applyReduceMotion(on) {

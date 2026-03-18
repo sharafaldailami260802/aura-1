@@ -26,6 +26,8 @@
             else d = d === 'true';
             document.documentElement.setAttribute('data-theme', t);
             document.documentElement.setAttribute('data-dark', d ? 'true' : 'false');
+            var _loc = localStorage.getItem('aura_locale') || 'en';
+            window.auraLocale = (_loc && _loc !== '_custom') ? _loc : 'en';
         })();
     </script>
     

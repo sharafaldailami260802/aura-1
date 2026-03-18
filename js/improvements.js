@@ -420,21 +420,6 @@
         });
     }
 
-    onReady(function () {
-        var origSavePref = window.savePreference;
-        if (typeof origSavePref !== 'function') return;
-        window.savePreference = function (key, value) {
-            var result = origSavePref.apply(this, arguments);
-            if (key === 'locale') {
-                setTimeout(function () {
-                    applyTranslationsSafe(value);
-                    if (typeof window.showToast === 'function') window.showToast('Language updated ✓');
-                }, 80);
-            }
-            return result;
-        };
-    });
-
     /* ═══════════════════════════════════════════════════════════════════
        6.  REPORT TABS — enforce inactive button appearance
            setReportTab toggles .btn / .btn-secondary but some base styles
