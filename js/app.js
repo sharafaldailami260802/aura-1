@@ -8603,6 +8603,13 @@ function startApp() {
             return initStorage();
         })
         .then(function() {
+            // Load preferences (including locale) once at boot so language and settings
+            // are applied without requiring a visit to the Settings page.
+            try {
+                if (typeof loadPreferencesIntoUI === 'function') loadPreferencesIntoUI();
+            } catch (e) {
+                console.warn('[Aura] loadPreferencesIntoUI at boot failed', e);
+            }
             return (document.fonts && document.fonts.ready) ? document.fonts.ready : Promise.resolve();
         })
         .then(function() {
@@ -8645,6 +8652,10 @@ function startApp() {
         })
         .then(function() {
             console.log('[Aura] Boot finished');
+            setTimeout(function() {
+                if (typeof window.runI18n === 'function') window.runI18n();
+                if (typeof updateDashboard === 'function') updateDashboard();
+            }, 100);
         })
         .catch(function(err) {
             console.error('[Aura] Boot error', err);

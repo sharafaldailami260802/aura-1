@@ -57,12 +57,29 @@
         dash_feat_insights:'Personalised insights',
         dash_go_deeper:'Go deeper',
         dash_analytics_hint:'Explore patterns, correlations, and forecasts from your data.',
+        /* Overview dashboard metrics */
+        mood_today:'Mood Today',
+        sleep_duration:'Sleep Duration',
+        energy_level:'Energy Level',
+        streak:'Streak',
+        days_label:'days',
+        mood_timeline:'Mood Timeline',
+        sleep_patterns:'Sleep Patterns',
+        energy_flow:'Energy Flow',
+        view_full:'View full →',
         tile_insights_desc:'Patterns from your data',
         tile_corr_desc:'Sleep, mood & energy links',
         tile_forecast_desc:'Where your mood may go',
         tile_patterns_desc:'Sleep timeline & rhythms',
         tile_seasonal_desc:'Monthly & yearly rhythm',
         tile_velocity_desc:'Day-to-day change',
+        /* Legacy key aliases for dashboard tiles */
+        insights_tile_desc:'Patterns from your data',
+        correlations_tile_desc:'Sleep, mood & energy links',
+        forecast_tile_desc:'Where your mood may go',
+        patterns_tile_desc:'Sleep timeline & rhythms',
+        seasonal_tile_desc:'Monthly & yearly rhythm',
+        velocity_tile_desc:'Day-to-day change',
 
         /* Dashboard narrative */
         good_morning:'Good morning', good_afternoon:'Good afternoon', good_evening:'Good evening',
@@ -782,6 +799,12 @@
         tile_patterns_desc:'Schlaf-Timeline & Rhythmen',
         tile_seasonal_desc:'Monatlicher & jährlicher Rhythmus',
         tile_velocity_desc:'Tägliche Veränderungen',
+        insights_tile_desc:'Muster aus deinen Daten',
+        correlations_tile_desc:'Schlaf-, Stimmungs- & Energieverbindungen',
+        forecast_tile_desc:'Wohin deine Stimmung tendiert',
+        patterns_tile_desc:'Schlaf-Timeline & Rhythmen',
+        seasonal_tile_desc:'Monatlicher & jährlicher Rhythmus',
+        velocity_tile_desc:'Tägliche Veränderungen',
         good_morning:'Guten Morgen', good_afternoon:'Guten Tag', good_evening:'Guten Abend',
         narrative_start:'Beginne mit deinem ersten Check-in, um Muster zu sehen.',
         narrative_trend_up:'Deine Stimmung steigt diese Woche.',
@@ -1373,6 +1396,12 @@
         tile_patterns_desc:'Chronologie & rythmes de sommeil',
         tile_seasonal_desc:'Rythme mensuel & annuel',
         tile_velocity_desc:'Changement jour par jour',
+        insights_tile_desc:'Patterns de vos données',
+        correlations_tile_desc:'Liens sommeil, humeur & énergie',
+        forecast_tile_desc:'Où va votre humeur',
+        patterns_tile_desc:'Chronologie & rythmes de sommeil',
+        seasonal_tile_desc:'Rythme mensuel & annuel',
+        velocity_tile_desc:'Changement jour par jour',
         good_morning:'Bonjour', good_afternoon:'Bon après-midi', good_evening:'Bonsoir',
         narrative_start:'Commencez à enregistrer votre premier bilan pour voir les patterns.',
         narrative_trend_up:'Votre humeur s\'améliore cette semaine.',
@@ -1955,6 +1984,12 @@
         tile_patterns_desc:'Línea de tiempo de sueño',
         tile_seasonal_desc:'Ritmo mensual y anual',
         tile_velocity_desc:'Cambio día a día',
+        insights_tile_desc:'Patrones de tus datos',
+        correlations_tile_desc:'Vínculos sueño, ánimo y energía',
+        forecast_tile_desc:'Hacia dónde va tu ánimo',
+        patterns_tile_desc:'Línea de tiempo de sueño',
+        seasonal_tile_desc:'Ritmo mensual y anual',
+        velocity_tile_desc:'Cambio día a día',
         good_morning:'Buenos días', good_afternoon:'Buenas tardes', good_evening:'Buenas noches',
         narrative_start:'Empieza a registrar tu primer check-in para ver los patrones.',
         narrative_trend_up:'Tu ánimo ha mejorado esta semana.',
@@ -2505,6 +2540,12 @@
         tile_patterns_desc:'الجدول الزمني وإيقاعات النوم',
         tile_seasonal_desc:'الإيقاع الشهري والسنوي',
         tile_velocity_desc:'التغيير من يوم لآخر',
+        insights_tile_desc:'الأنماط من بياناتك',
+        correlations_tile_desc:'روابط النوم والمزاج والطاقة',
+        forecast_tile_desc:'إلى أين يتجه مزاجك',
+        patterns_tile_desc:'الجدول الزمني وإيقاعات النوم',
+        seasonal_tile_desc:'الإيقاع الشهري والسنوي',
+        velocity_tile_desc:'التغيير من يوم لآخر',
 
         /* Dashboard narrative */
         good_morning:'صباح الخير', good_afternoon:'مساء الخير', good_evening:'مساء النور',
@@ -3209,6 +3250,205 @@
     S.zh = { nav_tracking:'追踪', nav_analytics_label:'分析', nav_explore:'探索', nav_data_label:'数据', nav_overview:'概览', nav_checkin:'每日打卡', nav_checkin_short:'打卡', nav_calendar:'日历', nav_journal:'日记', nav_mood_trends:'情绪趋势', nav_sleep:'睡眠分析', nav_energy:'能量模式', nav_insights:'洞察', nav_correlations:'相关性', nav_velocity:'情绪速度', nav_forecast:'预测', nav_patterns:'我的模式', nav_seasonal:'季节节律', nav_reports:'报告', nav_export:'导出与备份', nav_menu:'菜单', nav_seasonal_short:'季节', good_morning:'早上好', good_afternoon:'下午好', good_evening:'晚上好', narrative_start:'开始记录第一次打卡，在这里看到模式的出现。', narrative_trend_up:'您的情绪本周有所改善。', narrative_trend_down:'您的情绪本周略有下降。', narrative_steady:'您的情绪本周保持稳定。', no_checkin_today:'今天还没有打卡。', streak_days:'连续{n}天 \u2014 继续坚持！', streak_day:'连续第{n}天。', daily_checkin:'每日打卡', checkin_subtitle:'记录您的情绪、睡眠和能量。', save_entry:'保存记录', daily_summary:'每日总结', low_mood:'情绪低落', neutral:'中性', good_mood:'情绪良好', today:'今天', calendar_title:'日历', calendar_subtitle:'按日、周、月浏览情绪历史。', calendar_year_heatmap:'年度热力图', cal_year_heatmap:'年度热力图', calendar_month_grid:'月度网格', cal_month_grid:'月度网格', calendar_week_timeline:'周时间轴', cal_week_timeline:'周时间轴', calendar_list_view:'列表', cal_list:'列表', year_in_mood_title:'年度情绪', cal_year_in_mood:'年度情绪', export_heatmap:'导出热力图', journal:'日记', journal_title:'日记', journal_page_subtitle:'自由书写 \u2014 这只属于您。', journal_eyebrow:'您的反思', journal_one_per_day_sub:'每天一条记录。', journal_unsaved:'未保存的更改', save_journal:'保存日记', edit_journal_entry:'编辑日记', journal_saved_placeholder:'今天的日记已保存。', one_journal_per_day:'每天只能创建一条日记。', add_photo:'\ud83d\udcf7 添加照片', page_mood_subtitle:'情绪健康的规律和趋势。', page_sleep_subtitle:'休息的质量和一致性。', page_energy_subtitle:'各天的节奏和耐力。', page_velocity_h1:'情绪速度与稳定性', page_velocity_subtitle:'查看情绪日复一日的变化。', page_corr_subtitle:'发现追踪指标之间的关系。', page_patterns_subtitle:'睡眠、活动和情绪模式。', page_seasonal_h1:'季节性与节律分析', page_seasonal_subtitle:'发现情绪、睡眠和能量的季节变化。', page_forecast_subtitle:'基于最新数据的预测趋势。', insights_eyebrow:'个人分析', insights_overview:'来自您数据的规律。', export_page_title:'导出与备份', export_page_subtitle:'您的数据属于您。', from_label:'开始', to_label:'结束', tags_optional:'标签（可选）', report_week:'周', report_month:'月', report_year:'年', report_export_pdf:'将报告导出为PDF', report_best_day:'最佳日', report_challenging:'情绪最低日', settings:'设置', s_appearance:'外观', s_appearance_desc:'主题和显示偏好。', s_theme:'主题', s_dark_mode:'暗色模式', s_sound:'成功音效', s_particles:'环境粒子', s_parallax:'视差滚动', s_preferences:'偏好设置', s_preferences_desc:'默认和显示选项。', s_language:'语言', s_date_format:'日期格式', s_time_format:'时间格式', s_chart_days:'图表默认天数', s_reduce_motion:'减少动画', s_notifications:'启用通知（浏览器）', s_dashboard_widgets:'仪表板小组件', s_show_mood:'显示情绪图表', s_show_sleep:'显示睡眠图表', s_show_energy:'显示能量图表', s_custom_metrics:'自定义指标', s_custom_metrics_desc:'添加您自己的可追踪指标。', s_privacy:'数据与隐私', s_privacy_desc:'所有数据本地存储在您的设备上。', s_delete_all:'删除所有数据', s_favourite_tags:'收藏标签', s_default_activities:'默认活动', modal_full_edit:'\u270f\ufe0f 完整编辑', modal_journal_btn:'\ud83d\udcd3 日记', modal_close:'关闭', modal_cancel:'取消', modal_delete:'删除', modal_confirm:'确认', delete_entry:'删除记录', delete_entry_q:'删除记录？', cannot_undo:'此操作无法撤销。', full_delete_day:'删除整天记录？', full_delete_desc:'情绪、能量、睡眠、活动和日记将被永久删除。', full_delete_btn:'删除记录', are_you_sure:'您确定吗？', enter_passcode:'输入密码以确认', type_delete_label:'输入删除以确认', delete_all_title:'删除所有数据', delete_all_desc:'永久删除所有记录、日记、备份和设置。', delete_all_confirm:'删除一切', no_entry_day:'这天没有记录。', click_edit_checkin:'点击编辑以添加。', delete_entire_entry:'\ud83d\uddd1 删除这天的全部记录', pwa_install_text:'安装Aura以快速访问和离线使用。', pwa_not_now:'暂不', pwa_install_btn:'安装', pwa_update_text:'新版本可用。', pwa_reload:'重新加载', chart_avg_mood_month:'按月平均情绪', chart_mood_axis:'情绪变化（逐日）', chart_mood_axis_short:'变化', chart_mood_improved:'情绪提升了{n}分', chart_mood_dipped:'情绪下降了{n}分', chart_mood_1_10:'情绪（1\u201310）', chip_latest:'最近: {delta} vs 均', chip_range:'区间 {min}\u2013{max}', insights_what_data_shows:'数据揭示的内容', insight_sleep_heading:'睡眠', insight_activity_heading:'活动', insight_stability_heading:'情绪稳定性', insight_tags_heading:'标签', toast_lang:'语言已更新 \u2713', toast_date_fmt:'日期格式已更新 \u2713', toast_time_fmt:'时间格式已更新 \u2713', toast_saved:'已保存 \u2713', dow_need_more_data:'至少添加2周的记录以查看每周模式。', dow_no_data_label:'无数据', dow_average_label:'平均', dow_dataset_label:'平均情绪' };
 
     S.hi = { nav_tracking:'ट्रैकिंग', nav_analytics_label:'विश्लेषण', nav_explore:'अन्वेषण', nav_data_label:'डेटा', nav_overview:'अवलोकन', nav_checkin:'दैनिक चेक-इन', nav_checkin_short:'चेक-इन', nav_calendar:'कैलेंडर', nav_journal:'डायरी', nav_mood_trends:'मूड ट्रेंड', nav_sleep:'नींद विश्लेषण', nav_energy:'ऊर्जा पैटर्न', nav_insights:'अंतर्दृष्टि', nav_correlations:'सहसंबंध', nav_velocity:'मूड वेलोसिटी', nav_forecast:'पूर्वानुमान', nav_patterns:'मेरे पैटर्न', nav_seasonal:'मौसमी लय', nav_reports:'रिपोर्ट', nav_export:'निर्यात और बैकअप', nav_menu:'मेनू', nav_seasonal_short:'मौसमी', good_morning:'सुप्रभात', good_afternoon:'नमस्ते', good_evening:'शुभ संध्या', narrative_start:'पैटर्न देखने के लिए पहला चेक-इन दर्ज करें।', narrative_trend_up:'इस सप्ताह आपका मूड बेहतर हुआ है।', narrative_trend_down:'इस सप्ताह आपका मूड थोड़ा कम रहा।', narrative_steady:'इस सप्ताह आपका मूड स्थिर रहा।', no_checkin_today:'आज अभी तक कोई चेक-इन नहीं।', streak_days:'{n} दिन की लकीर \u2014 जारी रखें!', streak_day:'आपकी लकीर का दिन {n}।', daily_checkin:'दैनिक चेक-इन', checkin_subtitle:'अपना मूड, नींद और ऊर्जा दर्ज करें।', save_entry:'प्रविष्टि सहेजें', daily_summary:'दैनिक सारांश', low_mood:'कम मनोदशा', neutral:'तटस्थ', good_mood:'अच्छी मनोदशा', today:'आज', calendar_title:'कैलेंडर', calendar_subtitle:'दिनों, हफ्तों और महीनों में मूड इतिहास देखें।', calendar_year_heatmap:'वार्षिक हीटमैप', cal_year_heatmap:'वार्षिक हीटमैप', calendar_month_grid:'मासिक ग्रिड', cal_month_grid:'मासिक ग्रिड', calendar_week_timeline:'साप्ताहिक टाइमलाइन', cal_week_timeline:'साप्ताहिक टाइमलाइन', calendar_list_view:'सूची', cal_list:'सूची', year_in_mood_title:'मूड का वर्ष', cal_year_in_mood:'मूड का वर्ष', export_heatmap:'हीटमैप निर्यात करें', journal:'डायरी', journal_title:'डायरी', journal_page_subtitle:'स्वतंत्र रूप से लिखें \u2014 यह सिर्फ आपके लिए है।', journal_eyebrow:'आपके विचार', journal_one_per_day_sub:'प्रतिदिन एक प्रविष्टि।', journal_unsaved:'सहेजे नहीं गए बदलाव', save_journal:'डायरी सहेजें', edit_journal_entry:'डायरी प्रविष्टि संपादित करें', journal_saved_placeholder:'आज की डायरी प्रविष्टि पहले से सहेजी गई है।', one_journal_per_day:'प्रति दिन केवल एक डायरी प्रविष्टि।', add_photo:'\ud83d\udcf7 फ़ोटो जोड़ें', page_mood_subtitle:'आपके भावनात्मक स्वास्थ्य के पैटर्न।', page_sleep_subtitle:'आपकी नींद की गुणवत्ता और निरंतरता।', page_energy_subtitle:'दिनों में लय और सहनशक्ति।', page_velocity_h1:'मूड वेलोसिटी और स्थिरता', page_velocity_subtitle:'देखें मूड दिन-प्रतिदिन कैसे बदलता है।', page_corr_subtitle:'ट्रैक की गई मेट्रिक्स के बीच संबंध खोजें।', page_patterns_subtitle:'नींद, गतिविधि और मूड के पैटर्न।', page_seasonal_h1:'मौसमी और लयबद्ध विश्लेषण', page_seasonal_subtitle:'मूड, नींद और ऊर्जा में मौसमी बदलाव जानें।', page_forecast_subtitle:'हाल के डेटा के आधार पर पूर्वानुमान रुझान।', insights_eyebrow:'व्यक्तिगत विश्लेषण', insights_overview:'आपके डेटा से पैटर्न।', export_page_title:'निर्यात और बैकअप', export_page_subtitle:'आपका डेटा आपका है।', from_label:'से', to_label:'तक', tags_optional:'टैग (वैकल्पिक)', report_week:'सप्ताह', report_month:'माह', report_year:'वर्ष', report_export_pdf:'रिपोर्ट PDF में निर्यात करें', report_best_day:'सबसे अच्छा दिन', report_challenging:'कठिन दिन', settings:'सेटिंग्स', s_appearance:'दिखावट', s_appearance_desc:'थीम और प्रदर्शन प्राथमिकताएं।', s_theme:'थीम', s_dark_mode:'डार्क मोड', s_sound:'सफलता ध्वनि', s_particles:'परिवेश कण', s_parallax:'पैरेलेक्स स्क्रॉलिंग', s_preferences:'प्राथमिकताएं', s_preferences_desc:'डिफ़ॉल्ट विकल्प।', s_language:'भाषा', s_date_format:'दिनांक प्रारूप', s_time_format:'समय प्रारूप', s_chart_days:'चार्ट डिफ़ॉल्ट दिन', s_reduce_motion:'गति कम करें', s_notifications:'सूचनाएं सक्षम करें (ब्राउज़र)', s_dashboard_widgets:'डैशबोर्ड विजेट', s_show_mood:'मूड चार्ट दिखाएं', s_show_sleep:'नींद चार्ट दिखाएं', s_show_energy:'ऊर्जा चार्ट दिखाएं', s_custom_metrics:'कस्टम मेट्रिक्स', s_custom_metrics_desc:'अपनी खुद की मेट्रिक्स जोड़ें।', s_privacy:'डेटा और गोपनीयता', s_privacy_desc:'सभी डेटा आपके डिवाइस पर स्थानीय रूप से संग्रहीत है।', s_delete_all:'सभी डेटा हटाएं', s_favourite_tags:'पसंदीदा टैग', s_default_activities:'डिफ़ॉल्ट गतिविधियां', modal_full_edit:'\u270f\ufe0f पूर्ण संपादन', modal_journal_btn:'\ud83d\udcd3 डायरी', modal_close:'बंद करें', modal_cancel:'रद्द करें', modal_delete:'हटाएं', modal_confirm:'पुष्टि करें', delete_entry:'प्रविष्टि हटाएं', delete_entry_q:'प्रविष्टि हटाएं?', cannot_undo:'यह क्रिया पूर्ववत नहीं की जा सकती।', full_delete_day:'पूरा दिन हटाएं?', full_delete_desc:'मूड, ऊर्जा, नींद, गतिविधियां और डायरी स्थायी रूप से हटाई जाएंगी।', full_delete_btn:'प्रविष्टि हटाएं', are_you_sure:'क्या आप सुनिश्चित हैं?', enter_passcode:'पुष्टि के लिए पासकोड दर्ज करें', type_delete_label:'पुष्टि के लिए DELETE टाइप करें', delete_all_title:'सभी डेटा हटाएं', delete_all_desc:'सभी प्रविष्टियां, डायरी, बैकअप और सेटिंग्स स्थायी रूप से हटाएं।', delete_all_confirm:'सब कुछ हटाएं', no_entry_day:'इस दिन के लिए कोई प्रविष्टि नहीं।', click_edit_checkin:'जोड़ने के लिए चेक-इन संपादित करें पर क्लिक करें।', delete_entire_entry:'\ud83d\uddd1 इस दिन की पूरी प्रविष्टि हटाएं', pwa_install_text:'Aura इंस्टॉल करें।', pwa_not_now:'अभी नहीं', pwa_install_btn:'इंस्टॉल करें', pwa_update_text:'नया संस्करण उपलब्ध है।', pwa_reload:'पुनः लोड करें', chart_avg_mood_month:'माह के अनुसार औसत मूड', chart_mood_axis:'मूड परिवर्तन', chart_mood_axis_short:'परि.', chart_mood_improved:'मूड {n} अंक बेहतर हुआ', chart_mood_dipped:'मूड {n} अंक कम हुआ', chart_mood_1_10:'मूड (1\u201310)', chip_latest:'हाल: {delta} बनाम औसत', chip_range:'दायरा {min}\u2013{max}', insights_what_data_shows:'आपके डेटा से पता चलता है', insight_sleep_heading:'नींद अंतर्दृष्टि', insight_activity_heading:'गतिविधि अंतर्दृष्टि', insight_stability_heading:'मूड स्थिरता', insight_tags_heading:'टैग अंतर्दृष्टि', toast_lang:'भाषा अपडेट हुई \u2713', toast_date_fmt:'दिनांक प्रारूप अपडेट हुआ \u2713', toast_time_fmt:'समय प्रारूप अपडेट हुआ \u2713', toast_saved:'सहेजा गया \u2713', dow_need_more_data:'साप्ताहिक पैटर्न देखने के लिए कम से कम 2 सप्ताह जोड़ें।', dow_no_data_label:'कोई डेटा नहीं', dow_average_label:'औसत', dow_dataset_label:'औसत मूड' };
+
+    /* Overview dashboard metric strings per locale */
+    Object.assign(S.de, {
+        mood_today:'Stimmung heute',
+        sleep_duration:'Schlafdauer',
+        energy_level:'Energielevel',
+        streak:'Serie',
+        days_label:'Tage',
+        mood_timeline:'Stimmungsverlauf',
+        sleep_patterns:'Schlafmuster',
+        energy_flow:'Energieverlauf',
+        view_full:'Ganz anzeigen →'
+    });
+    Object.assign(S.fr, {
+        mood_today:'Humeur aujourd’hui',
+        sleep_duration:'Durée du sommeil',
+        energy_level:'Niveau d’énergie',
+        streak:'Série',
+        days_label:'jours',
+        mood_timeline:'Courbe d’humeur',
+        sleep_patterns:'Patterns de sommeil',
+        energy_flow:'Flux d’énergie',
+        view_full:'Voir en entier →'
+    });
+    Object.assign(S.es, {
+        mood_today:'Ánimo hoy',
+        sleep_duration:'Duración del sueño',
+        energy_level:'Nivel de energía',
+        streak:'Racha',
+        days_label:'días',
+        mood_timeline:'Línea de tiempo del ánimo',
+        sleep_patterns:'Patrones de sueño',
+        energy_flow:'Flujo de energía',
+        view_full:'Ver completo →'
+    });
+    Object.assign(S.tr, {
+        mood_today:'Bugünkü ruh hali',
+        sleep_duration:'Uyku süresi',
+        energy_level:'Enerji seviyesi',
+        streak:'Seri',
+        days_label:'gün',
+        mood_timeline:'Ruh hali grafiği',
+        sleep_patterns:'Uyku desenleri',
+        energy_flow:'Enerji akışı',
+        view_full:'Tümünü gör →'
+    });
+    Object.assign(S.pt, {
+        mood_today:'Humor hoje',
+        sleep_duration:'Duração do sono',
+        energy_level:'Nível de energia',
+        streak:'Sequência',
+        days_label:'dias',
+        mood_timeline:'Linha do tempo do humor',
+        sleep_patterns:'Padrões de sono',
+        energy_flow:'Fluxo de energia',
+        view_full:'Ver completo →',
+        insights_tile_desc:'Padrões a partir dos seus dados',
+        correlations_tile_desc:'Ligações entre sono, humor e energia',
+        forecast_tile_desc:'Para onde o seu humor pode ir',
+        patterns_tile_desc:'Linha temporal e ritmos de sono',
+        seasonal_tile_desc:'Ritmo mensal e anual',
+        velocity_tile_desc:'Variação diária'
+    });
+    Object.assign(S.it, {
+        mood_today:'Umore di oggi',
+        sleep_duration:'Durata del sonno',
+        energy_level:'Livello di energia',
+        streak:'Serie',
+        days_label:'giorni',
+        mood_timeline:'Andamento dell’umore',
+        sleep_patterns:'Pattern di sonno',
+        energy_flow:'Flusso di energia',
+        view_full:'Vedi tutto →',
+        insights_tile_desc:'Pattern dai tuoi dati',
+        correlations_tile_desc:'Collegamenti tra sonno, umore ed energia',
+        forecast_tile_desc:'Dove potrebbe andare il tuo umore',
+        patterns_tile_desc:'Timeline e ritmi del sonno',
+        seasonal_tile_desc:'Ritmo mensile e annuale',
+        velocity_tile_desc:'Variazione giorno per giorno'
+    });
+    Object.assign(S.nl, {
+        mood_today:'Stemming vandaag',
+        sleep_duration:'Slaaptijd',
+        energy_level:'Energieniveau',
+        streak:'Reeks',
+        days_label:'dagen',
+        mood_timeline:'Stemmingstijdlijn',
+        sleep_patterns:'Slaappatronen',
+        energy_flow:'Energiewerking',
+        view_full:'Volledig bekijken →',
+        insights_tile_desc:'Patronen uit je data',
+        correlations_tile_desc:'Koppelingen tussen slaap, stemming en energie',
+        forecast_tile_desc:'Waar je stemming naartoe kan gaan',
+        patterns_tile_desc:'Slaaptijdlijn en ritmes',
+        seasonal_tile_desc:'Maandelijks en jaarlijks ritme',
+        velocity_tile_desc:'Verandering per dag'
+    });
+    Object.assign(S.pl, {
+        mood_today:'Nastrój dziś',
+        sleep_duration:'Czas snu',
+        energy_level:'Poziom energii',
+        streak:'Seria',
+        days_label:'dni',
+        mood_timeline:'Oś czasu nastroju',
+        sleep_patterns:'Wzorce snu',
+        energy_flow:'Przepływ energii',
+        view_full:'Zobacz całość →',
+        insights_tile_desc:'Wzorce z Twoich danych',
+        correlations_tile_desc:'Powiązania snu, nastroju i energii',
+        forecast_tile_desc:'Dokąd może zmierzać Twój nastrój',
+        patterns_tile_desc:'Oś czasu snu i rytmy',
+        seasonal_tile_desc:'Rytm miesięczny i roczny',
+        velocity_tile_desc:'Zmiana z dnia na dzień'
+    });
+    Object.assign(S.ru, {
+        mood_today:'Настроение сегодня',
+        sleep_duration:'Длительность сна',
+        energy_level:'Уровень энергии',
+        streak:'Серия',
+        days_label:'дней',
+        mood_timeline:'Динамика настроения',
+        sleep_patterns:'Шаблоны сна',
+        energy_flow:'Поток энергии',
+        view_full:'Открыть полностью →',
+        insights_tile_desc:'Закономерности в ваших данных',
+        correlations_tile_desc:'Связи сна, настроения и энергии',
+        forecast_tile_desc:'Куда может двигаться ваше настроение',
+        patterns_tile_desc:'Хронология сна и ритмы',
+        seasonal_tile_desc:'Месячный и годовой ритм',
+        velocity_tile_desc:'Изменения день за днём'
+    });
+    Object.assign(S.ar, {
+        mood_today:'مزاج اليوم',
+        sleep_duration:'مدة النوم',
+        energy_level:'مستوى الطاقة',
+        streak:'سلسلة',
+        days_label:'أيام',
+        mood_timeline:'الخط الزمني للمزاج',
+        sleep_patterns:'أنماط النوم',
+        energy_flow:'تدفق الطاقة',
+        view_full:'عرض كامل →',
+        insights_tile_desc:'الأنماط من بياناتك',
+        correlations_tile_desc:'روابط النوم والمزاج والطاقة',
+        forecast_tile_desc:'إلى أين يتجه مزاجك',
+        patterns_tile_desc:'الجدول الزمني وإيقاعات النوم',
+        seasonal_tile_desc:'الإيقاع الشهري والسنوي',
+        velocity_tile_desc:'التغيير من يوم لآخر'
+    });
+    Object.assign(S.ja, {
+        mood_today:'今日の気分',
+        sleep_duration:'睡眠時間',
+        energy_level:'エネルギーレベル',
+        streak:'連続日数',
+        days_label:'日',
+        mood_timeline:'気分の推移',
+        sleep_patterns:'睡眠パターン',
+        energy_flow:'エネルギーの流れ',
+        view_full:'すべて表示 →',
+        insights_tile_desc:'データから見えるパターン',
+        correlations_tile_desc:'睡眠・気分・エネルギーのつながり',
+        forecast_tile_desc:'気分が向かいそうな方向',
+        patterns_tile_desc:'睡眠タイムラインとリズム',
+        seasonal_tile_desc:'月別・年別のリズム',
+        velocity_tile_desc:'日ごとの変化'
+    });
+    Object.assign(S.zh, {
+        mood_today:'今日心情',
+        sleep_duration:'睡眠时长',
+        energy_level:'能量水平',
+        streak:'连续天数',
+        days_label:'天',
+        mood_timeline:'心情时间线',
+        sleep_patterns:'睡眠模式',
+        energy_flow:'能量走势',
+        view_full:'查看全部 →',
+        insights_tile_desc:'数据中的模式',
+        correlations_tile_desc:'睡眠、情绪与能量的联系',
+        forecast_tile_desc:'情绪可能发展的方向',
+        patterns_tile_desc:'睡眠时间线与节律',
+        seasonal_tile_desc:'按月和按年的节律',
+        velocity_tile_desc:'逐日变化'
+    });
+    Object.assign(S.hi, {
+        mood_today:'आज का मूड',
+        sleep_duration:'नींद की अवधि',
+        energy_level:'ऊर्जा स्तर',
+        streak:'सिलसिला',
+        days_label:'दिन',
+        mood_timeline:'मूड टाइमलाइन',
+        sleep_patterns:'नींद के पैटर्न',
+        energy_flow:'ऊर्जा प्रवाह',
+        view_full:'पूरा देखें →',
+        insights_tile_desc:'आपके डेटा के पैटर्न',
+        correlations_tile_desc:'नींद, मूड और ऊर्जा के संबंध',
+        forecast_tile_desc:'आपका मूड कहाँ जा सकता है',
+        patterns_tile_desc:'नींद की टाइमलाइन और रिदम',
+        seasonal_tile_desc:'मासिक और वार्षिक रिदम',
+        velocity_tile_desc:'दिन-प्रतिदिन बदलाव'
+    });
 
     /* ════════════════════════════════════════════════════════════════════
        §2a  CRITICAL SUPPLEMENTARY KEYS — 9 MINIMAL LOCALES
@@ -5750,7 +5990,23 @@ Object.assign(S.hi, {
                         var cEl = document.getElementById('prefLocaleCustom');
                         loc = cEl ? (cEl.value.trim() || 'en') : 'en';
                     }
-                    runI18n(loc);
+                    /* For absolute consistency across all dynamic views and
+                       deep-patched strings, reload the app once the new
+                       locale has been saved. This guarantees charts,
+                       narratives, and all pages boot directly in the chosen
+                       language, matching the behaviour you see after a
+                       manual hard refresh. */
+                    try {
+                        if (typeof window.location !== 'undefined' &&
+                            typeof window.location.reload === 'function') {
+                            window.location.reload();
+                        } else {
+                            runI18n(loc);
+                        }
+                    } catch (e) {
+                        console.warn('[Aura i18n] reload on locale change failed', e);
+                        runI18n(loc);
+                    }
                 }
                 return r;
             };
@@ -5764,9 +6020,15 @@ Object.assign(S.hi, {
                 var r = origNav.apply(this, arguments);
                 /* Synchronous pass for all static DOM */
                 runI18n();
+                /* Re-render dashboard when navigating to overview so narrative,
+                   tiles, and stats always reflect the current locale. */
+                var p = String(page);
+                if (p === 'overview' && typeof window.updateDashboard === 'function') {
+                    try { window.updateDashboard(); } catch (e) { console.warn('[Aura i18n] updateDashboard on navigate failed', e); }
+                }
                 /* Second pass for chart pages (charts render async) */
                 var chartPages = ['analytics', 'velocity', 'forecast', 'patterns', 'seasonal'];
-                if (chartPages.indexOf(String(page)) >= 0) {
+                if (chartPages.indexOf(p) >= 0) {
                     setTimeout(runI18n, 0);
                 }
                 return r;
@@ -5804,4 +6066,8 @@ Object.assign(S.hi, {
     }
 
     console.log('[Aura i18n] Single-source i18n system loaded — all languages, all pages.');
+
+    window._auraI18nLookup = function(key, locale) {
+        return getStrings(locale || window.auraLocale || 'en')[key] || null;
+    };
 })();
