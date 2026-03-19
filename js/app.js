@@ -8355,6 +8355,22 @@ async function savePreference(key, value) {
         var loc = (v && v !== '_custom') ? v : 'en';
         window.auraLocale = loc;
         try { localStorage.setItem('aura_locale', loc); } catch (e) {}
+        /* Hard refresh with cache-busting on locale change */
+        try {
+            if (typeof window.location !== 'undefined' && window.location) {
+                if (typeof URL !== 'undefined' && typeof window.location.href === 'string') {
+                    var url = new URL(window.location.href);
+                    url.searchParams.set('_i18nHard', String(Date.now()));
+                    if (typeof window.location.replace === 'function') {
+                        window.location.replace(url.toString());
+                    } else {
+                        window.location.reload();
+                    }
+                } else if (typeof window.location.reload === 'function') {
+                    window.location.reload();
+                }
+            }
+        } catch (e2) {}
         /* i18n.js wrapper already calls runI18n synchronously — do not call again here */
         if (typeof window.runI18n !== 'function' && typeof applyTranslations === 'function') applyTranslations();
         if (typeof refreshPreferenceDrivenUi === 'function') refreshPreferenceDrivenUi();

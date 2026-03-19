@@ -5999,7 +5999,21 @@ Object.assign(S.hi, {
                     try {
                         if (typeof window.location !== 'undefined' &&
                             typeof window.location.reload === 'function') {
-                            window.location.reload();
+                            try {
+                                if (typeof URL !== 'undefined' && typeof window.location.href === 'string') {
+                                    var url = new URL(window.location.href);
+                                    url.searchParams.set('_i18nHard', String(Date.now()));
+                                    if (typeof window.location.replace === 'function') {
+                                        window.location.replace(url.toString());
+                                    } else {
+                                        window.location.reload();
+                                    }
+                                } else {
+                                    window.location.reload();
+                                }
+                            } catch (e2) {
+                                window.location.reload();
+                            }
                         } else {
                             runI18n(loc);
                         }
