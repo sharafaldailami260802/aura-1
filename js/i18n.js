@@ -770,6 +770,39 @@
         passcode_set_desc:'Enter a 4\u20138 digit passcode to lock the app.',
         passcode_new_label:'New passcode',
         passcode_confirm_lbl:'Confirm passcode',
+        /* Calendar */
+        calendar_click_to_edit:'Click an entry to view or edit.',
+        cal_nav_prev:'Prev',
+        cal_nav_next:'Next',
+        no_entries_yet:'No entries yet.',
+        no_photos_yet:'No photos yet',
+        no_tags_yet:'No tags yet. Add tags to your entries to see them here.',
+        /* Context menu */
+        context_open_journal:'Open journal',
+        context_delete_journal:'Delete journal',
+        /* Sleep segment */
+        sleep_segment_label:'Segment',
+        /* Data manager */
+        no_saved_days_yet:'No saved days yet.',
+        journal_saved_label:'Journal saved',
+        no_journal_label:'No journal',
+        recent_saved_days:'Recent saved days',
+        recent_saved_days_desc:'Browse recent records quickly. The date field still works for any saved day.',
+        saved_record_label:'Saved record',
+        no_mood_label:'No mood',
+        data_saved_label:'Saved',
+        data_missing_label:'Missing',
+        try_another_date:'Try another date. Only saved days can be edited from here.',
+        /* Delete entry modal */
+        delete_journal_modal_title:'Delete Journal',
+        delete_journal_modal_desc:'This will permanently remove the journal text and journal photos for this day. This action cannot be undone.',
+        /* Error messages */
+        incorrect_passcode:'Incorrect passcode',
+        /* Toast */
+        journal_deleted_toast:'Journal deleted',
+        /* Tag counts */
+        entry_tag_count:'{n} tag',
+        entry_tags_count:'{n} tags',
     };
 
     /* ──────────────────────────── GERMAN ──────────────────────────── */
@@ -1369,6 +1402,32 @@
         ds_journal:'Eine Tagebuchnotiz wurde gespeichert.',
         ds_multi_sleep:'Schlaf war auf mehrere Segmente aufgeteilt.',
         no_data:'Keine Daten',
+        /* Calendar */
+        calendar_click_to_edit:'Klicke auf einen Eintrag, um ihn anzusehen oder zu bearbeiten.',
+        cal_nav_prev:'Zur\u00fcck',
+        cal_nav_next:'Weiter',
+        no_entries_yet:'Noch keine Eintr\u00e4ge.',
+        no_photos_yet:'Noch keine Fotos',
+        no_tags_yet:'Noch keine Tags. F\u00fcge Tags zu deinen Eintr\u00e4gen hinzu, um sie hier zu sehen.',
+        context_open_journal:'Tagebuch \u00f6ffnen',
+        context_delete_journal:'Tagebuch l\u00f6schen',
+        sleep_segment_label:'Abschnitt',
+        no_saved_days_yet:'Noch keine gespeicherten Tage.',
+        journal_saved_label:'Tagebuch gespeichert',
+        no_journal_label:'Kein Tagebuch',
+        recent_saved_days:'Zuletzt gespeicherte Tage',
+        recent_saved_days_desc:'Durchsuche gespeicherte Eintr\u00e4ge schnell. Das Datumsfeld funktioniert f\u00fcr jeden gespeicherten Tag.',
+        saved_record_label:'Gespeicherter Eintrag',
+        no_mood_label:'Keine Stimmung',
+        data_saved_label:'Gespeichert',
+        data_missing_label:'Fehlend',
+        try_another_date:'Anderes Datum versuchen. Nur gespeicherte Tage k\u00f6nnen hier bearbeitet werden.',
+        delete_journal_modal_title:'Tagebuch l\u00f6schen',
+        delete_journal_modal_desc:'Dies entfernt dauerhaft den Tagebuchtext und die Fotos f\u00fcr diesen Tag. Diese Aktion kann nicht r\u00fcckg\u00e4ngig gemacht werden.',
+        incorrect_passcode:'Falscher Passcode',
+        journal_deleted_toast:'Tagebuch gel\u00f6scht',
+        entry_tag_count:'{n} Tag',
+        entry_tags_count:'{n} Tags',
     };
 
     /* ──────────────────────────── FRENCH ──────────────────────────── */
@@ -1957,6 +2016,32 @@
         ds_tags:'Tags\u00a0: {list}.', ds_activities:'Activit\u00e9s\u00a0: {list}.',
         ds_journal:'Une note de journal a \u00e9t\u00e9 enregistr\u00e9e.',
         ds_multi_sleep:'Le sommeil \u00e9tait r\u00e9parti en plusieurs segments.',
+        /* Calendar */
+        calendar_click_to_edit:'Cliquez sur une entr\u00e9e pour la voir ou la modifier.',
+        cal_nav_prev:'Pr\u00e9c\u00e9dent',
+        cal_nav_next:'Suivant',
+        no_entries_yet:'Aucune entr\u00e9e pour l\u2019instant.',
+        no_photos_yet:'Aucune photo pour l\u2019instant',
+        no_tags_yet:'Aucun tag pour l\u2019instant. Ajoute des tags \u00e0 tes entr\u00e9es pour les voir ici.',
+        context_open_journal:'Ouvrir le journal',
+        context_delete_journal:'Supprimer le journal',
+        sleep_segment_label:'Segment',
+        no_saved_days_yet:'Aucun jour enregistr\u00e9 pour l\u2019instant.',
+        journal_saved_label:'Journal enregistr\u00e9',
+        no_journal_label:'Pas de journal',
+        recent_saved_days:'Jours r\u00e9cemment enregistr\u00e9s',
+        recent_saved_days_desc:'Parcourez rapidement les enregistrements r\u00e9cents. Le champ date fonctionne pour n\u2019importe quel jour enregistr\u00e9.',
+        saved_record_label:'Enregistrement sauvegard\u00e9',
+        no_mood_label:'Pas d\u2019humeur',
+        data_saved_label:'Enregistr\u00e9',
+        data_missing_label:'Manquant',
+        try_another_date:'Essayez une autre date. Seuls les jours enregistr\u00e9s peuvent \u00eatre modifi\u00e9s ici.',
+        delete_journal_modal_title:'Supprimer le journal',
+        delete_journal_modal_desc:'Cela supprimera d\u00e9finitivement le texte et les photos du journal pour ce jour. Cette action ne peut pas \u00eatre annul\u00e9e.',
+        incorrect_passcode:'Code incorrect',
+        journal_deleted_toast:'Journal supprim\u00e9',
+        entry_tag_count:'{n} tag',
+        entry_tags_count:'{n} tags',
     };
 
     /* ──────────────────────────── SPANISH ─────────────────────────── */
@@ -2510,6 +2595,32 @@
         ds_tags:'Etiquetas: {list}.', ds_activities:'Actividades: {list}.',
         ds_journal:'Se guard\u00f3 una nota de diario.',
         ds_multi_sleep:'El sue\u00f1o estuvo dividido en m\u00faltiples segmentos.',
+        /* Calendar */
+        calendar_click_to_edit:'Haz clic en una entrada para verla o editarla.',
+        cal_nav_prev:'Anterior',
+        cal_nav_next:'Siguiente',
+        no_entries_yet:'A\u00fan no hay entradas.',
+        no_photos_yet:'A\u00fan no hay fotos',
+        no_tags_yet:'A\u00fan no hay etiquetas. A\u00f1ade etiquetas a tus entradas para verlas aqu\u00ed.',
+        context_open_journal:'Abrir diario',
+        context_delete_journal:'Eliminar diario',
+        sleep_segment_label:'Segmento',
+        no_saved_days_yet:'A\u00fan no hay d\u00edas guardados.',
+        journal_saved_label:'Diario guardado',
+        no_journal_label:'Sin diario',
+        recent_saved_days:'D\u00edas guardados recientemente',
+        recent_saved_days_desc:'Navega r\u00e1pidamente por los registros recientes. El campo de fecha sigue funcionando para cualquier d\u00eda guardado.',
+        saved_record_label:'Registro guardado',
+        no_mood_label:'Sin \u00e1nimo',
+        data_saved_label:'Guardado',
+        data_missing_label:'Faltante',
+        try_another_date:'Prueba otra fecha. Solo los d\u00edas guardados pueden editarse desde aqu\u00ed.',
+        delete_journal_modal_title:'Eliminar diario',
+        delete_journal_modal_desc:'Esto eliminar\u00e1 permanentemente el texto y las fotos del diario para este d\u00eda. Esta acci\u00f3n no se puede deshacer.',
+        incorrect_passcode:'C\u00f3digo incorrecto',
+        journal_deleted_toast:'Diario eliminado',
+        entry_tag_count:'{n} etiqueta',
+        entry_tags_count:'{n} etiquetas',
     };
 
     /* ──────────────────────────── ARABIC ──────────────────────────── */
@@ -3190,6 +3301,32 @@
         sleep_chart_eyebrow:'\u0627\u0644\u062a\u0639\u0627\u0641\u064a \u0648\u0627\u0644\u0627\u062a\u0633\u0627\u0642',
         sleep_chart_desc:'\u0645\u062f\u0629 \u0627\u0644\u0646\u0648\u0645 \u0648\u0627\u062a\u0633\u0627\u0642\u0647.',
 
+        /* Calendar */
+        calendar_click_to_edit:'\u0627\u0646\u0642\u0631 \u0639\u0644\u0649 \u0625\u062f\u062e\u0627\u0644 \u0644\u0639\u0631\u0636\u0647 \u0623\u0648 \u062a\u062d\u0631\u064a\u0631\u0647.',
+        cal_nav_prev:'\u0627\u0644\u0633\u0627\u0628\u0642',
+        cal_nav_next:'\u0627\u0644\u062a\u0627\u0644\u064a',
+        no_entries_yet:'\u0644\u0627 \u062a\u0648\u062c\u062f \u0625\u062f\u062e\u0627\u0644\u0627\u062a \u0628\u0639\u062f.',
+        no_photos_yet:'\u0644\u0627 \u062a\u0648\u062c\u062f \u0635\u0648\u0631 \u0628\u0639\u062f',
+        no_tags_yet:'\u0644\u0627 \u062a\u0648\u062c\u062f \u0648\u0633\u0648\u0645 \u0628\u0639\u062f. \u0623\u0636\u0641 \u0648\u0633\u0648\u0645\u064b\u0627 \u0625\u0644\u0649 \u0625\u062f\u062e\u0627\u0644\u0627\u062a\u0643 \u0644\u0631\u0624\u064a\u062a\u0647\u0627 \u0647\u0646\u0627.',
+        context_open_journal:'\u0641\u062a\u062d \u0627\u0644\u064a\u0648\u0645\u064a\u0627\u062a',
+        context_delete_journal:'\u062d\u0630\u0641 \u0627\u0644\u064a\u0648\u0645\u064a\u0627\u062a',
+        sleep_segment_label:'\u0645\u0642\u0637\u0639',
+        no_saved_days_yet:'\u0644\u0627 \u062a\u0648\u062c\u062f \u0623\u064a\u0627\u0645 \u0645\u062d\u0641\u0648\u0638\u0629 \u0628\u0639\u062f.',
+        journal_saved_label:'\u062a\u0645 \u062d\u0641\u0638 \u0627\u0644\u064a\u0648\u0645\u064a\u0627\u062a',
+        no_journal_label:'\u0644\u0627 \u062a\u0648\u062c\u062f \u064a\u0648\u0645\u064a\u0627\u062a',
+        recent_saved_days:'\u0627\u0644\u0623\u064a\u0627\u0645 \u0627\u0644\u0645\u062d\u0641\u0648\u0638\u0629 \u0645\u0624\u062e\u0631\u064b\u0627',
+        recent_saved_days_desc:'\u062a\u0635\u0641\u062d \u0627\u0644\u0633\u062c\u0644\u0627\u062a \u0627\u0644\u0623\u062e\u064a\u0631\u0629 \u0628\u0633\u0631\u0639\u0629. \u062d\u0642\u0644 \u0627\u0644\u062a\u0627\u0631\u064a\u062e \u064a\u0639\u0645\u0644 \u0644\u0623\u064a \u064a\u0648\u0645 \u0645\u062d\u0641\u0648\u0638.',
+        saved_record_label:'\u0633\u062c\u0644 \u0645\u062d\u0641\u0648\u0638',
+        no_mood_label:'\u0644\u0627 \u064a\u0648\u062c\u062f \u0645\u0632\u0627\u062c',
+        data_saved_label:'\u0645\u062d\u0641\u0648\u0638',
+        data_missing_label:'\u0645\u0641\u0642\u0648\u062f',
+        try_another_date:'\u062c\u0631\u0628 \u062a\u0627\u0631\u064a\u062e\u064b\u0627 \u0622\u062e\u0631. \u064a\u0645\u0643\u0646 \u062a\u062d\u0631\u064a\u0631 \u0627\u0644\u0623\u064a\u0627\u0645 \u0627\u0644\u0645\u062d\u0641\u0648\u0638\u0629 \u0641\u0642\u0637 \u0645\u0646 \u0647\u0646\u0627.',
+        delete_journal_modal_title:'\u062d\u0630\u0641 \u0627\u0644\u064a\u0648\u0645\u064a\u0627\u062a',
+        delete_journal_modal_desc:'\u0633\u064a\u0624\u062f\u064a \u0647\u0630\u0627 \u0625\u0644\u0649 \u062d\u0630\u0641 \u0646\u0635 \u0627\u0644\u064a\u0648\u0645\u064a\u0627\u062a \u0648\u0635\u0648\u0631\u0647 \u0628\u0634\u0643\u0644 \u062f\u0627\u0626\u0645. \u0644\u0627 \u064a\u0645\u0643\u0646 \u0627\u0644\u062a\u0631\u0627\u062c\u0639 \u0639\u0646 \u0647\u0630\u0627 \u0627\u0644\u0625\u062c\u0631\u0627\u0621.',
+        incorrect_passcode:'\u0631\u0645\u0632 \u0645\u0631\u0648\u0631 \u063a\u064a\u0631 \u0635\u062d\u064a\u062d',
+        journal_deleted_toast:'\u062a\u0645 \u062d\u0630\u0641 \u0627\u0644\u064a\u0648\u0645\u064a\u0627\u062a',
+        entry_tag_count:'{n} \u0648\u0633\u0645',
+        entry_tags_count:'{n} \u0648\u0633\u0648\u0645',
         /* Toasts extras */
         toast_journal_deleted:'\u062a\u0645 \u062d\u0630\u0641 \u0627\u0644\u064a\u0648\u0645\u064a\u0627\u062a',
         toast_entry_deleted:'\u062a\u0645 \u062d\u0630\u0641 \u0627\u0644\u0625\u062f\u062e\u0627\u0644',
@@ -5946,6 +6083,11 @@ Object.assign(S.hi, {
         /* Refresh JS-built content (dashboard narrative, entry list, etc.) in new language */
         if (typeof window.updateDashboard === 'function') window.updateDashboard();
         if (typeof window.renderEntryList === 'function') window.renderEntryList();
+        if (typeof window.renderCalendarList === 'function') window.renderCalendarList();
+        if (typeof window.renderCalendarCurrentView === 'function') window.renderCalendarCurrentView();
+        if (typeof window.renderTagCloud === 'function') window.renderTagCloud();
+        if (typeof window.renderJournalPhotos === 'function') window.renderJournalPhotos();
+        if (typeof window.renderSettingsDataManagerRecent === 'function') window.renderSettingsDataManagerRecent();
         if (typeof window.renderReportWeekly === 'function') window.renderReportWeekly();
         if (typeof window.renderReportMonthly === 'function') window.renderReportMonthly();
         if (typeof window.renderReportYear === 'function') window.renderReportYear();
