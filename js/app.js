@@ -513,20 +513,21 @@ function updateDeleteEntryModalContent(entryKey) {
     var preview = document.getElementById('deleteEntryModalPreview');
     var desc = document.getElementById('deleteEntryModalDesc');
     var entry = entryKey ? entries[entryKey] : null;
+    var _tDM = typeof auraTr === 'function' ? auraTr : function(k) { return k; };
     var formattedDate = formatDisplayDate(entryKey || (entry && entry.date) || '', window.auraDateFormat || 'MD');
-    if (title) title.textContent = formattedDate ? 'Delete Journal - ' + formattedDate + '?' : 'Delete Journal?';
-    if (desc) desc.textContent = 'This will permanently remove the journal text and journal photos for this day. This action cannot be undone.';
+    if (title) title.textContent = formattedDate ? _tDM('delete_journal_modal_title') + ' \u2014 ' + formattedDate + '?' : _tDM('delete_journal_modal_title') + '?';
+    if (desc) desc.textContent = _tDM('delete_journal_modal_desc');
     if (!preview) return;
     var lines = [];
     if (entry && entry.mood != null) {
-        lines.push('<div class="modal-preview-line"><span class="modal-preview-label">Mood:</span> ' + escapeHtml(formatDeleteEntryMetric(entry.mood)) + '</div>');
+        lines.push('<div class="modal-preview-line"><span class="modal-preview-label">' + escapeHtml(_tDM('mood_label_short')) + ':</span> ' + escapeHtml(formatDeleteEntryMetric(entry.mood)) + '</div>');
     }
     var sleepValue = entry ? (entry.sleepTotal != null ? entry.sleepTotal : entry.sleep) : null;
     if (sleepValue != null && sleepValue !== '') {
-        lines.push('<div class="modal-preview-line"><span class="modal-preview-label">Sleep:</span> ' + escapeHtml(formatDeleteEntryMetric(sleepValue)) + ' hours</div>');
+        lines.push('<div class="modal-preview-line"><span class="modal-preview-label">' + escapeHtml(_tDM('sleep_label_short')) + ':</span> ' + escapeHtml(formatDeleteEntryMetric(sleepValue)) + ' ' + escapeHtml(_tDM('hrs_short')) + '</div>');
     }
     if (entry && Array.isArray(entry.tags) && entry.tags.length) {
-        lines.push('<div class="modal-preview-line"><span class="modal-preview-label">Tags:</span> ' + escapeHtml(entry.tags.join(', ')) + '</div>');
+        lines.push('<div class="modal-preview-line"><span class="modal-preview-label">' + escapeHtml(_tDM('checkin_tags')) + ':</span> ' + escapeHtml(entry.tags.join(', ')) + '</div>');
     }
     preview.innerHTML = lines.join('');
     preview.hidden = lines.length === 0;
@@ -601,7 +602,7 @@ function confirmDeleteAll() {
             var input = document.getElementById('deleteAllPassword').value;
             hashPasscode(input).then(function(h) {
                 if (h !== row.value) {
-                    err.textContent = 'Incorrect passcode';
+                    err.textContent = typeof auraTr === 'function' ? auraTr('incorrect_passcode') : 'Incorrect passcode';
                     err.classList.add('show');
                     return;
                 }
@@ -609,7 +610,7 @@ function confirmDeleteAll() {
             });
         } else {
             if (document.getElementById('deleteAllTypeConfirm').value.trim() !== 'DELETE') {
-                err.textContent = 'Type DELETE to confirm';
+                err.textContent = typeof auraTr === 'function' ? auraTr('type_delete_label') : 'Type DELETE to confirm';
                 err.classList.add('show');
                 return;
             }
@@ -1459,7 +1460,8 @@ function showEntryContextMenu(x, y, dateStr) {
     menu.className = 'context-menu';
     menu.style.left = Math.min(x, window.innerWidth - 160) + 'px';
     menu.style.top = Math.min(y, window.innerHeight - 120) + 'px';
-    menu.innerHTML = '<button type="button" onclick="openJournalEntry(\'' + dateStr.replace(/'/g, "\\'") + '\'); closeContextMenu()">Open journal</button><button type="button" class="danger" onclick="openDeleteEntryModal(\'' + dateStr.replace(/'/g, "\\'") + '\'); closeContextMenu()">Delete journal</button>';
+    var _tCM = typeof auraTr === 'function' ? auraTr : function(k) { return k; };
+    menu.innerHTML = '<button type="button" onclick="openJournalEntry(\'' + dateStr.replace(/'/g, "\\'") + '\'); closeContextMenu()">' + escapeHtml(_tCM('context_open_journal')) + '</button><button type="button" class="danger" onclick="openDeleteEntryModal(\'' + dateStr.replace(/'/g, "\\'") + '\'); closeContextMenu()">' + escapeHtml(_tCM('context_delete_journal')) + '</button>';
     document.body.appendChild(menu);
     var close = function() { menu.remove(); document.removeEventListener('click', close); document.removeEventListener('touchstart', close); };
     setTimeout(function() { document.addEventListener('click', close); document.addEventListener('touchstart', close, { once: true }); }, 100);
@@ -2238,20 +2240,21 @@ function bindSleepSegmentInputs(card) {
     refreshSleepSegmentCardUI(card);
 }
 function buildSleepSegmentCard(index, startVal, endVal) {
+    var _bSeg = typeof auraTr === 'function' ? auraTr('sleep_segment_label') : 'Segment';
     var card = document.createElement('div');
     card.className = 'sleep-segment-card sleep-segment-card--draft';
     card.innerHTML =
-        '<span class="sleep-segment-label">Segment ' + index + '</span>' +
+        '<span class="sleep-segment-label">' + _bSeg + ' ' + index + '</span>' +
         '<div class="sleep-segment-row">' +
             '<div class="sleep-segment-times">' +
                 '<div class="sleep-segment-field">' +
                     '<span class="sleep-segment-field-label">Start</span>' +
-                    '<input type="text" class="aura-time-input form-input sleep-start" placeholder="HH:mm" aria-label="Segment ' + index + ' start time">' +
+                    '<input type="text" class="aura-time-input form-input sleep-start" placeholder="HH:mm" aria-label="' + _bSeg + ' ' + index + ' start time">' +
                 '</div>' +
                 '<span class="sleep-segment-arrow" aria-hidden="true">→</span>' +
                 '<div class="sleep-segment-field">' +
                     '<span class="sleep-segment-field-label">End</span>' +
-                    '<input type="text" class="aura-time-input form-input sleep-end" placeholder="HH:mm" aria-label="Segment ' + index + ' end time">' +
+                    '<input type="text" class="aura-time-input form-input sleep-end" placeholder="HH:mm" aria-label="' + _bSeg + ' ' + index + ' end time">' +
                 '</div>' +
             '</div>' +
             '<button type="button" class="sleep-segment-remove" onclick="removeSleepSegment(this)" aria-label="Remove segment">×</button>' +
@@ -2282,9 +2285,10 @@ function renumberSleepSegments(container) {
         var label = card.querySelector('.sleep-segment-label');
         var startInput = card.querySelector('.sleep-start');
         var endInput = card.querySelector('.sleep-end');
-        if (label) label.textContent = 'Segment ' + index;
-        if (startInput) startInput.setAttribute('aria-label', 'Segment ' + index + ' start time');
-        if (endInput) endInput.setAttribute('aria-label', 'Segment ' + index + ' end time');
+        var _segLabel = typeof auraTr === 'function' ? auraTr('sleep_segment_label') : 'Segment';
+        if (label) label.textContent = _segLabel + ' ' + index;
+        if (startInput) startInput.setAttribute('aria-label', _segLabel + ' ' + index + ' start time');
+        if (endInput) endInput.setAttribute('aria-label', _segLabel + ' ' + index + ' end time');
     });
 }
 function setSleepSegmentsInForm(segments) {
@@ -3623,9 +3627,9 @@ function renderDataManagerPreview(dateStr) {
         preview.innerHTML = ''
             + '<div class="data-manager-preview-empty">'
             + '  <p class="data-manager-preview-title">' + (typeof escapeHtml === 'function' ? escapeHtml(dmTr('no_saved_data_day')) : dmTr('no_saved_data_day')) + '</p>'
-            + '  <p class="data-manager-preview-copy">Try another date. Only saved days can be edited from here.</p>'
+            + '  <p class="data-manager-preview-copy">' + escapeHtml(dmTr('try_another_date')) + '</p>'
             + '</div>';
-        if (status) status.textContent = 'No saved data for ' + dateStr + '.';
+        if (status) status.textContent = dmTr('no_saved_data_day') + ' ' + dateStr + '.';
         return;
     }
     if (disabledHint) disabledHint.hidden = true;
@@ -3636,20 +3640,20 @@ function renderDataManagerPreview(dateStr) {
     preview.innerHTML = ''
         + '<div class="data-manager-preview-top">'
         + '  <div>'
-        + '    <p class="data-manager-preview-eyebrow">Saved record</p>'
+        + '    <p class="data-manager-preview-eyebrow">' + escapeHtml(dmTr('saved_record_label')) + '</p>'
         + '    <h4 class="data-manager-preview-date">' + escapeHtml(displayDate) + '</h4>'
         + '  </div>'
         + '  <div class="data-manager-preview-score">'
-        + (meta.hasMood ? '<span class="data-manager-score-value">' + escapeHtml(String(entry.mood)) + '</span><span class="data-manager-score-label">Mood</span>' : '<span class="data-manager-score-empty">No mood</span>')
+        + (meta.hasMood ? '<span class="data-manager-score-value">' + escapeHtml(String(entry.mood)) + '</span><span class="data-manager-score-label">' + escapeHtml(dmTr('mood_label_short')) + '</span>' : '<span class="data-manager-score-empty">' + escapeHtml(dmTr('no_mood_label')) + '</span>')
         + '  </div>'
         + '</div>'
         + '<div class="data-manager-preview-pills">'
-        + buildDataManagerMetaPill('Energy', meta.hasEnergy, meta.hasEnergy ? String(entry.energy) : 'Missing')
-        + buildDataManagerMetaPill('Sleep', meta.hasSleep, meta.hasSleep ? 'Saved' : 'Missing')
-        + buildDataManagerMetaPill('Journal', meta.hasJournal, meta.hasJournal ? 'Saved' : 'Missing')
-        + buildDataManagerMetaPill('Photos', meta.photoCount > 0, meta.photoCount > 0 ? String(meta.photoCount) : '0')
-        + buildDataManagerMetaPill('Tags', meta.tagCount > 0, meta.tagCount > 0 ? String(meta.tagCount) : '0')
-        + buildDataManagerMetaPill('Activities', meta.activityCount > 0, meta.activityCount > 0 ? String(meta.activityCount) : '0')
+        + buildDataManagerMetaPill(dmTr('energy_label_short'), meta.hasEnergy, meta.hasEnergy ? String(entry.energy) : dmTr('data_missing_label'))
+        + buildDataManagerMetaPill(dmTr('sleep_label_short'), meta.hasSleep, meta.hasSleep ? dmTr('data_saved_label') : dmTr('data_missing_label'))
+        + buildDataManagerMetaPill(dmTr('nav_journal'), meta.hasJournal, meta.hasJournal ? dmTr('data_saved_label') : dmTr('data_missing_label'))
+        + buildDataManagerMetaPill(dmTr('checkin_photos'), meta.photoCount > 0, meta.photoCount > 0 ? String(meta.photoCount) : '0')
+        + buildDataManagerMetaPill(dmTr('checkin_tags'), meta.tagCount > 0, meta.tagCount > 0 ? String(meta.tagCount) : '0')
+        + buildDataManagerMetaPill(dmTr('activities_label'), meta.activityCount > 0, meta.activityCount > 0 ? String(meta.activityCount) : '0')
         + '</div>';
     if (checkInBtn) checkInBtn.disabled = false;
     if (journalBtn) journalBtn.disabled = false;
@@ -3657,9 +3661,13 @@ function renderDataManagerPreview(dateStr) {
 function renderSettingsDataManagerRecent() {
     var wrap = document.getElementById('settingsDataManagerRecentList');
     if (!wrap) return;
+    var _tDR = typeof auraTr === 'function' ? auraTr : function(k, v) {
+        if (typeof window.t === 'function') return window.t(k, v);
+        return k;
+    };
     var dates = Object.keys(entries).sort().reverse().slice(0, 12);
     if (!dates.length) {
-        wrap.innerHTML = '<div class="data-manager-row data-manager-row-empty">No saved days yet.</div>';
+        wrap.innerHTML = '<div class="data-manager-row data-manager-row-empty">' + escapeHtml(_tDR('no_saved_days_yet')) + '</div>';
         return;
     }
     var dateFmt = window.auraDateFormat || 'MD';
@@ -3669,7 +3677,9 @@ function renderSettingsDataManagerRecent() {
         var displayDate = typeof formatDisplayDate === 'function' ? formatDisplayDate(date, dateFmt) : date;
         var safeDate = date.replace(/'/g, "\\'");
         var journalText = typeof notesValueToPlainText === 'function' ? notesValueToPlainText(entry).trim() : '';
-        var summary = journalText ? 'Journal saved' : (meta.hasMood ? 'Mood ' + entry.mood : 'No journal');
+        var summary = journalText ? _tDR('journal_saved_label') : (meta.hasMood ? _tDR('mood_label_short') + ' ' + entry.mood : _tDR('no_journal_label'));
+        var photoCount = meta.photoCount;
+        var photoLabel = photoCount === 1 ? _tDR('entry_photo_count', { n: photoCount }) : _tDR('entry_photos_count', { n: photoCount });
         return ''
             + '<button type="button" class="data-manager-row" onclick="selectSettingsDataManagerDate(\'' + safeDate + '\')">'
             + '  <span class="data-manager-row-main">'
@@ -3678,7 +3688,7 @@ function renderSettingsDataManagerRecent() {
             + '  </span>'
             + '  <span class="data-manager-row-meta">'
             + (meta.hasJournal ? '<span class="data-manager-row-dot is-journal"></span>' : '')
-            + (meta.photoCount > 0 ? '<span class="data-manager-row-badge">' + meta.photoCount + ' photo' + (meta.photoCount === 1 ? '' : 's') + '</span>' : '')
+            + (photoCount > 0 ? '<span class="data-manager-row-badge">' + escapeHtml(photoLabel) + '</span>' : '')
             + '  </span>'
             + '</button>';
     }).join('');
@@ -3950,24 +3960,25 @@ function renderCalendarList() {
     var dates = Object.keys(entries).sort().reverse();
     var todayStr = getLocalTodayYMD();
     var dateFmt = window.auraDateFormat || 'MD';
+    var _tCL = typeof auraTr === 'function' ? auraTr : (typeof window.t === 'function' ? window.t : function(k) { return k; });
+    var _todaySuffix = ' (' + _tCL('today') + ')';
     ul.innerHTML = dates.map(function(dateStr) {
         var e = entries[dateStr];
         var moodStr = e && e.mood != null ? e.mood.toFixed(1) : '\u2013';
         var energyStr = e && e.energy != null ? e.energy.toFixed(1) : '\u2013';
         var sleepStr = e && (e.sleepTotal != null || e.sleep != null) ? (e.sleepTotal != null ? e.sleepTotal : e.sleep).toFixed(1) : '';
-        var summaryParts = ['Mood ' + moodStr, 'Energy ' + energyStr];
-        if (sleepStr) summaryParts.push('Sleep ' + sleepStr + 'h');
+        var summaryParts = [_tCL('mood_label_short') + ' ' + moodStr, _tCL('energy_label_short') + ' ' + energyStr];
+        if (sleepStr) summaryParts.push(_tCL('sleep_label_short') + ' ' + sleepStr + _tCL('hrs_short'));
         var summaryText = summaryParts.join(' \u00B7 ');
-        var displayDate = formatDisplayDate(dateStr, dateFmt) + (dateStr === todayStr ? ' (today)' : '');
+        var displayDate = formatDisplayDate(dateStr, dateFmt) + (dateStr === todayStr ? _todaySuffix : '');
         var safeDate = dateStr.replace(/'/g, "\\'");
         var meta = typeof getDayRecordMeta === 'function' ? getDayRecordMeta(e) : { hasJournal: false, photoCount: 0, tagCount: 0 };
         var pills = '';
-        if (meta.hasJournal) pills += '<span class="calendar-record-pill">Journal</span>';
-        if (meta.photoCount > 0) pills += '<span class="calendar-record-pill">' + meta.photoCount + ' photo' + (meta.photoCount === 1 ? '' : 's') + '</span>';
-        if (meta.tagCount > 0) pills += '<span class="calendar-record-pill">' + meta.tagCount + ' tag' + (meta.tagCount === 1 ? '' : 's') + '</span>';
-        var _tCL = typeof window.t === 'function' ? window.t : function(k) { return k; };
+        if (meta.hasJournal) pills += '<span class="calendar-record-pill">' + escapeHtml(_tCL('nav_journal')) + '</span>';
+        if (meta.photoCount > 0) pills += '<span class="calendar-record-pill">' + escapeHtml(meta.photoCount === 1 ? _tCL('entry_photo_count', { n: meta.photoCount }) : _tCL('entry_photos_count', { n: meta.photoCount })) + '</span>';
+        if (meta.tagCount > 0) pills += '<span class="calendar-record-pill">' + escapeHtml(meta.tagCount === 1 ? _tCL('entry_tag_count', { n: meta.tagCount }) : _tCL('entry_tags_count', { n: meta.tagCount })) + '</span>';
         return '<li class="calendar-record-card" onclick="showEntryModal(\'' + safeDate + '\')"><div class="calendar-record-main"><span class="calendar-record-date">' + escapeHtml(displayDate) + '</span><span class="calendar-record-summary">' + escapeHtml(summaryText) + '</span></div><div class="calendar-record-pills">' + pills + '</div><div class="calendar-record-actions"><button type="button" class="calendar-record-action" onclick="event.stopPropagation(); navigateTo(\'entry\', \'' + safeDate + '\');">' + escapeHtml(_tCL('edit_checkin_btn')) + '</button><button type="button" class="calendar-record-action btn-secondary" onclick="event.stopPropagation(); navigateTo(\'journal\', \'' + safeDate + '\');">' + escapeHtml(_tCL('edit_journal_btn')) + '</button></div></li>';
-    }).join('') || '<li class="calendar-record-card" style="color: var(--text-muted); cursor: default; padding: var(--space-md);">No entries yet.</li>';
+    }).join('') || '<li class="calendar-record-card" style="color: var(--text-muted); cursor: default; padding: var(--space-md);">' + escapeHtml(_tCL('no_entries_yet')) + '</li>';
 }
 
 function exportHeatmapPNG() {
@@ -4215,7 +4226,7 @@ async function deleteJournalEntry(entryId) {
         renderEntryList();
     }
     updateDashboard();
-    showToast('Journal deleted');
+    showToast(typeof auraTr === 'function' ? auraTr('journal_deleted_toast') : 'Journal deleted');
 }
 
 async function deleteEntry(entryId) {
@@ -7149,7 +7160,8 @@ function renderJournalPhotos() {
     var el = document.getElementById('journalPhotoThumbs');
     if (!el) return;
     if (!journalPhotos.length) {
-        el.innerHTML = '<div class="journal-photo-empty"><span class="journal-photo-empty-icon" aria-hidden="true">📷</span><span>No photos yet</span></div>';
+        var _noPhotoTxt = typeof auraTr === 'function' ? auraTr('no_photos_yet') : 'No photos yet';
+        el.innerHTML = '<div class="journal-photo-empty"><span class="journal-photo-empty-icon" aria-hidden="true">\ud83d\udcf7</span><span>' + escapeHtml(_noPhotoTxt) + '</span></div>';
         return;
     }
     el.innerHTML = journalPhotos.map(function(p) {
@@ -7261,7 +7273,8 @@ function renderTagCloud() {
     });
     var tags = Object.keys(counts).sort(function(a, b) { return counts[b] - counts[a]; });
     if (!tags.length) {
-        el.innerHTML = '<span style="color: var(--text-muted); font-size: 1rem;">No tags yet. Add tags to your entries to see them here.</span>';
+        var _noTagTxt = typeof auraTr === 'function' ? auraTr('no_tags_yet') : 'No tags yet. Add tags to your entries to see them here.';
+        el.innerHTML = '<span style="color: var(--text-muted); font-size: 1rem;">' + escapeHtml(_noTagTxt) + '</span>';
         return;
     }
     var maxCount = counts[tags[0]] || 1;
