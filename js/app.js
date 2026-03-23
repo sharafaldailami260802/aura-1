@@ -7077,7 +7077,8 @@ function ensureJournalEntrySelection(force) {
 function initJournalEditor() {
     var container = document.getElementById('journalEditor');
     if (!container || quillEditor) return;
-    quillEditor = new Quill('#journalEditor', {
+    if (!container.ownerDocument || !container.parentNode) return;
+    try { quillEditor = new Quill('#journalEditor', {
         theme: 'snow',
         placeholder: typeof auraTr === 'function' ? auraTr('journal_write_placeholder') : 'Write something about your day…',
         modules: {
@@ -7096,6 +7097,7 @@ function initJournalEditor() {
     document.getElementById('journalPhotoInput').addEventListener('change', handleJournalPhotoUpload);
     ensureJournalEntrySelection(true);
     updateJournalWordCount();
+    } catch(e) { quillEditor = null; console.warn('[Aura] Quill init failed:', e); }
 }
 
 async function saveJournal() {
