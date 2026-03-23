@@ -3171,6 +3171,8 @@ function updateDashboard() {
     if (progressEl) progressEl.style.width = Math.min(100, Math.max(0, pct)) + '%';
     var labelsEl = document.getElementById('streakProgressLabels');
     if (labelsEl) {
+        var prevMilestone = streak >= 100 ? 100 : streak >= 50 ? 50 : streak >= 30 ? 30 : streak >= 14 ? 14 : streak >= 7 ? 7 : 0;
+        var nextMilestone = streak >= 100 ? 100 : streak >= 50 ? 100 : streak >= 30 ? 50 : streak >= 14 ? 30 : streak >= 7 ? 14 : 7;
         var fromLabel = prevMilestone === 0 ? 'Start' : prevMilestone + 'd';
         labelsEl.innerHTML = '<span>' + fromLabel + '</span><span>' + nextMilestone + ' days</span>';
     }

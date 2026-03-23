@@ -579,7 +579,7 @@
             if (!dateStr) return '';
             try {
                 var d = new Date(dateStr + 'T12:00:00');
-                return d.toLocaleDateString(undefined, { weekday: 'short', month: 'long', day: 'numeric' });
+                return d.toLocaleDateString(window.auraLocale || undefined, { weekday: 'short', month: 'long', day: 'numeric' });
             } catch (e) { return dateStr; }
         }
 
