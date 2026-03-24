@@ -7032,6 +7032,188 @@ Object.assign(S.hi, {
     });
 
     /* ════════════════════════════════════════════════════════════════════
+       §2e  CHECK-IN FORM LABELS + ENTRY SUBTITLE — all abbreviated locales
+       These keys fall back to English via AUTO-FILL because they exist in
+       S.en but were never added to the abbreviated locale objects.
+    ════════════════════════════════════════════════════════════════════ */
+    /* Add entry_subtitle and year_in_mood_subtitle to S.en */
+    Object.assign(S.en, {
+        entry_subtitle:'Log your mood, sleep, and energy. One entry per day \u2014 quick or detailed, your choice.',
+        year_in_mood_subtitle:'Track your mood consistency across the past year'
+    });
+    /* ── Italian ─────────────────────────────────────────────────────── */
+    Object.assign(S.it, {
+        checkin_mood:'Umore', checkin_energy:'Livello di energia',
+        checkin_sleep_duration:'Durata del sonno', checkin_sleep_quality:'Qualit\u00e0 del sonno',
+        checkin_sleep_time:'Orario principale di sonno', checkin_wake_time:'Orario principale di risveglio',
+        checkin_sleep_segments:'Fasi del sonno',
+        checkin_activities:'Attivit\u00e0', checkin_tags:'Tag', checkin_photos:'Foto',
+        checkin_date:'Data', date_heading:'Data', date_label:'Data', checkin_date_heading:'Data',
+        activities_label:'Attivit\u00e0', tags_label:'Tag', photos_label:'Foto',
+        suggested_tags:'Tag suggeriti', tap_to_add:'Tocca per aggiungere',
+        checkin_daily_reflection:'Riflessione quotidiana',
+        checkin_reflection_desc:'Annota come ti sei sentito oggi, cosa \u00e8 stato importante e cosa hai notato.',
+        checkin_saved_reflection:'Riflessione salvata',
+        checkin_open_journal:'Apri il diario completo',
+        checkin_save_hint:'\u2318S per salvare',
+        checkin_no_summary:'Non ci sono ancora abbastanza dati per generare un riepilogo.',
+        entry_subtitle:'Registra il tuo umore, sonno ed energia. Una voce al giorno \u2014 rapida o dettagliata, a tua scelta.',
+        year_in_mood_subtitle:'Monitora la coerenza del tuo umore nell\u2019ultimo anno'
+    });
+    /* ── Dutch ───────────────────────────────────────────────────────── */
+    Object.assign(S.nl, {
+        checkin_mood:'Stemming', checkin_energy:'Energieniveau',
+        checkin_sleep_duration:'Slaaptijd', checkin_sleep_quality:'Slaapkwaliteit',
+        checkin_sleep_time:'Primaire slaaptijd', checkin_wake_time:'Primaire wektijd',
+        checkin_sleep_segments:'Slaapsegmenten',
+        checkin_activities:'Activiteiten', checkin_tags:'Labels', checkin_photos:"Foto's",
+        checkin_date:'Datum', date_heading:'Datum', date_label:'Datum', checkin_date_heading:'Datum',
+        activities_label:'Activiteiten', tags_label:'Labels', photos_label:"Foto's",
+        suggested_tags:'Voorgestelde labels', tap_to_add:'Tik om toe te voegen',
+        checkin_daily_reflection:'Dagelijkse reflectie',
+        checkin_reflection_desc:'Noteer hoe de dag voelde, wat belangrijk was en wat je opviel.',
+        checkin_saved_reflection:'Opgeslagen reflectie',
+        checkin_open_journal:'Volledig dagboek openen',
+        checkin_save_hint:'\u2318S om op te slaan',
+        checkin_no_summary:'Nog niet genoeg data voor een samenvatting.',
+        entry_subtitle:'Log je stemming, slaap en energie. \u00c9\u00e9n invoer per dag \u2014 snel of gedetailleerd, jouw keuze.',
+        year_in_mood_subtitle:'Volg je stemmingsconsistentie over het afgelopen jaar'
+    });
+    /* ── Polish ──────────────────────────────────────────────────────── */
+    Object.assign(S.pl, {
+        checkin_mood:'Nastr\u00f3j', checkin_energy:'Poziom energii',
+        checkin_sleep_duration:'D\u0142ugo\u015b\u0107 snu', checkin_sleep_quality:'Jako\u015b\u0107 snu',
+        checkin_sleep_time:'G\u0142\u00f3wna pora snu', checkin_wake_time:'G\u0142\u00f3wna pora budzenia',
+        checkin_sleep_segments:'Segmenty snu',
+        checkin_activities:'Aktywno\u015bci', checkin_tags:'Tagi', checkin_photos:'Zdj\u0119cia',
+        checkin_date:'Data', date_heading:'Data', date_label:'Data', checkin_date_heading:'Data',
+        activities_label:'Aktywno\u015bci', tags_label:'Tagi', photos_label:'Zdj\u0119cia',
+        suggested_tags:'Sugerowane tagi', tap_to_add:'Dotknij, aby doda\u0107',
+        checkin_daily_reflection:'Codzienna refleksja',
+        checkin_reflection_desc:'Zapisz, jak si\u0119 czu\u0142e\u015b, co by\u0142o wa\u017cne i co zauwa\u017cy\u0142e\u015b.',
+        checkin_saved_reflection:'Zapisana refleksja',
+        checkin_open_journal:'Otw\u00f3rz pe\u0142ny dziennik',
+        checkin_save_hint:'\u2318S aby zapisa\u0107',
+        checkin_no_summary:'Za ma\u0142o danych, aby wygenerowa\u0107 podsumowanie.',
+        entry_subtitle:'Rejestruj nastr\u00f3j, sen i energi\u0119. Jeden wpis dziennie \u2014 kr\u00f3tki lub szczeg\u00f3\u0142owy.',
+        year_in_mood_subtitle:'\u015aled\u017a sp\u00f3jno\u015b\u0107 nastroju w ci\u0105gu ostatniego roku'
+    });
+    /* ── Russian ─────────────────────────────────────────────────────── */
+    Object.assign(S.ru, {
+        checkin_mood:'\u041d\u0430\u0441\u0442\u0440\u043e\u0435\u043d\u0438\u0435', checkin_energy:'\u0423\u0440\u043e\u0432\u0435\u043d\u044c \u044d\u043d\u0435\u0440\u0433\u0438\u0438',
+        checkin_sleep_duration:'\u041f\u0440\u043e\u0434\u043e\u043b\u0436\u0438\u0442\u0435\u043b\u044c\u043d\u043e\u0441\u0442\u044c \u0441\u043d\u0430', checkin_sleep_quality:'\u041a\u0430\u0447\u0435\u0441\u0442\u0432\u043e \u0441\u043d\u0430',
+        checkin_sleep_time:'\u041e\u0441\u043d\u043e\u0432\u043d\u043e\u0435 \u0432\u0440\u0435\u043c\u044f \u0441\u043d\u0430', checkin_wake_time:'\u041e\u0441\u043d\u043e\u0432\u043d\u043e\u0435 \u0432\u0440\u0435\u043c\u044f \u043f\u043e\u0434\u044a\u0451\u043c\u0430',
+        checkin_sleep_segments:'\u0421\u0435\u0433\u043c\u0435\u043d\u0442\u044b \u0441\u043d\u0430',
+        checkin_activities:'\u0410\u043a\u0442\u0438\u0432\u043d\u043e\u0441\u0442\u0438', checkin_tags:'\u0422\u0435\u0433\u0438', checkin_photos:'\u0424\u043e\u0442\u043e',
+        checkin_date:'\u0414\u0430\u0442\u0430', date_heading:'\u0414\u0430\u0442\u0430', date_label:'\u0414\u0430\u0442\u0430', checkin_date_heading:'\u0414\u0430\u0442\u0430',
+        activities_label:'\u0410\u043a\u0442\u0438\u0432\u043d\u043e\u0441\u0442\u0438', tags_label:'\u0422\u0435\u0433\u0438', photos_label:'\u0424\u043e\u0442\u043e',
+        suggested_tags:'\u041f\u0440\u0435\u0434\u043b\u0430\u0433\u0430\u0435\u043c\u044b\u0435 \u0442\u0435\u0433\u0438', tap_to_add:'\u041d\u0430\u0436\u043c\u0438\u0442\u0435, \u0447\u0442\u043e\u0431\u044b \u0434\u043e\u0431\u0430\u0432\u0438\u0442\u044c',
+        checkin_daily_reflection:'\u0415\u0436\u0435\u0434\u043d\u0435\u0432\u043d\u0430\u044f \u0440\u0435\u0444\u043b\u0435\u043a\u0441\u0438\u044f',
+        checkin_reflection_desc:'\u0417\u0430\u043f\u0438\u0448\u0438\u0442\u0435, \u043a\u0430\u043a \u043f\u0440\u043e\u0448\u0451\u043b \u0434\u0435\u043d\u044c, \u0447\u0442\u043e \u0431\u044b\u043b\u043e \u0432\u0430\u0436\u043d\u043e \u0438 \u0447\u0442\u043e \u0432\u044b \u0437\u0430\u043c\u0435\u0442\u0438\u043b\u0438.',
+        checkin_saved_reflection:'\u0421\u043e\u0445\u0440\u0430\u043d\u0451\u043d\u043d\u0430\u044f \u0440\u0435\u0444\u043b\u0435\u043a\u0441\u0438\u044f',
+        checkin_open_journal:'\u041e\u0442\u043a\u0440\u044b\u0442\u044c \u043f\u043e\u043b\u043d\u044b\u0439 \u0434\u043d\u0435\u0432\u043d\u0438\u043a',
+        checkin_save_hint:'\u2318S \u0434\u043b\u044f \u0441\u043e\u0445\u0440\u0430\u043d\u0435\u043d\u0438\u044f',
+        checkin_no_summary:'\u041d\u0435\u0434\u043e\u0441\u0442\u0430\u0442\u043e\u0447\u043d\u043e \u0434\u0430\u043d\u043d\u044b\u0445 \u0434\u043b\u044f \u0441\u0432\u043e\u0434\u043a\u0438.',
+        entry_subtitle:'\u0417\u0430\u043f\u0438\u0441\u044b\u0432\u0430\u0439\u0442\u0435 \u043d\u0430\u0441\u0442\u0440\u043e\u0435\u043d\u0438\u0435, \u0441\u043e\u043d \u0438 \u044d\u043d\u0435\u0440\u0433\u0438\u044e. \u041e\u0434\u043d\u0430 \u0437\u0430\u043f\u0438\u0441\u044c \u0432 \u0434\u0435\u043d\u044c \u2014 \u043a\u0440\u0430\u0442\u043a\u043e \u0438\u043b\u0438 \u043f\u043e\u0434\u0440\u043e\u0431\u043d\u043e.',
+        year_in_mood_subtitle:'\u041e\u0442\u0441\u043b\u0435\u0436\u0438\u0432\u0430\u0439\u0442\u0435 \u043f\u043e\u0441\u0442\u043e\u044f\u043d\u0441\u0442\u0432\u043e \u043d\u0430\u0441\u0442\u0440\u043e\u0435\u043d\u0438\u044f \u0437\u0430 \u043f\u0440\u043e\u0448\u043b\u044b\u0439 \u0433\u043e\u0434'
+    });
+    /* ── Turkish ─────────────────────────────────────────────────────── */
+    Object.assign(S.tr, {
+        checkin_mood:'Ruh Hali', checkin_energy:'Enerji Seviyesi',
+        checkin_sleep_duration:'Uyku S\u00fcresi', checkin_sleep_quality:'Uyku Kalitesi',
+        checkin_sleep_time:'Ana Uyku Saati', checkin_wake_time:'Ana Uyan\u0131\u015f Saati',
+        checkin_sleep_segments:'Uyku Segmentleri',
+        checkin_activities:'Aktiviteler', checkin_tags:'Etiketler', checkin_photos:'Foto\u011fraflar',
+        checkin_date:'Tarih', date_heading:'Tarih', date_label:'Tarih', checkin_date_heading:'Tarih',
+        activities_label:'Aktiviteler', tags_label:'Etiketler', photos_label:'Foto\u011fraflar',
+        suggested_tags:'\u00d6nerilen etiketler', tap_to_add:'Eklemek i\u00e7in dokun',
+        checkin_daily_reflection:'G\u00fcnl\u00fck Yans\u0131ma',
+        checkin_reflection_desc:'G\u00fcn\u00fcn nas\u0131l ge\u00e7ti\u011fini, ne \u00f6nemli oldu\u011funu ve ne fark etti\u011fini yaz.',
+        checkin_saved_reflection:'Kaydedilen yans\u0131ma',
+        checkin_open_journal:'Tam g\u00fcnl\u00fc\u011f\u00fc a\u00e7',
+        checkin_save_hint:'\u2318S kaydetmek i\u00e7in',
+        checkin_no_summary:'\u00d6zet olu\u015fturmak i\u00e7in yeterli veri yok.',
+        entry_subtitle:'Ruh halinizi, uykunuzu ve enerjinizi kaydedin. G\u00fcnde bir kay\u0131t \u2014 k\u0131sa veya ayr\u0131nt\u0131l\u0131.',
+        year_in_mood_subtitle:'Ge\u00e7en y\u0131l boyunca ruh hali tutarl\u0131l\u0131\u011f\u0131n\u0131 takip edin'
+    });
+    /* ── Japanese ────────────────────────────────────────────────────── */
+    Object.assign(S.ja, {
+        checkin_mood:'\u6c17\u5206', checkin_energy:'\u6d3b\u529b\u30ec\u30d9\u30eb',
+        checkin_sleep_duration:'\u7761\u7720\u6642\u9593', checkin_sleep_quality:'\u7761\u7720\u306e\u8cea',
+        checkin_sleep_time:'\u4e3b\u306a\u5c31\u5be1\u6642\u9593', checkin_wake_time:'\u4e3b\u306a\u8d77\u5e8a\u6642\u9593',
+        checkin_sleep_segments:'\u7761\u7720\u30bb\u30b0\u30e1\u30f3\u30c8',
+        checkin_activities:'\u30a2\u30af\u30c6\u30a3\u30d3\u30c6\u30a3', checkin_tags:'\u30bf\u30b0', checkin_photos:'\u5199\u771f',
+        checkin_date:'\u65e5\u4ed8', date_heading:'\u65e5\u4ed8', date_label:'\u65e5\u4ed8', checkin_date_heading:'\u65e5\u4ed8',
+        activities_label:'\u30a2\u30af\u30c6\u30a3\u30d3\u30c6\u30a3', tags_label:'\u30bf\u30b0', photos_label:'\u5199\u771f',
+        suggested_tags:'\u30bf\u30b0\u306e\u5019\u88dc', tap_to_add:'\u30bf\u30c3\u30d7\u3057\u3066\u8ffd\u52a0',
+        checkin_daily_reflection:'\u65e5\u3005\u306e\u632f\u308a\u8fd4\u308a',
+        checkin_reflection_desc:'\u4eca\u65e5\u306e\u6c17\u5206\u3001\u5927\u5207\u306a\u3053\u3068\u3001\u6c17\u3065\u3044\u305f\u3053\u3068\u3092\u8a18\u9332\u3057\u307e\u3057\u3087\u3046\u3002',
+        checkin_saved_reflection:'\u4fdd\u5b58\u6e08\u307f\u306e\u632f\u308a\u8fd4\u308a',
+        checkin_open_journal:'\u30d5\u30eb\u30b8\u30e3\u30fc\u30ca\u30eb\u3092\u958b\u304f',
+        checkin_save_hint:'\u2318S\u3067\u4fdd\u5b58',
+        checkin_no_summary:'\u30b5\u30de\u30ea\u30fc\u3092\u751f\u6210\u3059\u308b\u306b\u306f\u30c7\u30fc\u30bf\u304c\u4e0d\u8db3\u3057\u3066\u3044\u307e\u3059\u3002',
+        entry_subtitle:'\u6c17\u5206\u3001\u7761\u7720\u3001\u6d3b\u529b\u3092\u8a18\u9332\u3057\u307e\u3057\u3087\u3046\u30021\u65e5\uff11\u56de\u2014\u77ed\u304f\u3066\u3082\u8a73\u3057\u304f\u3066\u3082OK\u3002',
+        year_in_mood_subtitle:'\u904e\u53bb1\u5e74\u9593\u306e\u6c17\u5206\u306e\u4e00\u8cab\u6027\u3092\u8ffd\u8de1\u3059\u308b'
+    });
+    /* ── Chinese ─────────────────────────────────────────────────────── */
+    Object.assign(S.zh, {
+        checkin_mood:'\u5fc3\u60c5', checkin_energy:'\u7cbe\u529b\u6c34\u5e73',
+        checkin_sleep_duration:'\u7761\u7720\u65f6\u957f', checkin_sleep_quality:'\u7761\u7720\u8d28\u91cf',
+        checkin_sleep_time:'\u4e3b\u8981\u5165\u7761\u65f6\u95f4', checkin_wake_time:'\u4e3b\u8981\u8d77\u5e8a\u65f6\u95f4',
+        checkin_sleep_segments:'\u7761\u7720\u7247\u6bb5',
+        checkin_activities:'\u6d3b\u52a8', checkin_tags:'\u6807\u7b7e', checkin_photos:'\u7167\u7247',
+        checkin_date:'\u65e5\u671f', date_heading:'\u65e5\u671f', date_label:'\u65e5\u671f', checkin_date_heading:'\u65e5\u671f',
+        activities_label:'\u6d3b\u52a8', tags_label:'\u6807\u7b7e', photos_label:'\u7167\u7247',
+        suggested_tags:'\u5efa\u8bae\u6807\u7b7e', tap_to_add:'\u70b9\u51fb\u6dfb\u52a0',
+        checkin_daily_reflection:'\u6bcf\u65e5\u53cd\u601d',
+        checkin_reflection_desc:'\u8bb0\u5f55\u4eca\u5929\u7684\u611f\u53d7\u3001\u91cd\u8981\u7684\u4e8b\u60c5\u548c\u4f60\u6ce8\u610f\u5230\u7684\u3002',
+        checkin_saved_reflection:'\u5df2\u4fdd\u5b58\u7684\u53cd\u601d',
+        checkin_open_journal:'\u6253\u5f00\u5b8c\u6574\u65e5\u8bb0',
+        checkin_save_hint:'\u2318S\u4fdd\u5b58',
+        checkin_no_summary:'\u6ca1\u6709\u8db3\u591f\u7684\u6570\u636e\u6765\u751f\u6210\u6458\u8981\u3002',
+        entry_subtitle:'\u8bb0\u5f55\u5fc3\u60c5\u3001\u7761\u7720\u548c\u7cbe\u529b\u3002\u6bcf\u5929\u4e00\u6761\u8bb0\u5f55\u2014\u7b80\u77ed\u6216\u8be6\u7ec6\u5747\u53ef\u3002',
+        year_in_mood_subtitle:'\u8ffd\u8e2a\u8fc7\u53bb\u4e00\u5e74\u7684\u5fc3\u60c5\u4e00\u81f4\u6027'
+    });
+    /* ── Hindi ───────────────────────────────────────────────────────── */
+    Object.assign(S.hi, {
+        checkin_mood:'\u092e\u0942\u0921', checkin_energy:'\u090a\u0930\u094d\u091c\u093e \u0938\u094d\u0924\u0930',
+        checkin_sleep_duration:'\u0928\u0940\u0902\u0926 \u0915\u0940 \u0905\u0935\u0927\u093f', checkin_sleep_quality:'\u0928\u0940\u0902\u0926 \u0915\u0940 \u0917\u0941\u0923\u0935\u0924\u094d\u0924\u093e',
+        checkin_sleep_time:'\u092e\u0941\u0916\u094d\u092f \u0938\u094b\u0928\u0947 \u0915\u093e \u0938\u092e\u092f', checkin_wake_time:'\u092e\u0941\u0916\u094d\u092f \u091c\u093e\u0917\u0928\u0947 \u0915\u093e \u0938\u092e\u092f',
+        checkin_sleep_segments:'\u0928\u0940\u0902\u0926 \u0915\u0947 \u0916\u0902\u0921',
+        checkin_activities:'\u0917\u0924\u093f\u0935\u093f\u0927\u093f\u092f\u093e\u0901', checkin_tags:'\u091f\u0948\u0917', checkin_photos:'\u092b\u093c\u094b\u091f\u094b',
+        checkin_date:'\u0924\u093e\u0930\u0940\u0916', date_heading:'\u0924\u093e\u0930\u0940\u0916', date_label:'\u0924\u093e\u0930\u0940\u0916', checkin_date_heading:'\u0924\u093e\u0930\u0940\u0916',
+        activities_label:'\u0917\u0924\u093f\u0935\u093f\u0927\u093f\u092f\u093e\u0901', tags_label:'\u091f\u0948\u0917', photos_label:'\u092b\u093c\u094b\u091f\u094b',
+        suggested_tags:'\u0938\u0941\u091d\u093e\u090f \u0917\u090f \u091f\u0948\u0917', tap_to_add:'\u091c\u094b\u095c\u0928\u0947 \u0915\u0947 \u0932\u093f\u090f \u091f\u0948\u092a \u0915\u0930\u0947\u0902',
+        checkin_daily_reflection:'\u0926\u0948\u0928\u093f\u0915 \u0935\u093f\u091a\u093e\u0930',
+        checkin_reflection_desc:'\u0906\u091c \u0915\u0948\u0938\u093e \u0932\u0917\u093e, \u0915\u094d\u092f\u093e \u092e\u0939\u0924\u094d\u0935\u092a\u0942\u0930\u094d\u0923 \u0925\u093e \u0914\u0930 \u0915\u094d\u092f\u093e \u0927\u094d\u092f\u093e\u0928 \u0906\u092f\u093e, \u092f\u0939 \u0928\u094b\u091f \u0915\u0930\u0947\u0902\u0964',
+        checkin_saved_reflection:'\u0938\u0939\u0947\u091c\u093e \u0917\u092f\u093e \u0935\u093f\u091a\u093e\u0930',
+        checkin_open_journal:'\u092a\u0942\u0930\u0940 \u0921\u093e\u092f\u0930\u0940 \u0916\u094b\u0932\u0947\u0902',
+        checkin_save_hint:'\u2318S \u0938\u0947 \u0938\u0939\u0947\u091c\u0947\u0902',
+        checkin_no_summary:'\u0938\u093e\u0930\u093e\u0902\u0936 \u0915\u0947 \u0932\u093f\u090f \u092a\u0930\u094d\u092f\u093e\u092a\u094d\u0924 \u0921\u0947\u091f\u093e \u0928\u0939\u0940\u0902\u0964',
+        entry_subtitle:'\u0905\u092a\u0928\u093e \u092e\u0942\u0921, \u0928\u0940\u0902\u0926 \u0914\u0930 \u090a\u0930\u094d\u091c\u093e \u0930\u093f\u0915\u0949\u0930\u094d\u0921 \u0915\u0930\u0947\u0902\u0964 \u090f\u0915 \u0926\u093f\u0928 \u092e\u0947\u0902 \u090f\u0915 \u092a\u094d\u0930\u0935\u093f\u0937\u094d\u091f\u093f \u2014 \u0938\u0902\u0915\u094d\u0937\u093f\u092a\u094d\u0924 \u092f\u093e \u0935\u093f\u0938\u094d\u0924\u0943\u0924\u0964',
+        year_in_mood_subtitle:'\u092a\u093f\u091b\u0932\u0947 \u0935\u0930\u094d\u0937 \u0915\u0940 \u092e\u0942\u0921 \u0938\u094d\u0925\u093f\u0930\u0924\u093e \u0915\u094b \u091f\u094d\u0930\u0948\u0915 \u0915\u0930\u0947\u0902'
+    });
+    /* ── Portuguese ──────────────────────────────────────────────────── */
+    Object.assign(S.pt, {
+        checkin_mood:'Humor', checkin_energy:'N\u00edvel de energia',
+        checkin_sleep_duration:'Dura\u00e7\u00e3o do sono', checkin_sleep_quality:'Qualidade do sono',
+        checkin_sleep_time:'Hora principal de dormir', checkin_wake_time:'Hora principal de acordar',
+        checkin_sleep_segments:'Segmentos de sono',
+        checkin_activities:'Atividades', checkin_tags:'Etiquetas', checkin_photos:'Fotos',
+        checkin_date:'Data', date_heading:'Data', date_label:'Data', checkin_date_heading:'Data',
+        activities_label:'Atividades', tags_label:'Etiquetas', photos_label:'Fotos',
+        suggested_tags:'Etiquetas sugeridas', tap_to_add:'Toque para adicionar',
+        checkin_daily_reflection:'Reflex\u00e3o di\u00e1ria',
+        checkin_reflection_desc:'Registe como o dia correu, o que foi importante e o que notou.',
+        checkin_saved_reflection:'Reflex\u00e3o guardada',
+        checkin_open_journal:'Abrir di\u00e1rio completo',
+        checkin_save_hint:'\u2318S para guardar',
+        checkin_no_summary:'Dados insuficientes para gerar um resumo.',
+        entry_subtitle:'Registe o seu humor, sono e energia. Uma entrada por dia \u2014 r\u00e1pida ou detalhada.',
+        year_in_mood_subtitle:'Acompanhe a consist\u00eancia do seu humor ao longo do \u00faltimo ano'
+    });
+
+    /* ════════════════════════════════════════════════════════════════════
        §2  AUTO-FILL MISSING KEYS FROM ENGLISH
        ─── Guarantees zero blank text for every locale ─────────────────
     ════════════════════════════════════════════════════════════════════ */
