@@ -1291,10 +1291,12 @@ function navigate(page, button) {
         generateInsights();
     }
 
-    /* Re-apply i18n so the active page is fully translated (fixes delayed or missing translation) */
+    /* Re-apply i18n so the active page is fully translated.
+       Use 250ms so it fires AFTER requestAnimationFrame renders and
+       setTimeout(60) chart builders finish populating the DOM. */
     setTimeout(function () {
         if (typeof window.runI18n === 'function') window.runI18n();
-    }, 0);
+    }, 250);
 }
 
 function openSidebar() {
@@ -2579,9 +2581,10 @@ function updateSupportRail() {
     var dateVal = dateInput ? getDateInputValue(dateInput) : '';
     var today = new Date().toISOString().split('T')[0];
     var yesterday = new Date(Date.now() - 86400000).toISOString().split('T')[0];
-    var relLabel = dateVal === today ? 'Today' : dateVal === yesterday ? 'Yesterday' : (dateVal || '—');
+    var _ts = typeof window.t === 'function' ? window.t : function(k,v){return k;};
+    var relLabel = dateVal === today ? _ts('today_rel') : dateVal === yesterday ? _ts('yesterday_rel') : (dateVal || '—');
     dateEl.textContent = relLabel;
-    if (draftEl) draftEl.textContent = entryDirty ? '● Unsaved changes' : 'Saved';
+    if (draftEl) draftEl.textContent = entryDirty ? '● ' + _ts('unsaved_changes') : _ts('draft_status_saved');
     if (moodEl) {
         var m = document.getElementById('entryMood');
         moodEl.textContent = m && m.value !== '' ? m.value : '—';
@@ -2774,7 +2777,7 @@ async function saveEntry() {
         entrySaveInFlight = false;
         if (saveBtn) {
             saveBtn.disabled = false;
-            saveBtn.textContent = originalSaveLabel || 'Save Entry';
+            saveBtn.textContent = originalSaveLabel || (window.t ? window.t('save_entry') : 'Save Entry');
         }
     }
 }
@@ -3173,8 +3176,9 @@ function updateDashboard() {
     if (labelsEl) {
         var prevMilestone = streak >= 100 ? 100 : streak >= 50 ? 50 : streak >= 30 ? 30 : streak >= 14 ? 14 : streak >= 7 ? 7 : 0;
         var nextMilestone = streak >= 100 ? 100 : streak >= 50 ? 100 : streak >= 30 ? 50 : streak >= 14 ? 30 : streak >= 7 ? 14 : 7;
-        var fromLabel = prevMilestone === 0 ? 'Start' : prevMilestone + 'd';
-        labelsEl.innerHTML = '<span>' + fromLabel + '</span><span>' + nextMilestone + ' days</span>';
+        var _tSL = typeof window.t === 'function' ? window.t : function(k){return k;};
+        var fromLabel = prevMilestone === 0 ? _tSL('streak_start_label') : prevMilestone + 'd';
+        labelsEl.innerHTML = '<span>' + fromLabel + '</span><span>' + nextMilestone + ' ' + _tSL('days_label') + '</span>';
     }
     
     if (streak < lastStreakMilestone) lastStreakMilestone = streak;
@@ -3510,11 +3514,12 @@ async function emSaveField(dateStr, field) {
     }
 }
 function emDeleteField(dateStr, field) {
-    var labels = { mood: 'Mood', energy: 'Energy', sleep: 'Sleep data', tags: 'Tags', activities: 'Activities', journal: 'Journal entry' };
+    var _td = typeof window.t === 'function' ? window.t : function(k){return k;};
+    var labels = { mood: _td('checkin_mood'), energy: _td('checkin_energy'), sleep: _td('checkin_sleep_duration'), tags: _td('checkin_tags'), activities: _td('checkin_activities'), journal: _td('journal') };
     showPremiumConfirm(
-        'Delete this value?',
-        'This action cannot be undone.',
-        'Delete',
+        _td('delete_value_title'),
+        _td('cannot_undo'),
+        _td('modal_delete'),
         function() {
             var update = {};
             if (field === 'mood') update.mood = null;
@@ -4514,22 +4519,23 @@ function renderChartEmptyState(canvas, chartLabel) {
     var pos = getComputedStyle(wrap).position;
     if (pos === 'static') wrap.style.position = 'relative';
 
+    var _tE = typeof window.t === 'function' ? window.t : function(k){return k;};
     var ctaMap = {
-        'Mood':   { text: 'Log your first mood', page: 'entry' },
-        'Sleep':  { text: 'Add sleep data',       page: 'entry' },
-        'Energy': { text: 'Track your energy',    page: 'entry' },
-        'Mood Change': { text: 'Track 2+ days of mood', page: 'entry' }
+        'Mood':   { text: _tE('chart_empty_mood_cta'), page: 'entry' },
+        'Sleep':  { text: _tE('chart_empty_sleep_cta'), page: 'entry' },
+        'Energy': { text: _tE('chart_empty_energy_cta'), page: 'entry' },
+        'Mood Change': { text: _tE('chart_empty_velocity_cta'), page: 'entry' }
     };
     var iconMap = { 'Mood': '🌿', 'Sleep': '🌙', 'Energy': '⚡', 'Mood Change': '📈' };
     var msgMap = {
-        'Mood':        'Your mood trend will appear here once you\u2019ve logged a few days.',
-        'Sleep':       'Sleep patterns emerge once you start tracking daily.',
-        'Energy':      'Energy data gives this chart life \u2014 log your first check-in.',
-        'Mood Change': 'Track at least two consecutive days to see day-over-day change.'
+        'Mood':        _tE('chart_empty_mood_msg'),
+        'Sleep':       _tE('chart_empty_sleep_msg'),
+        'Energy':      _tE('chart_empty_energy_msg'),
+        'Mood Change': _tE('chart_empty_velocity_msg')
     };
 
     var icon = iconMap[chartLabel] || '📊';
-    var msg  = msgMap[chartLabel]  || 'Add entries to see this chart.';
+    var msg  = msgMap[chartLabel]  || _tE('chart_empty_default');
     var cta  = ctaMap[chartLabel];
 
     var overlay = document.createElement('div');
@@ -4643,11 +4649,11 @@ function renderCorrelations() {
                 if (r2SmEl) r2SmEl.textContent = (window.t ? window.t('corr_need_entries') : 'Need at least 3 entries with sleep and mood to show correlation.');
             }
             var r2Sm = validSleep.length >= 3 ? computeR2(validSleep, validMood) : null;
-            if (r2SmEl && validSleep.length >= 3) r2SmEl.textContent = r2Sm != null ? 'R² = ' + (r2Sm * 100).toFixed(1) + '%' : '';
+            if (r2SmEl && validSleep.length >= 3) r2SmEl.textContent = r2Sm != null ? 'R\u00B2 = ' + (r2Sm * 100).toFixed(1) + '%' : '';
             var smReg = validSleep.length >= 3 ? computeRegressionLine(validSleep, validMood, 0, 12) : null;
             var correlationValues = validSleep.length ? validSleep.map(function(s, i) { return { x: s, y: validMood[i] }; }) : [{ x: 0, y: 5 }];
             var corrDatasets = [{
-                label: 'Sleep vs Mood',
+                label: (window.t ? window.t('chart_sleep_vs_mood') : 'Sleep vs Mood'),
                 data: correlationValues,
                 backgroundColor: colors.chart1 ? (colors.chart1.length === 7 ? colors.chart1 + '40' : colors.chart1 + '40') : 'rgba(139, 157, 131, 0.35)',
                 borderColor: colors.chart1 || '#8B9D83',
@@ -4657,7 +4663,7 @@ function renderCorrelations() {
                 pointBorderColor: colors.chart1 ? (colors.chart1.length === 7 ? colors.chart1 + '99' : colors.chart1) : 'rgba(139, 157, 131, 0.7)',
                 type: 'scatter'
             }];
-            if (smReg) corrDatasets.push({ label: 'Trend', data: smReg, type: 'line', borderColor: colors.text || colors.chart2 || '#6B7D63', borderWidth: 2, tension: 0.35, borderDash: [6, 4], pointRadius: 0, pointHoverRadius: 0, fill: false });
+            if (smReg) corrDatasets.push({ label: (window.t ? window.t('chart_trend') : 'Trend'), data: smReg, type: 'line', borderColor: colors.text || colors.chart2 || '#6B7D63', borderWidth: 2, tension: 0.35, borderDash: [6, 4], pointRadius: 0, pointHoverRadius: 0, fill: false });
             if (correlationsChartInstance) {
                 correlationsChartInstance.destroy();
                 correlationsChartInstance = null;
@@ -4722,7 +4728,7 @@ function renderCorrelations() {
             if (r2AEEl) r2AEEl.textContent = r2AE != null ? 'R² = ' + (r2AE * 100).toFixed(1) + '%' : '';
             var aeReg = computeRegressionLine(actCounts, energyArr, 0, 10);
             var aeDatasets = [{
-                label: 'Activity vs Energy',
+                label: (window.t ? window.t('chart_act_vs_energy') : 'Activity vs Energy'),
                 data: dates.map(function(d, i) { return { x: actCounts[i], y: energyArr[i] }; }),
                 backgroundColor: colors.chart3 ? (colors.chart3.length === 7 ? colors.chart3 + '40' : colors.chart3 + '40') : 'rgba(201, 125, 96, 0.35)',
                 borderColor: colors.chart3 || '#C97D60',
@@ -4732,7 +4738,7 @@ function renderCorrelations() {
                 pointBorderColor: colors.chart3 ? (colors.chart3.length === 7 ? colors.chart3 + '99' : colors.chart3) : 'rgba(201, 125, 96, 0.7)',
                 type: 'scatter'
             }];
-            if (aeReg) aeDatasets.push({ label: 'Trend', data: aeReg, type: 'line', borderColor: colors.text || colors.chart2 || '#6B7D63', borderWidth: 2, tension: 0.35, borderDash: [6, 4], pointRadius: 0, pointHoverRadius: 0, fill: false });
+            if (aeReg) aeDatasets.push({ label: (window.t ? window.t('chart_trend') : 'Trend'), data: aeReg, type: 'line', borderColor: colors.text || colors.chart2 || '#6B7D63', borderWidth: 2, tension: 0.35, borderDash: [6, 4], pointRadius: 0, pointHoverRadius: 0, fill: false });
             if (activityEnergyChartInstance) {
                 activityEnergyChartInstance.destroy();
                 activityEnergyChartInstance = null;
@@ -4862,10 +4868,11 @@ function renderCorrelationMatrix() {
     var el = document.getElementById('correlationMatrix');
     if (!el) return;
     var data = Object.keys(entries).sort().map(function(d) { return entries[d]; });
-    if (data.length < 5) { el.innerHTML = '<p style="color: var(--text-muted);">Need more entries for correlation matrix.</p>'; return; }
+    var _tCM = typeof window.t === 'function' ? window.t : function(k){return k;};
+    if (data.length < 5) { el.innerHTML = '<p style="color: var(--text-muted);">' + _tCM('corr_matrix_need') + '</p>'; return; }
     getCustomMetrics().then(function(list) {
         var custom = list.filter(function(m) { return m.visible && m.type === 'scale'; });
-        var labels = ['Mood', 'Sleep', 'Energy', 'Activities'].concat(custom.map(function(m) { return m.name; }));
+        var labels = [_tCM('checkin_mood'), _tCM('checkin_sleep_duration'), _tCM('checkin_energy'), _tCM('checkin_activities')].concat(custom.map(function(m) { return m.name; }));
         var N = labels.length;
         var arrays = [
             data.map(function(e) { return e.mood; }),
@@ -5045,7 +5052,7 @@ function renderMoodVelocity() {
         data: {
             labels: labels,
             datasets: [{
-                label: 'Mood Change',
+                label: (window.t ? window.t('chart_mood_change') : 'Mood Change'),
                 data: velocities,
                 backgroundColor: barColors,
                 borderRadius: 8,
@@ -5278,9 +5285,9 @@ function renderCustomRangeChart() {
         data: {
             labels: dates,
             datasets: [
-                { label: 'Mood', data: dates.map(function(d) { return entries[d].mood; }), borderColor: colors.chart1, fill: false, tension: 0.35, borderWidth: 3, pointRadius: 0, pointHoverRadius: 5 },
-                { label: 'Sleep (h)', data: dates.map(function(d) { return entries[d].sleep; }), borderColor: colors.chart2, fill: false, tension: 0.35, borderWidth: 3, pointRadius: 0, pointHoverRadius: 5 },
-                { label: 'Energy', data: dates.map(function(d) { return entries[d].energy; }), borderColor: colors.chart3, fill: false, tension: 0.35, borderWidth: 3, pointRadius: 0, pointHoverRadius: 5 }
+                { label: (window.t ? window.t('checkin_mood') : 'Mood'), data: dates.map(function(d) { return entries[d].mood; }), borderColor: colors.chart1, fill: false, tension: 0.35, borderWidth: 3, pointRadius: 0, pointHoverRadius: 5 },
+                { label: (window.t ? window.t('chart_sleep_h') : 'Sleep (h)'), data: dates.map(function(d) { return entries[d].sleep; }), borderColor: colors.chart2, fill: false, tension: 0.35, borderWidth: 3, pointRadius: 0, pointHoverRadius: 5 },
+                { label: (window.t ? window.t('checkin_energy') : 'Energy'), data: dates.map(function(d) { return entries[d].energy; }), borderColor: colors.chart3, fill: false, tension: 0.35, borderWidth: 3, pointRadius: 0, pointHoverRadius: 5 }
             ]
         },
         options: getChartConfig({ yMin: 0, yMax: 12, yStep: 1, yTitle: 'Score / Hours' })
@@ -5506,9 +5513,10 @@ function getInsightSignature() {
     }).join('||');
 }
 function getInsightStrength(score) {
-    if (score >= 5) return { label: 'Strong pattern', width: 100 };
-    if (score >= 3) return { label: 'Moderate pattern', width: 68 };
-    return { label: 'Weak pattern', width: 38 };
+    var _tS = typeof window.t === 'function' ? window.t : function(k){return k;};
+    if (score >= 5) return { label: _tS('strength_strong'), width: 100 };
+    if (score >= 3) return { label: _tS('strength_moderate'), width: 68 };
+    return { label: _tS('strength_weak'), width: 38 };
 }
 function buildInsightCardHtml(insight) {
     var _t = typeof window.t === 'function' ? window.t : function (k) { return k; };
@@ -6358,7 +6366,7 @@ function renderRadarChart() {
             labels: days,
             datasets: [
                 {
-                    label: 'Average mood',
+                    label: (window.t ? window.t('chart_avg_mood') : 'Average mood'),
                     data: filled,
                     borderColor: colors.chart1,
                     backgroundColor: colors.chart1 + '22',
@@ -6386,7 +6394,8 @@ function renderRadarChart() {
                         callbacks: {
                             label: function(context) {
                                 var v = context.raw;
-                                return 'Average mood: ' + (typeof v === 'number' && !isNaN(v) ? v.toFixed(1) : v);
+                                var _avgLabel = window.t ? window.t('chart_avg_mood') : 'Average mood';
+                                return _avgLabel + ': ' + (typeof v === 'number' && !isNaN(v) ? v.toFixed(1) : v);
                             }
                         }
                     }
@@ -6715,14 +6724,18 @@ function formatHourRange(hour) {
     var hour2 = (hour + 1) % 24; var h2 = hour2 % 12; var am2 = hour2 < 12; var s2 = (h2 === 0 ? '12' : String(h2)) + (am2 ? 'am' : 'pm');
     return s1 + '–' + s2;
 }
-var TIME_OF_DAY_BUCKETS = [
-    { label: 'Night', range: [0, 3] },
-    { label: 'Early AM', range: [4, 7] },
-    { label: 'Morning', range: [8, 11] },
-    { label: 'Afternoon', range: [12, 15] },
-    { label: 'Evening', range: [16, 19] },
-    { label: 'Late Night', range: [20, 23] }
-];
+function getTimeOfDayBuckets() {
+    var _tB = typeof window.t === 'function' ? window.t : function(k){return k;};
+    return [
+        { label: _tB('time_night'), range: [0, 3] },
+        { label: _tB('time_early_am'), range: [4, 7] },
+        { label: _tB('time_morning'), range: [8, 11] },
+        { label: _tB('time_afternoon'), range: [12, 15] },
+        { label: _tB('time_evening'), range: [16, 19] },
+        { label: _tB('time_late_night'), range: [20, 23] }
+    ];
+}
+var TIME_OF_DAY_BUCKETS = getTimeOfDayBuckets();
 function getBucketIndexForHour(hour) {
     for (var i = 0; i < TIME_OF_DAY_BUCKETS.length; i++) {
         var r = TIME_OF_DAY_BUCKETS[i].range;
@@ -6902,7 +6915,7 @@ function renderTimeHeatmap() {
         cells.className = 'time-heatmap-cells';
         for (var i = 0; i < 6; i++) {
             var b = buckets[i];
-            var meta = TIME_OF_DAY_BUCKETS[i];
+            var meta = getTimeOfDayBuckets()[i];
             var cell = document.createElement('div');
             cell.className = 'time-heatmap-cell heatmap-animate';
             cell.style.animationDelay = (i * 40) + 'ms';
