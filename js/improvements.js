@@ -468,7 +468,7 @@
         var textInput = document.createElement('input');
         textInput.type = 'text';
         textInput.className = 'tag-chip-text-input';
-        textInput.placeholder = 'Add a tag…';
+        textInput.placeholder = (window.t ? window.t('add_tag_ph') : 'Add a tag…');
         textInput.setAttribute('autocomplete', 'off');
         textInput.setAttribute('spellcheck', 'false');
 
