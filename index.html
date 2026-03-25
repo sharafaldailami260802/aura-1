@@ -195,7 +195,7 @@
                     <div class="metric">
                         <h3 data-i18n="sleep_duration">Sleep Duration</h3>
                         <span class="metric-value skeleton" id="todaySleep">--</span>
-                        <span class="metric-unit">hrs</span>
+                        <span class="metric-unit" data-i18n="hrs_short">hrs</span>
                     </div>
                     <div class="metric">
                         <h3 data-i18n="energy_level">Energy Level</h3>
@@ -390,7 +390,7 @@
                             <div class="form-group">
                                         <label data-i18n="sleep_segments_label">
                                     Sleep Segments
-                                    <span class="form-hint-inline">(up to 3 per night)</span>
+                                    <span class="form-hint-inline" data-i18n="sleep_segments_max">(up to 3 per night)</span>
                                 </label>
                                         <p class="sleep-segments-intro" data-i18n="checkin_sleep_segments_intro">Capture split or interrupted sleep in separate segments.</p>
                                         <div class="sleep-segments-module">
@@ -486,16 +486,16 @@
                         <div class="entry-actions">
                             <div class="entry-history-controls" aria-label="Editor history controls">
                                 <button type="button" class="btn btn-secondary entry-history-btn" id="undoBtn" onclick="entryUndo()" title="Undo (Cmd+Z)">
-                                    <span>Undo</span>
+                                    <span data-i18n="undo">Undo</span>
                                     <span class="entry-history-icon" aria-hidden="true">↺</span>
                                 </button>
                                 <button type="button" class="btn btn-secondary entry-history-btn" id="redoBtn" onclick="entryRedo()" title="Redo (Cmd+Shift+Z)">
-                                    <span>Redo</span>
+                                    <span data-i18n="redo">Redo</span>
                                     <span class="entry-history-icon" aria-hidden="true">↻</span>
                                 </button>
                 </div>
                             <button class="btn" id="saveEntryBtn" onclick="saveEntry()" data-i18n="save_entry">Save Entry</button>
-                            <span class="shortcut-hint">⌘S to save</span>
+                            <span class="shortcut-hint" data-i18n="shortcut_save">⌘S to save</span>
                         </div>
                     </div>
 
@@ -591,8 +591,8 @@
                     </div>
                     <div id="entryModalBody" class="entry-modal-body"></div>
                     <div class="entry-modal-footer">
-                        <button type="button" class="btn btn-secondary entry-modal-footer-btn" id="entryModalEditBtn" onclick="openEntryForDate(entryModalDate)">✏️ Full Edit</button>
-                        <button type="button" class="btn btn-secondary entry-modal-footer-btn" id="entryModalJournalBtn" onclick="openJournalEntryFromModal(entryModalDate)" style="display:none;">📓 Journal</button>
+                        <button type="button" class="btn btn-secondary entry-modal-footer-btn" id="entryModalEditBtn" onclick="openEntryForDate(entryModalDate)" data-i18n="modal_full_edit">✏️ Full Edit</button>
+                        <button type="button" class="btn btn-secondary entry-modal-footer-btn" id="entryModalJournalBtn" onclick="openJournalEntryFromModal(entryModalDate)" style="display:none;" data-i18n="modal_journal_btn">📓 Journal</button>
                         <button type="button" class="btn btn-neutral entry-modal-footer-btn" onclick="closeEntryModal()" data-i18n="modal_close">Close</button>
                     </div>
                 </div>
@@ -627,9 +627,9 @@
                 <!-- Hero: eyebrow + title + date navigation -->
                 <div class="journal-page-hero">
                     <div>
-                        <p class="journal-hero-eyebrow">Your reflections</p>
-                        <h1 id="journalPageTitle" class="journal-hero-title">Journal</h1>
-                        <p class="journal-hero-subtitle">One entry per day. Write freely — this is only for you.</p>
+                        <p class="journal-hero-eyebrow" data-i18n="journal_eyebrow">Your reflections</p>
+                        <h1 id="journalPageTitle" class="journal-hero-title" data-i18n="journal_title">Journal</h1>
+                        <p class="journal-hero-subtitle" data-i18n="journal_page_subtitle">One entry per day. Write freely — this is only for you.</p>
                     </div>
                     <div class="journal-hero-nav" aria-label="Navigate between days">
                         <button type="button" class="journal-hero-nav-btn" id="journalPrevDay" aria-label="Previous day">‹</button>
@@ -647,7 +647,7 @@
                         <!-- Meta bar: date pill + unsaved indicator -->
                         <div class="journal-editor-meta-bar">
                     <p id="journalEntryMeta" class="journal-entry-meta"></p>
-                            <p id="journalUnsavedIndicator" class="journal-unsaved-indicator" hidden>Unsaved changes</p>
+                            <p id="journalUnsavedIndicator" class="journal-unsaved-indicator" hidden data-i18n="journal_unsaved">Unsaved changes</p>
                         </div>
 
                         <!-- Quill editor (app.js mounts here) -->
@@ -703,21 +703,21 @@
             <!-- Search modal (Cmd+K) -->
             <div id="searchModal" class="search-modal-overlay" role="dialog" aria-modal="true" aria-labelledby="searchModalTitle" aria-hidden="true" onclick="if (event.target === this) this.classList.remove('show')">
                 <div class="search-modal">
-                    <h3 id="searchModalTitle">Search entries</h3>
-                    <input type="text" id="searchQuery" placeholder="Search in journal, activities, tags..." class="form-input">
+                    <h3 id="searchModalTitle" data-i18n="search_entries">Search entries</h3>
+                    <input type="text" id="searchQuery" placeholder="Search in journal, activities, tags..." class="form-input" data-i18n="search_ph" data-i18n-placeholder="true">
                     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-sm); margin-top: var(--space-sm);">
-                        <div><label style="font-size: 0.85rem; color: var(--text-muted);">Date from</label><input type="text" id="searchDateFrom" class="aura-date-input" placeholder="YYYY-MM-DD" aria-label="Date from"></div>
-                        <div><label style="font-size: 0.85rem; color: var(--text-muted);">Date to</label><input type="text" id="searchDateTo" class="aura-date-input" placeholder="YYYY-MM-DD" aria-label="Date to"></div>
+                        <div><label style="font-size: 0.85rem; color: var(--text-muted);" data-i18n="search_date_from">Date from</label><input type="text" id="searchDateFrom" class="aura-date-input" placeholder="YYYY-MM-DD" aria-label="Date from"></div>
+                        <div><label style="font-size: 0.85rem; color: var(--text-muted);" data-i18n="search_date_to">Date to</label><input type="text" id="searchDateTo" class="aura-date-input" placeholder="YYYY-MM-DD" aria-label="Date to"></div>
                     </div>
                     <div style="margin-top: var(--space-sm);">
-                        <label style="font-size: 0.85rem; color: var(--text-muted);">Mood range</label>
+                        <label style="font-size: 0.85rem; color: var(--text-muted);" data-i18n="search_mood_range">Mood range</label>
                         <div style="display: flex; gap: 8px; align-items: center;"><input type="number" id="searchMoodMin" min="1" max="10" placeholder="Min" style="width: 60px;"> – <input type="number" id="searchMoodMax" min="1" max="10" placeholder="Max" style="width: 60px;"></div>
                     </div>
                     <div style="margin-top: var(--space-sm);">
-                        <label style="font-size: 0.85rem; color: var(--text-muted);">Tags (comma-separated)</label>
+                        <label style="font-size: 0.85rem; color: var(--text-muted);" data-i18n="search_tags_label">Tags (comma-separated)</label>
                         <input type="text" id="searchTags" placeholder="e.g. work, exercise" class="form-input">
                     </div>
-                    <button type="button" class="btn" style="margin-top: var(--space-md);" onclick="runSearch()">Search</button>
+                    <button type="button" class="btn" style="margin-top: var(--space-md);" onclick="runSearch()" data-i18n="search_btn">Search</button>
                     <div id="searchResults" class="search-results"></div>
                 </div>
             </div>
@@ -738,7 +738,7 @@
                 <div class="card analytics-insights-card" style="margin-top: var(--space-lg);">
                     <h3 data-i18n="nav_insights">Insights</h3>
                     <div id="analyticsInsightsContent">
-                        <p class="insight-empty">Insights will appear once enough data has been collected.</p>
+                        <p class="insight-empty" data-i18n="insight_collecting">Insights will appear once enough data has been collected.</p>
                     </div>
                 </div>
             </div>
@@ -795,8 +795,8 @@
             
             <div id="correlations" class="page">
                 <header class="page-hero">
-                <h1>Data Correlations</h1>
-                    <p class="page-hero-subtitle">Discover how sleep, mood, and energy relate to each other over time.</p>
+                <h1 data-i18n="page_corr_title">Data Correlations</h1>
+                    <p class="page-hero-subtitle" data-i18n="page_corr_subtitle">Discover how sleep, mood, and energy relate to each other over time.</p>
                 </header>
 
                 <!-- Primary: switchable scatter chart -->
@@ -889,8 +889,8 @@
             
             <div id="patterns" class="page">
                 <header class="page-hero patterns-hero">
-                    <h1>Pattern Analysis</h1>
-                    <p class="page-hero-subtitle">How mood, sleep, and time of day connect across your data.</p>
+                    <h1 data-i18n="page_patterns_h1">Pattern Analysis</h1>
+                    <p class="page-hero-subtitle" data-i18n="page_patterns_subtitle">How mood, sleep, and time of day connect across your data.</p>
                 </header>
 
                 <section class="patterns-hero-chart" aria-label="Mood balance chart">
@@ -926,7 +926,7 @@
                     <div class="dashboard-grid">
                     <div class="card card--secondary">
                         <h3 data-i18n="nav_distribution">Mood Distribution</h3>
-                        <p class="patterns-card-desc">Where your ratings cluster over time.</p>
+                        <p class="patterns-card-desc" data-i18n="dist_desc">Where your ratings cluster over time.</p>
                         <div class="chart-container pattern-chart-wrap">
                         <canvas id="distributionChart"></canvas>
                         </div>
@@ -937,31 +937,31 @@
                 <div class="card card--secondary patterns-sleep-card" style="margin-top: var(--space-lg);">
                     <div class="patterns-sleep-header">
                         <div>
-                            <h3>Sleep Timeline</h3>
-                            <p class="patterns-card-desc">When you slept and woke — shows consistency and gaps across nights.</p>
+                            <h3 data-i18n="sleep_timeline_title">Sleep Timeline</h3>
+                            <p class="patterns-card-desc" data-i18n="sleep_timeline_desc">When you slept and woke — shows consistency and gaps across nights.</p>
                         </div>
                         <div class="sleep-timeline-legend" aria-hidden="true">
-                            <span class="stl-legend-dot stl-legend-main"></span><span>Main sleep</span>
-                            <span class="stl-legend-dot stl-legend-frag"></span><span>Fragment</span>
+                            <span class="stl-legend-dot stl-legend-main"></span><span data-i18n="sleep_legend_main">Main sleep</span>
+                            <span class="stl-legend-dot stl-legend-frag"></span><span data-i18n="sleep_legend_fragment">Fragment</span>
                         </div>
                     </div>
                     <div class="sleep-timeline-controls" id="sleepTimelineControls">
-                        <button type="button" class="btn" data-range="30" onclick="setSleepTimelineRange(30, this)">Last 30 days</button>
-                        <button type="button" class="btn-secondary" data-range="7" onclick="setSleepTimelineRange(7, this)">Last 7 days</button>
-                        <button type="button" class="btn-secondary" data-range="90" onclick="setSleepTimelineRange(90, this)">Last 90 days</button>
+                        <button type="button" class="btn" data-range="30" onclick="setSleepTimelineRange(30, this)" data-i18n="last_30_days">Last 30 days</button>
+                        <button type="button" class="btn-secondary" data-range="7" onclick="setSleepTimelineRange(7, this)" data-i18n="last_7_days">Last 7 days</button>
+                        <button type="button" class="btn-secondary" data-range="90" onclick="setSleepTimelineRange(90, this)" data-i18n="last_90_days">Last 90 days</button>
                     </div>
                     <div class="sleep-timeline-shell">
                         <div id="sleepTimelineChart" class="sleep-timeline-chart"></div>
                     </div>
                 </div>
                 <div class="card card--secondary" style="margin-top: var(--space-lg);">
-                    <h3>Mood by Time of Day</h3>
-                    <p class="patterns-card-desc">How your mood relates to when you sleep and wake.</p>
+                    <h3 data-i18n="mood_by_time">Mood by Time of Day</h3>
+                    <p class="patterns-card-desc" data-i18n="mood_by_time_desc">How your mood relates to when you sleep and wake.</p>
                     <div id="timeHeatmap" class="time-heatmap"></div>
                 </div>
                 <div class="card card--secondary" style="margin-top: var(--space-lg);">
-                    <h3>Weekly Rhythm</h3>
-                    <p class="patterns-card-desc">Which days tend to feel better or harder.</p>
+                    <h3 data-i18n="weekly_rhythm">Weekly Rhythm</h3>
+                    <p class="patterns-card-desc" data-i18n="weekly_rhythm_desc">Which days tend to feel better or harder.</p>
                     <div class="chart-container pattern-chart-wrap">
                     <canvas id="dowChart"></canvas>
                     </div>
@@ -973,39 +973,39 @@
             
             <div id="seasonal" class="page">
                 <header class="page-hero">
-                    <h1>Seasonal &amp; Rhythm Analysis</h1>
-                    <p class="page-hero-subtitle">Uncover how your mood, sleep and energy shift across seasons and years.</p>
+                    <h1 data-i18n="page_seasonal_h1">Seasonal &amp; Rhythm Analysis</h1>
+                    <p class="page-hero-subtitle" data-i18n="page_seasonal_subtitle">Uncover how your mood, sleep and energy shift across seasons and years.</p>
                 </header>
 
                 <!-- NEW: Seasonal Deviation (sine-wave style) -->
                 <div class="card seasonal-deviation-card" style="margin-bottom: var(--space-lg);">
                     <div class="seasonal-dev-header">
                         <div>
-                            <p class="seasonal-dev-eyebrow">Seasonal pattern</p>
-                            <h3 class="seasonal-dev-title">Monthly rhythm</h3>
-                            <p class="seasonal-dev-desc">How each metric drifts above or below your personal average across the year — great for spotting SAD-like or seasonal patterns.</p>
+                            <p class="seasonal-dev-eyebrow" data-i18n="seasonal_pattern_eyebrow">Seasonal pattern</p>
+                            <h3 class="seasonal-dev-title" data-i18n="seasonal_monthly_rhythm">Monthly rhythm</h3>
+                            <p class="seasonal-dev-desc" data-i18n="seasonal_dev_desc">How each metric drifts above or below your personal average across the year — great for spotting SAD-like or seasonal patterns.</p>
                         </div>
                         <div class="seasonal-dev-controls-wrap">
                             <div class="seasonal-dev-controls" role="group" aria-label="Select metrics to display">
                                 <label class="seasonal-dev-toggle" data-metric="mood">
                                     <input type="checkbox" checked value="mood">
-                                    <span class="seasonal-dev-toggle-label">Mood</span>
+                                    <span class="seasonal-dev-toggle-label" data-i18n="mood_label_short">Mood</span>
                                 </label>
                                 <label class="seasonal-dev-toggle" data-metric="sleep">
                                     <input type="checkbox" value="sleep">
-                                    <span class="seasonal-dev-toggle-label">Sleep</span>
+                                    <span class="seasonal-dev-toggle-label" data-i18n="sleep_label_short">Sleep</span>
                                 </label>
                                 <label class="seasonal-dev-toggle" data-metric="energy">
                                     <input type="checkbox" value="energy">
-                                    <span class="seasonal-dev-toggle-label">Energy</span>
+                                    <span class="seasonal-dev-toggle-label" data-i18n="energy_label_short">Energy</span>
                                 </label>
                             </div>
                             <div class="seasonal-dev-range-wrap">
-                                <label for="seasonalDevRange" class="seasonal-dev-range-label">History</label>
+                                <label for="seasonalDevRange" class="seasonal-dev-range-label" data-i18n="seasonal_history">History</label>
                                 <select id="seasonalDevRange" class="theme-select seasonal-dev-range-select">
-                                    <option value="0">All time</option>
-                                    <option value="365">Last year</option>
-                                    <option value="730">Last 2 years</option>
+                                    <option value="0" data-i18n="all_time">All time</option>
+                                    <option value="365" data-i18n="last_year">Last year</option>
+                                    <option value="730" data-i18n="last_2_years">Last 2 years</option>
                                 </select>
                             </div>
                         </div>
@@ -1013,37 +1013,37 @@
                     <div class="comparison-chart-wrap seasonal-dev-chart-wrap">
                         <canvas id="seasonalDeviationChart"></canvas>
                     </div>
-                    <p class="seasonal-dev-hint">Values show deviation from your personal average for that metric. Zero = your baseline.</p>
+                    <p class="seasonal-dev-hint" data-i18n="seasonal_dev_hint">Values show deviation from your personal average for that metric. Zero = your baseline.</p>
                 </div>
 
                 <div class="card" style="margin-bottom: var(--space-lg);">
-                    <h3>Monthly comparison</h3>
-                    <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: var(--space-sm);">Average mood by calendar month across all your data.</p>
+                    <h3 data-i18n="monthly_comparison">Monthly comparison</h3>
+                    <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: var(--space-sm);" data-i18n="monthly_comparison_desc">Average mood by calendar month across all your data.</p>
                     <div class="comparison-chart-wrap seasonal-chart-wrap">
                     <canvas id="seasonalChart"></canvas>
                     </div>
                 </div>
                 <div class="card" style="margin-bottom: var(--space-lg);">
-                    <h3>Year-over-year</h3>
-                    <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: var(--space-lg); line-height: 1.6;">Compare average mood by month across two years. Choose two years to see how your patterns shifted.</p>
+                    <h3 data-i18n="year_over_year">Year-over-year</h3>
+                    <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: var(--space-lg); line-height: 1.6;" data-i18n="year_over_year_desc">Compare average mood by month across two years. Choose two years to see how your patterns shifted.</p>
                     <div class="comparison-controls yoy-controls">
                         <div class="form-group">
-                            <label for="yoyYear1">First year</label>
+                            <label for="yoyYear1" data-i18n="first_year">First year</label>
                             <select id="yoyYear1" class="theme-select yoy-select" aria-label="Select first year"></select>
                         </div>
                         <div class="form-group">
-                            <label for="yoyYear2">Second year</label>
+                            <label for="yoyYear2" data-i18n="second_year">Second year</label>
                             <select id="yoyYear2" class="theme-select yoy-select" aria-label="Select second year"></select>
                         </div>
-                        <button type="button" class="btn btn-compare-years" onclick="renderYearOverYear()">Compare years</button>
+                        <button type="button" class="btn btn-compare-years" onclick="renderYearOverYear()" data-i18n="compare_years">Compare years</button>
                     </div>
                     <div class="comparison-chart-wrap">
                         <canvas id="yoyChart"></canvas>
                     </div>
                 </div>
                 <div class="card">
-                    <h3>Custom date range</h3>
-                    <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: var(--space-lg); line-height: 1.6;">View mood, sleep, and energy for any date range.</p>
+                    <h3 data-i18n="custom_date_range">Custom date range</h3>
+                    <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: var(--space-lg); line-height: 1.6;" data-i18n="custom_date_range_desc">View mood, sleep, and energy for any date range.</p>
                     <div class="comparison-controls">
                         <div class="form-group">
                             <label for="customRangeFrom" data-i18n="from_label">From</label>
@@ -1053,7 +1053,7 @@
                             <label for="customRangeTo" data-i18n="to_label">To</label>
                             <input type="text" id="customRangeTo" class="aura-date-input" placeholder="YYYY-MM-DD" aria-label="End date">
                         </div>
-                        <button type="button" class="btn" onclick="renderCustomRangeChart()">Apply range</button>
+                        <button type="button" class="btn" onclick="renderCustomRangeChart()" data-i18n="apply_range">Apply range</button>
                     </div>
                     <div class="comparison-chart-wrap">
                         <canvas id="customRangeChart"></canvas>
@@ -1158,11 +1158,11 @@
                         <div class="form-group">
                             <label for="themeSelect" data-i18n="s_theme">Theme</label>
                             <select id="themeSelect" class="theme-select" onchange="setTheme(this.value)">
-                                <option value="aura">Aura (sage / terracotta)</option>
-                                <option value="midnight">Midnight (deep blues)</option>
-                                <option value="forest">Forest (rich greens)</option>
-                                <option value="sunset">Sunset (warm oranges / pinks)</option>
-                                <option value="ocean">Ocean (cool blues / teals)</option>
+                                <option value="aura" data-i18n="theme_aura">Aura (sage / terracotta)</option>
+                                <option value="midnight" data-i18n="theme_midnight">Midnight (deep blues)</option>
+                                <option value="forest" data-i18n="theme_forest">Forest (rich greens)</option>
+                                <option value="sunset" data-i18n="theme_sunset">Sunset (warm oranges / pinks)</option>
+                                <option value="ocean" data-i18n="theme_ocean">Ocean (cool blues / teals)</option>
                             </select>
                         </div>
                         <div class="form-group">
@@ -1228,39 +1228,39 @@
                         <div class="form-group">
                             <label for="prefDateFormat" data-i18n="s_date_format">Date format</label>
                             <select id="prefDateFormat" class="theme-select" onchange="savePreference('dateFormat', this.value)">
-                                <option value="DM">Day / Month / Year (DD.MM.YYYY) — Germany, UK, Europe</option>
-                                <option value="MD">Month / Day / Year (MM/DD/YYYY) — USA</option>
-                                <option value="YMD">Year-Month-Day (YYYY-MM-DD) — ISO</option>
+                                <option value="DM" data-i18n="date_fmt_dm">Day / Month / Year (DD.MM.YYYY) — Germany, UK, Europe</option>
+                                <option value="MD" data-i18n="date_fmt_md">Month / Day / Year (MM/DD/YYYY) — USA</option>
+                                <option value="YMD" data-i18n="date_fmt_ymd">Year-Month-Day (YYYY-MM-DD) — ISO</option>
                             </select>
                         </div>
                         <div class="form-group">
                             <label for="prefTimeFormat" data-i18n="s_time_format">Time format</label>
                             <select id="prefTimeFormat" class="theme-select" onchange="savePreference('timeFormat', this.value)">
-                                <option value="12">12-hour</option>
-                                <option value="24">24-hour</option>
+                                <option value="12" data-i18n="time_12h">12-hour</option>
+                                <option value="24" data-i18n="time_24h">24-hour</option>
                             </select>
                         </div>
                         <div class="form-group">
                             <label for="prefDefaultSleep" data-i18n="pref_default_sleep_time">Default sleep time</label>
                             <input type="text" id="prefDefaultSleep" class="aura-time-input form-input" placeholder="HH:mm" aria-label="Default sleep time">
-                            <p class="form-hint">Used to prefill new or incomplete check-ins. Does not overwrite saved days.</p>
+                            <p class="form-hint" data-i18n="pref_sleep_hint">Used to prefill new or incomplete check-ins. Does not overwrite saved days.</p>
                         </div>
                         <div class="form-group">
                             <label for="prefDefaultWake" data-i18n="pref_default_wake_time">Default wake time</label>
                             <input type="text" id="prefDefaultWake" class="aura-time-input form-input" placeholder="HH:mm" aria-label="Default wake time">
-                            <p class="form-hint">Applies as a default only when a wake time has not been set yet.</p>
+                            <p class="form-hint" data-i18n="pref_wake_hint">Applies as a default only when a wake time has not been set yet.</p>
                         </div>
                         <div class="form-group">
-                            <label for="prefFavoriteTags">Favorite tags (comma-separated)</label>
+                            <label for="prefFavoriteTags" data-i18n="s_favourite_tags">Favorite tags (comma-separated)</label>
                             <input type="text" id="prefFavoriteTags" class="form-input" placeholder="e.g. work, exercise" onchange="savePreference('favoriteTags', this.value)">
                         </div>
                         <div class="form-group">
                             <label for="prefChartDays" data-i18n="s_chart_days">Chart default days</label>
                             <select id="prefChartDays" class="theme-select" onchange="savePreference('chartDays', this.value)">
-                                <option value="7">7 days</option>
-                                <option value="14">14 days</option>
-                                <option value="30">30 days</option>
-                                <option value="90">90 days</option>
+                                <option value="7" data-i18n="chart_7_days">7 days</option>
+                                <option value="14" data-i18n="chart_14_days">14 days</option>
+                                <option value="30" data-i18n="chart_30_days">30 days</option>
+                                <option value="90" data-i18n="chart_90_days">90 days</option>
                             </select>
                         </div>
                         <div class="form-group">
@@ -1306,7 +1306,7 @@
                                 <input type="text" id="newMetricName" class="form-input" data-i18n-placeholder="add_metric_placeholder" placeholder="e.g. Anxiety" style="max-width: 180px;">
                                 <select id="newMetricType" class="theme-select" style="min-width: 120px;">
                                     <option value="scale" data-i18n="scale_1_10">1–10 scale</option>
-                                    <option value="yesno">Yes / No</option>
+                                    <option value="yesno" data-i18n="yes_no">Yes / No</option>
                                 </select>
                                 <button type="button" class="btn" onclick="addCustomMetric()" data-i18n="add_btn">Add</button>
                             </div>
@@ -1441,7 +1441,7 @@
                         </div>
                     </div>
                     <p class="card-desc" data-i18n="backup_desc">A JSON backup is created automatically every 24 hours. The last 7 are kept in your browser.</p>
-                    <p id="backupReminder" class="backup-reminder">⏱ It's been a while — consider downloading a backup.</p>
+                    <p id="backupReminder" class="backup-reminder" data-i18n="backup_reminder">⏱ It's been a while — consider downloading a backup.</p>
                     <div class="data-action-row">
                         <button type="button" class="btn" onclick="downloadBackupNow()" data-i18n="download_backup_now">Download backup now</button>
                     </div>
@@ -1479,22 +1479,22 @@
                 <svg viewBox="0 0 192 192" xmlns="http://www.w3.org/2000/svg"><path d="M36 96 Q 60 72, 96 96 T 156 96" fill="none" stroke="currentColor" stroke-width="12" stroke-linecap="round"/><path d="M44 112 Q 68 88, 96 112 T 148 112" fill="none" stroke="currentColor" stroke-width="10" stroke-linecap="round" opacity="0.85"/><path d="M52 128 Q 76 104, 96 128 T 140 128" fill="none" stroke="currentColor" stroke-width="8" stroke-linecap="round" opacity="0.7"/></svg>
             </div>
                 <h1 class="splash-title"><span class="splash-title-main">Aura</span> <span class="splash-title-accent">Mood</span></h1>
-                <p class="splash-subtitle">Mood and rhythm tracking</p>
-                <p class="splash-status" aria-live="polite">Opening…</p>
+                <p class="splash-subtitle" data-i18n="splash_subtitle">Mood and rhythm tracking</p>
+                <p class="splash-status" aria-live="polite" data-i18n="splash_opening">Opening…</p>
         </div>
         </div>
         <button type="button" class="fab" id="fabEntry" onclick="navigateFromBottom('entry', document.querySelector('.bottom-nav [data-page=entry]'))" aria-label="Quick check-in" aria-hidden="false">✨</button>
         <div id="addToHomeBanner" class="add-to-home-banner" role="dialog" aria-label="Add to Home Screen">
-            <p style="margin: 0; font-size: 0.9rem;">Add to Home Screen for an app-like experience.</p>
-            <button type="button" id="addToHomeInstallBtn" class="btn" style="margin-top: 8px; display: none;" onclick="triggerPwaInstall()">Install app</button>
+            <p style="margin: 0; font-size: 0.9rem;" data-i18n="add_home_text">Add to Home Screen for an app-like experience.</p>
+            <button type="button" id="addToHomeInstallBtn" class="btn" style="margin-top: 8px; display: none;" onclick="triggerPwaInstall()" data-i18n="install_app_btn">Install app</button>
             <button type="button" class="banner-dismiss" onclick="dismissAddToHomeBanner()" aria-label="Dismiss">×</button>
         </div>
         <nav class="bottom-nav" role="navigation" aria-label="Mobile navigation">
-            <button type="button" data-page="dashboard" class="active" onclick="navigateFromBottom('dashboard', this)" aria-label="Overview"><span class="bn-icon">📊</span><span>Overview</span></button>
-            <button type="button" data-page="entry" onclick="navigateFromBottom('entry', this)" aria-label="Daily Check-In"><span class="bn-icon">✨</span><span>Check-In</span></button>
-            <button type="button" data-page="calendar" onclick="navigateFromBottom('calendar', this)" aria-label="Calendar"><span class="bn-icon">📅</span><span>Calendar</span></button>
-            <button type="button" data-page="journal" onclick="navigateFromBottom('journal', this)" aria-label="Journal"><span class="bn-icon">📔</span><span>Journal</span></button>
-            <button type="button" onclick="openSidebar()" aria-label="Open menu"><span class="bn-icon">☰</span><span>Menu</span></button>
+            <button type="button" data-page="dashboard" class="active" onclick="navigateFromBottom('dashboard', this)" aria-label="Overview"><span class="bn-icon">📊</span><span data-i18n="nav_overview">Overview</span></button>
+            <button type="button" data-page="entry" onclick="navigateFromBottom('entry', this)" aria-label="Daily Check-In"><span class="bn-icon">✨</span><span data-i18n="nav_checkin_short">Check-In</span></button>
+            <button type="button" data-page="calendar" onclick="navigateFromBottom('calendar', this)" aria-label="Calendar"><span class="bn-icon">📅</span><span data-i18n="nav_calendar">Calendar</span></button>
+            <button type="button" data-page="journal" onclick="navigateFromBottom('journal', this)" aria-label="Journal"><span class="bn-icon">📔</span><span data-i18n="nav_journal">Journal</span></button>
+            <button type="button" onclick="openSidebar()" aria-label="Open menu"><span class="bn-icon">☰</span><span data-i18n="nav_menu">Menu</span></button>
         </nav>
     </div>
     
@@ -1502,7 +1502,7 @@
     <div id="deleteAllModal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="deleteAllModalTitle" aria-describedby="deleteAllModalDesc">
         <div class="modal">
             <h3 id="deleteAllModalTitle" data-i18n="s_delete_all">Delete all my data</h3>
-            <p id="deleteAllModalDesc">This permanently deletes all entries, journal, backups, and settings. This cannot be undone.</p>
+            <p id="deleteAllModalDesc" data-i18n="delete_all_desc">This permanently deletes all entries, journal, backups, and settings. This cannot be undone.</p>
             <p id="deleteAllModalError" class="modal-error"></p>
             <div id="deleteAllPasscodeWrap">
                 <label style="display:block; margin-bottom: 4px; font-size: 0.9rem; color: var(--text-muted);" data-i18n="passcode_enter_label">Enter passcode to confirm</label>
@@ -1522,7 +1522,7 @@
     <!-- Delete journal entry confirmation modal -->
     <div id="deleteEntryModal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="deleteEntryModalTitle" aria-describedby="deleteEntryModalPreview deleteEntryModalDesc" aria-hidden="true" onclick="if (event.target === this) closeDeleteEntryModal()">
         <div class="modal">
-            <h3 id="deleteEntryModalTitle">Delete Entry?</h3>
+            <h3 id="deleteEntryModalTitle" data-i18n="delete_entry_q">Delete Entry?</h3>
             <div id="deleteEntryModalPreview" class="modal-preview" hidden></div>
             <p id="deleteEntryModalDesc" data-i18n="cannot_undo">This action cannot be undone.</p>
             <div class="modal-actions">
@@ -1535,17 +1535,17 @@
     <!-- Import Preview Modal -->
     <div id="importPreviewModal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="importPreviewTitle">
         <div class="modal">
-            <h3 id="importPreviewTitle">Preview import</h3>
+            <h3 id="importPreviewTitle" data-i18n="import_preview_title">Preview import</h3>
             <p id="importPreviewSummary" style="color: var(--text-muted); margin-bottom: var(--space-sm);"></p>
             <div id="importPreviewSample" style="max-height: 200px; overflow-y: auto; font-size: 0.9rem; margin-bottom: var(--space-md); padding: var(--space-sm); background: var(--bg); border-radius: 12px;"></div>
-            <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: var(--space-sm);">For matching dates:</p>
-            <label style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px;"><input type="radio" name="importConflict" value="keep"> Keep existing</label>
-            <label style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px;"><input type="radio" name="importConflict" value="overwrite" checked> Use imported</label>
-            <label style="display: flex; align-items: center; gap: 8px; margin-bottom: var(--space-md);"><input type="radio" name="importConflict" value="newer"> Keep newer</label>
+            <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: var(--space-sm);" data-i18n="import_for_matching">For matching dates:</p>
+            <label style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px;"><input type="radio" name="importConflict" value="keep"> <span data-i18n="import_keep_existing">Keep existing</span></label>
+            <label style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px;"><input type="radio" name="importConflict" value="overwrite" checked> <span data-i18n="import_use_imported">Use imported</span></label>
+            <label style="display: flex; align-items: center; gap: 8px; margin-bottom: var(--space-md);"><input type="radio" name="importConflict" value="newer"> <span data-i18n="import_keep_newer">Keep newer</span></label>
             <div class="modal-actions">
-                <button type="button" class="btn btn-secondary-styled" onclick="confirmImportMerge()">Import (merge)</button>
-                <button type="button" class="btn btn-secondary-styled" onclick="confirmImportReplace()">Import (replace all)</button>
-                <button type="button" class="btn-neutral" onclick="closeImportPreviewModal()">Cancel</button>
+                <button type="button" class="btn btn-secondary-styled" onclick="confirmImportMerge()" data-i18n="import_merge">Import (merge)</button>
+                <button type="button" class="btn btn-secondary-styled" onclick="confirmImportReplace()" data-i18n="import_replace">Import (replace all)</button>
+                <button type="button" class="btn-neutral" onclick="closeImportPreviewModal()" data-i18n="modal_cancel">Cancel</button>
             </div>
         </div>
     </div>
@@ -1555,7 +1555,7 @@
         <div class="passcode-lock-card">
             <h3 data-i18n="passcode_enter_heading">Enter passcode</h3>
             <input type="password" id="passcodeUnlockInput" class="modal-input" placeholder="Passcode" autocomplete="off" aria-label="Passcode">
-            <button type="button" class="btn" onclick="unlockWithPasscode()">Unlock</button>
+            <button type="button" class="btn" onclick="unlockWithPasscode()" data-i18n="unlock_btn">Unlock</button>
         </div>
     </div>
     
@@ -1570,39 +1570,39 @@
             <input type="password" id="setPasscodeConfirm" class="modal-input" placeholder="Confirm" autocomplete="off" maxlength="8" inputmode="numeric" pattern="[0-9]*">
             <p id="setPasscodeError" class="modal-error" style="margin-top: var(--space-sm);"></p>
             <div class="modal-actions" style="margin-top: var(--space-md);">
-                <button type="button" class="btn-secondary" onclick="closeSetPasscodeModal()">Cancel</button>
-                <button type="button" class="btn" onclick="savePasscode()">Set passcode</button>
+                <button type="button" class="btn-secondary" onclick="closeSetPasscodeModal()" data-i18n="modal_cancel">Cancel</button>
+                <button type="button" class="btn" onclick="savePasscode()" data-i18n="set_passcode_btn">Set passcode</button>
             </div>
         </div>
     </div>
     
     <!-- Success Message -->
-    <div class="success-message" id="successMessage">
+    <div class="success-message" id="successMessage" data-i18n="toast_saved">
         Entry saved successfully ✓
     </div>
     <div class="undo-toast" id="undoToast" role="status" aria-live="polite" aria-hidden="true">
-        <span class="undo-toast-text" id="undoToastText">Entry deleted</span>
-        <button type="button" class="btn btn-secondary undo-toast-btn" id="undoToastBtn" onclick="undoLastDeletedEntry()">Undo</button>
+        <span class="undo-toast-text" id="undoToastText" data-i18n="toast_entry_deleted">Entry deleted</span>
+        <button type="button" class="btn btn-secondary undo-toast-btn" id="undoToastBtn" onclick="undoLastDeletedEntry()" data-i18n="undo">Undo</button>
     </div>
     
     <!-- PWA: Install app banner -->
     <div class="pwa-banner" id="pwaInstallBanner" role="dialog" aria-label="Install Aura app">
-        <span class="pwa-banner-text">Install Aura for quick access and offline use.</span>
+        <span class="pwa-banner-text" data-i18n="pwa_install_text">Install Aura for quick access and offline use.</span>
         <div class="pwa-banner-actions">
-            <button type="button" class="btn-secondary" onclick="dismissPwaInstallBanner()">Not now</button>
-            <button type="button" class="btn" id="pwaInstallBtn" onclick="installPwa()">Install</button>
+            <button type="button" class="btn-secondary" onclick="dismissPwaInstallBanner()" data-i18n="pwa_not_now">Not now</button>
+            <button type="button" class="btn" id="pwaInstallBtn" onclick="installPwa()" data-i18n="pwa_install_btn">Install</button>
         </div>
     </div>
     <!-- PWA: Update available banner -->
     <div class="pwa-banner" id="pwaUpdateBanner" role="dialog" aria-label="Update available">
-        <span class="pwa-banner-text">A new version is available.</span>
+        <span class="pwa-banner-text" data-i18n="pwa_update_text">A new version is available.</span>
         <div class="pwa-banner-actions">
-            <button type="button" class="btn" onclick="reloadForPwaUpdate()">Reload</button>
+            <button type="button" class="btn" onclick="reloadForPwaUpdate()" data-i18n="pwa_reload">Reload</button>
         </div>
     </div>
     <!-- No data yet: floating suggestion banner -->
     <div class="no-data-banner" id="noDataFloatingBanner" role="dialog" aria-label="Getting started">
-        <span class="no-data-banner-text">No entries yet — when you're ready, you can add sample data in <button type="button" class="no-data-settings-btn" onclick="var b = document.querySelector('.sidebar .nav[onclick*=\'settings\']'); if(b) navigate('settings', b);">Settings</button> → Data &amp; Privacy to explore the app.</span>
+        <span class="no-data-banner-text" data-i18n="no_data_banner">No entries yet — when you're ready, you can add sample data in Settings → Data &amp; Privacy to explore the app.</span>
         <button type="button" class="no-data-banner-close" onclick="dismissNoDataBanner()" aria-label="Dismiss">×</button>
     </div>
     
@@ -1610,11 +1610,11 @@
     <div class="ambient-particles" id="ambientParticles" aria-hidden="true"><canvas id="particlesCanvas"></canvas></div>
     
 
-    <script src="js/charts.js?v=20260323c"></script>
-    <script src="js/app.js?v=20260323c"></script>
-    <script src="js/improvements.js?v=20260323c"></script>
-    <script src="js/i18n.js?v=20260323c"></script>
-    <script src="js/i18n_deep_patch.js?v=20260323c"></script>
+    <script src="js/charts.js?v=20260324a"></script>
+    <script src="js/app.js?v=20260324a"></script>
+    <script src="js/improvements.js?v=20260324a"></script>
+    <script src="js/i18n.js?v=20260324a"></script>
+    <script src="js/i18n_deep_patch.js?v=20260324a"></script>
     <script>if (typeof window.runI18n === 'function') window.runI18n();</script>
 </body>
 </html>

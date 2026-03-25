@@ -1911,7 +1911,7 @@
         var editOld = document.getElementById('entryModalEditBtn');
         if (editOld) {
             var editNew = editOld.cloneNode(false); // false = no children
-            editNew.textContent = 'Edit Entry';
+            editNew.textContent = (window.t ? window.t('modal_full_edit') : 'Edit Entry');
             editNew.className   = editOld.className;
             editNew.id          = 'entryModalEditBtn';
             editNew.type        = 'button';
@@ -1937,7 +1937,7 @@
         var jOld = document.getElementById('entryModalJournalBtn');
         if (jOld) {
             var jNew = jOld.cloneNode(false);
-            jNew.textContent = 'Journal';
+            jNew.textContent = (window.t ? window.t('modal_journal_btn') : 'Journal');
             jNew.className   = jOld.className;
             jNew.id          = 'entryModalJournalBtn';
             jNew.type        = 'button';
