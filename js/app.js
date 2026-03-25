@@ -2617,7 +2617,7 @@ function startDraftAutoSave() {
         try {
             await db.appState.put({ key: 'entryDraft', value: state });
             var ind = document.getElementById('draftIndicator');
-            if (ind) { ind.textContent = 'Draft saved'; ind.setAttribute('aria-live', 'polite'); }
+            if (ind) { ind.textContent = (window.t ? window.t('draft_saved') : 'Draft saved'); ind.setAttribute('aria-live', 'polite'); }
         } catch (e) {}
     }, 10000);
 }
@@ -2673,7 +2673,7 @@ async function saveEntry() {
     entrySaveInFlight = true;
     if (saveBtn) {
         saveBtn.disabled = true;
-        saveBtn.textContent = 'Saving...';
+        saveBtn.textContent = (window.t ? window.t('saving') : 'Saving...');
     }
     try {
         setWorkingEntryDate(date);
@@ -2804,7 +2804,7 @@ function showToast(message) {
     var msg = document.getElementById('successMessage');
     msg.textContent = message;
     msg.classList.add('show');
-    setTimeout(function() { msg.classList.remove('show'); msg.textContent = 'Entry saved successfully ✓'; }, 3000);
+    setTimeout(function() { msg.classList.remove('show'); msg.textContent = (window.t ? window.t('toast_saved') : 'Entry saved successfully \u2713'); }, 3000);
 }
 
 function hapticFeedback() {
@@ -4640,7 +4640,7 @@ function renderCorrelations() {
             });
             var r2SmEl = document.getElementById('r2SleepMood');
             if (validSleep.length < 3) {
-                if (r2SmEl) r2SmEl.textContent = 'Need at least 3 entries with sleep and mood to show correlation.';
+                if (r2SmEl) r2SmEl.textContent = (window.t ? window.t('corr_need_entries') : 'Need at least 3 entries with sleep and mood to show correlation.');
             }
             var r2Sm = validSleep.length >= 3 ? computeR2(validSleep, validMood) : null;
             if (r2SmEl && validSleep.length >= 3) r2SmEl.textContent = r2Sm != null ? 'R² = ' + (r2Sm * 100).toFixed(1) + '%' : '';
@@ -6875,7 +6875,8 @@ function renderTimeHeatmap() {
     var hasWake = wakeBuckets.some(function(b) { return b.count > 0; });
     var hasSleep = sleepBuckets.some(function(b) { return b.count > 0; });
     if (!hasWake && !hasSleep) {
-        el.innerHTML = '<p class="chart-empty-message" style="color: var(--text-muted); font-size: 0.9rem; margin: 0;">No time data yet. Add sleep/wake times in the Daily Check-In to see patterns.</p>';
+        var _noTimeMsg = window.t ? window.t('no_time_data') : 'No time data yet. Add sleep/wake times in the Daily Check-In to see patterns.';
+        el.innerHTML = '<p class="chart-empty-message" style="color: var(--text-muted); font-size: 0.9rem; margin: 0;">' + _noTimeMsg.replace(/</g,'&lt;') + '</p>';
         return;
     }
     wakeBuckets.forEach(function(b) { b.average = b.count ? b.sum / b.count : null; });
@@ -7506,9 +7507,9 @@ function downloadBackupNow() {
         updateLastBackupDisplay();
         renderBackupList();
         const msg = document.getElementById('successMessage');
-        msg.textContent = 'Backup downloaded ✓';
+        msg.textContent = (window.t ? window.t('backup_downloaded') : 'Backup downloaded \u2713');
         msg.classList.add('show');
-        setTimeout(() => { msg.classList.remove('show'); msg.textContent = 'Entry saved successfully ✓'; }, 3000);
+        setTimeout(() => { msg.classList.remove('show'); msg.textContent = (window.t ? window.t('toast_saved') : 'Entry saved successfully \u2713'); }, 3000);
     });
 }
 
@@ -7616,14 +7617,14 @@ async function importData() {
         await db.entries.bulkPut(normalized);
         await loadAllEntries();
         closeImportPreviewModal();
-        resultEl.textContent = 'Imported ' + normalized.length + ' entries.';
+        resultEl.textContent = (window.t ? window.t('import_success', {n: normalized.length}) : 'Imported ' + normalized.length + ' entries.');
         document.getElementById('importFile').value = '';
         renderHeatmap();
         generateInsights();
         updateDashboard();
         renderEntryList();
     } catch (err) {
-        resultEl.textContent = 'Import failed: ' + err.message;
+        resultEl.textContent = (window.t ? window.t('import_failed') : 'Import failed') + ': ' + err.message;
     }
 }
 
@@ -7684,7 +7685,7 @@ function parseBearableExport(text) {
 function previewImport() {
     var input = document.getElementById('importFile');
     var resultEl = document.getElementById('importResult');
-    if (!input.files.length) { resultEl.textContent = 'Please choose a file.'; return; }
+    if (!input.files.length) { resultEl.textContent = (window.t ? window.t('choose_file') : 'Please choose a file.'); return; }
     var file = input.files[0];
     file.text().then(function(text) {
         var imported = [];
@@ -7694,7 +7695,7 @@ function previewImport() {
                 var data = JSON.parse(text);
                 if (data.mood_entries || (data.data && data.data.mood)) { format = 'bearable'; imported = parseBearableExport(text); }
                 else { imported = Array.isArray(data.entries) ? data.entries : (data.entries ? Object.values(data.entries) : []); }
-            } catch (e) { resultEl.textContent = 'Invalid JSON: ' + e.message; return; }
+            } catch (e) { resultEl.textContent = (window.t ? window.t('invalid_json') : 'Invalid JSON') + ': ' + e.message; return; }
         } else {
             imported = parseDaylioCSV(text);
             if (imported.length > 0) format = 'daylio';
@@ -7726,11 +7727,12 @@ function previewImport() {
             } catch (e) {}
         }
         importPreviewData = { entries: imported, journal: journal, journalPhotos: journalPhotos };
-        document.getElementById('importPreviewSummary').textContent = 'Found ' + imported.length + ' entries (' + format + ' format).';
-        var sample = imported.slice(0, 5).map(function(e) { return e.date + ' — Mood ' + (e.mood != null ? e.mood : '–'); }).join('\n');
-        document.getElementById('importPreviewSample').textContent = sample || 'No entries.';
+        document.getElementById('importPreviewSummary').textContent = (window.t ? window.t('import_found', {n: imported.length, format: format}) : 'Found ' + imported.length + ' entries (' + format + ' format).');
+        var _moodLabel = window.t ? window.t('mood_label_short') : 'Mood';
+        var sample = imported.slice(0, 5).map(function(e) { return e.date + ' \u2014 ' + _moodLabel + ' ' + (e.mood != null ? e.mood : '\u2013'); }).join('\n');
+        document.getElementById('importPreviewSample').textContent = sample || (window.t ? window.t('no_entries_yet') : 'No entries.');
         document.getElementById('importPreviewModal').classList.add('show');
-    }).catch(function(e) { resultEl.textContent = 'Could not read file: ' + e.message; });
+    }).catch(function(e) { resultEl.textContent = (window.t ? window.t('file_read_error') : 'Could not read file') + ': ' + e.message; });
 }
 function closeImportPreviewModal() {
     document.getElementById('importPreviewModal').classList.remove('show');
@@ -7763,8 +7765,8 @@ function savePasscode() {
     var newP = document.getElementById('setPasscodeNew').value;
     var conf = document.getElementById('setPasscodeConfirm').value;
     var err = document.getElementById('setPasscodeError');
-    if (newP.length < 4 || newP.length > 8) { err.textContent = 'Passcode must be 4–8 characters'; return; }
-    if (newP !== conf) { err.textContent = 'Passcodes do not match'; return; }
+    if (newP.length < 4 || newP.length > 8) { err.textContent = (window.t ? window.t('passcode_length_error') : 'Passcode must be 4\u20138 characters'); return; }
+    if (newP !== conf) { err.textContent = (window.t ? window.t('passcode_mismatch') : 'Passcodes do not match'); return; }
     hashPasscode(newP).then(function(h) {
         db.appState.put({ key: 'passcodeHash', value: h });
         closeSetPasscodeModal();
