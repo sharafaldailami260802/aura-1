@@ -7358,7 +7358,24 @@ Object.assign(S.hi, {
         time_evening:'Evening',
         time_late_night:'Late Night',
         /* Tag input */
-        add_tag_ph:'Add a tag\u2026'
+        add_tag_ph:'Add a tag\u2026',
+        /* Missing keys found via audit */
+        add_sleep_segment:'+ Add Sleep Segment',
+        current_streak_label:'Current streak',
+        explore_sample_btn:'Explore with sample data',
+        feature_mood:'Mood trends & forecasting',
+        feature_sleep:'Sleep pattern analysis',
+        feature_insights:'Personalised insights',
+        insights_empty:'More insights will appear as you record additional entries. Track mood, sleep, and activities to uncover patterns.',
+        nav_distribution:'Mood Distribution',
+        pref_default_sleep_time:'Default sleep time',
+        pref_default_wake_time:'Default wake time',
+        primary_sleep_time:'Primary Sleep Time',
+        primary_wake_time:'Primary Wake Time',
+        sleep_duration_label:'Sleep Duration',
+        sleep_quality_label:'Sleep Quality',
+        sleep_segments_label:'Sleep Segments',
+        start_checkin_btn:'Start your first check-in'
     });
 
     /* ──────────────────────────── GERMAN ─────────────────────────── */
@@ -7483,7 +7500,23 @@ Object.assign(S.hi, {
         time_afternoon:'Nachmittag',
         time_evening:'Abend',
         time_late_night:'Sp\u00e4tabend',
-        add_tag_ph:'Tag hinzuf\u00fcgen\u2026'
+        add_tag_ph:'Tag hinzuf\u00fcgen\u2026',
+        add_sleep_segment:'+ Schlafabschnitt hinzuf\u00fcgen',
+        current_streak_label:'Aktuelle Serie',
+        explore_sample_btn:'Mit Beispieldaten erkunden',
+        feature_mood:'Stimmungstrends & Prognosen',
+        feature_sleep:'Schlafmuster-Analyse',
+        feature_insights:'Personalisierte Einblicke',
+        insights_empty:'Weitere Einblicke erscheinen, wenn du mehr Eintr\u00e4ge erfasst. Verfolge Stimmung, Schlaf und Aktivit\u00e4ten, um Muster zu entdecken.',
+        nav_distribution:'Stimmungsverteilung',
+        pref_default_sleep_time:'Standard-Schlafenszeit',
+        pref_default_wake_time:'Standard-Aufwachzeit',
+        primary_sleep_time:'Haupt-Schlafenszeit',
+        primary_wake_time:'Haupt-Aufwachzeit',
+        sleep_duration_label:'Schlafdauer',
+        sleep_quality_label:'Schlafqualit\u00e4t',
+        sleep_segments_label:'Schlafabschnitte',
+        start_checkin_btn:'Ersten Check-in starten'
     });
 
     /* ──────────────────────────── FRENCH ─────────────────────────── */
@@ -7608,7 +7641,23 @@ Object.assign(S.hi, {
         time_afternoon:'Apr\u00e8s-midi',
         time_evening:'Soir',
         time_late_night:'Fin de soir\u00e9e',
-        add_tag_ph:'Ajouter un tag\u2026'
+        add_tag_ph:'Ajouter un tag\u2026',
+        add_sleep_segment:'+ Ajouter un segment de sommeil',
+        current_streak_label:'S\u00e9rie en cours',
+        explore_sample_btn:'Explorer avec des donn\u00e9es d\u2019exemple',
+        feature_mood:'Tendances d\u2019humeur et pr\u00e9visions',
+        feature_sleep:'Analyse des habitudes de sommeil',
+        feature_insights:'Insights personnalis\u00e9s',
+        insights_empty:'D\u2019autres insights appara\u00eetront \u00e0 mesure que vous ajoutez des entr\u00e9es.',
+        nav_distribution:'R\u00e9partition de l\u2019humeur',
+        pref_default_sleep_time:'Heure de coucher par d\u00e9faut',
+        pref_default_wake_time:'Heure de r\u00e9veil par d\u00e9faut',
+        primary_sleep_time:'Heure de coucher principale',
+        primary_wake_time:'Heure de r\u00e9veil principale',
+        sleep_duration_label:'Dur\u00e9e du sommeil',
+        sleep_quality_label:'Qualit\u00e9 du sommeil',
+        sleep_segments_label:'Segments de sommeil',
+        start_checkin_btn:'Commencer votre premier bilan'
     });
 
     /* ──────────────────────────── SPANISH ────────────────────────── */
@@ -7733,7 +7782,23 @@ Object.assign(S.hi, {
         time_afternoon:'Tarde',
         time_evening:'Atardecer',
         time_late_night:'Noche tard\u00eda',
-        add_tag_ph:'A\u00f1adir etiqueta\u2026'
+        add_tag_ph:'A\u00f1adir etiqueta\u2026',
+        add_sleep_segment:'+ A\u00f1adir segmento de sue\u00f1o',
+        current_streak_label:'Racha actual',
+        explore_sample_btn:'Explorar con datos de ejemplo',
+        feature_mood:'Tendencias y pron\u00f3sticos de \u00e1nimo',
+        feature_sleep:'An\u00e1lisis de patrones de sue\u00f1o',
+        feature_insights:'Insights personalizados',
+        insights_empty:'M\u00e1s insights aparecer\u00e1n a medida que registres m\u00e1s entradas.',
+        nav_distribution:'Distribuci\u00f3n del \u00e1nimo',
+        pref_default_sleep_time:'Hora de dormir predeterminada',
+        pref_default_wake_time:'Hora de despertar predeterminada',
+        primary_sleep_time:'Hora principal de dormir',
+        primary_wake_time:'Hora principal de despertar',
+        sleep_duration_label:'Duraci\u00f3n del sue\u00f1o',
+        sleep_quality_label:'Calidad del sue\u00f1o',
+        sleep_segments_label:'Segmentos de sue\u00f1o',
+        start_checkin_btn:'Comienza tu primer check-in'
     });
 
     /* ──────────────────────────── ARABIC ─────────────────────────── */
@@ -7858,7 +7923,23 @@ Object.assign(S.hi, {
         time_afternoon:'\u0638\u0647\u064a\u0631\u0629',
         time_evening:'\u0645\u0633\u0627\u0621',
         time_late_night:'\u0622\u062e\u0631 \u0627\u0644\u0644\u064a\u0644',
-        add_tag_ph:'\u0623\u0636\u0641 \u0648\u0633\u0645\u064b\u0627\u2026'
+        add_tag_ph:'\u0623\u0636\u0641 \u0648\u0633\u0645\u064b\u0627\u2026',
+        add_sleep_segment:'+ \u0625\u0636\u0627\u0641\u0629 \u0641\u062a\u0631\u0629 \u0646\u0648\u0645',
+        current_streak_label:'\u0627\u0644\u0633\u0644\u0633\u0644\u0629 \u0627\u0644\u062d\u0627\u0644\u064a\u0629',
+        explore_sample_btn:'\u0627\u0633\u062a\u0643\u0634\u0641 \u0628\u0628\u064a\u0627\u0646\u0627\u062a \u062a\u062c\u0631\u064a\u0628\u064a\u0629',
+        feature_mood:'\u0627\u062a\u062c\u0627\u0647\u0627\u062a \u0627\u0644\u0645\u0632\u0627\u062c \u0648\u0627\u0644\u062a\u0646\u0628\u0624\u0627\u062a',
+        feature_sleep:'\u062a\u062d\u0644\u064a\u0644 \u0623\u0646\u0645\u0627\u0637 \u0627\u0644\u0646\u0648\u0645',
+        feature_insights:'\u0631\u0624\u0649 \u0645\u062e\u0635\u0635\u0629',
+        insights_empty:'\u0633\u062a\u0638\u0647\u0631 \u0631\u0624\u0649 \u0623\u0643\u062b\u0631 \u0643\u0644\u0645\u0627 \u0633\u062c\u0644\u062a \u0625\u062f\u062e\u0627\u0644\u0627\u062a \u0625\u0636\u0627\u0641\u064a\u0629.',
+        nav_distribution:'\u062a\u0648\u0632\u064a\u0639 \u0627\u0644\u0645\u0632\u0627\u062c',
+        pref_default_sleep_time:'\u0648\u0642\u062a \u0627\u0644\u0646\u0648\u0645 \u0627\u0644\u0627\u0641\u062a\u0631\u0627\u0636\u064a',
+        pref_default_wake_time:'\u0648\u0642\u062a \u0627\u0644\u0627\u0633\u062a\u064a\u0642\u0627\u0638 \u0627\u0644\u0627\u0641\u062a\u0631\u0627\u0636\u064a',
+        primary_sleep_time:'\u0648\u0642\u062a \u0627\u0644\u0646\u0648\u0645 \u0627\u0644\u0631\u0626\u064a\u0633\u064a',
+        primary_wake_time:'\u0648\u0642\u062a \u0627\u0644\u0627\u0633\u062a\u064a\u0642\u0627\u0638 \u0627\u0644\u0631\u0626\u064a\u0633\u064a',
+        sleep_duration_label:'\u0645\u062f\u0629 \u0627\u0644\u0646\u0648\u0645',
+        sleep_quality_label:'\u062c\u0648\u062f\u0629 \u0627\u0644\u0646\u0648\u0645',
+        sleep_segments_label:'\u0641\u062a\u0631\u0627\u062a \u0627\u0644\u0646\u0648\u0645',
+        start_checkin_btn:'\u0627\u0628\u062f\u0623 \u0623\u0648\u0644 \u062a\u0633\u062c\u064a\u0644'
     });
 
     /* ──────────────────────────── TURKISH ────────────────────────── */
@@ -7983,7 +8064,23 @@ Object.assign(S.hi, {
         time_afternoon:'\u00d6\u011fleden sonra',
         time_evening:'Ak\u015fam',
         time_late_night:'Gece ge\u00e7',
-        add_tag_ph:'Etiket ekle\u2026'
+        add_tag_ph:'Etiket ekle\u2026',
+        add_sleep_segment:'+ Uyku b\u00f6l\u00fcm\u00fc ekle',
+        current_streak_label:'Mevcut seri',
+        explore_sample_btn:'\u00d6rnek verilerle ke\u015ffet',
+        feature_mood:'Ruh hali trendleri ve tahminler',
+        feature_sleep:'Uyku d\u00fczeni analizi',
+        feature_insights:'Ki\u015fisel i\u00e7g\u00f6r\u00fcler',
+        insights_empty:'Daha fazla kay\u0131t ekledik\u00e7e daha fazla i\u00e7g\u00f6r\u00fc g\u00f6r\u00fcnecektir.',
+        nav_distribution:'Ruh hali da\u011f\u0131l\u0131m\u0131',
+        pref_default_sleep_time:'Varsay\u0131lan uyku saati',
+        pref_default_wake_time:'Varsay\u0131lan uyanma saati',
+        primary_sleep_time:'Ana uyku saati',
+        primary_wake_time:'Ana uyanma saati',
+        sleep_duration_label:'Uyku s\u00fcresi',
+        sleep_quality_label:'Uyku kalitesi',
+        sleep_segments_label:'Uyku b\u00f6l\u00fcmleri',
+        start_checkin_btn:'\u0130lk check-in\u2019inizi ba\u015flat\u0131n'
     });
 
     /* ──────────────────────────── ITALIAN ────────────────────────── */
@@ -8071,7 +8168,8 @@ Object.assign(S.hi, {
         toast_entry_saved:'Voce salvata \u2713',toast_entry_restored:'Voce ripristinata',toast_refreshed:'Aggiornato',toast_journal_saved:'Diario salvato',toast_sample_added:'90 giorni di dati di esempio aggiunti \u2713',toast_metric_added:'Metrica aggiunta.',toast_metric_name_req:'Inserisci un nome per la metrica.',toast_select_date:'Seleziona una data.',toast_val_1_10:'Inserisci un valore tra 1 e 10',toast_val_sleep:'Il sonno deve essere 0\u201312 ore',toast_save_failed:'Salvataggio fallito. Riprova.',toast_app_updated:'App aggiornata. Ricaricamento\u2026',
         today_rel:'Oggi',yesterday_rel:'Ieri',unsaved_changes:'Modifiche non salvate',draft_status_saved:'Salvato',delete_value_title:'Eliminare questo valore?',streak_start_label:'Inizio',
         chart_sleep_vs_mood:'Sonno vs Umore',chart_act_vs_energy:'Attivit\u00e0 vs Energia',chart_trend:'Tendenza',chart_mood_change:'Variazione umore',chart_sleep_h:'Sonno (h)',chart_avg_mood:'Umore medio',chart_score_hours:'Punteggio / Ore',corr_matrix_need:'Servono pi\u00f9 voci per la matrice di correlazione.',strength_weak:'SCHEMA DEBOLE',
-        time_night:'Notte',time_early_am:'Prima mattina',time_morning:'Mattina',time_afternoon:'Pomeriggio',time_evening:'Sera',time_late_night:'Tarda notte',add_tag_ph:'Aggiungi un tag\u2026'
+        time_night:'Notte',time_early_am:'Prima mattina',time_morning:'Mattina',time_afternoon:'Pomeriggio',time_evening:'Sera',time_late_night:'Tarda notte',add_tag_ph:'Aggiungi un tag\u2026',
+        add_sleep_segment:'+ Aggiungi segmento di sonno',current_streak_label:'Serie attuale',explore_sample_btn:'Esplora con dati di esempio',feature_mood:'Tendenze e previsioni dell\u2019umore',feature_sleep:'Analisi dei pattern del sonno',feature_insights:'Approfondimenti personalizzati',insights_empty:'Pi\u00f9 approfondimenti appariranno man mano che registri nuove voci.',nav_distribution:'Distribuzione dell\u2019umore',pref_default_sleep_time:'Orario di sonno predefinito',pref_default_wake_time:'Orario di risveglio predefinito',primary_sleep_time:'Orario principale di sonno',primary_wake_time:'Orario principale di risveglio',sleep_duration_label:'Durata del sonno',sleep_quality_label:'Qualit\u00e0 del sonno',sleep_segments_label:'Segmenti di sonno',start_checkin_btn:'Inizia il tuo primo check-in'
     });
 
     /* ──────────────────────────── PORTUGUESE ─────────────────────── */
@@ -8159,7 +8257,8 @@ Object.assign(S.hi, {
         toast_entry_saved:'Entrada salva \u2713',toast_entry_restored:'Entrada restaurada',toast_refreshed:'Atualizado',toast_journal_saved:'Di\u00e1rio salvo',toast_sample_added:'90 dias de dados de exemplo adicionados \u2713',toast_metric_added:'M\u00e9trica adicionada.',toast_metric_name_req:'Digite um nome para a m\u00e9trica.',toast_select_date:'Selecione uma data.',toast_val_1_10:'Digite um valor entre 1 e 10',toast_val_sleep:'O sono deve ser de 0 a 12 horas',toast_save_failed:'Falha ao salvar. Tente novamente.',toast_app_updated:'App atualizado. Recarregando\u2026',
         today_rel:'Hoje',yesterday_rel:'Ontem',unsaved_changes:'Altera\u00e7\u00f5es n\u00e3o salvas',draft_status_saved:'Salvo',delete_value_title:'Excluir este valor?',streak_start_label:'In\u00edcio',
         chart_sleep_vs_mood:'Sono vs Humor',chart_act_vs_energy:'Atividade vs Energia',chart_trend:'Tend\u00eancia',chart_mood_change:'Mudan\u00e7a de humor',chart_sleep_h:'Sono (h)',chart_avg_mood:'Humor m\u00e9dio',chart_score_hours:'Pontua\u00e7\u00e3o / Horas',corr_matrix_need:'Mais entradas necess\u00e1rias para a matriz de correla\u00e7\u00e3o.',strength_weak:'PADR\u00c3O FRACO',
-        time_night:'Noite',time_early_am:'Madrugada',time_morning:'Manh\u00e3',time_afternoon:'Tarde',time_evening:'Entardecer',time_late_night:'Noite tardia',add_tag_ph:'Adicionar tag\u2026'
+        time_night:'Noite',time_early_am:'Madrugada',time_morning:'Manh\u00e3',time_afternoon:'Tarde',time_evening:'Entardecer',time_late_night:'Noite tardia',add_tag_ph:'Adicionar tag\u2026',
+        add_sleep_segment:'+ Adicionar segmento de sono',current_streak_label:'Sequ\u00eancia atual',explore_sample_btn:'Explorar com dados de exemplo',feature_mood:'Tend\u00eancias e previs\u00f5es de humor',feature_sleep:'An\u00e1lise de padr\u00f5es de sono',feature_insights:'Insights personalizados',insights_empty:'Mais insights aparecer\u00e3o conforme voc\u00ea registra mais entradas.',nav_distribution:'Distribui\u00e7\u00e3o do humor',pref_default_sleep_time:'Hor\u00e1rio padr\u00e3o de dormir',pref_default_wake_time:'Hor\u00e1rio padr\u00e3o de acordar',primary_sleep_time:'Hor\u00e1rio principal de dormir',primary_wake_time:'Hor\u00e1rio principal de acordar',sleep_duration_label:'Dura\u00e7\u00e3o do sono',sleep_quality_label:'Qualidade do sono',sleep_segments_label:'Segmentos de sono',start_checkin_btn:'Comece seu primeiro check-in'
     });
 
     /* ──────────────────────────── DUTCH ──────────────────────────── */
@@ -8247,7 +8346,8 @@ Object.assign(S.hi, {
         toast_entry_saved:'Invoer opgeslagen \u2713',toast_entry_restored:'Invoer hersteld',toast_refreshed:'Vernieuwd',toast_journal_saved:'Dagboek opgeslagen',toast_sample_added:'90 dagen voorbeelddata toegevoegd \u2713',toast_metric_added:'Metriek toegevoegd.',toast_metric_name_req:'Voer een metrieknaam in.',toast_select_date:'Selecteer een datum.',toast_val_1_10:'Voer een waarde in tussen 1 en 10',toast_val_sleep:'Slaap moet 0\u201312 uur zijn',toast_save_failed:'Opslaan mislukt. Probeer opnieuw.',toast_app_updated:'App bijgewerkt. Herladen\u2026',
         today_rel:'Vandaag',yesterday_rel:'Gisteren',unsaved_changes:'Niet-opgeslagen wijzigingen',draft_status_saved:'Opgeslagen',delete_value_title:'Deze waarde verwijderen?',streak_start_label:'Start',
         chart_sleep_vs_mood:'Slaap vs Stemming',chart_act_vs_energy:'Activiteit vs Energie',chart_trend:'Trend',chart_mood_change:'Stemmingsverandering',chart_sleep_h:'Slaap (u)',chart_avg_mood:'Gemiddelde stemming',chart_score_hours:'Score / Uren',corr_matrix_need:'Meer invoer nodig voor de correlatiematrix.',strength_weak:'ZWAK PATROON',
-        time_night:'Nacht',time_early_am:'Vroege ochtend',time_morning:'Ochtend',time_afternoon:'Middag',time_evening:'Avond',time_late_night:'Late avond',add_tag_ph:'Tag toevoegen\u2026'
+        time_night:'Nacht',time_early_am:'Vroege ochtend',time_morning:'Ochtend',time_afternoon:'Middag',time_evening:'Avond',time_late_night:'Late avond',add_tag_ph:'Tag toevoegen\u2026',
+        add_sleep_segment:'+ Slaapsegment toevoegen',current_streak_label:'Huidige reeks',explore_sample_btn:'Verken met voorbeelddata',feature_mood:'Stemmingstrends en voorspellingen',feature_sleep:'Slaappatroonanalyse',feature_insights:'Persoonlijke inzichten',insights_empty:'Meer inzichten verschijnen naarmate je meer invoer registreert.',nav_distribution:'Stemmingsverdeling',pref_default_sleep_time:'Standaard slaaptijd',pref_default_wake_time:'Standaard wektijd',primary_sleep_time:'Primaire slaaptijd',primary_wake_time:'Primaire wektijd',sleep_duration_label:'Slaapduur',sleep_quality_label:'Slaapkwaliteit',sleep_segments_label:'Slaapsegmenten',start_checkin_btn:'Begin je eerste check-in'
     });
 
     /* ──────────────────────────── POLISH ─────────────────────────── */
@@ -8335,7 +8435,8 @@ Object.assign(S.hi, {
         toast_entry_saved:'Wpis zapisany \u2713',toast_entry_restored:'Wpis przywr\u00f3cony',toast_refreshed:'Od\u015bwie\u017cono',toast_journal_saved:'Dziennik zapisany',toast_sample_added:'Dodano 90 dni przyk\u0142adowych danych \u2713',toast_metric_added:'Metryka dodana.',toast_metric_name_req:'Podaj nazw\u0119 metryki.',toast_select_date:'Wybierz dat\u0119.',toast_val_1_10:'Podaj warto\u015b\u0107 od 1 do 10',toast_val_sleep:'Sen musi wynosi\u0107 0\u201312 godzin',toast_save_failed:'Zapisywanie nie powiod\u0142o si\u0119. Spr\u00f3buj ponownie.',toast_app_updated:'Aplikacja zaktualizowana. Ponowne \u0142adowanie\u2026',
         today_rel:'Dzisiaj',yesterday_rel:'Wczoraj',unsaved_changes:'Niezapisane zmiany',draft_status_saved:'Zapisano',delete_value_title:'Usun\u0105\u0107 t\u0119 warto\u015b\u0107?',streak_start_label:'Start',
         chart_sleep_vs_mood:'Sen vs Nastr\u00f3j',chart_act_vs_energy:'Aktywno\u015b\u0107 vs Energia',chart_trend:'Trend',chart_mood_change:'Zmiana nastroju',chart_sleep_h:'Sen (godz.)',chart_avg_mood:'\u015aredni nastr\u00f3j',chart_score_hours:'Wynik / Godziny',corr_matrix_need:'Potrzeba wi\u0119cej wpis\u00f3w do macierzy korelacji.',strength_weak:'S\u0141ABY WZ\u00d3R',
-        time_night:'Noc',time_early_am:'Wczesny ranek',time_morning:'Rano',time_afternoon:'Po po\u0142udniu',time_evening:'Wiecz\u00f3r',time_late_night:'P\u00f3\u017ana noc',add_tag_ph:'Dodaj tag\u2026'
+        time_night:'Noc',time_early_am:'Wczesny ranek',time_morning:'Rano',time_afternoon:'Po po\u0142udniu',time_evening:'Wiecz\u00f3r',time_late_night:'P\u00f3\u017ana noc',add_tag_ph:'Dodaj tag\u2026',
+        add_sleep_segment:'+ Dodaj segment snu',current_streak_label:'Aktualna seria',explore_sample_btn:'Eksploruj z danymi przyk\u0142adowymi',feature_mood:'Trendy nastroju i prognozy',feature_sleep:'Analiza wzorc\u00f3w snu',feature_insights:'Spersonalizowane spostrzerzenia',insights_empty:'Wi\u0119cej spostrze\u017ce\u0144 pojawi si\u0119 w miar\u0119 dodawania wpis\u00f3w.',nav_distribution:'Rozk\u0142ad nastroju',pref_default_sleep_time:'Domy\u015blna godzina snu',pref_default_wake_time:'Domy\u015blna godzina budzenia',primary_sleep_time:'G\u0142\u00f3wna godzina snu',primary_wake_time:'G\u0142\u00f3wna godzina budzenia',sleep_duration_label:'D\u0142ugo\u015b\u0107 snu',sleep_quality_label:'Jako\u015b\u0107 snu',sleep_segments_label:'Segmenty snu',start_checkin_btn:'Rozpocznij pierwszy check-in'
     });
 
     /* ──────────────────────────── RUSSIAN ────────────────────────── */
@@ -8423,7 +8524,8 @@ Object.assign(S.hi, {
         toast_entry_saved:'\u0417\u0430\u043f\u0438\u0441\u044c \u0441\u043e\u0445\u0440\u0430\u043d\u0435\u043d\u0430 \u2713',toast_entry_restored:'\u0417\u0430\u043f\u0438\u0441\u044c \u0432\u043e\u0441\u0441\u0442\u0430\u043d\u043e\u0432\u043b\u0435\u043d\u0430',toast_refreshed:'\u041e\u0431\u043d\u043e\u0432\u043b\u0435\u043d\u043e',toast_journal_saved:'\u0414\u043d\u0435\u0432\u043d\u0438\u043a \u0441\u043e\u0445\u0440\u0430\u043d\u0451\u043d',toast_sample_added:'90 \u0434\u043d\u0435\u0439 \u043f\u0440\u0438\u043c\u0435\u0440\u043d\u044b\u0445 \u0434\u0430\u043d\u043d\u044b\u0445 \u0434\u043e\u0431\u0430\u0432\u043b\u0435\u043d\u043e \u2713',toast_metric_added:'\u041c\u0435\u0442\u0440\u0438\u043a\u0430 \u0434\u043e\u0431\u0430\u0432\u043b\u0435\u043d\u0430.',toast_metric_name_req:'\u0412\u0432\u0435\u0434\u0438\u0442\u0435 \u043d\u0430\u0437\u0432\u0430\u043d\u0438\u0435 \u043c\u0435\u0442\u0440\u0438\u043a\u0438.',toast_select_date:'\u0412\u044b\u0431\u0435\u0440\u0438\u0442\u0435 \u0434\u0430\u0442\u0443.',toast_val_1_10:'\u0412\u0432\u0435\u0434\u0438\u0442\u0435 \u0437\u043d\u0430\u0447\u0435\u043d\u0438\u0435 \u043e\u0442 1 \u0434\u043e 10',toast_val_sleep:'\u0421\u043e\u043d \u0434\u043e\u043b\u0436\u0435\u043d \u0431\u044b\u0442\u044c 0\u201312 \u0447\u0430\u0441\u043e\u0432',toast_save_failed:'\u041e\u0448\u0438\u0431\u043a\u0430 \u0441\u043e\u0445\u0440\u0430\u043d\u0435\u043d\u0438\u044f. \u041f\u043e\u043f\u0440\u043e\u0431\u0443\u0439\u0442\u0435 \u0441\u043d\u043e\u0432\u0430.',toast_app_updated:'\u041f\u0440\u0438\u043b\u043e\u0436\u0435\u043d\u0438\u0435 \u043e\u0431\u043d\u043e\u0432\u043b\u0435\u043d\u043e. \u041f\u0435\u0440\u0435\u0437\u0430\u0433\u0440\u0443\u0437\u043a\u0430\u2026',
         today_rel:'\u0421\u0435\u0433\u043e\u0434\u043d\u044f',yesterday_rel:'\u0412\u0447\u0435\u0440\u0430',unsaved_changes:'\u041d\u0435\u0441\u043e\u0445\u0440\u0430\u043d\u0451\u043d\u043d\u044b\u0435 \u0438\u0437\u043c\u0435\u043d\u0435\u043d\u0438\u044f',draft_status_saved:'\u0421\u043e\u0445\u0440\u0430\u043d\u0435\u043d\u043e',delete_value_title:'\u0423\u0434\u0430\u043b\u0438\u0442\u044c \u044d\u0442\u043e \u0437\u043d\u0430\u0447\u0435\u043d\u0438\u0435?',streak_start_label:'\u0421\u0442\u0430\u0440\u0442',
         chart_sleep_vs_mood:'\u0421\u043e\u043d \u0432\u0441 \u041d\u0430\u0441\u0442\u0440\u043e\u0435\u043d\u0438\u0435',chart_act_vs_energy:'\u0410\u043a\u0442\u0438\u0432\u043d\u043e\u0441\u0442\u044c \u0432\u0441 \u042d\u043d\u0435\u0440\u0433\u0438\u044f',chart_trend:'\u0422\u0440\u0435\u043d\u0434',chart_mood_change:'\u0418\u0437\u043c\u0435\u043d\u0435\u043d\u0438\u0435 \u043d\u0430\u0441\u0442\u0440\u043e\u0435\u043d\u0438\u044f',chart_sleep_h:'\u0421\u043e\u043d (\u0447)',chart_avg_mood:'\u0421\u0440\u0435\u0434\u043d\u0435\u0435 \u043d\u0430\u0441\u0442\u0440\u043e\u0435\u043d\u0438\u0435',chart_score_hours:'\u0411\u0430\u043b\u043b / \u0427\u0430\u0441\u044b',corr_matrix_need:'\u041d\u0443\u0436\u043d\u043e \u0431\u043e\u043b\u044c\u0448\u0435 \u0437\u0430\u043f\u0438\u0441\u0435\u0439 \u0434\u043b\u044f \u043c\u0430\u0442\u0440\u0438\u0446\u044b \u043a\u043e\u0440\u0440\u0435\u043b\u044f\u0446\u0438\u0438.',strength_weak:'\u0421\u041b\u0410\u0411\u042b\u0419 \u041f\u0410\u0422\u0422\u0415\u0420\u041d',
-        time_night:'\u041d\u043e\u0447\u044c',time_early_am:'\u0420\u0430\u043d\u043d\u0435\u0435 \u0443\u0442\u0440\u043e',time_morning:'\u0423\u0442\u0440\u043e',time_afternoon:'\u0414\u0435\u043d\u044c',time_evening:'\u0412\u0435\u0447\u0435\u0440',time_late_night:'\u041f\u043e\u0437\u0434\u043d\u0438\u0439 \u0432\u0435\u0447\u0435\u0440',add_tag_ph:'\u0414\u043e\u0431\u0430\u0432\u0438\u0442\u044c \u0442\u0435\u0433\u2026'
+        time_night:'\u041d\u043e\u0447\u044c',time_early_am:'\u0420\u0430\u043d\u043d\u0435\u0435 \u0443\u0442\u0440\u043e',time_morning:'\u0423\u0442\u0440\u043e',time_afternoon:'\u0414\u0435\u043d\u044c',time_evening:'\u0412\u0435\u0447\u0435\u0440',time_late_night:'\u041f\u043e\u0437\u0434\u043d\u0438\u0439 \u0432\u0435\u0447\u0435\u0440',add_tag_ph:'\u0414\u043e\u0431\u0430\u0432\u0438\u0442\u044c \u0442\u0435\u0433\u2026',
+        add_sleep_segment:'+ \u0414\u043e\u0431\u0430\u0432\u0438\u0442\u044c \u0441\u0435\u0433\u043c\u0435\u043d\u0442 \u0441\u043d\u0430',current_streak_label:'\u0422\u0435\u043a\u0443\u0449\u0430\u044f \u0441\u0435\u0440\u0438\u044f',explore_sample_btn:'\u0418\u0441\u0441\u043b\u0435\u0434\u043e\u0432\u0430\u0442\u044c \u0441 \u043f\u0440\u0438\u043c\u0435\u0440\u043d\u044b\u043c\u0438 \u0434\u0430\u043d\u043d\u044b\u043c\u0438',feature_mood:'\u0422\u0440\u0435\u043d\u0434\u044b \u043d\u0430\u0441\u0442\u0440\u043e\u0435\u043d\u0438\u044f \u0438 \u043f\u0440\u043e\u0433\u043d\u043e\u0437\u044b',feature_sleep:'\u0410\u043d\u0430\u043b\u0438\u0437 \u043f\u0430\u0442\u0442\u0435\u0440\u043d\u043e\u0432 \u0441\u043d\u0430',feature_insights:'\u041f\u0435\u0440\u0441\u043e\u043d\u0430\u043b\u0438\u0437\u0438\u0440\u043e\u0432\u0430\u043d\u043d\u044b\u0435 \u0438\u043d\u0441\u0430\u0439\u0442\u044b',insights_empty:'\u0411\u043e\u043b\u044c\u0448\u0435 \u0438\u043d\u0441\u0430\u0439\u0442\u043e\u0432 \u043f\u043e\u044f\u0432\u0438\u0442\u0441\u044f \u043f\u043e \u043c\u0435\u0440\u0435 \u0434\u043e\u0431\u0430\u0432\u043b\u0435\u043d\u0438\u044f \u0437\u0430\u043f\u0438\u0441\u0435\u0439.',nav_distribution:'\u0420\u0430\u0441\u043f\u0440\u0435\u0434\u0435\u043b\u0435\u043d\u0438\u0435 \u043d\u0430\u0441\u0442\u0440\u043e\u0435\u043d\u0438\u044f',pref_default_sleep_time:'\u0412\u0440\u0435\u043c\u044f \u0441\u043d\u0430 \u043f\u043e \u0443\u043c\u043e\u043b\u0447\u0430\u043d\u0438\u044e',pref_default_wake_time:'\u0412\u0440\u0435\u043c\u044f \u043f\u043e\u0434\u044a\u0451\u043c\u0430 \u043f\u043e \u0443\u043c\u043e\u043b\u0447\u0430\u043d\u0438\u044e',primary_sleep_time:'\u041e\u0441\u043d\u043e\u0432\u043d\u043e\u0435 \u0432\u0440\u0435\u043c\u044f \u0441\u043d\u0430',primary_wake_time:'\u041e\u0441\u043d\u043e\u0432\u043d\u043e\u0435 \u0432\u0440\u0435\u043c\u044f \u043f\u043e\u0434\u044a\u0451\u043c\u0430',sleep_duration_label:'\u041f\u0440\u043e\u0434\u043e\u043b\u0436\u0438\u0442\u0435\u043b\u044c\u043d\u043e\u0441\u0442\u044c \u0441\u043d\u0430',sleep_quality_label:'\u041a\u0430\u0447\u0435\u0441\u0442\u0432\u043e \u0441\u043d\u0430',sleep_segments_label:'\u0421\u0435\u0433\u043c\u0435\u043d\u0442\u044b \u0441\u043d\u0430',start_checkin_btn:'\u041d\u0430\u0447\u0430\u0442\u044c \u043f\u0435\u0440\u0432\u044b\u0439 \u0447\u0435\u043a-\u0438\u043d'
     });
 
     /* ──────────────────────────── JAPANESE ───────────────────────── */
@@ -8511,7 +8613,25 @@ Object.assign(S.hi, {
         toast_entry_saved:'\u8a18\u9332\u3092\u4fdd\u5b58\u3057\u307e\u3057\u305f \u2713',toast_entry_restored:'\u8a18\u9332\u3092\u5fa9\u5143\u3057\u307e\u3057\u305f',toast_refreshed:'\u66f4\u65b0\u6e08\u307f',toast_journal_saved:'\u65e5\u8a18\u3092\u4fdd\u5b58\u3057\u307e\u3057\u305f',toast_sample_added:'90\u65e5\u5206\u306e\u30b5\u30f3\u30d7\u30eb\u30c7\u30fc\u30bf\u3092\u8ffd\u52a0 \u2713',toast_metric_added:'\u6307\u6a19\u3092\u8ffd\u52a0\u3057\u307e\u3057\u305f\u3002',toast_metric_name_req:'\u6307\u6a19\u540d\u3092\u5165\u529b\u3057\u3066\u304f\u3060\u3055\u3044\u3002',toast_select_date:'\u65e5\u4ed8\u3092\u9078\u629e\u3057\u3066\u304f\u3060\u3055\u3044\u3002',toast_val_1_10:'1\u304b\u308910\u306e\u5024\u3092\u5165\u529b',toast_val_sleep:'\u7761\u7720\u306f0\u301c12\u6642\u9593',toast_save_failed:'\u4fdd\u5b58\u306b\u5931\u6557\u3002\u518d\u8a66\u884c\u3057\u3066\u304f\u3060\u3055\u3044\u3002',toast_app_updated:'\u30a2\u30d7\u30ea\u304c\u66f4\u65b0\u3055\u308c\u307e\u3057\u305f\u3002\u518d\u8aad\u307f\u8fbc\u307f\u4e2d\u2026',
         today_rel:'\u4eca\u65e5',yesterday_rel:'\u6628\u65e5',unsaved_changes:'\u672a\u4fdd\u5b58\u306e\u5909\u66f4',draft_status_saved:'\u4fdd\u5b58\u6e08\u307f',delete_value_title:'\u3053\u306e\u5024\u3092\u524a\u9664\u3057\u307e\u3059\u304b\uff1f',streak_start_label:'\u30b9\u30bf\u30fc\u30c8',
         chart_sleep_vs_mood:'\u7761\u7720 vs \u6c17\u5206',chart_act_vs_energy:'\u6d3b\u52d5 vs \u30a8\u30cd\u30eb\u30ae\u30fc',chart_trend:'\u30c8\u30ec\u30f3\u30c9',chart_mood_change:'\u6c17\u5206\u306e\u5909\u5316',chart_sleep_h:'\u7761\u7720 (\u6642\u9593)',chart_avg_mood:'\u5e73\u5747\u6c17\u5206',chart_score_hours:'\u30b9\u30b3\u30a2 / \u6642\u9593',corr_matrix_need:'\u76f8\u95a2\u884c\u5217\u306b\u306f\u3082\u3063\u3068\u8a18\u9332\u304c\u5fc5\u8981\u3067\u3059\u3002',strength_weak:'\u5f31\u3044\u30d1\u30bf\u30fc\u30f3',
-        time_night:'\u6df1\u591c',time_early_am:'\u65e9\u671d',time_morning:'\u5348\u524d',time_afternoon:'\u5348\u5f8c',time_evening:'\u5915\u65b9',time_late_night:'\u591c\u9045\u304f',add_tag_ph:'\u30bf\u30b0\u3092\u8ffd\u52a0\u2026'
+        time_night:'\u6df1\u591c',time_early_am:'\u65e9\u671d',time_morning:'\u5348\u524d',time_afternoon:'\u5348\u5f8c',time_evening:'\u5915\u65b9',time_late_night:'\u591c\u9045\u304f',add_tag_ph:'\u30bf\u30b0\u3092\u8ffd\u52a0\u2026',
+        /* Missing keys found via audit */
+        add_sleep_segment:'+ \u7761\u7720\u30bb\u30b0\u30e1\u30f3\u30c8\u3092\u8ffd\u52a0',
+        current_streak_label:'\u73fe\u5728\u306e\u9023\u7d9a\u8a18\u9332',
+        explore_sample_btn:'\u30b5\u30f3\u30d7\u30eb\u30c7\u30fc\u30bf\u3067\u63a2\u7d22',
+        feature_mood:'\u6c17\u5206\u306e\u8ffd\u8de1',
+        feature_sleep:'\u7761\u7720\u306e\u8ffd\u8de1',
+        feature_insights:'\u30a4\u30f3\u30b5\u30a4\u30c8',
+        insights_empty:'\u30a4\u30f3\u30b5\u30a4\u30c8\u306f\u307e\u3060\u3042\u308a\u307e\u305b\u3093\u3002\u3082\u3063\u3068\u8a18\u9332\u3057\u3066\u304f\u3060\u3055\u3044\u3002',
+        nav_distribution:'\u5206\u5e03',
+        pref_default_sleep_time:'\u30c7\u30d5\u30a9\u30eb\u30c8\u5c31\u5bdd\u6642\u9593',
+        pref_default_wake_time:'\u30c7\u30d5\u30a9\u30eb\u30c8\u8d77\u5e8a\u6642\u9593',
+        primary_sleep_time:'\u5c31\u5bdd\u6642\u9593',
+        primary_wake_time:'\u8d77\u5e8a\u6642\u9593',
+        sleep_duration_label:'\u7761\u7720\u6642\u9593',
+        sleep_quality_label:'\u7761\u7720\u306e\u8cea',
+        sleep_segments_label:'\u7761\u7720\u30bb\u30b0\u30e1\u30f3\u30c8',
+        start_checkin_btn:'\u30c1\u30a7\u30c3\u30af\u30a4\u30f3\u3092\u958b\u59cb',
+        days_label:'\u65e5'
     });
 
     /* ──────────────────────────── CHINESE ────────────────────────── */
@@ -8599,7 +8719,25 @@ Object.assign(S.hi, {
         toast_entry_saved:'\u8bb0\u5f55\u5df2\u4fdd\u5b58 \u2713',toast_entry_restored:'\u8bb0\u5f55\u5df2\u6062\u590d',toast_refreshed:'\u5df2\u5237\u65b0',toast_journal_saved:'\u65e5\u8bb0\u5df2\u4fdd\u5b58',toast_sample_added:'\u5df2\u6dfb\u52a090\u5929\u793a\u4f8b\u6570\u636e \u2713',toast_metric_added:'\u6307\u6807\u5df2\u6dfb\u52a0\u3002',toast_metric_name_req:'\u8bf7\u8f93\u5165\u6307\u6807\u540d\u79f0\u3002',toast_select_date:'\u8bf7\u9009\u62e9\u65e5\u671f\u3002',toast_val_1_10:'\u8bf7\u8f93\u51651\u523010\u7684\u503c',toast_val_sleep:'\u7761\u7720\u5fc5\u987b\u4e3a0\u201312\u5c0f\u65f6',toast_save_failed:'\u4fdd\u5b58\u5931\u8d25\u3002\u8bf7\u91cd\u8bd5\u3002',toast_app_updated:'\u5e94\u7528\u5df2\u66f4\u65b0\u3002\u91cd\u65b0\u52a0\u8f7d\u4e2d\u2026',
         today_rel:'\u4eca\u5929',yesterday_rel:'\u6628\u5929',unsaved_changes:'\u672a\u4fdd\u5b58\u7684\u66f4\u6539',draft_status_saved:'\u5df2\u4fdd\u5b58',delete_value_title:'\u5220\u9664\u6b64\u503c\uff1f',streak_start_label:'\u5f00\u59cb',
         chart_sleep_vs_mood:'\u7761\u7720 vs \u5fc3\u60c5',chart_act_vs_energy:'\u6d3b\u52a8 vs \u7cbe\u529b',chart_trend:'\u8d8b\u52bf',chart_mood_change:'\u5fc3\u60c5\u53d8\u5316',chart_sleep_h:'\u7761\u7720(\u5c0f\u65f6)',chart_avg_mood:'\u5e73\u5747\u5fc3\u60c5',chart_score_hours:'\u5206\u6570 / \u5c0f\u65f6',corr_matrix_need:'\u76f8\u5173\u77e9\u9635\u9700\u8981\u66f4\u591a\u8bb0\u5f55\u3002',strength_weak:'\u5f31\u6a21\u5f0f',
-        time_night:'\u6df1\u591c',time_early_am:'\u51cc\u6668',time_morning:'\u4e0a\u5348',time_afternoon:'\u4e0b\u5348',time_evening:'\u508d\u665a',time_late_night:'\u665a\u95f4',add_tag_ph:'\u6dfb\u52a0\u6807\u7b7e\u2026'
+        time_night:'\u6df1\u591c',time_early_am:'\u51cc\u6668',time_morning:'\u4e0a\u5348',time_afternoon:'\u4e0b\u5348',time_evening:'\u508d\u665a',time_late_night:'\u665a\u95f4',add_tag_ph:'\u6dfb\u52a0\u6807\u7b7e\u2026',
+        /* Missing keys found via audit */
+        add_sleep_segment:'+ \u6dfb\u52a0\u7761\u7720\u7247\u6bb5',
+        current_streak_label:'\u5f53\u524d\u8fde\u7eed\u8bb0\u5f55',
+        explore_sample_btn:'\u7528\u793a\u4f8b\u6570\u636e\u63a2\u7d22',
+        feature_mood:'\u5fc3\u60c5\u8ffd\u8e2a',
+        feature_sleep:'\u7761\u7720\u8ffd\u8e2a',
+        feature_insights:'\u6d1e\u5bdf',
+        insights_empty:'\u6682\u65e0\u6d1e\u5bdf\u3002\u8bf7\u591a\u8bb0\u5f55\u51e0\u5929\u3002',
+        nav_distribution:'\u5206\u5e03',
+        pref_default_sleep_time:'\u9ed8\u8ba4\u5c31\u5bdd\u65f6\u95f4',
+        pref_default_wake_time:'\u9ed8\u8ba4\u8d77\u5e8a\u65f6\u95f4',
+        primary_sleep_time:'\u5c31\u5bdd\u65f6\u95f4',
+        primary_wake_time:'\u8d77\u5e8a\u65f6\u95f4',
+        sleep_duration_label:'\u7761\u7720\u65f6\u957f',
+        sleep_quality_label:'\u7761\u7720\u8d28\u91cf',
+        sleep_segments_label:'\u7761\u7720\u7247\u6bb5',
+        start_checkin_btn:'\u5f00\u59cb\u7b7e\u5230',
+        days_label:'\u5929'
     });
 
     /* ──────────────────────────── HINDI ──────────────────────────── */
@@ -8687,7 +8825,25 @@ Object.assign(S.hi, {
         toast_entry_saved:'\u092a\u094d\u0930\u0935\u093f\u0937\u094d\u091f\u093f \u0938\u0939\u0947\u091c\u0940 \u0917\u0908 \u2713',toast_entry_restored:'\u092a\u094d\u0930\u0935\u093f\u0937\u094d\u091f\u093f \u092a\u0941\u0928\u0930\u094d\u0938\u094d\u0925\u093e\u092a\u093f\u0924',toast_refreshed:'\u0930\u093f\u092b\u094d\u0930\u0947\u0936 \u0939\u094b \u0917\u092f\u093e',toast_journal_saved:'\u0921\u093e\u092f\u0930\u0940 \u0938\u0939\u0947\u091c\u0940 \u0917\u0908',toast_sample_added:'90 \u0926\u093f\u0928 \u0915\u093e \u0928\u092e\u0942\u0928\u093e \u0921\u0947\u091f\u093e \u091c\u094b\u0921\u093c\u093e \u0917\u092f\u093e \u2713',toast_metric_added:'\u092e\u0947\u091f\u094d\u0930\u093f\u0915 \u091c\u094b\u0921\u093c\u0940 \u0917\u0908\u0964',toast_metric_name_req:'\u092e\u0947\u091f\u094d\u0930\u093f\u0915 \u0928\u093e\u092e \u0926\u0930\u094d\u091c \u0915\u0930\u0947\u0902\u0964',toast_select_date:'\u0915\u0943\u092a\u092f\u093e \u0924\u093e\u0930\u0940\u0916 \u091a\u0941\u0928\u0947\u0902\u0964',toast_val_1_10:'1 \u0938\u0947 10 \u0915\u0947 \u092c\u0940\u091a \u092e\u093e\u0928 \u0926\u0930\u094d\u091c \u0915\u0930\u0947\u0902',toast_val_sleep:'\u0928\u0940\u0902\u0926 0\u201312 \u0918\u0902\u091f\u0947 \u0939\u094b\u0928\u0940 \u091a\u093e\u0939\u093f\u090f',toast_save_failed:'\u0938\u0939\u0947\u091c\u0928\u093e \u0935\u093f\u092b\u0932\u0964 \u092a\u0941\u0928\u0903 \u092a\u094d\u0930\u092f\u093e\u0938 \u0915\u0930\u0947\u0902\u0964',toast_app_updated:'\u090f\u092a \u0905\u092a\u0921\u0947\u091f \u0939\u094b \u0917\u092f\u093e\u0964 \u0930\u0940\u0932\u094b\u0921 \u0939\u094b \u0930\u0939\u093e \u0939\u0948\u2026',
         today_rel:'\u0906\u091c',yesterday_rel:'\u0915\u0932',unsaved_changes:'\u0905\u0938\u0939\u0947\u091c\u0947 \u092a\u0930\u093f\u0935\u0930\u094d\u0924\u0928',draft_status_saved:'\u0938\u0939\u0947\u091c\u093e \u0917\u092f\u093e',delete_value_title:'\u092f\u0939 \u092e\u093e\u0928 \u0939\u091f\u093e\u090f\u0901?',streak_start_label:'\u0936\u0941\u0930\u0942',
         chart_sleep_vs_mood:'\u0928\u0940\u0902\u0926 vs \u092e\u0942\u0921',chart_act_vs_energy:'\u0917\u0924\u093f\u0935\u093f\u0927\u093f vs \u090a\u0930\u094d\u091c\u093e',chart_trend:'\u0930\u0941\u091d\u093e\u0928',chart_mood_change:'\u092e\u0942\u0921 \u092a\u0930\u093f\u0935\u0930\u094d\u0924\u0928',chart_sleep_h:'\u0928\u0940\u0902\u0926 (\u0918\u0902\u091f\u0947)',chart_avg_mood:'\u0914\u0938\u0924 \u092e\u0942\u0921',chart_score_hours:'\u0938\u094d\u0915\u094b\u0930 / \u0918\u0902\u091f\u0947',corr_matrix_need:'\u0938\u0939\u0938\u0902\u092c\u0902\u0927 \u092e\u0948\u091f\u094d\u0930\u093f\u0915\u094d\u0938 \u0915\u0947 \u0932\u093f\u090f \u0914\u0930 \u092a\u094d\u0930\u0935\u093f\u0937\u094d\u091f\u093f\u092f\u093e\u0901 \u091a\u093e\u0939\u093f\u090f\u0964',strength_weak:'\u0915\u092e\u091c\u094b\u0930 \u092a\u0948\u091f\u0930\u094d\u0928',
-        time_night:'\u0930\u093e\u0924',time_early_am:'\u0938\u0941\u092c\u0939',time_morning:'\u0938\u0941\u092c\u0939',time_afternoon:'\u0926\u094b\u092a\u0939\u0930',time_evening:'\u0936\u093e\u092e',time_late_night:'\u0926\u0947\u0930 \u0930\u093e\u0924',add_tag_ph:'\u091f\u0948\u0917 \u091c\u094b\u0921\u093c\u0947\u0902\u2026'
+        time_night:'\u0930\u093e\u0924',time_early_am:'\u0938\u0941\u092c\u0939',time_morning:'\u0938\u0941\u092c\u0939',time_afternoon:'\u0926\u094b\u092a\u0939\u0930',time_evening:'\u0936\u093e\u092e',time_late_night:'\u0926\u0947\u0930 \u0930\u093e\u0924',add_tag_ph:'\u091f\u0948\u0917 \u091c\u094b\u0921\u093c\u0947\u0902\u2026',
+        /* Missing keys found via audit */
+        add_sleep_segment:'+ \u0928\u0940\u0902\u0926 \u0916\u0902\u0921 \u091c\u094b\u0921\u093c\u0947\u0902',
+        current_streak_label:'\u0935\u0930\u094d\u0924\u092e\u093e\u0928 \u0932\u0917\u093e\u0924\u093e\u0930 \u0926\u093f\u0928',
+        explore_sample_btn:'\u0928\u092e\u0942\u0928\u093e \u0921\u0947\u091f\u093e \u0938\u0947 \u0916\u094b\u091c\u0947\u0902',
+        feature_mood:'\u092e\u0942\u0921 \u091f\u094d\u0930\u0948\u0915\u093f\u0902\u0917',
+        feature_sleep:'\u0928\u0940\u0902\u0926 \u091f\u094d\u0930\u0948\u0915\u093f\u0902\u0917',
+        feature_insights:'\u0905\u0902\u0924\u0930\u094d\u0926\u0943\u0937\u094d\u091f\u093f',
+        insights_empty:'\u0905\u092d\u0940 \u0924\u0915 \u0915\u094b\u0908 \u0905\u0902\u0924\u0930\u094d\u0926\u0943\u0937\u094d\u091f\u093f \u0928\u0939\u0940\u0902\u0964 \u0905\u0927\u093f\u0915 \u092a\u094d\u0930\u0935\u093f\u0937\u094d\u091f\u093f\u092f\u093e\u0901 \u0926\u0930\u094d\u091c \u0915\u0930\u0947\u0902\u0964',
+        nav_distribution:'\u0935\u093f\u0924\u0930\u0923',
+        pref_default_sleep_time:'\u0921\u093f\u092b\u093c\u0949\u0932\u094d\u091f \u0938\u094b\u0928\u0947 \u0915\u093e \u0938\u092e\u092f',
+        pref_default_wake_time:'\u0921\u093f\u092b\u093c\u0949\u0932\u094d\u091f \u091c\u093e\u0917\u0928\u0947 \u0915\u093e \u0938\u092e\u092f',
+        primary_sleep_time:'\u0938\u094b\u0928\u0947 \u0915\u093e \u0938\u092e\u092f',
+        primary_wake_time:'\u091c\u093e\u0917\u0928\u0947 \u0915\u093e \u0938\u092e\u092f',
+        sleep_duration_label:'\u0928\u0940\u0902\u0926 \u0915\u0940 \u0905\u0935\u0927\u093f',
+        sleep_quality_label:'\u0928\u0940\u0902\u0926 \u0915\u0940 \u0917\u0941\u0923\u0935\u0924\u094d\u0924\u093e',
+        sleep_segments_label:'\u0928\u0940\u0902\u0926 \u0915\u0947 \u0916\u0902\u0921',
+        start_checkin_btn:'\u091a\u0947\u0915-\u0907\u0928 \u0936\u0941\u0930\u0942 \u0915\u0930\u0947\u0902',
+        days_label:'\u0926\u093f\u0928'
     });
 
     /* ════════════════════════════════════════════════════════════════════
