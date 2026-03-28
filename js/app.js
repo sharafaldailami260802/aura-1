@@ -1006,7 +1006,7 @@ async function initStorage() {
     checkDailyBackup();
     const lastBackup = await db.backupMeta.get('lastBackup');
     const el = document.getElementById('lastBackupDate');
-    if (el) el.textContent = lastBackup ? formatDisplayDateTime(lastBackup.value, window.auraDateFormat, window.auraTimeFormat) : 'Never';
+    if (el) el.textContent = lastBackup ? formatDisplayDateTime(lastBackup.value, window.auraDateFormat, window.auraTimeFormat) : (window.t ? window.t('never_label') : 'Never');
     var passcodeRow = await db.appState.get('passcodeHash');
     var encRow = await db.appState.get('encryptEntries');
     var privRow = await db.appState.get('privateMode');
@@ -1508,7 +1508,7 @@ function hideSplash() {
         var loc = typeof getLocale === 'function' ? getLocale() : 'en';
         var WDAYS = typeof getLocaleWeekdayNames === 'function' ? getLocaleWeekdayNames(loc, getFirstDayOfWeek()) : ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
         var strings = typeof getLocaleStrings === 'function' ? getLocaleStrings(loc) : { clear: 'Clear', today: 'Today' };
-        picker.innerHTML = '<div class="aura-dp-header"><span class="aura-dp-title" id="auraDpTitle"></span><div class="aura-dp-nav"><button type="button" class="aura-dp-nav-btn" id="auraDpPrev" aria-label="Previous month">&lsaquo;</button><button type="button" class="aura-dp-nav-btn" id="auraDpNext" aria-label="Next month">&rsaquo;</button></div></div><div class="aura-dp-weekdays">' + WDAYS.map(function(w){ return '<span>' + w + '</span>'; }).join('') + '</div><div class="aura-dp-days" id="auraDpDays"></div><div class="aura-dp-footer"><button type="button" class="aura-dp-footer-btn" id="auraDpClear">' + strings.clear + '</button><button type="button" class="aura-dp-footer-btn" id="auraDpToday">' + strings.today + '</button></div>';
+        picker.innerHTML = '<div class="aura-dp-header"><span class="aura-dp-title" id="auraDpTitle"></span><div class="aura-dp-nav"><button type="button" class="aura-dp-nav-btn" id="auraDpPrev" aria-label="' + (window.t ? window.t('prev_month') : 'Previous month') + '">&lsaquo;</button><button type="button" class="aura-dp-nav-btn" id="auraDpNext" aria-label="' + (window.t ? window.t('next_month') : 'Next month') + '">&rsaquo;</button></div></div><div class="aura-dp-weekdays">' + WDAYS.map(function(w){ return '<span>' + w + '</span>'; }).join('') + '</div><div class="aura-dp-days" id="auraDpDays"></div><div class="aura-dp-footer"><button type="button" class="aura-dp-footer-btn" id="auraDpClear">' + strings.clear + '</button><button type="button" class="aura-dp-footer-btn" id="auraDpToday">' + strings.today + '</button></div>';
     }
     function renderDays() {
         var container = document.getElementById('auraDpDays');
@@ -2002,7 +2002,7 @@ function entryJournalStartEdit() {
 }
 function confirmDiscardEntryChanges() {
     if (!entryDirty) return true;
-    return window.confirm('You have unsaved changes.\nLeave without saving?');
+    return window.confirm(window.t ? window.t('confirm_unsaved_changes') : 'You have unsaved changes.\nLeave without saving?');
 }
 function resetEntryProgressTracking(state) {
     entryTouchedFields = { mood: false, energy: false, sleep: false };
@@ -2056,9 +2056,9 @@ function updateEntryProgressUI() {
         if (fill) fill.style.width = state.percent + '%';
         if (label) {
             var filledSections = Object.keys(state.sections).filter(function(k) { return state.sections[k]; }).length;
-            var messages = ['', 'Good start', 'Getting there', 'Almost done', 'All done ✓'];
+            var messages = ['', window.t ? window.t('progress_good_start') : 'Good start', window.t ? window.t('progress_getting_there') : 'Getting there', window.t ? window.t('progress_almost_done') : 'Almost done', window.t ? window.t('progress_all_done') : 'All done ✓'];
             label.textContent = filledSections === 0
-                ? 'Fill in the sections below'
+                ? (window.t ? window.t('checkin_fill_sections') : 'Fill in the sections below')
                 : (messages[filledSections] || filledSections + ' of 4 complete');
         }
 
@@ -2259,11 +2259,11 @@ function buildSleepSegmentCard(index, startVal, endVal) {
                     '<input type="text" class="aura-time-input form-input sleep-end" placeholder="HH:mm" aria-label="' + _bSeg + ' ' + index + ' end time">' +
                 '</div>' +
             '</div>' +
-            '<button type="button" class="sleep-segment-remove" onclick="removeSleepSegment(this)" aria-label="Remove segment">×</button>' +
+            '<button type="button" class="sleep-segment-remove" onclick="removeSleepSegment(this)" aria-label="' + (window.t ? window.t('remove_segment') : 'Remove segment') + '">×</button>' +
         '</div>' +
         '<div class="sleep-segment-meta">' +
             '<span class="sleep-segment-duration" aria-hidden="true"></span>' +
-            '<span class="sleep-segment-status">Enter start and end time</span>' +
+            '<span class="sleep-segment-status">' + (window.t ? window.t('sleep_seg_enter_times') : 'Enter start and end time') + '</span>' +
         '</div>';
     // NOTE: DO NOT call bindDynamicAuraTimeInput here.
     // Inputs are not in the DOM yet; binding must happen after appendChild.
@@ -2380,25 +2380,25 @@ function computeSleepTotalsFromSegments(segments) {
         var startCanonical = parseRawHHMM(seg.start);
         var endCanonical = parseRawHHMM(seg.end);
         if (!startCanonical || !endCanonical) {
-            return { totalHours: null, count: 0, error: 'Sleep segments must have valid start and end times.' };
+            return { totalHours: null, count: 0, error: (window.t ? window.t('sleep_err_invalid_times') : 'Sleep segments must have valid start and end times.') };
         }
         var startMin = timeToMinutes(startCanonical);
         var endMin = timeToMinutes(endCanonical);
         if (!isFinite(startMin) || !isFinite(endMin)) {
-            return { totalHours: null, count: 0, error: 'Sleep segments must have valid start and end times.' };
+            return { totalHours: null, count: 0, error: (window.t ? window.t('sleep_err_invalid_times') : 'Sleep segments must have valid start and end times.') };
         }
         if (endMin <= startMin) {
             endMin += 24 * 60;
         }
         if (endMin <= startMin) {
-            return { totalHours: null, count: 0, error: 'Sleep segment end time must be after start time.' };
+            return { totalHours: null, count: 0, error: (window.t ? window.t('sleep_err_end_after_start') : 'Sleep segment end time must be after start time.') };
         }
         intervals.push({ start: startMin, end: endMin });
     }
     intervals.sort(function(a, b) { return a.start - b.start; });
     for (var j = 1; j < intervals.length; j++) {
         if (intervals[j].start < intervals[j - 1].end) {
-            return { totalHours: null, count: 0, error: 'Sleep segments must not overlap.' };
+            return { totalHours: null, count: 0, error: (window.t ? window.t('sleep_err_overlap') : 'Sleep segments must not overlap.') };
         }
     }
     var totalMinutes = intervals.reduce(function(sum, seg) { return sum + Math.max(0, seg.end - seg.start); }, 0);
@@ -2598,7 +2598,9 @@ function updateSupportRail() {
         var segs = getSleepSegmentsFromForm();
         var segCount = segs && segs.length ? segs.length : 0;
         var sleepStr = sv ? sv.innerText : (document.getElementById('entrySleep') ? document.getElementById('entrySleep').value : '—');
-        sleepEl.textContent = sleepStr !== '' && sleepStr != null ? (segCount > 0 ? sleepStr + ' hrs (' + segCount + ' segment' + (segCount !== 1 ? 's' : '') + ')' : sleepStr + ' hrs') : '—';
+        var _hrsLbl = (window.t ? window.t('hrs_short') : 'hrs');
+        var _segLbl = (window.t ? window.t('segments_label') : (segCount !== 1 ? 'segments' : 'segment'));
+        sleepEl.textContent = sleepStr !== '' && sleepStr != null ? (segCount > 0 ? sleepStr + ' ' + _hrsLbl + ' (' + segCount + ' ' + _segLbl + ')' : sleepStr + ' ' + _hrsLbl) : '\u2014';
     }
     if (tagsEl) {
         var t = document.getElementById('tags');
@@ -2607,7 +2609,7 @@ function updateSupportRail() {
     }
     if (reflectionEl) {
         var n = document.getElementById('notes');
-        reflectionEl.textContent = n && (n.value || '').trim().length > 0 ? 'Started' : 'Not yet';
+        reflectionEl.textContent = n && (n.value || '').trim().length > 0 ? (window.t ? window.t('reflection_started') : 'Started') : (window.t ? window.t('reflection_not_yet') : 'Not yet');
     }
 }
 
@@ -3347,11 +3349,15 @@ function showEntryModal(dateStr) {
         function emFieldRow(icon, label, valueHtml, fieldKey, editHint, editType, deleteOnly) {
             var actions = '';
             if (deleteOnly) {
-                actions = '<div class="em-field-actions"><button class="em-btn em-del" title="Delete ' + label + '" onclick="deleteMetric(\'' + safeDate + '\',\'' + fieldKey + '\')" aria-label="Delete ' + label + '">🗑</button></div>';
+                var _delLbl = (window.t ? window.t('em_delete') : 'Delete');
+                var _editLbl = (window.t ? window.t('em_edit') : 'Edit');
+                actions = '<div class="em-field-actions"><button class="em-btn em-del" title="' + _delLbl + ' ' + label + '" onclick="deleteMetric(\'' + safeDate + '\',\'' + fieldKey + '\')" aria-label="' + _delLbl + ' ' + label + '">🗑</button></div>';
             } else if (editHint !== false) {
+                var _delLbl = (window.t ? window.t('em_delete') : 'Delete');
+                var _editLbl = (window.t ? window.t('em_edit') : 'Edit');
                 actions = '<div class="em-field-actions">' +
-                '<button class="em-btn" title="Edit ' + label + '" onclick="editMetric(\'' + safeDate + '\',\'' + fieldKey + '\')" aria-label="Edit ' + label + '">✏️</button>' +
-                '<button class="em-btn em-del" title="Delete ' + label + '" onclick="deleteMetric(\'' + safeDate + '\',\'' + fieldKey + '\')" aria-label="Delete ' + label + '">🗑</button>' +
+                '<button class="em-btn" title="' + _editLbl + ' ' + label + '" onclick="editMetric(\'' + safeDate + '\',\'' + fieldKey + '\')" aria-label="' + _editLbl + ' ' + label + '">✏️</button>' +
+                '<button class="em-btn em-del" title="' + _delLbl + ' ' + label + '" onclick="deleteMetric(\'' + safeDate + '\',\'' + fieldKey + '\')" aria-label="' + _delLbl + ' ' + label + '">🗑</button>' +
                 '</div>';
             }
             var inputEl = '';
@@ -3360,9 +3366,9 @@ function showEntryModal(dateStr) {
                 if (isText) {
                     inputEl = '<input class="em-inline-input" type="text" id="em-input-' + fieldKey + '" placeholder="' + escapeHtml(editHint || '') + '" />';
                 } else if (fieldKey === 'sleep') {
-                    inputEl = '<input class="em-inline-input" type="number" min="0" max="12" step="0.1" id="em-input-' + fieldKey + '" placeholder="0–12 hours" />';
+                    inputEl = '<input class="em-inline-input" type="number" min="0" max="12" step="0.1" id="em-input-' + fieldKey + '" placeholder="' + (window.t ? window.t('ph_sleep_range') : '0–12 hours') + '" />';
                 } else {
-                    inputEl = '<input class="em-inline-input" type="number" min="1" max="10" step="0.5" id="em-input-' + fieldKey + '" placeholder="' + (editHint || '1–10 (0.5 steps)') + '" />';
+                    inputEl = '<input class="em-inline-input" type="number" min="1" max="10" step="0.5" id="em-input-' + fieldKey + '" placeholder="' + (editHint || (window.t ? window.t('ph_scale_range') : '1–10 (0.5 steps)')) + '" />';
                 }
             }
             return '<div class="em-field-row" data-field="' + fieldKey + '">' +
@@ -3373,7 +3379,7 @@ function showEntryModal(dateStr) {
                 '</div>' +
                 (inputEl ? '<div class="em-inline-edit-row" id="em-edit-' + fieldKey + '" data-field="' + fieldKey + '" data-date="' + escapeHtml(dateStr) + '">' +
                 inputEl +
-                '<button type="button" class="btn btn-secondary em-save-btn" data-field="' + fieldKey + '">Save</button>' +
+                '<button type="button" class="btn btn-secondary em-save-btn" data-field="' + fieldKey + '">' + (window.t ? window.t('save_btn') : 'Save') + '</button>' +
                 '<button type="button" class="btn btn-neutral em-cancel-btn" data-field="' + fieldKey + '">✕</button>' +
                 '</div>' : '');
         }
@@ -3395,9 +3401,9 @@ function showEntryModal(dateStr) {
         
         var tr = typeof auraTr === 'function' ? auraTr : function(k) { return k; };
         body.innerHTML =
-            emFieldRow('😊', tr('mood_label_short'), (entry.mood != null ? '<strong>' + roundMoodEnergySleepQuality(entry.mood).toFixed(1) + '</strong><span style="font-size:0.8em;opacity:0.5;font-family:var(--font-body);"> /10</span>' : '–'), 'mood', '1–10') +
-            emFieldRow('⚡', tr('energy_label_short'), (entry.energy != null ? '<strong>' + roundMoodEnergySleepQuality(entry.energy).toFixed(1) + '</strong><span style="font-size:0.8em;opacity:0.5;font-family:var(--font-body);"> /10</span>' : '–'), 'energy', '1–10') +
-            emFieldRow('🌙', tr('sleep_label_short'), sleepLabel, 'sleep', '0–12 hours') +
+            emFieldRow('😊', tr('mood_label_short'), (entry.mood != null ? '<strong>' + roundMoodEnergySleepQuality(entry.mood).toFixed(1) + '</strong><span style="font-size:0.8em;opacity:0.5;font-family:var(--font-body);"> /10</span>' : '–'), 'mood', (window.t ? window.t('ph_scale_range_short') : '1–10')) +
+            emFieldRow('⚡', tr('energy_label_short'), (entry.energy != null ? '<strong>' + roundMoodEnergySleepQuality(entry.energy).toFixed(1) + '</strong><span style="font-size:0.8em;opacity:0.5;font-family:var(--font-body);"> /10</span>' : '–'), 'energy', (window.t ? window.t('ph_scale_range_short') : '1–10')) +
+            emFieldRow('🌙', tr('sleep_label_short'), sleepLabel, 'sleep', (window.t ? window.t('ph_sleep_range') : '0–12 hours')) +
             (activitiesHtml ? emFieldRow('🏃', tr('activities_label'), activitiesHtml, 'activities', 'activity1, activity2', 'tags') : '') +
             emFieldRow('🏷️', tr('tags_label'), tagsHtml, 'tags', 'e.g. happy, calm', 'tags') +
             (hasJournal ?
@@ -3507,10 +3513,10 @@ async function emSaveField(dateStr, field) {
         if (typeof updateDashboard === 'function') updateDashboard();
         if (typeof renderCharts === 'function') renderCharts();
         if (typeof renderEntryList === 'function') renderEntryList();
-        showToast('Saved ✓');
+        showToast(window.t ? window.t('toast_saved') : 'Saved \u2713');
     } catch (err) {
         console.error('[Aura] emSaveField error:', err);
-        showToast('Save failed. Try again.');
+        showToast(window.t ? window.t('toast_save_failed') : 'Save failed. Try again.');
     }
 }
 function emDeleteField(dateStr, field) {
@@ -3533,7 +3539,7 @@ function emDeleteField(dateStr, field) {
                 if (typeof updateDashboard === 'function') updateDashboard();
                 if (typeof renderCharts === 'function') renderCharts();
                 showEntryModal(dateStr);
-                showToast('Deleted');
+                showToast(window.t ? window.t('toast_deleted') : 'Deleted');
             });
         }
     );
@@ -3953,9 +3959,9 @@ function renderWeekTimeline() {
                 : dateStr);
         html += '<span class="week-date">' + escapeHtml(dateDisplay) + '</span>';
         html += '<div class="week-bars">';
-        html += '<div class="week-bar" style="height:' + moodH + 'px;background:var(--heat-good);" title="Mood ' + mood + '"></div>';
-        html += '<div class="week-bar" style="height:' + sleepH + 'px;background:var(--chart-2);" title="Sleep ' + sleep + 'h"></div>';
-        html += '<div class="week-bar" style="height:' + energyH + 'px;background:var(--accent);" title="Energy ' + energy + '"></div>';
+        html += '<div class="week-bar" style="height:' + moodH + 'px;background:var(--heat-good);" title="' + (window.t ? window.t('ds_mood') : 'Mood') + ' ' + mood + '"></div>';
+        html += '<div class="week-bar" style="height:' + sleepH + 'px;background:var(--chart-2);" title="' + (window.t ? window.t('ds_sleep') : 'Sleep') + ' ' + sleep + 'h"></div>';
+        html += '<div class="week-bar" style="height:' + energyH + 'px;background:var(--accent);" title="' + (window.t ? window.t('ds_energy') : 'Energy') + ' ' + energy + '"></div>';
         html += '</div></div>';
     }
     container.innerHTML = html;
@@ -5290,7 +5296,7 @@ function renderCustomRangeChart() {
                 { label: (window.t ? window.t('checkin_energy') : 'Energy'), data: dates.map(function(d) { return entries[d].energy; }), borderColor: colors.chart3, fill: false, tension: 0.35, borderWidth: 3, pointRadius: 0, pointHoverRadius: 5 }
             ]
         },
-        options: getChartConfig({ yMin: 0, yMax: 12, yStep: 1, yTitle: 'Score / Hours' })
+        options: getChartConfig({ yMin: 0, yMax: 12, yStep: 1, yTitle: (window.t ? window.t('chart_score_hours') : 'Score / Hours') })
     });
 }
 
@@ -5443,32 +5449,36 @@ function exportReportPDF() {
 var insightsEngineCacheSignature = '';
 var insightsEngineCacheResult = null;
 var MIN_INSIGHT_RECORDS = 5;
-var INSIGHT_SECTION_META = {
+function getInsightSectionMeta() {
+    var _t = function(k, fb) { return window.t ? window.t(k) : fb; };
+    return {
     sleep: {
-        heading: 'Sleep Insights',
-        title: 'Sleep Insights',
-        description: 'Patterns between sleep timing, duration, fragmentation, and mood.',
-        icon: '☾'
+        heading: _t('insight_sleep_heading', 'Sleep Insights'),
+        title: _t('insight_sleep_heading', 'Sleep Insights'),
+        description: _t('insight_sleep_desc', 'Patterns between sleep timing, duration, fragmentation, and mood.'),
+        icon: '\u263e'
     },
     activity: {
-        heading: 'Activity Insights',
-        title: 'Activity Insights',
-        description: 'Activities and daily energy patterns that appear linked to mood.',
-        icon: '◌'
+        heading: _t('insight_activity_heading', 'Activity Insights'),
+        title: _t('insight_activity_heading', 'Activity Insights'),
+        description: _t('insight_activity_desc', 'Activities and daily energy patterns that appear linked to mood.'),
+        icon: '\u25cc'
     },
     stability: {
-        heading: 'Mood Stability Insights',
-        title: 'Mood Stability Insights',
-        description: 'Signals around recent volatility, stability, and day-to-day mood change.',
-        icon: '◔'
+        heading: _t('insight_stability_heading', 'Mood Stability Insights'),
+        title: _t('insight_stability_heading', 'Mood Stability Insights'),
+        description: _t('insight_stability_desc', 'Signals around recent volatility, stability, and day-to-day mood change.'),
+        icon: '\u25d4'
     },
     tags: {
-        heading: 'Tag Insights',
-        title: 'Tag Insights',
-        description: 'Recurring tags that appear associated with shifts in mood.',
+        heading: _t('insight_tags_heading', 'Tag Insights'),
+        title: _t('insight_tags_heading', 'Tag Insights'),
+        description: _t('insight_tags_desc', 'Recurring tags that appear associated with shifts in mood.'),
         icon: '#'
     }
-};
+    };
+}
+var INSIGHT_SECTION_META = getInsightSectionMeta();
 function averageMoodForRecords(records) {
     if (!records || !records.length) return null;
     var sum = 0;
@@ -5560,7 +5570,8 @@ function getInsightSectionMeta(key) {
         stability: { heading: _t('sec_stab_heading'),  title: _t('sec_stab_title'),  description: _t('sec_stab_desc'),   icon: '◔' },
         tags:      { heading: _t('sec_tags_heading'),  title: _t('sec_tags_title'),  description: _t('sec_tags_desc'),   icon: '#'  }
     };
-    return map[key] || INSIGHT_SECTION_META[key] || { heading: key, title: key, description: '' };
+    var meta = getInsightSectionMeta();
+    return map[key] || meta[key] || { heading: key, title: key, description: '' };
 }
 function buildInsightsOverviewHtml(result) {
     var _t = typeof window.t === 'function' ? window.t : function (k) { return k; };
@@ -5608,7 +5619,7 @@ function createInsightCandidate(section, title, description, supportCount, score
         supportCount: supportCount,
         score: score,
         kicker: options.kicker || _tIC('kicker_default'),
-        icon: options.icon || ((INSIGHT_SECTION_META[section] && INSIGHT_SECTION_META[section].icon) || '•'),
+        icon: options.icon || ((getInsightSectionMeta()[section] && getInsightSectionMeta()[section].icon) || '\u2022'),
         context: options.context || _tIC('insight_observed', { n: supportCount, entries: entryWord }),
         nudge: options.nudge || '',
         strength: score >= 5 ? 'strong' : score >= 3 ? 'moderate' : 'emerging'
@@ -6163,7 +6174,8 @@ function renderPredictions() {
 
 var radarModeState = 'weekly';
 var selectedRadarMonth = null;
-var MONTH_NAMES = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+function getMonthNames() { return (typeof window.getLocalizedMonths === 'function') ? window.getLocalizedMonths('long') : ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']; }
+var MONTH_NAMES = getMonthNames();
 function getCurrentRadarMonth() {
     var d = new Date();
     var y = d.getFullYear();
@@ -6188,7 +6200,7 @@ function getWeeklyRadarData() {
     var sevenDaysAgo = new Date(today);
     sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 6);
     sevenDaysAgo.setHours(0, 0, 0, 0);
-    var days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    var days = [window.t ? window.t('day_sun') : 'Sun', window.t ? window.t('day_mon') : 'Mon', window.t ? window.t('day_tue') : 'Tue', window.t ? window.t('day_wed') : 'Wed', window.t ? window.t('day_thu') : 'Thu', window.t ? window.t('day_fri') : 'Fri', window.t ? window.t('day_sat') : 'Sat'];
     var byDay = days.map(function() { return []; });
     Object.keys(entries).forEach(function(dateStr) {
         var d = new Date(dateStr + 'T12:00:00');
@@ -6204,7 +6216,7 @@ function getWeeklyRadarData() {
     return { avg: avg, entryCount: byDay.reduce(function(s, arr) { return s + arr.length; }, 0) };
 }
 function getMonthlyRadarData(month, year) {
-    var days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    var days = [window.t ? window.t('day_sun') : 'Sun', window.t ? window.t('day_mon') : 'Mon', window.t ? window.t('day_tue') : 'Tue', window.t ? window.t('day_wed') : 'Wed', window.t ? window.t('day_thu') : 'Thu', window.t ? window.t('day_fri') : 'Fri', window.t ? window.t('day_sat') : 'Sat'];
     var byDay = days.map(function() { return []; });
     Object.keys(entries).forEach(function(dateStr) {
         var d = new Date(dateStr + 'T12:00:00');
@@ -6226,7 +6238,7 @@ function formatRadarMonth(value) {
     var year = parseInt(parts[0], 10);
     var month = parseInt(parts[1], 10) - 1;
     if (isNaN(year) || isNaN(month) || month < 0 || month > 11) return value;
-    return MONTH_NAMES[month] + ' ' + year;
+    return getMonthNames()[month] + ' ' + year;
 }
 function populateMonthPicker() {
     var list = document.querySelector('.radar-month-picker .month-list');
@@ -6241,7 +6253,7 @@ function populateMonthPicker() {
         var val = o.year + '-' + (o.month < 9 ? '0' : '') + (o.month + 1);
         var option = document.createElement('div');
         option.className = 'month-option' + (val === selectedRadarMonth ? ' active' : '');
-        option.textContent = MONTH_NAMES[o.month] + ' ' + o.year;
+        option.textContent = getMonthNames()[o.month] + ' ' + o.year;
         option.setAttribute('data-value', val);
         option.setAttribute('role', 'option');
         list.appendChild(option);
@@ -6333,7 +6345,7 @@ function renderRadarChart() {
             var year = parseInt(parts[0], 10);
             var month = parseInt(parts[1], 10) - 1;
             result = getMonthlyRadarData(month, year);
-            contextText = auraTr('radar_month_overview', { month: (MONTH_NAMES[month] || '') + ' ' + year });
+            contextText = auraTr('radar_month_overview', { month: (getMonthNames()[month] || '') + ' ' + year });
         }
     }
     contextLabel.textContent = contextText || auraTr('radar_weekly_balance');
@@ -6687,7 +6699,7 @@ function renderSleepTimeline() {
     rows.forEach(function(row, rowIndex) {
         var rowEl = document.createElement('div');
         rowEl.className = 'sleep-timeline-row';
-        var moodText = row.record && row.record.mood != null ? ('Mood ' + formatDeleteEntryMetric(row.record.mood)) : '';
+        var moodText = row.record && row.record.mood != null ? ((window.t ? window.t('ds_mood') : 'Mood') + ' ' + formatDeleteEntryMetric(row.record.mood)) : '';
         rowEl.innerHTML =
             '<div class="sleep-timeline-date">' + escapeHtml(formatDisplayDate(row.date, window.auraDateFormat || 'MD')) + '</div>' +
             '<div class="sleep-timeline-track"></div>' +
@@ -6701,7 +6713,7 @@ function renderSleepTimeline() {
                 blockEl.style.left = ((block.start / 1440) * 100) + '%';
                 blockEl.style.width = Math.max(((block.end - block.start) / 1440) * 100, 1.2) + '%';
                 blockEl.style.animationDelay = ((rowIndex * 25) + (segIndex * 40) + (blockIndex * 10)) + 'ms';
-                blockEl.setAttribute('aria-label', 'Sleep segment from ' + segment.start + ' to ' + segment.end + ', duration ' + formatSleepTimelineDuration(segment.durationMinutes));
+                blockEl.setAttribute('aria-label', (window.t ? window.t('sleep_seg_aria', {start: segment.start, end: segment.end, duration: formatSleepTimelineDuration(segment.durationMinutes)}) : 'Sleep segment from ' + segment.start + ' to ' + segment.end + ', duration ' + formatSleepTimelineDuration(segment.durationMinutes)));
                 blockEl.addEventListener('mouseenter', function(e) { showSleepTimelineTooltip(blockEl, segment, e); });
                 blockEl.addEventListener('mousemove', function(e) { showSleepTimelineTooltip(blockEl, segment, e); });
                 blockEl.addEventListener('mouseleave', hideSleepTimelineTooltip);
@@ -7057,7 +7069,7 @@ function setJournalDirty(dirty) {
 }
 function confirmDiscardJournalChanges() {
     if (!journalDirty) return true;
-    return window.confirm('You have unsaved journal changes.\nLeave without saving?');
+    return window.confirm(window.t ? window.t('confirm_unsaved_journal') : 'You have unsaved journal changes.\nLeave without saving?');
 }
 function openJournalEntry(dateStr, options) {
     options = options || {};
@@ -7183,7 +7195,7 @@ function renderJournalPhotos() {
         return;
     }
     el.innerHTML = journalPhotos.map(function(p) {
-        return '<div class="journal-photo-thumb-wrap"><img class="journal-photo-thumb" src="' + escapeHtml(p.thumb) + '" alt="Journal photo" loading="lazy" onclick="showJournalPhotoFull(\'' + p.id + '\')"><button type="button" class="journal-photo-delete" aria-label="Delete photo" onclick="deleteJournalPhoto(\'' + p.id + '\')">×</button></div>';
+        return '<div class="journal-photo-thumb-wrap"><img class="journal-photo-thumb" src="' + escapeHtml(p.thumb) + '" alt="' + (window.t ? window.t('journal_photo_alt') : 'Journal photo') + '" loading="lazy" onclick="showJournalPhotoFull(\'' + p.id + '\')"><button type="button" class="journal-photo-delete" aria-label="' + (window.t ? window.t('delete_photo') : 'Delete photo') + '" onclick="deleteJournalPhoto(\'' + p.id + '\')">×</button></div>';
     }).join('');
 }
 
@@ -7344,11 +7356,11 @@ function runSearch() {
     });
     var resultsEl = document.getElementById('searchResults');
     if (!resultsEl) return;
-    resultsEl.innerHTML = out.length === 0 ? '<p style="color: var(--text-muted);">No entries match.</p>' : out.map(function(d) {
+    resultsEl.innerHTML = out.length === 0 ? '<p style="color: var(--text-muted);">' + (window.t ? window.t('no_entries_match') : 'No entries match.') + '</p>' : out.map(function(d) {
         var e = entries[d];
         var journalText = notesValueToPlainText(e);
         var preview = journalText.slice(0, 80) + (journalText.length > 80 ? '…' : '');
-        var label = e.mood != null ? ('Mood ' + e.mood) : (journalText ? 'Journal entry' : 'Daily record');
+        var label = e.mood != null ? ((window.t ? window.t('ds_mood') : 'Mood') + ' ' + e.mood) : (journalText ? (window.t ? window.t('journal_entry_label') : 'Journal entry') : (window.t ? window.t('daily_record_label') : 'Daily record'));
         return '<div class="result-item" onclick="navigateToEntry(\'' + d + '\')">' + d + ' — ' + label + '<br><small style="color: var(--text-muted);">' + preview + '</small></div>';
     }).join('');
 }
@@ -7427,7 +7439,7 @@ async function checkDailyBackup() {
 function updateLastBackupDisplay() {
     db.backupMeta.get('lastBackup').then(row => {
         const el = document.getElementById('lastBackupDate');
-        if (el) el.textContent = row ? formatDisplayDateTime(row.value, window.auraDateFormat, window.auraTimeFormat) : 'Never';
+        if (el) el.textContent = row ? formatDisplayDateTime(row.value, window.auraDateFormat, window.auraTimeFormat) : (window.t ? window.t('never_label') : 'Never');
         var reminder = document.getElementById('backupReminder');
         if (reminder) {
             var show = !row || (Date.now() - row.value >= 24 * 60 * 60 * 1000);
@@ -7833,7 +7845,7 @@ function setCustomMetrics(arr) {
 function addCustomMetric() {
     var nameInput = document.getElementById('newMetricName');
     var name = (nameInput && nameInput.value || '').trim();
-    if (!name) { showToast('Enter a metric name.'); return; }
+    if (!name) { showToast(window.t ? window.t('toast_metric_name_req') : 'Enter a metric name.'); return; }
     var typeSelect = document.getElementById('newMetricType');
     var type = (typeSelect && typeSelect.value) || 'scale';
     getCustomMetrics().then(function(list) {
@@ -7844,7 +7856,7 @@ function addCustomMetric() {
         if (nameInput) nameInput.value = '';
         renderCustomMetricsList();
         renderCustomMetricsInEntryForm();
-        showToast('Metric added.');
+        showToast(window.t ? window.t('toast_metric_added') : 'Metric added.');
     });
 }
 function removeCustomMetric(id) {
@@ -7871,9 +7883,9 @@ function renderCustomMetricsList() {
     getCustomMetrics().then(function(list) {
         if (list.length === 0) { var msg = typeof auraTr === 'function' ? auraTr('no_custom_metrics_yet') : 'No custom metrics yet. Add one above.'; el.innerHTML = '<li style="color: var(--text-muted); padding: var(--space-sm) 0;">' + (typeof escapeHtml === 'function' ? escapeHtml(msg) : msg) + '</li>'; return; }
         el.innerHTML = list.map(function(m) {
-            var typeLabel = m.type === 'yesno' ? 'Yes/No' : '1–10';
-            var visLabel = m.visible ? 'Hide' : 'Show';
-            return '<li><span class="metric-name">' + escapeHtml(m.name) + '</span> <span class="metric-type">' + typeLabel + '</span> <span class="metric-actions"><button type="button" class="btn-secondary" style="font-size: 0.85rem; padding: 4px 8px;" onclick="toggleMetricVisible(\'' + m.id + '\')">' + visLabel + '</button> <button type="button" class="btn-secondary" style="font-size: 0.85rem; padding: 4px 8px;" onclick="removeCustomMetric(\'' + m.id + '\')">Remove</button></span></li>';
+            var typeLabel = m.type === 'yesno' ? (window.t ? window.t('metric_type_yesno') : 'Yes/No') : (window.t ? window.t('metric_type_scale') : '1–10');
+            var visLabel = m.visible ? (window.t ? window.t('hide_label') : 'Hide') : (window.t ? window.t('show_label') : 'Show');
+            return '<li><span class="metric-name">' + escapeHtml(m.name) + '</span> <span class="metric-type">' + typeLabel + '</span> <span class="metric-actions"><button type="button" class="btn-secondary" style="font-size: 0.85rem; padding: 4px 8px;" onclick="toggleMetricVisible(\'' + m.id + '\')">' + visLabel + '</button> <button type="button" class="btn-secondary" style="font-size: 0.85rem; padding: 4px 8px;" onclick="removeCustomMetric(\'' + m.id + '\')">' + (window.t ? window.t('remove_label') : 'Remove') + '</button></span></li>';
         }).join('');
     });
 }
@@ -7938,7 +7950,7 @@ function getLocaleWeekdayNames(locale, firstDayOfWeek) {
 }
 function getLocaleStrings(locale) {
     locale = (locale || getLocale()).split('-')[0];
-    var strings = { clear: 'Clear', today: 'Today', weekOf: 'Week of ' };
+    var strings = { clear: (window.t ? window.t('dp_clear') : 'Clear'), today: (window.t ? window.t('dp_today') : 'Today'), weekOf: (window.t ? window.t('dp_week_of') : 'Week of ') };
     if (locale === 'de') { strings.clear = 'Löschen'; strings.today = 'Heute'; strings.weekOf = 'Woche vom '; }
     else if (locale === 'fr') { strings.clear = 'Effacer'; strings.today = 'Aujourd\'hui'; strings.weekOf = 'Semaine du '; }
     else if (locale === 'es') { strings.clear = 'Borrar'; strings.today = 'Hoy'; strings.weekOf = 'Semana del '; }
@@ -8544,13 +8556,13 @@ if ('serviceWorker' in navigator) {
             });
         });
         navigator.serviceWorker.addEventListener('controllerchange', function() {
-            showToast('App updated. Refreshing…');
+            showToast(window.t ? window.t('toast_app_updated') : 'App updated. Refreshing…');
             setTimeout(function() { window.location.reload(); }, 800);
         });
     }).catch(function() {});
     navigator.serviceWorker.addEventListener('message', function(event) {
         if (event.data && event.data.type === 'AURA_SW_UPDATED') {
-            showToast('App updated. Refreshing…');
+            showToast(window.t ? window.t('toast_app_updated') : 'App updated. Refreshing…');
             setTimeout(function() { window.location.reload(); }, 800);
         }
         if (event.data && event.data.type === 'AURA_BACKUP_SYNC') {
@@ -8572,7 +8584,7 @@ if ('serviceWorker' in navigator) {
         var appended = existing ? (existing + '\n\n--- Shared ---\n' + content) : content;
         return upsertDailyRecord(targetDate, { journal: appended });
     }).then(function() {
-        if (typeof showToast === 'function') showToast('Shared content added to journal');
+        if (typeof showToast === 'function') showToast(window.t ? window.t('toast_shared') : 'Shared content added to journal');
         if (typeof navigate === 'function') navigate('journal');
         if (window.history && window.history.replaceState) window.history.replaceState({}, document.title, window.location.pathname || './index.html');
     });
