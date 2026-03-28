@@ -24,29 +24,32 @@
         if (!label) return '';
         var t = typeof window.t === 'function' ? window.t : function(k) { return k; };
         var map = {};
-        map[t('ds_mood')]    = '/ 10';
-        map[t('ds_energy')]  = '/ 10';
-        map[t('ds_sleep')]   = t('hrs_short') || 'hrs';
-        map['Mood Change']   = 'pts';
-        map['Frequency']     = '';
-        map[t('ds_avg_mood')]= '/ 10';
-        map[t('ds_forecast')]= '/ 10';
-        /* English fallbacks for when t() is not yet available */
-        map['Mood']     = '/ 10';
-        map['Energy']   = '/ 10';
-        map['Sleep']    = t('hrs_short') || 'hrs';
-        map['Average mood'] = '/ 10';
-        map['Forecast'] = '/ 10';
-        map['Sleep vs Mood']      = '';
-        map['Activity vs Energy'] = '';
+        map[t('ds_mood')]           = '/ 10';
+        map[t('ds_energy')]         = '/ 10';
+        map[t('ds_sleep')]          = t('hrs_short') || 'hrs';
+        map[t('chart_mood_change')] = 'pts';
+        map[t('dist_y_label')]      = '';
+        map[t('ds_avg_mood')]       = '/ 10';
+        map[t('ds_forecast')]       = '/ 10';
+        map[t('chart_sleep_vs_mood')]   = '';
+        map[t('chart_act_vs_energy')]   = '';
         return map[label] || '';
     }
     /* Legacy object kept for backward compat (auraChartUnits reference) */
-    var CHART_UNITS = {
-        'Mood':'/ 10','Energy':'/ 10','Sleep':'hrs','Mood Change':'pts',
-        'Frequency':'','Average mood':'/ 10','Forecast':'/ 10',
-        'Sleep vs Mood':'','Activity vs Energy':''
-    };
+    var CHART_UNITS = (function() {
+        var t = typeof window.t === 'function' ? window.t : function(k) { return k; };
+        var u = {};
+        u[t('ds_mood')]              = '/ 10';
+        u[t('ds_energy')]            = '/ 10';
+        u[t('ds_sleep')]             = t('hrs_short') || 'hrs';
+        u[t('chart_mood_change')]    = 'pts';
+        u[t('dist_y_label')]         = '';
+        u[t('ds_avg_mood')]          = '/ 10';
+        u[t('ds_forecast')]          = '/ 10';
+        u[t('chart_sleep_vs_mood')]  = '';
+        u[t('chart_act_vs_energy')] = '';
+        return u;
+    })();
 
     /* ─── Date label → readable title ────────────────────────────────────── */
     function prettifyChartDate(raw) {
@@ -208,7 +211,7 @@
                             var _energyLabel = _t('ds_energy');
                             var _sleepLabel = _t('ds_sleep');
                             var suffix = '';
-                            if (label === _moodLabel || label === 'Mood' || label === _energyLabel || label === 'Energy') {
+                            if (label === _moodLabel || label === _energyLabel) {
                                 var n = Number(value);
                                 if (!isNaN(n)) {
                                     if (n >= 8) suffix = ' \u2014 ' + _t('chart_tooltip_great');
@@ -216,7 +219,7 @@
                                     else if (n <= 3) suffix = ' \u2014 ' + _t('chart_tooltip_tough');
                                 }
                             }
-                            if (label === _sleepLabel || label === 'Sleep') {
+                            if (label === _sleepLabel) {
                                 var h = Number(value);
                                 if (!isNaN(h)) {
                                     if (h >= 8) suffix = ' \u2014 ' + _t('chart_tooltip_well_rested');
