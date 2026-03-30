@@ -5562,16 +5562,9 @@ function buildInsightCardHtml(insight) {
         '<p class="insight-detail-context">' + escapeHtml(ctxStr) + '</p>' +
     '</div>';
 }
-function getInsightSectionMeta(key) {
-    var _t = typeof window.t === 'function' ? window.t : function (k) { return k; };
-    var map = {
-        sleep:     { heading: _t('sec_sleep_heading'), title: _t('sec_sleep_title'), description: _t('sec_sleep_desc'),  icon: '☾' },
-        activity:  { heading: _t('sec_act_heading'),   title: _t('sec_act_title'),   description: _t('sec_act_desc'),    icon: '◌' },
-        stability: { heading: _t('sec_stab_heading'),  title: _t('sec_stab_title'),  description: _t('sec_stab_desc'),   icon: '◔' },
-        tags:      { heading: _t('sec_tags_heading'),  title: _t('sec_tags_title'),  description: _t('sec_tags_desc'),   icon: '#'  }
-    };
+function getInsightSectionMetaByKey(key) {
     var meta = getInsightSectionMeta();
-    return map[key] || meta[key] || { heading: key, title: key, description: '' };
+    return meta[key] || { heading: key, title: key, description: '' };
 }
 function buildInsightsOverviewHtml(result) {
     var _t = typeof window.t === 'function' ? window.t : function (k) { return k; };
@@ -5586,7 +5579,7 @@ function buildInsightsDashboardHtml(result) {
         return '<p class="insight-empty">' + escapeHtml((result && result.message) || _t('insight_empty')) + '</p>';
     }
     return result.sections.map(function(section) {
-        var meta = getInsightSectionMeta(section.key);
+        var meta = getInsightSectionMetaByKey(section.key);
         return '<section class="insights-section">' +
             '<div>' +
                 '<p class="insights-section-heading">' + escapeHtml(meta.heading) + '</p>' +
@@ -5928,7 +5921,7 @@ var correlationInsightsEngine = {
             totalShown += sectionInsights.length;
             sections.push({
                 key: sectionKey,
-                title: typeof getInsightSectionMeta === 'function' ? getInsightSectionMeta(sectionKey).title : (INSIGHT_SECTION_META[sectionKey] ? INSIGHT_SECTION_META[sectionKey].title : sectionKey),
+                title: typeof getInsightSectionMetaByKey === 'function' ? getInsightSectionMetaByKey(sectionKey).title : (INSIGHT_SECTION_META[sectionKey] ? INSIGHT_SECTION_META[sectionKey].title : sectionKey),
                 insights: sectionInsights
             });
         });
